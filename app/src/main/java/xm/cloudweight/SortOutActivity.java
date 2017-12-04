@@ -320,6 +320,9 @@ public class SortOutActivity extends BaseActivity implements
         }
     });
 
+    /**
+     * 设置按钮是否可用
+     */
     private void setBtnEnable() {
         if (!mBtnSortOut.isEnabled()) {
             mBtnSortOut.setEnabled(true);
