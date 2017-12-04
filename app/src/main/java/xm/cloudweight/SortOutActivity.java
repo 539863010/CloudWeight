@@ -7,6 +7,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -44,6 +45,7 @@ import xm.cloudweight.presenter.CommPresenter;
 import xm.cloudweight.presenter.SortOutPresenter;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
+import xm.cloudweight.utils.IsBottomUtil;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.EtMaxLengthUtil;
@@ -76,10 +78,14 @@ public class SortOutActivity extends BaseActivity implements
         , SortOutImpl.OnGetSortOutListListener
         , SortOutImpl.OnCancelSortOutListener
         , AdapterView.OnItemSelectedListener
-        , SortOutHistoryPopWindow.OnDeleteListener, onInputFinishListener, VideoFragment.OnInstrumentListener {
+        , SortOutHistoryPopWindow.OnDeleteListener, onInputFinishListener, VideoFragment.OnInstrumentListener, AbsListView.OnScrollListener {
 
     public static final int TYPE_WEIGHT = 0;
     public static final int TYPE_COUNT = 1;
+    public static final int DEFAULT_PAGE_SIZE = 0;
+    public static final int PAGE_SIZE = 0;
+    public static final int PAGE = 0;
+    public static final int UPLOAD_PAGE_SIZE = 50;
 
     @BindView(R.id.btn_sort_out_history)
     Button mBtnSortOutHistory;
@@ -114,6 +120,7 @@ public class SortOutActivity extends BaseActivity implements
     @BindView(R.id.btn_sort_out)
     Button mBtnSortOut;
     private List<SortOutData> mListShow = new ArrayList<>();
+    private ArrayList<SortOutData> mListFilter = new ArrayList<>();
     private List<SortOutData> mListAll = new ArrayList<>();
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private SortOutAdapter mSortOutAdapter;
@@ -153,6 +160,7 @@ public class SortOutActivity extends BaseActivity implements
                 notifyItemClick();
             }
         });
+        mGvSortOut.setOnScrollListener(this);
         mSpCustomers.setTitleColor(R.color.color_135c31);
         mSpWareHouse.setTitleColor(R.color.color_135c31);
         mSpCustomersLevel.setTitleColor(R.color.color_135c31);
@@ -170,7 +178,7 @@ public class SortOutActivity extends BaseActivity implements
                         CommPresenter.queryStock(getActivity(), 0, 0, 0, key);
                     }
                 } else {
-                    SortOutPresenter.getSourOutList(getActivity(), TYPE_WEIGHT, 0, 0, 0, mBtnDate.getText().toString());
+                    SortOutPresenter.getSourOutList(getActivity(), TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, mBtnDate.getText().toString());
                 }
             }
         });
@@ -203,7 +211,8 @@ public class SortOutActivity extends BaseActivity implements
         //设置当前日期
         String currentData = DateUtils.StringData();
         mBtnDate.setText(currentData);
-        SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, 0, 0, 0, currentData);
+        showP();
+        SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, currentData);
     }
 
     @Override
@@ -241,8 +250,7 @@ public class SortOutActivity extends BaseActivity implements
                 mEtShow.setText("");
                 mEtShow.setEnabled(false);
                 mIntType = TYPE_WEIGHT;
-                String time = mBtnDate.getText().toString().trim();
-                SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, 0, 0, 0, time);
+                requestSortOutList();
                 break;
             }
             case R.id.btn_sort_out_count: {
@@ -255,8 +263,7 @@ public class SortOutActivity extends BaseActivity implements
                 mEtShow.setText("");
                 mEtShow.setEnabled(true);
                 mIntType = TYPE_COUNT;
-                String time = mBtnDate.getText().toString().trim();
-                SortOutPresenter.getSourOutList(this, TYPE_COUNT, 0, 0, 0, time);
+                requestSortOutList();
                 break;
             }
             case R.id.btn_sort_out_history:
@@ -290,6 +297,17 @@ public class SortOutActivity extends BaseActivity implements
             default:
                 break;
         }
+    }
+
+    private void requestSortOutList() {
+        String time = mBtnDate.getText().toString().trim();
+        dismissP();
+        showP();
+        mListAll.clear();
+        mListFilter.clear();
+        mListShow.clear();
+        mSortOutAdapter.notifyDataSetChanged();
+        SortOutPresenter.getSourOutList(this, mIntType, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
     }
 
     private Handler mHandlerShotPic = new Handler(new Handler.Callback() {
@@ -439,8 +457,7 @@ public class SortOutActivity extends BaseActivity implements
             String dayStr = (dayOfMonth < 10) ? "0" + dayOfMonth : dayOfMonth + "";
             String date = year + "-" + monthStr + "-" + dayStr;
             mBtnDate.setText(date);
-            //请求数据
-            SortOutPresenter.getSourOutList(getActivity(), mIntType, 0, 0, 0, date);
+            requestSortOutList();
         }
     };
 
@@ -529,7 +546,7 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void getSortOutListSuccess(int type, List<SortOutData> data) {
-        mListAll.clear();
+        dismissP();
         mListAll.addAll(data);
         loadSortOutList = true;
         //筛选条件
@@ -538,6 +555,7 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void getSortOutListFailed(int type, String message) {
+        dismissP();
         ToastUtil.showShortToast(getContext(), message);
     }
 
@@ -589,11 +607,16 @@ public class SortOutActivity extends BaseActivity implements
         }
 
         //逐级删除不符合的数据
-//        ArrayList<SortOutData> filterList = FilterUtil.filter(mListAll, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtBasket, mEtCustomGroup);
-        ArrayList<SortOutData> filterList = FilterUtil.filter(mListAll, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
+        ArrayList<SortOutData> filter = FilterUtil.filter(mListAll, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
+        mListFilter.clear();
+        mListFilter.addAll(filter);
 
         mListShow.clear();
-        mListShow.addAll(filterList);
+        if (mListFilter.size() > UPLOAD_PAGE_SIZE) {
+            mListShow.addAll(mListFilter.subList(0, UPLOAD_PAGE_SIZE));
+        } else {
+            mListShow.addAll(mListFilter);
+        }
         if (mListShow.size() > 0) {
             mPreSortOutData = mListShow.get(0);
             notifyItemClick();
@@ -662,6 +685,28 @@ public class SortOutActivity extends BaseActivity implements
     @Override
     public void onQueryStockFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (IsBottomUtil.isBottom(mGvSortOut)) {
+            int sizeFilter = mListFilter.size();
+            int sizeShow = mListShow.size();
+            if (sizeFilter > sizeShow) {
+                int endSize = sizeShow + UPLOAD_PAGE_SIZE;
+                if (sizeFilter > endSize) {
+                    mListShow.addAll(mListFilter.subList(sizeShow, endSize));
+                } else {
+                    mListShow.addAll(mListFilter.subList(sizeShow, sizeFilter));
+                }
+                mSortOutAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     /**
