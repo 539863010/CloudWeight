@@ -718,7 +718,7 @@ public class SortOutActivity extends BaseActivity implements
         private float mDim10Sp;
 
         private SortOutAdapter(Context context, List<SortOutData> data) {
-            super(context, R.layout.item_sort_out_new, data);
+            super(context, R.layout.item_sort_out, data);
             mDim10Sp = getResources().getDimension(R.dimen._10sp);
         }
 

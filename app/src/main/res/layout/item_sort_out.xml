@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/item_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_e7f0d5"
+                android:orientation="vertical"
+                android:padding="@dimen/_10dp"
+    >
+
+    <xm.cloudweight.widget.ScalableTextView
+        android:id="@+id/item_goods_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_20dp"
+        android:ellipsize="middle"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sp"
+        tools:text="TextView"
+        />
+
+    <View
+        android:id="@+id/item_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_0.5dp"
+        android:layout_below="@id/item_goods_name"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:background="@color/grey"/>
+
+    <TextView
+        android:id="@+id/item_goods_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_line"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/red"
+        android:textSize="@dimen/_20sp"
+        tools:text="重量"/>
+
+    <TextView
+        android:id="@+id/item_goods_weight_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/item_goods_weight"
+        android:layout_marginLeft="@dimen/_5dp"
+        android:layout_toRightOf="@id/item_goods_weight"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textSize="@dimen/_12sp"
+        tools:text="kg"/>
+
+    <TextView
+        android:id="@+id/item_goods_weight_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_goods_weight"
+        android:layout_marginBottom="@dimen/_4dp"
+        android:layout_marginTop="@dimen/_4dp"
+        android:singleLine="true"
+        android:textSize="@dimen/_10sp"
+        tools:text="TextView"
+        />
+
+    <TextView
+        android:id="@+id/item_goods_weight_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/item_goods_weight_all"
+        android:layout_toRightOf="@id/item_goods_weight_all"
+        android:singleLine="true"
+        android:gravity="end"
+        android:textSize="@dimen/_10sp"
+        tools:text="TextView"
+        />
+
+    <xm.cloudweight.widget.ScalableTextView
+        android:id="@+id/item_goods_customer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_12dp"
+        android:layout_below="@id/item_goods_weight_all"
+        android:layout_marginTop="@dimen/_2dp"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/color_71bd5c"
+        android:textSize="@dimen/_10sp"
+        tools:text="TextewTextViewTextViewTextView"
+        />
+
+</RelativeLayout>
