@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#F0EFF5">
+    
+  <ScrollView 
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:background="@drawable/system_setting_listview_shape" >
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="16" >
+
+      <LinearLayout 
+         android:id="@+id/divider_layout"
+         android:layout_width="fill_parent"
+         android:layout_height="40dp"
+         android:background="#F0EFF5"
+         android:orientation="vertical">         
+      </LinearLayout>
+     
+     <LinearLayout 
+        android:id="@+id/alarm_content_imgLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="225dp"       
+        android:gravity="center"
+        android:background="#F0EFF5"     
+        android:orientation="horizontal">
+
+      <!--    <ProgressBar
+             android:id="@+id/img_prgBar"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:progress="10"
+             style="@android:style/Widget.ProgressBar.Small" /> -->
+           
+         <ImageView 
+                android:id="@+id/imgView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"                
+                android:scaleType="fitXY"
+                android:contentDescription="@string/alarm_content_img"/>
+        </LinearLayout>
+        
+     <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+          <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2"
+            android:layout_alignParentTop="true" />
+
+            <LinearLayout
+                android:id="@+id/device_add_recorders"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"                    
+                    android:text="@string/alarm_content_devicename"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <com.starnet.snview.util.LineEditText
+                android:id="@+id/alarm_content_device"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/device_add_recorders"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="none"
+                android:singleLine="true"
+                android:textSize="16sp" >
+
+            </com.starnet.snview.util.LineEditText>
+
+        </RelativeLayout> 
+        
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+           <LinearLayout 
+                android:id="@+id/server_name"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"   
+                    android:gravity="center_vertical"
+                    android:text="@string/alarm_content_time"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <com.starnet.snview.util.LineEditText
+                android:id="@+id/alarm_content_time"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/server_name"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+             >
+
+            <LinearLayout
+                android:id="@+id/txt_device_add_port"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                 >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/alarm_content_type"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <com.starnet.snview.util.LineEditText
+                android:id="@+id/alarm_content_type"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/txt_device_add_port"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+<!--         <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/cloudaccout_setting_marginleft"
+            android:layout_marginRight="@dimen/cloudaccout_setting_marginright" >
+
+            <LinearLayout
+                android:id="@+id/txt_device_add_ip"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:gravity="center"
+                    android:text="@string/alarm_content_ip"
+                    android:textColor="@color/md__defaultBackground"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/alarm_content_ip"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="47sp"
+                android:layout_toRightOf="@id/txt_device_add_ip"
+                android:ems="10"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="18sp" >
+
+                <requestFocus />
+            </EditText>
+        </RelativeLayout> -->
+
+        <!-- <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/cloudaccout_setting_marginleft"
+            android:layout_marginRight="@dimen/cloudaccout_setting_marginright" >
+
+            <LinearLayout
+                android:id="@+id/txt_device_add_iport"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:gravity="center"
+                    android:text="@string/alarm_content_port"
+                    android:textColor="@color/md__defaultBackground"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/alarm_content_iport"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="47sp"
+                android:layout_toRightOf="@id/txt_device_add_iport"
+                android:ems="10"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="18sp" >
+
+                <requestFocus />
+            </EditText>
+        </RelativeLayout> -->
+
+        <RelativeLayout
+            android:id="@+id/alarm_channel_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:id="@+id/txt_device_add_channel"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"  
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/alarm_content_channel"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <com.starnet.snview.util.LineEditText
+                android:id="@+id/alarm_content_channel"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/txt_device_add_channel"
+                android:ems="10"
+                android:background="@null"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+             >
+
+            <LinearLayout
+                android:id="@+id/txt_device_add_pushusername"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/alarm_content_pushusername"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <com.starnet.snview.util.LineEditText
+                android:id="@+id/alarm_content_pushusername"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/txt_device_add_pushusername"
+                android:ems="10"
+                android:background="@null"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:id="@+id/txt_device_add_pushdomain"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/alarm_content_pushdomain"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/alarm_content_pushdomain"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/txt_device_add_pushdomain"
+                android:ems="10"
+                android:background="@null"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="16sp" />
+             <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2"
+            android:layout_alignParentBottom="true" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="#F0EFF5" >
+            
+        </LinearLayout>
+        
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+              <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2"
+            android:layout_alignParentTop="true" />
+
+            <LinearLayout
+                android:id="@+id/txt_device_add_username"
+                android:layout_width="fill_parent"
+                android:layout_height="120dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/alarm_content_contents"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/alarm_content_contents"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:ems="10"
+                    android:background="@null"
+                    android:inputType="textMultiLine" 
+                    android:textSize="16sp"/>
+            </LinearLayout>
+        </RelativeLayout>
+        
+      <!--   <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <Button 
+                android:id="@+id/imgBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_manageradapter_imageload"/>
+        </LinearLayout> -->
+       
+    </LinearLayout>
+
+</ScrollView> <!-- </LinearLayout> -->
+
+      <LinearLayout
+        android:id="@+id/alarm_content_bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:background="#F7F7F7"
+        android:dividerHeight="0.0dip"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/vdoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:layout_gravity="center"
+                android:background="#F7F7F7"
+                android:text="@string/alarm_manageradapter_videopreview"
+                android:textColor="@drawable/button_text_color_selector" 
+                android:textSize="18sp"/>
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>

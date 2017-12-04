@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_similar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    tools:context="xm.cloudweight.SimilarActivity">
+
+    <LinearLayout
+        android:layout_width="@dimen/_0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.75"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <xm.cloudweight.widget.DataSpinner
+                android:id="@+id/sp_ware_house"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_35dp"
+                android:background="@drawable/shape_spinner_bg_a"
+                android:minWidth="@dimen/spinner_min_width"
+                />
+
+            <xm.cloudweight.widget.ScanEditText
+                android:id="@+id/et_basket"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/color_279c70"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="周转筐"
+                android:inputType="number"
+                android:paddingLeft="@dimen/_10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="@dimen/_12sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_goods"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2dp"
+                    android:paddingLeft="@dimen/_20dp"
+                    android:layout_marginRight="@dimen/_20dp"
+                    android:layout_marginTop="@dimen/_2dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_20sp"
+                    tools:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:id="@+id/container"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp">
+
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_pop_info"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="@dimen/_5dp"
+                                android:drawableTop="@drawable/tubiao_d_xiangq_a"
+                                android:paddingBottom="@dimen/_10dp"
+                                android:paddingLeft="@dimen/_30dp"
+                                android:paddingRight="@dimen/_30dp"
+                                android:paddingTop="@dimen/_10dp"
+                                android:text="详情"/>
+
+                            <View
+                                android:layout_width="@dimen/_1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="@dimen/_20dp"
+                                android:layout_marginTop="@dimen/_20dp"
+                                android:background="@color/grey"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="@dimen/_5dp"
+                                android:drawableTop="@drawable/tubiao_d_zhouzk_a"
+                                android:paddingBottom="@dimen/_10dp"
+                                android:paddingLeft="@dimen/_30dp"
+                                android:paddingRight="@dimen/_30dp"
+                                android:paddingTop="@dimen/_10dp"
+                                android:text="周转筐"/>
+
+                            <ListView
+                                android:id="@+id/lv_basket_saved"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_10dp"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_marginRight="@dimen/_10dp"
+                android:layout_weight="0.25"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/_20dp">
+
+                <include
+                    android:id="@+id/ll_stock_num"
+                    layout="@layout/layout_item"/>
+
+                <include
+                    android:id="@+id/ll_current_weight"
+                    layout="@layout/layout_item"/>
+
+                <include
+                    android:id="@+id/ll_weight_accumulate"
+                    layout="@layout/layout_item"
+                    android:visibility="gone"/>
+
+                <include
+                    android:id="@+id/ll_buckles_leather"
+                    layout="@layout/layout_item"/>
+
+                <include
+                    android:id="@+id/ll_deduct_weight"
+                    layout="@layout/layout_item"/>
+
+                <include
+                    android:id="@+id/ll_count"
+                    layout="@layout/layout_item"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:background="@color/color_135c31"
+        android:orientation="vertical">
+
+        <xm.cloudweight.widget.DataSpinner
+            android:id="@+id/sp_goods_category"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35dp"
+            android:background="@drawable/shape_spinner_bg_a"
+            android:minWidth="@dimen/spinner_min_width"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35dp"
+            android:layout_marginBottom="@dimen/_5dp"
+            android:layout_marginLeft="@dimen/_10dp"
+            android:layout_marginRight="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:background="@drawable/shape_edit_round_bg_135c31"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <xm.cloudweight.widget.SearchAndFocusEditText
+                android:id="@+id/et_key_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="商品名"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sp"/>
+
+            <ImageView
+                android:id="@+id/iv_similar_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5dp"
+                android:layout_marginRight="@dimen/_10dp"
+                android:background="@drawable/tubiao_l_shous_a"/>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_goods"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_71bd5c"
+            android:divider="@color/color_135c31"
+            android:dividerHeight="0.5dp"/>
+    </LinearLayout>
+
+</LinearLayout>

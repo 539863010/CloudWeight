@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ExpandableListView
+        android:id="@+id/alarm_expandlistview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/alarm_push_bottombar"        
+        android:background="@color/color_white"
+        android:groupIndicator="@null"
+        android:fadingEdge="vertical"        
+        android:divider="@drawable/alarm_list_item_divider"
+        android:dividerHeight="0.25dip" 
+        >
+    </ExpandableListView>
+    
+      <LinearLayout
+        android:id="@+id/alarm_push_bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:background="#F7F7F7"
+        android:dividerHeight="0.0dip"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/alarm_pushset_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:layout_gravity="center"
+                android:background="#F7F7F7"
+                android:text="@string/system_setting_alarm_pushset"
+                android:textColor="@drawable/button_text_color_selector" 
+                android:textSize="18sp"/>
+        </FrameLayout>
+    </LinearLayout>
+    
+
+</RelativeLayout>

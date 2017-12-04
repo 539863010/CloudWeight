@@ -1,0 +1,305 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".DemoActivity" >
+
+    <FrameLayout
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentRight="true" >
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/videoView"
+        android:layout_below="@+id/videoView"
+        android:text="预览" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_play"
+        android:layout_alignBottom="@+id/btn_play"
+        android:layout_toRightOf="@+id/btn_play"
+        android:text="关闭" />
+
+    <Button
+        android:id="@+id/btn_zoom_in"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_stop"
+        android:layout_alignBottom="@+id/btn_stop"
+        android:layout_toRightOf="@+id/btn_stop"
+        android:text="放大" />
+
+    <Button
+        android:id="@+id/btn_zoom_out"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btn_zoom_in"
+        android:layout_alignBottom="@+id/btn_zoom_in"
+        android:layout_toRightOf="@+id/btn_zoom_in"
+        android:text="缩小" />
+
+    <!-- 第一行 -->
+    <!-- 云台移动-左上 -->
+
+    <Button
+        android:id="@+id/btn_left_up"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_below="@+id/btn_play"
+        android:text="↖"/>
+    <!-- 云台移动-上 -->
+   
+
+    <Button
+        android:id="@+id/btn_up"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignTop="@+id/btn_left_up"
+        android:layout_toRightOf="@+id/btn_left_up"
+        android:text="上" />
+    <!-- 云台移动-右上 -->
+
+    <Button
+        android:id="@+id/btn_right_up"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignTop="@+id/btn_up"
+        android:layout_toRightOf="@+id/btn_up" 
+        android:text="↗"/>
+
+    <!-- 第二行 -->
+    <!-- 云台移动-左 -->
+
+    <Button
+        android:id="@+id/btn_left"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_below="@+id/btn_left_up"
+        android:text="左"  />
+
+    <!-- 云台移动-中 -->
+
+    <Button
+        android:id="@+id/btn_center"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignTop="@+id/btn_left"
+        android:layout_toRightOf="@+id/btn_left"
+        android:paddingLeft="40dip" />
+    <!-- 云台移动-右 -->
+
+    <Button
+        android:id="@+id/btn_right"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignTop="@+id/btn_center"
+        android:layout_toRightOf="@+id/btn_center"
+        android:text="右" />
+    
+     <!-- 第三行 -->
+    <!-- 云台移动-左下 -->
+    <Button
+        android:id="@+id/btn_left_down"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_below="@+id/btn_left"
+        android:text="↙"/>
+    <!-- 云台移动-下 -->
+    <Button
+        android:id="@+id/btn_down"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/btn_left_down"
+        android:layout_alignTop="@+id/btn_left_down"
+        android:text="下"   />
+    <!-- 云台移动-右下 -->
+    <Button
+        android:id="@+id/btn_right_down"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/btn_down"
+        android:layout_alignTop="@+id/btn_down" 
+        android:text="↘"/>
+    
+    <!-- 预置点 -->
+    <TextView
+        android:id="@+id/txtPrePoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn_right"
+        android:layout_toRightOf="@+id/btn_right"
+        android:layout_marginLeft="15dp"
+        android:text="预置点" />
+    <EditText
+        android:id="@+id/editPrePoint"
+        android:inputType="number"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignBaseline="@+id/txtPrePoint"
+        android:layout_toRightOf="@+id/txtPrePoint"
+        android:hint="点位"
+        android:text="1"
+        android:textColor="#000000"
+        android:textColorHint="#555555" />
+    <!-- 定位 -->
+    <Button
+        android:id="@+id/btn_goto_point"
+        android:layout_width="50dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/editPrePoint"
+        android:layout_alignBaseline="@+id/editPrePoint"
+        android:text="定位"   />
+    <!-- 设置预置点 -->
+    <Button
+        android:id="@+id/btn_set_point"
+        android:layout_width="50dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/btn_goto_point"
+        android:layout_alignBaseline="@+id/btn_goto_point" 
+        android:text="设置"/>"
+
+
+    
+
+    <TextView
+        android:id="@+id/txtIp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btn_left_down"
+        android:layout_below="@+id/btn_left_down"
+        android:layout_marginTop="25dp"
+        android:text="IP" />
+
+    <EditText
+        android:id="@+id/editIP"
+        android:layout_width="130dip"
+        android:layout_height="40dip"
+        android:layout_alignBaseline="@+id/txtIp"
+        android:layout_alignBottom="@+id/txtIp"
+        android:layout_toRightOf="@+id/txtIp"
+        android:hint="请输入IP"
+        android:text="10.18.72.136"
+        android:textColor="#000000"
+        android:textColorHint="#555555" />
+
+    <TextView
+        android:id="@+id/txtPort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editIP"
+        android:layout_alignBottom="@+id/editIP"
+        android:layout_toRightOf="@+id/editIP"
+        android:text="端口" />
+
+    <EditText
+        android:id="@+id/editPort"
+        android:layout_width="70dip"
+        android:layout_height="40dip"
+        android:layout_alignBaseline="@+id/editIP"
+        android:layout_toRightOf="@+id/txtPort"
+        android:hint="请输入端口"
+        android:text="8080"
+        android:textColor="#000000"
+        android:textColorHint="#555555" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/txtChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editPort"
+        android:layout_alignBottom="@+id/editPort"
+        android:layout_toRightOf="@+id/editPort"
+        android:text="通道" />
+
+    <EditText
+        android:id="@+id/editChannel"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignBaseline="@+id/editIP"
+        android:layout_toRightOf="@+id/txtChannel"
+        android:hint="通道"
+        android:text="0"
+        android:textColor="#000000"
+        android:textColorHint="#555555" >
+    </EditText>
+
+    <!-- 用户名 -->
+
+    <TextView
+        android:id="@+id/txtUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtIp"
+        android:layout_below="@+id/txtIp"
+        android:paddingTop="20dip"
+        android:text="用户名" />
+
+    <EditText
+        android:id="@+id/editUser"
+        android:layout_width="70dip"
+        android:layout_height="40dip"
+        android:layout_alignBaseline="@+id/txtUser"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/txtUser"
+        android:ems="5"
+        android:text="admin"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/txtPassWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editUser"
+        android:layout_alignBottom="@+id/editUser"
+        android:layout_toRightOf="@+id/editUser"
+        android:text="密码" />
+
+    <EditText
+        android:id="@+id/editPassword"
+        android:layout_width="60dip"
+        android:layout_height="40dip"
+        android:layout_alignBaseline="@+id/txtPassWord"
+        android:layout_alignBottom="@+id/txtPassWord"
+        android:layout_toRightOf="@+id/txtPassWord"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="123456"
+        android:textColor="#000000" />
+
+    <!-- 记录名 -->
+
+    <TextView
+        android:id="@+id/txtRecordName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editPassword"
+        android:layout_toRightOf="@+id/editPassword"
+        android:paddingTop="20dip"
+        android:text="记录名" />
+
+    <EditText
+        android:id="@+id/editRecordName"
+        android:layout_width="70dip"
+        android:layout_height="40dip"
+        android:layout_alignBaseline="@+id/txtRecordName"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/txtRecordName"
+        android:ems="5"
+        android:text="136"
+        android:textColor="#000000" />
+
+</RelativeLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/channel_listview_device_item_bg"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical"
+    android:weightSum="10.0" >
+
+    <!-- android:descendantFocusability="blocksDescendants" -->
+    
+    <LinearLayout 
+        android:id="@+id/devicelist_progressBar_Layout"
+        android:layout_width="0.0dip" 
+        android:layout_height="@dimen/channel_listview_account_item_height" 
+        android:layout_weight="1.0" >
+
+        <ProgressBar
+            android:id="@+id/devicelist_progressBar_net_load"
+            android:layout_width="wrap_content"
+            android:progress="10"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+      <ImageView
+        android:id="@+id/channel_listview_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dip"
+        android:background="@drawable/channel_listview_right_arrow_selector"
+        android:contentDescription="@string/nothing" />
+
+   <LinearLayout 
+        android:id="@+id/imageLayout"
+        android:layout_width="0.0dip"
+        android:layout_height="@dimen/channel_listview_device_item_height"
+        android:layout_marginLeft="12dip"
+        android:layout_weight="2.0" >
+     <ImageView
+        android:id="@+id/channel_listview_device_item_text_prefix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/nothing"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/channel_listview_account_sel" />
+        
+      </LinearLayout>
+
+    <!-- <LinearLayout android:gravity="center" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" > -->
+    <!-- <ImageView android:background="@drawable/channel_listview_device" android:layout_width="wrap_content" android:layout_height="wrap_content" android:contentDescription="@string/nothing"/> -->
+    <!-- </LinearLayout> -->
+
+    
+    <TextView
+        android:id="@+id/channelName"
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="7.3"
+        android:layout_marginLeft="15dip"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:hint="@string/nothing"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textSize="@dimen/common_textsize_small_16sp" 
+       />
+    
+    <LinearLayout 
+        android:id="@+id/btnLayout"
+        android:gravity="center" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_marginRight="1dip"
+         >
+    <Button
+        android:id="@+id/button_state"
+        android:layout_width="40dip"
+        android:layout_height="40dip"        
+        android:background="@drawable/channellist_select_empty"
+        />
+      </LinearLayout>
+
+</LinearLayout>

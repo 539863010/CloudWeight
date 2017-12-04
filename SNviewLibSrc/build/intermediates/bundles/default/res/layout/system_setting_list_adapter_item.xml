@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal" > <!-- android:background="@drawable/system_setting_list_adapter_item_selector" -->
+    <!-- 修改item样式 -->
+    <TextView
+        android:id="@+id/tvColorSet"
+        android:layout_width="wrap_content"
+        android:layout_height="40dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:textColor="#0A0A0A"
+        android:textSize="16sp" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/ivConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="40dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="11dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="11dp" >
+    </ImageView>
+
+</RelativeLayout>

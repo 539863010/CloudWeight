@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp" >
+
+            <com.starnet.snview.componet.switchbutton.CheckSwitchButton
+                android:id="@+id/imgBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="150.0dip"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="23dp"
+            android:gravity="center|left"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/system_setting_alarmuser_accept"
+                android:textColor="#0A0A0A"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/alarm_cnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:gravity="left"
+                android:maxLines="3"
+                android:text="TextView"
+                android:textColor="@color/gray_transplate"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

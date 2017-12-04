@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/container_csvs1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center|left"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:text="@string/system_setting_alarminfo_accept"
+                android:textColor="#0A0A0A"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_push_accept"
+                android:layout_width="150.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_marginBottom="5.0dip"
+                android:lineSpacingMultiplier="1.0"
+                android:maxLines="2"
+                android:text="TextView"
+                android:textColor="@color/gray_transplate"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.starnet.snview.componet.switchbutton.CheckSwitchButton
+            android:id="@+id/global_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.25dip"
+        android:background="@drawable/list_item_divider"
+        android:orientation="horizontal" />
+
+    <RelativeLayout
+        android:id="@+id/container_csvs2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center|left"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/system_setting_alarminfo_remind_shake"
+                android:textColor="#0A0A0A"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_push_shake"
+                android:layout_width="150.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:maxLines="2"
+                android:text="TextView"
+                android:textColor="@color/gray_transplate"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.starnet.snview.componet.switchbutton.CheckSwitchButton
+            android:id="@+id/alarm_shake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.25dip"
+        android:background="@drawable/list_item_divider"
+        android:orientation="horizontal" />
+
+    <RelativeLayout
+        android:id="@+id/container_csvs3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center|left"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:text="@string/system_setting_alarminfo_remind_sound"
+                android:textColor="#0A0A0A"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_push_sound"
+                android:layout_width="150.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_marginBottom="5.0dip"
+                android:maxLines="2"
+                android:text="TextView"
+                android:textColor="@color/gray_transplate"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.starnet.snview.componet.switchbutton.CheckSwitchButton
+            android:id="@+id/alarm_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+</LinearLayout>

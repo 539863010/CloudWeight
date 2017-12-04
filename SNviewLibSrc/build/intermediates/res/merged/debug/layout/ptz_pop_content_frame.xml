@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <!-- 焦距弹窗 -->
+
+    <LinearLayout
+        android:id="@id/ptz_pop_focal_length_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ptz_pop_frame_bg"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="6.0" >
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+
+        <ImageButton
+            android:id="@id/ptz_pop_focal_length_decrease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ptz_pop_frame_decrease_btn_selector"
+            android:contentDescription="@string/nothing" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toolbar_sub_menu_focal_length" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.0" />
+
+        <ImageButton
+            android:id="@id/ptz_pop_focal_length_increase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ptz_pop_frame_increase_btn_selector"
+            android:contentDescription="@string/nothing" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+    </LinearLayout>
+    <!-- 聚焦弹窗 -->
+
+    <LinearLayout
+        android:id="@id/ptz_pop_focus_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ptz_pop_frame_bg"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="6.0" >
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+
+        <ImageButton
+            android:id="@id/ptz_pop_focus_decrease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ptz_pop_frame_decrease_btn_selector"
+            android:contentDescription="@string/nothing" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toolbar_sub_menu_focus" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.0" />
+
+        <ImageButton
+            android:id="@id/ptz_pop_focus_increase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ptz_pop_frame_increase_btn_selector"
+            android:contentDescription="@string/nothing" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+    </LinearLayout>
+    <!-- 光圈弹窗 -->
+
+    <LinearLayout
+        android:id="@id/ptz_pop_aperture_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ptz_pop_frame_bg"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="6.0" >
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+
+        <ImageButton
+            android:id="@id/ptz_pop_aperture_decrease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ptz_pop_frame_decrease_btn_selector"
+            android:contentDescription="@string/nothing" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toolbar_sub_menu_aperture" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="2.0" />
+
+        <ImageButton
+            android:id="@id/ptz_pop_aperture_increase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ptz_pop_frame_increase_btn_selector"
+            android:contentDescription="@string/nothing" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" />
+    </LinearLayout>
+    <!-- 预置点弹窗 -->
+
+    <LinearLayout
+        android:id="@id/ptz_pop_preset_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/ptz_presetpanelbg1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:paddingTop="9.0dip" >
+
+            <EditText
+                android:id="@id/ptz_pop_preset_edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/toolbar_sub_dialog_hint"
+                android:maxLength="3"
+                android:numeric="integer"
+                android:textSize="@dimen/common_textsize_small_16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ptz_presetpanelbg2"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="3.0dip"
+            android:weightSum="2.5" >
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0" />
+
+            <Button
+                android:id="@id/ptz_pop_preset_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ptz_presetbtn_selector"
+                android:text="@string/toolbar_sub_dialog_call"
+                android:textSize="@dimen/common_textsize_small_16sp" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.5" />
+
+            <Button
+                android:id="@id/ptz_pop_preset_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ptz_presetbtn_selector"
+                android:text="@string/toolbar_sub_dialog_set"
+                android:textSize="@dimen/common_textsize_small_16sp" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

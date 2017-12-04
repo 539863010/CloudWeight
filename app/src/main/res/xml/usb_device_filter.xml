@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <usb-device vendor-id="7568" class="7" />	     	<!-- 0x1d90 : CITIZEN POS Printer -->
+    <usb-device vendor-id="10032" class="7" />		<!-- 0x2730 : CITIZEN POS Printer -->
+</resources>

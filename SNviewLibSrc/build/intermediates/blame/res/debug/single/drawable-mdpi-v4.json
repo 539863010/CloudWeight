@@ -1,0 +1,70 @@
+[
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_menu_moreoverflow_normal_holo_light.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\ic_menu_moreoverflow_normal_holo_light.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\md__list_focused_holo.9.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\md__list_focused_holo.9.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_action_refresh_dark.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\ic_action_refresh_dark.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\download_icon.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\download_icon.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\simple_notification_icon.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\simple_notification_icon.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\md__list_longpressed_holo.9.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\md__list_longpressed_holo.9.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\menu_arrow_end.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\menu_arrow_end.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_alarm.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\ic_alarm.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\md__category_background.9.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\md__category_background.9.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\menu_arrow_top.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\menu_arrow_top.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\menu_arrow_start.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\menu_arrow_start.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\md__list_pressed_holo_dark.9.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\md__list_pressed_holo_dark.9.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_drawer.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\ic_drawer.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_action_select_all_dark.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\ic_action_select_all_dark.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\menu_arrow_bottom.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\menu_arrow_bottom.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\md_list_selector_disabled_holo_dark.9.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-mdpi\\md_list_selector_disabled_holo_dark.9.png"
+    }
+]

@@ -1,0 +1,78 @@
+<resources>
+    <drawable name="button_normal">#ff0096FF</drawable>
+    <drawable name="button_pressed">#557f7f7f</drawable>
+
+    <color name="md__transparent">#00000000</color>
+    <color name="black">#000000</color><!--黑色 --> 
+
+    <color name="md__defaultBackground">#FF555555</color>
+    
+    <color name="md__bgTransparent">#66555555</color>  
+    
+    <color name="menu_drawer_bg">#FF333333</color>
+    <color name="menu_drawer_item_bg">#00666666</color>
+    <color name="menu_drawer_item_top_bg">#00787878</color>
+    <color name="menu_drawer_item_active_bg">#FF1A6084</color>
+    <color name="menu_drawer_text_color">#FFE6E6E6</color>
+    
+    <color name="navigation_bar_blue_bg">#FF0096FF</color>
+    <color name="navigation_bar_red_bg">#FFFF3C3C</color>
+    <color name="view_bg">#FFF2F2F2</color>
+    
+    <color name="list_view_bg">#FFFFFFFF</color>
+    
+    <color name="images_listview_date_info_layout_bg">#FFF2F2F2</color>
+    <color name="images_date_textview">#FF666666</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="normal_lawngreen">#32cd32</color><!-- #32cd32 -->
+    <color name="pressed_lawngreen">#228b22</color><!-- #32cd32 -->
+    <color name="base_toolbar_sub_menu_text">#ffc9c9c9</color>
+    
+    <color name="channel_listview_account_item_bg_collapsed">#C0222222</color>
+    <color name="channel_listview_account_item_bg_expanded">#C0F2F2F2</color>
+    <color name="channel_listview_device_item_bg">#00FFFFFF</color>
+    <color name="channel_listview_device_divider">#F6F6F6</color>
+    <color name="channel_listview_text_selected">#FF3BC7FF</color>
+    <color name="channel_listview_text_unselected">#FFFFFFFF</color>
+    <color name="darkgray">#cccc</color>
+    <color name="color_white">#ffffff</color>
+    <color name="red">#FFFF0000</color>
+    <color name="blue">#0096ff</color>
+
+    
+    <color name="system_setting_listview_selected">#1E90FF</color>
+    <color name="system_setting_listview_background">#FFFFFF</color>
+    <color name="system_setting_listview_center">#666699</color>
+    <color name="system_setting_listview_line">#C8C8C8</color>
+    <color name="system_setting_button_selected">#FF0000</color>
+    <color name="system_setting_about_line">#8C8C8C</color>
+    <color name="system_setting_about_build">#000000</color>
+    <color name="system_setting_about_noIsenable">#666666</color> 
+    
+    <color name="gray_transplate">#66606060</color>
+    
+    <color name="windows_info_text_bg">#FF333333</color>
+    <color name="windows_info_text">#FFB2B2B2</color>
+<!--     <color name="windows_info_text">#FFF2F2F2</color> -->
+
+    
+    <color name="windows_info_lavender">#E6E6FA</color>   
+    <color name="listview_bg_noisenable">#999999</color> 
+    <color name="listview_bg_noIsenable">#666666</color> 
+    <color name="listview_bg_NoIsenable">#333333</color> 
+    <color name="listview_bg_NoIsEnable">#CCCCCC</color> 
+    
+    <color name="realplay_divider_1">#FFB4B4B4</color>
+    <color name="realplay_divider_2">#FF808080</color>
+    <color name="realplay_toast_bg">#AA808080</color>
+    
+    <color name="landscape_pageindicator">#FFFFEB00</color>
+    
+    <color name="liveview_bg_invalid">#FF606060</color>
+    <color name="image_manager_delete_red">#FF6666</color>
+    <color name="grey">#C8C8C8</color>
+    <color name="yellow">#ffffff00</color>
+    <color name="text_disable">#ff7f7f7f</color>
+    
+    
+</resources>

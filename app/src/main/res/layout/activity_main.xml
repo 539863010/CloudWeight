@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/_40dp"
+    android:background="@drawable/main_bg"
+    tools:context="xm.cloudweight.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_accepting"
+            style="@style/main_btns"
+            android:drawableTop="@drawable/tubiao_s_ruku"
+            android:text="验收"
+            />
+
+        <Button
+            android:id="@+id/btn_sorting"
+            style="@style/main_btns"
+            android:drawableTop="@drawable/tubiao_s_fenjian"
+            android:text="分拣"
+            />
+
+        <Button
+            android:id="@+id/btn_stockout"
+            style="@style/main_btns"
+            android:drawableTop="@drawable/tubiao_s_chuku"
+            android:text="出库"
+            />
+
+        <Button
+            android:id="@+id/btn_allocating"
+            style="@style/main_btns"
+            android:drawableTop="@drawable/tubiao_s_diaobo"
+            android:text="调拨"
+            />
+
+        <Button
+            android:id="@+id/btn_checking"
+            style="@style/main_btns"
+            android:drawableTop="@drawable/tubiao_s_pandian"
+            android:text="盘点"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/btn_height"
+        android:text="退出"
+        android:background="@drawable/anniu_b"
+        android:textSize="@dimen/_16sp"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

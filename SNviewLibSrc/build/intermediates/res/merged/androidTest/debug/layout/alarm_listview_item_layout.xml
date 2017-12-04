@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   >
+
+    <LinearLayout
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_list_item_imgcontainer_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="@dimen/device_list_item_imgcontainer_width"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+             >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/channel_listview_account_sel"
+                android:contentDescription="@string/nothing"
+               />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/devicename"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/device_list_item_spacing_10dp"
+                android:layout_marginTop="3dp"
+                android:singleLine="true"
+                android:text="@string/device_manager_name"
+                android:textColor="@color/md__defaultBackground"
+                android:textSize="@dimen/common_textsize_small_16sp" /> <!-- android:layout_marginLeft="@dimen/device_list_item_spacing_10dp" -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp" >
+
+                <TextView
+                    android:id="@+id/alarm_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:ellipsize="marquee"
+                    android:gravity="center|left"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@string/alarm_content_time" 
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/alarm_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:ellipsize="marquee"
+                    android:gravity="center|left"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@string/alarm_content_type" 
+                    android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/arrowimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/device_list_item_spacing_5dp"
+            android:layout_marginRight="@dimen/device_list_item_spacing_5dp"
+            android:background="@drawable/device_list_item_arrow_btn_selector"
+            android:contentDescription="@string/nothing"
+            android:focusable="false" />
+    </LinearLayout>
+
+</LinearLayout>

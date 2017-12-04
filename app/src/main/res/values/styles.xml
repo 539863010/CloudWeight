@@ -1,0 +1,57 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="main_btns">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/_20dp</item>
+        <item name="android:drawablePadding">@dimen/_5dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="item_title" parent="comm">
+        <item name="android:textSize">@dimen/_10sp</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+    <style name="similar_title" parent="comm">
+        <item name="android:textSize">@dimen/_10sp</item>
+        <item name="android:layout_marginTop">6dp</item>
+    </style>
+
+    <style name="similar_content" parent="comm">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:textSize">@dimen/_12sp</item>
+    </style>
+
+    <style name="item_content" parent="comm">
+        <item name="android:textSize">@dimen/_12sp</item>
+    </style>
+
+    <style name="comm">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="check_in_edit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/_10sp</item>
+        <item name="android:layout_marginRight">@dimen/_15dp</item>
+    </style>
+
+    <style name="btn_border_less" parent="@style/Widget.AppCompat.Button.Borderless">
+    </style>
+
+</resources>

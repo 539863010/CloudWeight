@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_40dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="@dimen/_60dp"
+        android:layout_height="wrap_content"
+        android:text="当前重量"
+        android:textSize="12sp"
+        />
+
+    <xm.cloudweight.widget.SearchAndFocusEditText
+        android:id="@+id/ed_content"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_weight="1"
+        android:ems="10"
+        tools:text="12.23"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:background="@drawable/shape_edit_round_bg_71bd5c"
+        android:singleLine="true"
+        android:textSize="@dimen/_16sp"/>
+
+    <TextView
+        android:id="@+id/tv_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kg"
+        android:layout_marginLeft="@dimen/_5dp"
+        android:textSize="@dimen/_12sp"/>
+
+</LinearLayout>

@@ -1,0 +1,71 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    signingConfigs {
+        release {
+            keyAlias 'sanyou'
+            keyPassword '123456'
+            storeFile file('D:/sanyou/签名及加固/sanyou.jks')
+            storePassword '123456'
+        }
+    }
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "xm.cloudweight"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            // 移除无用的resource文件   添加会引起打包报错
+//            shrinkResources true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+        }
+    }
+    greendao {
+        schemaVersion 1
+    }
+    //修改生成的apk文件名
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent, "ScaleApp-" + buildType.name + ".apk")
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    // add library
+    //其中lat est.release指代最新版本号，也可以指定明确的版本号，例如2.1.5
+    compile files('libs/CSJLabelLib_Android.jar')
+    compile project(':Serialport')
+    compile project(':SNviewLibSrc')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'org.greenrobot:greendao:3.2.2'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.trello:rxlifecycle-components:0.3.1'
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+}

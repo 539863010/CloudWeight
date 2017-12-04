@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\raw\\pushset_refreshsound.mp3",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\raw\\pushset_refreshsound.mp3"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\raw\\pushset_sound.mp3",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\raw\\pushset_sound.mp3"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\raw\\paizhao.mp3",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\raw\\paizhao.mp3"
+    }
+]

@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0EFF5"
+    tools:context="${packageName}.${activityClass}" >
+  <!-- 将listview改成自定义的CornerListview   -->
+    <com.starnet.snview.syssetting.CornerListView
+        android:id="@+id/cloudaccount_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dip"        
+        android:background="@drawable/system_setting_listview_shape"
+        android:cacheColorHint="#00000000"
+        android:divider="@drawable/system_setting_list_item_divider"
+        android:dividerHeight="1.0dip"  />
+    <!--  -->
+
+</LinearLayout>

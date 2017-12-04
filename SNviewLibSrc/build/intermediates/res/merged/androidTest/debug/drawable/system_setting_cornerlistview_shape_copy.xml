@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/system_setting_listview_selected" 
+        android:state_pressed="true"><shape>
+            <gradient android:angle="270" 
+                android:endColor="@color/system_setting_listview_selected" 
+                android:startColor="@color/system_setting_listview_selected" />
+            <!-- 描边  -->
+            <stroke android:width="0.25dp" android:color="#C8C8C8" />
+
+            <corners android:topLeftRadius="10dip" android:topRightRadius="10dip" />
+        </shape></item>
+
+</selector>

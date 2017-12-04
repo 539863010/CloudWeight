@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/channel_listview_device_item_bg"
+    android:gravity="center_vertical"
+    android:weightSum="10.0" >
+
+    <!-- android:descendantFocusability="blocksDescendants" -->
+
+    <LinearLayout
+        android:id="@+id/tv_container"
+        android:layout_width="0.0dip"
+        android:layout_height="@dimen/channel_listview_device_item_height"
+        android:layout_marginLeft="35sp"
+        android:layout_weight="1.0"
+        android:orientation="horizontal" />
+<!--  -->
+    <!-- <LinearLayout android:gravity="center" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" > -->
+    <!-- <ImageView android:background="@drawable/channel_listview_device" android:layout_width="wrap_content" android:layout_height="wrap_content" android:contentDescription="@string/nothing"/> -->
+    <!-- </LinearLayout> -->
+
+    <TextView
+        android:id="@id/channel_listview_device_item_text_prefix"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5.0dip"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:text="●"
+        android:textSize="@dimen/common_textsize_small_16sp" />
+
+    <TextView
+        android:id="@+id/channel_name"
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="8.4"
+        android:clickable="true"
+        android:ellipsize="marquee"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="left"
+        android:hint="@string/nothing"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textSize="@dimen/common_textsize_small_16sp" />
+
+    <LinearLayout
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/stateBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/channellist_select_empty"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+    </LinearLayout>
+
+</LinearLayout>

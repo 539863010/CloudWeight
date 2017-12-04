@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 自定义divider样式，修改长度，距离左边85dp,使其与用户名对齐，用于视频监控服务平台界面 -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:insetLeft="85dp"
+    android:drawable="@color/system_setting_listview_line">
+
+</inset>

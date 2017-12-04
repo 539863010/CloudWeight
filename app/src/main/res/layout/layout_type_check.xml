@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingBottom="@dimen/_5dp"
+              android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_add_weight"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="@dimen/btn_height_large"
+            android:background="@drawable/anniu_a"
+            android:layout_marginRight="@dimen/_5dp"
+            android:layout_marginLeft="@dimen/_10dp"
+            android:textColor="@color/white"
+            android:text="累计"
+            android:gravity="center"
+            android:textSize="@dimen/_14sp"/>
+
+
+        <Button
+            android:id="@+id/btn_inventory"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="@dimen/btn_height_large"
+            android:background="@drawable/selector_anniu_a_grey"
+            android:layout_marginRight="@dimen/_10dp"
+            android:layout_marginLeft="@dimen/_5dp"
+            android:textColor="@color/white"
+            android:text="确定"
+            android:gravity="center"
+            android:textSize="@dimen/_14sp"/>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

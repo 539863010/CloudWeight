@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="#FFFFFF"
+    android:gravity="center_vertical" >
+
+   
+    <!-- 设备列表 -->
+
+    
+    <!-- 搜索栏  -->
+    <EditText
+        android:id="@+id/search_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"
+        android:background="@drawable/search_edittext_shape"
+        android:drawableLeft="@drawable/search_icon"
+        android:drawablePadding="1dp"
+        android:hint="@string/channel_manager_channellistview_search"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+    
+	<!-- 设备列表 -->
+	<ExpandableListView
+        android:id="@+id/cloudaccountExtListview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/search_et"
+        android:layout_above="@+id/bottomBar"
+        android:cacheColorHint="@android:color/transparent"
+        android:childDivider="@android:color/transparent"
+        android:divider="@color/channel_listview_device_divider"
+        android:dividerHeight="0.0dip"
+        android:fadingEdge="vertical"
+        android:groupIndicator="@android:color/transparent"
+        android:scrollbars="vertical"
+        android:smoothScrollbar="true" />
+
+<!-- 底部工具栏空间
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dip"
+        android:background="#000000"
+        android:layout_below="@+id/cloudaccountExtListview"
+        android:orientation="vertical" >
+    </LinearLayout> -->
+    
+	<!--开始预览按钮  -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:background="#F7F7F7"
+        android:dividerHeight="0.0dip"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/startScan"
+                android:layout_width="wrap_content"
+                android:layout_height="50dip"
+                android:layout_gravity="center"
+                android:background="#F7F7F7"
+                android:text="@string/playback_click_start_scan"
+                android:textColor="@drawable/button_text_color_selector"
+                android:textSize="18sp" />
+
+
+
+        </FrameLayout>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

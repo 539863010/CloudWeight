@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="false" >
+
+    <LinearLayout
+        android:id="@id/landscape_liveview_pageindicator_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5.0dip"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <!-- 分页指示器控件（横屏） -->
+        <!-- <com.mcu.iVMS.component.PageIndicatorsView android:id="@id/landscape_liveview_pageindicator" android:layout_width="wrap_content" android:layout_height="wrap_content" /> -->
+
+        <TextView
+            android:id="@id/landscape_liveview_pageindicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fullscreen_pageindicator_bg"
+            android:gravity="center"
+            android:textColor="@color/landscape_pageindicator" />
+    </LinearLayout>
+
+    <!-- 横屏工具条 -->
+
+    <com.starnet.snview.component.LandscapeToolbar
+        android:id="@id/landscape_liveview_control_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@id/landscape_liveview_controlbar_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false" >
+
+            <!-- 视频质量控件条（横屏） -->
+
+            <LinearLayout
+                android:id="@id/landscape_liveview_quality_control_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fullscreen_bar"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="13.0dip"
+                android:paddingRight="10.0dip"
+                android:visibility="gone"
+                android:weightSum="9.0" >
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0" />
+                <!-- 清晰 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_quality_clear_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_liveview_quality_clear_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 均衡 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_quality_balance_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_liveview_quality_balance_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 流畅 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_quality_fluent_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_liveview_quality_fluent_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 自定义 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_quality_custom_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_liveview_quality_custom_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 关闭 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_quality_back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_bar_back_selector"
+                    android:clickable="false" />
+            </LinearLayout>
+
+            <!-- PTZ控制条（横屏） -->
+
+            <LinearLayout
+                android:id="@id/landscape_liveview_ptz_control_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fullscreen_bar"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="20.0dip"
+                android:paddingRight="20.0dip"
+                android:visibility="gone"
+                android:weightSum="12.0" >
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0" />
+                <!-- 自动巡航 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_ptz_auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_ptz_auto_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 焦距 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_ptz_focal_length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_ptz_focal_length_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 聚焦 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_ptz_focus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_ptz_focus_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 光圈 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_ptz_aperture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_ptz_aperture_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 预置点 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_ptz_preset_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_ptz_preset_point_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="3.0"
+                    android:clickable="false" />
+                <!-- 关闭 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_ptz_bar_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_bar_back_selector"
+                    android:clickable="false" />
+            </LinearLayout>
+
+            <!-- 功能工具条（横屏） -->
+
+            <LinearLayout
+                android:id="@id/landscape_liveview_controlbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fullscreen_bar"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="20.0dip"
+                android:paddingRight="20.0dip"
+                android:weightSum="16.0" >
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0" />
+                <!-- 拍照 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_capture_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_capture_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 录像 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_record_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_record_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- PTZ控制 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_ptz_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_ptz_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 视频质量 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_quality_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_quality_selector"
+                    android:clickable="false"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 删除所有选中 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_delete_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_delete_all_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 声音 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_sound_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_sound_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 麦克风 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_voicetalk_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_voicetalk_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 报警 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_alarm_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_alarm_selector"
+                    android:clickable="false" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.0"
+                    android:clickable="false" />
+                <!-- 放大 -->
+
+                <ImageButton
+                    android:id="@id/landscape_liveview_enlarge_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/landscape_enlarge_selector"
+                    android:clickable="false"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:clickable="false" />
+            </LinearLayout>
+        </FrameLayout>
+    </com.starnet.snview.component.LandscapeToolbar>
+
+</RelativeLayout>

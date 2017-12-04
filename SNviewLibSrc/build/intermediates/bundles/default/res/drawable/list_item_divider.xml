@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 自定义divider样式，修改长度，距离左边20dp -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:insetLeft="20dp"
+    android:drawable="@color/system_setting_listview_line">
+
+</inset>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/pop_title"
+              android:layout_width="600dp"
+              android:gravity="center_vertical"
+              android:layout_height="@dimen/_34dp"
+              android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_goods_name"
+        android:layout_width="@dimen/history_item_width"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:text="商品"
+        android:layout_marginLeft="@dimen/_10dp"
+        android:layout_marginRight="@dimen/_10dp"
+        android:textSize="@dimen/history_item_size"/>
+
+    <TextView
+        android:id="@+id/item_goods_unit"
+        android:layout_width="@dimen/_50dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:layout_marginRight="@dimen/_10dp"
+        android:text="单位"
+        android:textSize="@dimen/history_item_size"/>
+
+    <TextView
+        android:id="@+id/item_order_num"
+        android:layout_width="@dimen/_50dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/_10dp"
+        android:singleLine="true"
+        android:text="订购数"
+        android:textSize="@dimen/history_item_size"/>
+
+    <TextView
+        android:id="@+id/item_sort_out_num"
+        android:layout_width="@dimen/_50dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/_10dp"
+        android:singleLine="true"
+        android:text="分拣数"
+        android:textSize="@dimen/history_item_size"/>
+
+    <TextView
+        android:id="@+id/item_customer"
+        android:layout_width="@dimen/_120dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:singleLine="true"
+        android:layout_marginRight="@dimen/_10dp"
+        android:text="客户"
+        android:textSize="@dimen/history_item_size"/>
+
+    <TextView
+        android:id="@+id/item_order_id"
+        android:layout_width="@dimen/_0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/_10dp"
+        android:singleLine="true"
+        android:text="订单编号"
+        android:textSize="@dimen/history_item_size"/>
+
+    <Button
+        android:id="@+id/item_revocation"
+        android:layout_width="@dimen/_42dp"
+        android:layout_height="@dimen/_25dp"
+        android:gravity="center"
+        android:text="撤销"
+        android:textColor="@color/color_20925f"
+        android:background="@drawable/anniu_c"
+        android:layout_marginRight="@dimen/_10dp"
+        android:textSize="9sp"/>
+
+
+</LinearLayout>

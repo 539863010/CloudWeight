@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\simple_notification_icon.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-ldpi\\simple_notification_icon.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-ldpi-v4\\ic_launcher.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-ldpi\\ic_launcher.png"
+    }
+]

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="40dp"
+              android:orientation="horizontal">
+
+    <FrameLayout
+        android:id="@+id/video_frame"
+        android:layout_width="260dp"
+        android:layout_height="200dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/zero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="false"
+                android:text="归零"
+                android:textColor="@color/red" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/debarked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:clickable="false"
+                android:text="去皮"
+                android:textColor="@color/red" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/stable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:clickable="false"
+                android:text="稳定"
+                android:textColor="@color/red" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=""
+            android:textColor="@color/red"
+            android:textSize="26sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="open"
+                android:text="开启视频" />
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="close"
+                android:text="关闭视频" />
+
+            <Button
+                android:id="@+id/screenshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="screenshot"
+                android:text="截  屏" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/open_instrument"
+                android:onClick="openYb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开启仪表" />
+
+            <Button
+                android:id="@+id/close_instrument"
+                android:onClick="closeYb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关闭仪表" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

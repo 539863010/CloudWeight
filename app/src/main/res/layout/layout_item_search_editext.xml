@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_40dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="@dimen/_60dp"
+        android:layout_height="wrap_content"
+        android:text="当前重量"
+        android:textSize="12sp"
+        />
+
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="36dp">
+
+        <xm.cloudweight.widget.SearchEditText
+            android:id="@+id/ed_content"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_edit_round_bg_71bd5c"
+            android:ems="10"
+            tools:text="140.22"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:textSize="@dimen/_16sp"/>
+
+        <ImageView
+            android:id="@+id/img_sub"
+            android:layout_centerVertical="true"
+            android:src="@drawable/tubiao_k_sub"
+            android:layout_marginLeft="@dimen/_4dp"
+            android:visibility="gone"
+            android:layout_width="@dimen/_25dp"
+            android:layout_height="@dimen/_25dp"/>
+
+        <ImageView
+            android:id="@+id/img_add"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_4dp"
+            android:visibility="gone"
+            android:src="@drawable/tubiao_k_add"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/_25dp"
+            android:layout_height="@dimen/_25dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kg"
+        android:layout_marginLeft="@dimen/_5dp"
+        android:textSize="@dimen/_12sp"/>
+
+</LinearLayout>

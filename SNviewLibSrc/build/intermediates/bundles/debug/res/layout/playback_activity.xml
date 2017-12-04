@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+	<RelativeLayout
+	    android:id="@id/playback_container"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true" >
+
+	    <!-- <ImageView android:background="@drawable/demo_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:contentDescription="@string/nothing"/> -->
+
+	    <FrameLayout
+	        android:id="@+id/playback_video_region"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true" />
+		<!-- 全屏工具栏 -->
+	    <include
+	        android:id="@id/playback_landscape_pop_frame"
+	        layout="@layout/playback_landscape_controlbar_frame" />
+
+	    <!-- 时间标尺 -->
+
+	    <FrameLayout
+	        android:id="@id/playback_controlbar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="@dimen/timebar_height"
+	        android:layout_alignParentBottom="true"
+	        android:background="@drawable/liveview_extend_bar" >
+
+	        <com.starnet.snview.playback.TimeBar
+	            android:id="@id/timebar_control"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:layout_gravity="center"
+	            android:layout_margin="1.0dip" />
+	    </FrameLayout>
+	</RelativeLayout>
+
+</RelativeLayout>

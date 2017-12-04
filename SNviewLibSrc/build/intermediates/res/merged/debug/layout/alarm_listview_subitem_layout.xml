@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/channel_listview_account_item_bg_collapsed"
+        android:paddingLeft="30.0dp"
+        android:gravity="left" >
+        <Button
+            android:id="@+id/contentbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="@string/alarm_manageradapter_content"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/imgbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="@string/alarm_manageradapter_imageload"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/vdobtn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="@string/alarm_manageradapter_videopreview" />
+    </LinearLayout>
+
+</LinearLayout>

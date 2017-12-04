@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#F0EFF5"
+    android:scrollbars="vertical" >
+
+    <!-- android:layout_marginTop="@dimen/cloudaccout_setting_mtop" -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/system_setting_listview_shape"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"            
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="65dp"
+                android:layout_height="wrap_content" 
+                android:layout_marginLeft="20dp"              
+                android:text="@string/system_setting_cloudaccount_username"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <com.starnet.snview.util.LineEditText
+                android:id="@+id/user_edt"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="5"
+                android:background="@null"
+                android:inputType="text"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/system_setting_cloudaccount_password"
+                android:textColor="@color/black" 
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/password_edt"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="5"
+                android:background="@null"
+                android:gravity="left|center"
+                android:hint="@string/alarm_user_please_input_newpassword_hint"
+                android:inputType="textPassword"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

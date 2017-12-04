@@ -1,0 +1,42 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral() // add repository
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.8.1'
+    }
+}
+
+
+
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    // Sdk and tools
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.0'
+    minSdkVersion = 21
+    targetSdkVersion = 21
+
+}

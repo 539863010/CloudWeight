@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\right.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\right.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\right_down.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\right_down.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\left.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\left.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\left_down.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\left_down.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\down.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\down.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\right_up.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\right_up.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\ic_launcher.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\up.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\up.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\left_up.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\left_up.png"
+    }
+]

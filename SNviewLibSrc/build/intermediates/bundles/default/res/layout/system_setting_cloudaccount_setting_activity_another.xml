@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0EFF5" >
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            android:layout_marginTop="45dip"
+            android:scrollbars="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="0.5dip"
+                        android:background="#B2B2B2" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white" >
+
+                    <LinearLayout
+                        android:id="@+id/system_setting_add_server"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true" >
+
+                        <TextView
+                            android:layout_width="95dp"
+                            android:layout_height="53dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/system_setting_cloudaccount_server"
+                            android:textColor="@color/md__defaultBackground"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <!-- 使用自定义的EditText -->
+
+                    <com.starnet.snview.util.LineEditText
+                        android:id="@+id/cloudaccount_setting_server_edittext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@id/system_setting_add_server"
+                        android:background="@null"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:text="xy3.star-netsecurity.com"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white" >
+
+                    <LinearLayout
+                        android:id="@+id/system_setting_add_port"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true" >
+
+                        <TextView
+                            android:layout_width="95dp"
+                            android:layout_height="53dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/system_setting_cloudaccount_port"
+                            android:textColor="@color/md__defaultBackground"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.starnet.snview.util.LineEditText
+                        android:id="@+id/cloudaccount_setting_port_edittext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@id/system_setting_add_port"
+                        android:background="@null"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:text="10080"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+
+                <!-- android:hint="@string/device_manager_collect_add_not_ext65534" -->
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white" >
+
+                    <LinearLayout
+                        android:id="@+id/system_setting__add_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true" >
+
+                        <TextView
+                            android:layout_width="95dp"
+                            android:layout_height="53dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/system_setting_cloudaccount_username"
+                            android:textColor="@color/md__defaultBackground"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.starnet.snview.util.LineEditText
+                        android:id="@+id/cloudaccount_setting_username_edittext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@id/system_setting__add_username"
+                        android:background="@null"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:singleLine="true"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white" >
+
+                    <LinearLayout
+                        android:id="@+id/system_setting_add_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true" >
+
+                        <TextView
+                            android:layout_width="95dp"
+                            android:layout_height="53dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/system_setting_cloudaccount_password"
+                            android:textColor="@color/md__defaultBackground"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.starnet.snview.util.LineEditText
+                        android:id="@+id/cloudaccount_setting_password_edittext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/system_setting_add_password"
+                        android:background="@null"
+                        android:ems="10"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:textSize="16sp" >
+                    </com.starnet.snview.util.LineEditText>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_white" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3.0dp"
+                        android:background="@color/color_white"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="2"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:text="@string/device_manager_usable_flag"
+                            android:textColor="@color/md__defaultBackground"
+                            android:textSize="16sp" />
+
+                        <ToggleButton
+                            android:id="@+id/cloudaccount_setting_isenable_toggleButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="40dp"
+                            android:background="@android:color/transparent"
+                            android:button="@drawable/toggle_btn_selector"
+                            android:checked="true"
+                            android:text=""
+                            android:textOff=""
+                            android:textOn="" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="0.5dip"
+                        android:background="#B2B2B2" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#F7F7F7"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/identify_cloudaccount_right"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="#F7F7F7"
+                android:text="@string/identify_cloudaccount_right"
+                android:textColor="@drawable/button_text_color_selector"
+                android:textSize="18sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>

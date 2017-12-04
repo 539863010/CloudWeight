@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="false"
+    
+    android:visibility="visible" >
+
+    <com.starnet.snview.component.PlaybackLandscapeToolbar
+        android:id="@id/playback_landscape_toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/playback_fullscreen_timebar"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:id="@id/playback_landscape_toolbar_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:clickable="false"
+            android:gravity="center_vertical" >
+
+
+            <!-- 时间标尺  -->
+            <LinearLayout
+                android:id="@id/playback_landscape_timebar_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal" 
+		    	android:visibility="gone">
+
+                <!-- <com.mcu.iVMS.component.TimeBar android:layout_gravity="center_vertical" android:id="@id/landscape_timebar_control" android:layout_width="fill_parent" android:layout_height="@dimen/playback_progressbar_height" /> -->
+
+                <com.starnet.snview.playback.TimeBar
+                    android:id="@id/landscape_timebar_control"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/playback_progressbar_height"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="1.0dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal" >
+            <!-- 播放按钮 -->
+                <ImageButton
+                    android:id="@id/playback_landscape_pause_play_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dip"
+                    android:contentDescription="@string/playback_button_play"
+                    android:background="@drawable/landscape_pause_selector"
+                    android:clickable="false" />
+
+                <!-- 抓图 -->
+                <ImageButton
+                    android:id="@id/playback_landscape_capture_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/playback_fullscreen_item_margin"
+                    android:layout_marginRight="@dimen/playback_fullscreen_item_margin"
+                    android:contentDescription="@string/playback_button_capture"
+                    android:background="@drawable/landscape_capture_selector"
+                    android:clickable="false" />
+
+                <!-- 剪辑 -->
+                <ImageButton
+                    android:id="@id/playback_landscape_record_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/playback_fullscreen_item_margin"
+                    android:contentDescription="@string/playback_button_record"
+                    android:background="@drawable/landscape_playback_cut_selector"
+                    android:clickable="false" />
+
+                <!-- 声音 -->
+                <ImageButton
+                    android:id="@id/playback_landscape_sound_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/playback_fullscreen_item_margin"
+                    android:contentDescription="@string/playback_button_audio"
+                    android:background="@drawable/landscape_sound_selector"
+                    android:clickable="false" />
+				<!-- 停止 -->
+                <ImageButton
+                    android:id="@id/playback_landscape_stop_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/playback_button_stop"
+                    android:background="@drawable/landscape_delete_all_selector"
+                    android:clickable="false" />
+
+                <ImageButton
+                    android:id="@id/playback_landscape_enlarge_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/landscape_enlarge_selector"
+                    android:clickable="false"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.starnet.snview.component.PlaybackLandscapeToolbar>
+
+</RelativeLayout>

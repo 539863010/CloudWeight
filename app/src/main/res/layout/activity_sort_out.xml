@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="xm.cloudweight.SortOutActivity">
+
+    <!--宽高不动-->
+    <xm.cloudweight.widget.PrinterView
+        android:id="@+id/pv"
+        android:layout_width="@dimen/printer_width"
+        android:layout_height="@dimen/printer_height"
+        android:visibility="invisible"/>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:visibility="invisible"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_135c31"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_date"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/btn_height"
+                android:layout_marginBottom="@dimen/_2dp"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_marginRight="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_2dp"
+                android:background="@drawable/anniu_b"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_5dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                />
+
+            <xm.cloudweight.widget.ScanEditText
+                android:id="@+id/et_basket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_5dp"
+                android:layout_weight="1"
+                android:hint="周转筐"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="@dimen/_14sp"/>
+
+            <xm.cloudweight.widget.SearchAndFocusEditText
+                android:id="@+id/et_goods_name_or_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_5dp"
+                android:layout_weight="1"
+                android:hint="商品名称或编码"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="@dimen/_14sp"/>
+
+            <xm.cloudweight.widget.SearchAndFocusEditText
+                android:id="@+id/et_custom_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_5dp"
+                android:layout_weight="1"
+                android:hint="分组"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="@dimen/_14sp"/>
+
+            <xm.cloudweight.widget.DataSpinner
+                android:id="@+id/sp_customers"
+                android:layout_width="80dp"
+                android:layout_height="@dimen/_35dp"
+                android:layout_marginRight="@dimen/_5dp"
+                android:background="@drawable/shape_spinner_bg_b">
+
+            </xm.cloudweight.widget.DataSpinner>
+
+            <xm.cloudweight.widget.DataSpinner
+                android:id="@+id/sp_customers_level"
+                android:layout_width="80dp"
+                android:layout_height="@dimen/_35dp"
+                android:layout_marginRight="@dimen/_5dp"
+                android:background="@drawable/shape_spinner_bg_b">
+
+            </xm.cloudweight.widget.DataSpinner>
+
+            <Button
+                android:id="@+id/btn_sort_out_weight"
+                style="@style/btn_border_less"
+                android:layout_width="@dimen/_80dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_sort_out_type"
+                android:text="重量"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sp"/>
+
+            <Button
+                android:id="@+id/btn_sort_out_count"
+                style="@style/btn_border_less"
+                android:layout_width="@dimen/_80dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_sort_out_type"
+                android:text="数量"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sp"/>
+
+            <Button
+                android:id="@+id/btn_sort_out_history"
+                style="@style/btn_border_less"
+                android:layout_width="@dimen/_80dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_135c31"
+                android:drawableTop="@drawable/tubiao_l_lishi"
+                android:text="历史"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sp"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:background="@color/color_20925f"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+             >
+
+                <TextView
+                    android:id="@+id/tv_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/btn_sort_out"
+                    android:layout_alignBottom="@+id/btn_sort_out"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
+                    android:layout_centerVertical="true"
+                    android:text="汇总："
+                    android:layout_marginLeft="@dimen/_20dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18sp"/>
+
+                <xm.cloudweight.widget.DataSpinner
+                    android:id="@+id/sp_ware_house"
+                    android:layout_width="100dp"
+                    android:layout_height="@dimen/_40dp"
+                    android:layout_toLeftOf="@+id/btn_sort_out"
+                    android:background="@drawable/shape_spinner_bg_b"
+                    >
+
+                </xm.cloudweight.widget.DataSpinner>
+
+                <Button
+                    android:id="@+id/btn_sort_out"
+                    android:layout_width="@dimen/_100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="@dimen/_10dp"
+                    android:layout_marginRight="@dimen/_20dp"
+                    android:background="@drawable/selector_anniu_d_grey"
+                    android:minHeight="@dimen/_40dp"
+                    android:text="确认"
+                    android:textColor="@color/color_135c31"
+                    android:textSize="@dimen/_12sp"/>
+
+            </RelativeLayout>
+
+            <GridView
+                android:id="@+id/gv_sort_out"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/linearLayout"
+                android:layout_alignParentStart="true"
+                android:horizontalSpacing="@dimen/_5dp"
+                android:numColumns="5"
+                android:padding="@dimen/_5dp"
+                android:verticalSpacing="@dimen/_5dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/_5dp"
+                android:paddingLeft="@dimen/_20dp"
+                android:paddingRight="@dimen/_20dp"
+                android:paddingTop="@dimen/_5dp">
+
+                <TextView
+                    android:id="@+id/tv_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="称重数："
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18sp"/>
+
+                <EditText
+                    android:id="@+id/et_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="@dimen/_10dp"
+                    android:paddingRight="@dimen/_10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/color_c5f25b"
+                    android:textSize="@dimen/_25sp"
+                    tools:text="99.9"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_type_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18sp"
+                    tools:text="kg"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

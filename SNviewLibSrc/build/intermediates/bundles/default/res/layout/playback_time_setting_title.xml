@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 表头 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical" >
+    <!-- 录像类型行 -->
+    <!-- 录像类型行空格 -->
+
+    <RelativeLayout
+        android:id="@+id/input_remote_type"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/playback_timesetting_account_item_height"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/liveview_extend_bar" >
+
+        <!-- 录像类型 -->
+
+        <TextView
+            android:id="@+id/video_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/playback_timesetting_txt_img_distance"
+            android:text="@string/playback_setting_video_type"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <!-- 手动 -->
+
+        <Button
+            android:id="@+id/btn_type_manu"
+            android:layout_width="50dip"
+            android:layout_height="30dip"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dip"
+            android:layout_toRightOf="@+id/video_type"
+            android:background="@drawable/button_check_selector"
+            android:text="@string/playback_setting_type_manu" />
+        <!-- 定时 -->
+
+        <Button
+            android:id="@+id/btn_type_auto"
+            android:layout_width="50dip"
+            android:layout_height="30dip"
+            android:layout_centerVertical="true"
+            android:layout_margin="3dip"
+            android:layout_toRightOf="@+id/btn_type_manu"
+            android:background="@drawable/button_check_selector"
+            android:text="@string/playback_setting_type_auto" />
+        <!-- 移动侦测 -->
+
+        <Button
+            android:id="@+id/btn_type_move"
+            android:layout_width="70dip"
+            android:layout_height="30dip"
+            android:layout_centerVertical="true"
+            android:layout_margin="3dip"
+            android:layout_toRightOf="@+id/btn_type_auto"
+            android:background="@drawable/button_check_long_selector"
+            android:text="@string/playback_setting_type_alarm_move" />
+        <!-- 报警 -->
+
+        <Button
+            android:id="@+id/btn_type_alarm"
+            android:layout_width="50dip"
+            android:layout_height="30dip"
+            android:layout_centerVertical="true"
+            android:layout_margin="3dip"
+            android:layout_toRightOf="@+id/btn_type_move"
+            android:background="@drawable/button_check_selector"
+            android:text="@string/playback_setting_type_alarm" />
+    </RelativeLayout>
+    <!-- 录像类型行-设备列表分割线 -->
+
+    <LinearLayout
+        android:id="@+id/divider4"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0px"
+        android:layout_below="@+id/input_remote_type"
+        android:background="@color/black"
+        android:orientation="horizontal" >
+    </LinearLayout>
+    <!-- 开始时间行头空格 -->
+
+
+    <!-- 开始时间行 -->
+
+    <RelativeLayout
+        android:id="@+id/input_starttime_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/playback_timesetting_account_item_height"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dip"
+        android:background="@drawable/time_edittext_shape"
+        android:layout_below="@+id/input_remote_type" >
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/playback_timesetting_txt_img_distance"
+            android:text="@string/playback_setting_start_time"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <!-- 点击输入时间 (开始时间) -->
+
+        <TextView
+            android:id="@+id/starttime"
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/playback_timesetting_txt_txt_distance"
+            android:layout_toRightOf="@+id/start_time"
+            android:text="@string/playback_click_input_time"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </RelativeLayout>
+    <!-- 开始时间-结束时间分隔线 -->
+
+    <LinearLayout
+        android:id="@+id/divider"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0px"
+        android:layout_below="@+id/input_starttime_view"
+        android:background="@color/black"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <!-- 结束时间行头空格 -->
+
+
+    <!-- 结束时间行 -->
+
+    <RelativeLayout
+        android:id="@+id/input_endtime_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/playback_timesetting_account_item_height"
+        android:layout_margin="5dip"
+        android:background="@drawable/time_edittext_shape"
+        android:layout_below="@+id/divider"
+        android:layout_centerVertical="true" >
+
+        <!-- android:src="@drawable/playback_clock" android:paddingLeft="38.0dip" -->
+        <!-- 结束时间 -->
+
+        <TextView
+            android:id="@+id/end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/playback_timesetting_txt_img_distance"
+            android:text="@string/playback_setting_end_time"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <!-- 点击输入时间(结束时间) -->
+
+        <TextView
+            android:id="@+id/endtime"
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/playback_timesetting_txt_txt_distance"
+            android:layout_toRightOf="@+id/end_time"
+            android:text="@string/playback_click_input_time"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </RelativeLayout>
+    <!-- 结束时间-录像类型分割线 -->
+
+    <LinearLayout
+        android:id="@+id/divider2"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0px"
+        android:layout_below="@+id/input_endtime_view"
+        android:background="@color/black"
+        android:orientation="horizontal" >
+    </LinearLayout>
+    
+    <!-- 时间选择器 -->
+    <FrameLayout
+        android:id="@+id/date_picker_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider2">
+
+        <include
+            android:id="@+id/datePicker"
+            android:visibility="invisible"
+            layout="@layout/time_dialog" />
+
+    </FrameLayout>
+
+</RelativeLayout>

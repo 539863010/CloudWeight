@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/update_progress_title"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/soft_updating"
+        android:textSize="20sp"
+        android:textColor="@color/black" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dip"
+        android:layout_below="@id/update_progress_title"
+        android:background="#B2B2B2" />
+
+    <LinearLayout
+        android:id="@+id/progressLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:layout_below="@id/update_progress_title" >
+
+        <ProgressBar
+            android:id="@+id/update_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_below="@id/progressLayout"
+        android:background="#F7F7F7"
+        android:dividerHeight="0.0dip"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dip"
+            android:background="#B2B2B2" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/update_cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dip"
+                android:layout_gravity="center"
+                android:background="#F7F7F7"
+                android:text="@string/soft_update_cancel"
+                android:textColor="#557f7f7f"
+                android:textSize="18sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>

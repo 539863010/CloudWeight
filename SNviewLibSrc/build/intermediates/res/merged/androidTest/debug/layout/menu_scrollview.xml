@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/menu_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@id/menu_drawer_top"
+            android:layout_width="match_parent"
+            android:layout_height="66dip"           
+            android:background="@color/menu_drawer_item_top_bg"     
+            android:text="@string/common_drawer_top"
+            style="@style/MenuDrawer.Widget.Title.Top" />
+        
+         <View 
+			android:layout_width="220dip" 
+			android:layout_height="1dip" 
+			android:layout_gravity="center_horizontal"
+			android:background="#44748E" />  
+       
+        <TextView
+            android:id="@id/menu_drawer_realtime_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/menu_drawer_realtime_preview"
+            android:background="@drawable/menu_drawer_item_selector"
+            android:text="@string/common_drawer_realtime_preview"
+            style="@style/MenuDrawer.Widget.Title" />
+        
+<!--         <View  -->
+<!-- 			android:layout_width="fill_parent"  -->
+<!-- 			android:layout_height="@dimen/menu_drawer_divider_height"  -->
+<!-- 			android:background="@drawable/menu_drawer_divide_line" />         -->
+
+        <TextView
+            android:id="@id/menu_drawer_remote_playback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/menu_drawer_remote_playback"
+            android:background="@drawable/menu_drawer_item_selector"
+            android:text="@string/common_drawer_remote_playback"
+            style="@style/MenuDrawer.Widget.Title" />
+        
+<!--         <View  -->
+<!-- 			android:layout_width="fill_parent"  -->
+<!-- 			android:layout_height="@dimen/menu_drawer_divider_height"  -->
+<!-- 			android:background="@drawable/menu_drawer_divide_line" />   -->
+
+        <TextView
+            android:id="@id/menu_drawer_device_managerment"  
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/menu_drawer_device_management"
+            android:background="@drawable/menu_drawer_item_selector"
+            android:text="@string/common_drawer_device_management"
+            style="@style/MenuDrawer.Widget.Title" />
+        
+<!--       	<View  -->
+<!-- 			android:layout_width="fill_parent"  -->
+<!-- 			android:layout_height="@dimen/menu_drawer_divider_height"  -->
+<!-- 			android:background="@drawable/menu_drawer_divide_line" />   -->
+
+        <TextView
+            android:id="@id/menu_drawer_picture_management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/menu_drawer_picture_management"
+            android:background="@drawable/menu_drawer_item_selector"
+            android:text="@string/common_drawer_picture_management"
+            style="@style/MenuDrawer.Widget.Title" />
+        
+<!--         <View  -->
+<!-- 			android:layout_width="fill_parent"  -->
+<!-- 			android:layout_height="@dimen/menu_drawer_divider_height"  -->
+<!-- 			android:background="@drawable/menu_drawer_divide_line" />   -->
+
+        <TextView
+            android:id="@id/menu_drawer_alarm_management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/menu_drawer_alarm_management"
+            android:background="@drawable/menu_drawer_item_selector"
+            android:text="@string/common_drawer_alarm_management"
+            style="@style/MenuDrawer.Widget.Title" />
+        
+
+<!--         <View  -->
+<!-- 			android:layout_width="fill_parent"  -->
+<!-- 			android:layout_height="@dimen/menu_drawer_divider_height"  -->
+<!-- 			android:background="@drawable/menu_drawer_divide_line" />   -->
+
+        <TextView
+            android:id="@id/menu_drawer_sys_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/menu_drawer_sys_setting"
+            android:background="@drawable/menu_drawer_item_selector"
+            android:text="@string/common_drawer_sys_setting"
+            style="@style/MenuDrawer.Widget.Title" />
+
+        
+
+    </LinearLayout>
+</ScrollView>

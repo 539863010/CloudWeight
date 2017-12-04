@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        sourceSets.main {
+            java.srcDirs = ['src/main/java']
+            jni.srcDirs = [] //设置这条将不生成so文件
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+        /*ndk {
+            moduleName "SerialPort"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+            ldLibs "log" //防止生成so文件时报日志错误
+        }*/
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+}
