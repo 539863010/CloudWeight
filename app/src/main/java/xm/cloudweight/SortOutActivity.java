@@ -1,5 +1,6 @@
 package xm.cloudweight;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Handler;
@@ -84,7 +85,7 @@ public class SortOutActivity extends BaseActivity implements
     public static final int DEFAULT_PAGE_SIZE = 0;
     public static final int PAGE_SIZE = 0;
     public static final int PAGE = 0;
-    public static final int UPLOAD_PAGE_SIZE = 100;
+    public static final int UPLOAD_PAGE_SIZE = 50;
 
     @BindView(R.id.btn_sort_out_history)
     Button mBtnSortOutHistory;
@@ -118,15 +119,19 @@ public class SortOutActivity extends BaseActivity implements
     TextView mTvAmount;
     @BindView(R.id.btn_sort_out)
     Button mBtnSortOut;
+    @BindView(R.id.btn_request)
+    Button mBtnRequest;
     private List<SortOutData> mListShow = new ArrayList<>();
     private ArrayList<SortOutData> mListFilter = new ArrayList<>();
-    private List<SortOutData> mListAll = new ArrayList<>();
+    private List<SortOutData> mListAllWeight = new ArrayList<>();
+    private List<SortOutData> mListAllCount = new ArrayList<>();
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private SortOutAdapter mSortOutAdapter;
     private int mIntType = TYPE_WEIGHT;
     private boolean loadCustomer;
     private boolean loadCustomerLevel;
-    private boolean loadSortOutList;
+    private boolean loadWeightSuccess;
+    private boolean loadCountSuccess;
     private SortOutData mPreSortOutData;
     private SortOutHistoryPopWindow mHistoryPopWindow;
     private DBManager mDBManager;
@@ -140,6 +145,7 @@ public class SortOutActivity extends BaseActivity implements
         return R.layout.activity_sort_out;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initContentView() {
         mVideoFragment = VideoFragment.getInstance();
@@ -163,6 +169,40 @@ public class SortOutActivity extends BaseActivity implements
         mSpCustomers.setTitleColor(R.color.color_135c31);
         mSpWareHouse.setTitleColor(R.color.color_135c31);
         mSpCustomersLevel.setTitleColor(R.color.color_135c31);
+//        mSpCustomers.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                ToastUtil.showShortToast(getContext(), "---------");
+//
+//                ArrayList<SortOutData> mListAll = new ArrayList<>();
+//                mListAll.addAll(mListAllWeight);
+//                mListAll.addAll(mListAllCount);
+//
+//                List<MerchantCustomer> list = mSpCustomers.getList();
+//                int size = list.size();
+//                if (size > 0) {
+//                    for (int i = 0; i < size; i++) {
+//                        MerchantCustomer merchantCustomer = list.get(i);
+//                        Customer customer = merchantCustomer.getCustomer();
+//                        String name = customer.getName();
+//                        boolean hasInfo = false;
+//                        for (SortOutData sortOutData : mListAll) {
+//                            IdName idName = sortOutData.getCustomer();
+//                            if (name.equals(idName.getName())) {
+//                                hasInfo = true;
+//                                break;
+//                            }
+//                        }
+//                        if (!hasInfo) {
+//                            list.remove(merchantCustomer);
+//                        }
+//                    }
+//                }
+//                mSpCustomers.setList(list);
+//                mSpCustomers.performClick();
+//                return true;
+//            }
+//        });
 
         mSpCustomers.setCustomItemSelectedListener(this);
         mSpCustomersLevel.setCustomItemSelectedListener(this);
@@ -211,8 +251,6 @@ public class SortOutActivity extends BaseActivity implements
         //设置当前日期
         String currentData = DateUtils.StringData();
         mBtnDate.setText(currentData);
-        showP();
-        SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, currentData);
     }
 
     private void getLocalInfo() {
@@ -256,7 +294,7 @@ public class SortOutActivity extends BaseActivity implements
         }
     }
 
-    @OnClick({R.id.btn_sort_out_weight, R.id.btn_sort_out_count, R.id.btn_sort_out_history, R.id.btn_sort_out, R.id.btn_date})
+    @OnClick({R.id.btn_sort_out_weight, R.id.btn_sort_out_count, R.id.btn_request, R.id.btn_sort_out_history, R.id.btn_sort_out, R.id.btn_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -268,26 +306,16 @@ public class SortOutActivity extends BaseActivity implements
                 if (mIntType == TYPE_WEIGHT) {
                     return;
                 }
-                mBtnSortOutWeight.setSelected(true);
-                mBtnSortOutCount.setSelected(false);
-                mTvType.setText("称重数：");
-                mEtShow.setText("");
-                mEtShow.setEnabled(false);
                 mIntType = TYPE_WEIGHT;
-                requestSortOutList();
+                setClick("称重数：", false, false, true);
                 break;
             }
             case R.id.btn_sort_out_count: {
                 if (mIntType == TYPE_COUNT) {
                     return;
                 }
-                mBtnSortOutCount.setSelected(true);
-                mBtnSortOutWeight.setSelected(false);
-                mTvType.setText("出库数量：");
-                mEtShow.setText("");
-                mEtShow.setEnabled(true);
                 mIntType = TYPE_COUNT;
-                requestSortOutList();
+                setClick("出库数量：", true, true, false);
                 break;
             }
             case R.id.btn_sort_out_history:
@@ -318,20 +346,46 @@ public class SortOutActivity extends BaseActivity implements
                     dismissP();
                 }
                 break;
+            case R.id.btn_request:
+                String time = mBtnDate.getText().toString().trim();
+                if (!TextUtils.isEmpty(time)) {
+                    mBtnRequest.setEnabled(false);
+                    dismissP();
+                    showP();
+                    loadWeightSuccess = false;
+                    loadCountSuccess = false;
+                    mListAllWeight.clear();
+                    mListAllCount.clear();
+                    mListFilter.clear();
+                    mListShow.clear();
+                    mSortOutAdapter.notifyDataSetChanged();
+                    SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+                    SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+                }
+                break;
             default:
                 break;
         }
     }
 
-    private void requestSortOutList() {
-        String time = mBtnDate.getText().toString().trim();
-        dismissP();
-        showP();
-        mListAll.clear();
+    private void setClick(String type, boolean showEnable, boolean countSelect, boolean weightSelect) {
+        mTvType.setText(type);
+        mEtShow.setText("");
+        mEtShow.setEnabled(showEnable);
+        mBtnSortOutCount.setSelected(countSelect);
+        mBtnSortOutWeight.setSelected(weightSelect);
         mListFilter.clear();
         mListShow.clear();
-        mSortOutAdapter.notifyDataSetChanged();
-        SortOutPresenter.getSourOutList(this, mIntType, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+        //不会滚动到第一行
+//        mSortOutAdapter.notifyDataSetChanged();
+
+        mGvSortOut.setAdapter(mSortOutAdapter);
+//                mGvSortOut.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+        filterList();
+//                    }
+//                });
     }
 
     private Handler mHandlerShotPic = new Handler(new Handler.Callback() {
@@ -412,6 +466,12 @@ public class SortOutActivity extends BaseActivity implements
                 if (mListShow.contains(mPreSortOutData)) {
                     mListShow.remove(mPreSortOutData);
                 }
+                if (mListAllWeight.contains(mPreSortOutData)) {
+                    mListAllWeight.remove(mPreSortOutData);
+                }
+                if (mListAllCount.contains(mPreSortOutData)) {
+                    mListAllCount.remove(mPreSortOutData);
+                }
             } else {
                 //显示已出 数量
                 if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
@@ -481,7 +541,6 @@ public class SortOutActivity extends BaseActivity implements
             String dayStr = (dayOfMonth < 10) ? "0" + dayOfMonth : dayOfMonth + "";
             String date = year + "-" + monthStr + "-" + dayStr;
             mBtnDate.setText(date);
-            requestSortOutList();
         }
     };
 
@@ -494,7 +553,6 @@ public class SortOutActivity extends BaseActivity implements
             mHistoryPopWindow.setOnDeleteListener(this);
         }
         refreshHistoryList();
-
     }
 
     /**
@@ -545,16 +603,34 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void getSortOutListSuccess(int type, List<SortOutData> data) {
-        dismissP();
-        mListAll.addAll(data);
-        loadSortOutList = true;
-        //筛选条件
-        filterList();
+        if (type == TYPE_WEIGHT) {
+            loadWeightSuccess = true;
+            mListAllWeight.clear();
+            mListAllWeight.addAll(data);
+        } else if (type == TYPE_COUNT) {
+            loadCountSuccess = true;
+            mListAllCount.clear();
+            mListAllCount.addAll(data);
+        }
+        if (loadWeightSuccess && loadCountSuccess) {
+            mBtnRequest.setEnabled(true);
+            dismissP();
+            //筛选条件
+            filterList();
+        }
     }
 
     @Override
     public void getSortOutListFailed(int type, String message) {
-        dismissP();
+        if (type == TYPE_WEIGHT) {
+            loadWeightSuccess = false;
+        } else {
+            loadCountSuccess = false;
+        }
+        if (!loadWeightSuccess && !loadCountSuccess) {
+            dismissP();
+            mBtnRequest.setEnabled(true);
+        }
         ToastUtil.showShortToast(getContext(), message);
     }
 
@@ -593,20 +669,31 @@ public class SortOutActivity extends BaseActivity implements
      */
     private void filterList() {
         //等待全部加载后再筛选
-        if (!loadSortOutList || !loadCustomer || !loadCustomerLevel) {
+        if (!loadCountSuccess || !loadWeightSuccess || !loadCustomer || !loadCustomerLevel) {
             return;
         }
+
         mTvAmount.setText("汇总：");
-        if (mListAll == null
-                || mListAll.size() == 0) {
+
+        if ((mIntType == TYPE_WEIGHT && (mListAllWeight == null || mListAllWeight.size() == 0))
+                ||
+                (mIntType == TYPE_COUNT && (mListAllCount == null || mListAllCount.size() == 0))) {
             mSortOutAdapter.setIntSelect(0);
+            mListFilter.clear();
             mListShow.clear();
             mSortOutAdapter.notifyDataSetChanged();
             return;
         }
 
         //逐级删除不符合的数据
-        ArrayList<SortOutData> filter = FilterUtil.filter(mListAll, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
+        ArrayList<SortOutData> filter;
+        if (mIntType == TYPE_WEIGHT) {
+            //重量
+            filter = FilterUtil.filter(mListAllWeight, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
+        } else {
+            //数量
+            filter = FilterUtil.filter(mListAllCount, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
+        }
         mListFilter.clear();
         mListFilter.addAll(filter);
 

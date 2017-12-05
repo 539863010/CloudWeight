@@ -167,9 +167,21 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_18sp"/>
 
+                <Button
+                    android:id="@+id/btn_request"
+                    android:layout_width="@dimen/_80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/sp_ware_house"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:background="@drawable/selector_anniu_d_grey"
+                    android:minHeight="@dimen/_40dp"
+                    android:text="获取数据"
+                    android:textColor="@color/color_135c31"
+                    android:textSize="@dimen/_12sp"/>
+
                 <xm.cloudweight.widget.DataSpinner
                     android:id="@+id/sp_ware_house"
-                    android:layout_width="100dp"
+                    android:layout_width="@dimen/_80dp"
                     android:layout_height="@dimen/_40dp"
                     android:layout_toLeftOf="@+id/btn_sort_out"
                     android:background="@drawable/shape_spinner_bg_b"
@@ -179,7 +191,7 @@
 
                 <Button
                     android:id="@+id/btn_sort_out"
-                    android:layout_width="@dimen/_100dp"
+                    android:layout_width="@dimen/_80dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="@dimen/_10dp"
