@@ -1,5 +1,6 @@
 package xm.cloudweight;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
@@ -71,8 +72,11 @@ public class MainActivity extends BaseActivity {
      * 退出登录
      */
     private void requestLogout() {
-        LocalSpUtil.setMerchant(getContext(), "");
-        LocalSpUtil.setCookie(getContext(), "");
+        Context ctx = getContext();
+        LocalSpUtil.setMerchant(ctx, "");
+        LocalSpUtil.setCookie(ctx, "");
+        LocalSpUtil.setListCustomerLevel(ctx, null);
+        LocalSpUtil.setListWareHouse(ctx, null);
         startActivity(LoginActivity.class);
         finish();
     }

@@ -1,5 +1,6 @@
 package xm.cloudweight;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.impl.LoginImpl;
+import xm.cloudweight.presenter.CommPresenter;
 import xm.cloudweight.presenter.LoginPresenter;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
@@ -59,15 +61,17 @@ public class LoginActivity extends BaseActivity implements LoginImpl.OnLoginStat
         if (!TextUtils.isEmpty(user) && !TextUtils.isEmpty(pwd)) {
             mEtName.setText(user);
             mEtPwd.setText(pwd);
+            mEtPwd.setSelection(pwd.length());
+            mEtPwd.requestFocus();
         } else {
             mEtName.setText("");
             mEtPwd.setText("");
+            mEtName.requestFocus();
         }
 
-//        mEtName.setText("13666049527");
 //        mEtName.setText("18559695718");
+//        mEtName.setText("13666049527");
 //        mEtPwd.setText("12345");
-        mEtPwd.requestFocus();
     }
 
     @OnClick(R.id.btn_login)
@@ -94,11 +98,15 @@ public class LoginActivity extends BaseActivity implements LoginImpl.OnLoginStat
     }
 
     @Override
-    public void onLoginSuccess(Merchant result) {
+    public void onLoginSuccess(Merchant merchant) {
+        Context applicationContext = this.getApplicationContext();
+        CommPresenter.getListWareHouse(applicationContext, merchant);
+        CommPresenter.getDropDownLevels(applicationContext, merchant);
+
         String user = mEtName.getText().toString().trim();
         String pwd = mEtPwd.getText().toString().trim();
         LocalSpUtil.setUserInfo(getContext(), user, pwd);
-        LocalSpUtil.setMerchant(getContext(), GsonUtil.getGson().toJson(result));
+        LocalSpUtil.setMerchant(getContext(), GsonUtil.getGson().toJson(merchant));
         startActivity(MainActivity.class);
         finish();
     }

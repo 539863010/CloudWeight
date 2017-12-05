@@ -1,7 +1,10 @@
 package xm.cloudweight.presenter;
 
+import android.content.Context;
 import android.text.TextUtils;
 
+import com.tencent.bugly.crashreport.CrashReport;
+import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.wms.stock.Stock;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
@@ -9,7 +12,6 @@ import com.xmzynt.storm.util.IMGType;
 import com.xmzynt.storm.util.query.PageData;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,10 +20,11 @@ import okhttp3.RequestBody;
 import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
+import xm.cloudweight.app.App;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.impl.CommImpl;
-import xm.cloudweight.impl.SimilarImpl;
+import xm.cloudweight.utils.LogUtils;
 import xm.cloudweight.utils.bussiness.BeanUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.UploadPhotoUtil;
@@ -34,44 +37,52 @@ import xm.cloudweight.utils.bussiness.UploadPhotoUtil;
 public class CommPresenter {
 
     /**
-     * 获取日期列表
-     */
-    public static void getListDate(final BaseActivity aty) {
-        if (!(aty instanceof CommImpl.OnGetDatesListener)) {
-            return;
-        }
-        List<String> list = new ArrayList<>();
-        list.add("2017-10-31");
-        if (list.size() > 0) {
-            ((CommImpl.OnGetDatesListener) aty).getDatesSuccess(list);
-        } else {
-            ((CommImpl.OnGetDatesListener) aty).getDatesFailed("日期列表为空");
-        }
-    }
-
-    /**
      * 获取仓库列表
      */
-    public static void getListWareHouse(final BaseActivity aty) {
-        if (!(aty instanceof CommImpl.OnGetWareHousesListener)) {
+    public static void getListWareHouse(final Context ctx, Merchant merchant) {
+        if (merchant == null || ctx == null) {
             return;
         }
-        PBaseInfo p = BeanUtil.getWareHouse(aty);
-        aty.getApiManager()
+        PBaseInfo p = BeanUtil.getWareHouse(merchant);
+        App.getApiManager(ctx)
                 .getDropDownWareHouse(p)
-                .compose(new TransformerHelper<ResponseEntity<List<Warehouse>>>().get(aty))
+                .compose(new TransformerHelper<ResponseEntity<List<Warehouse>>>().get())
                 .subscribe(new ApiSubscribe<List<Warehouse>>() {
                                @Override
                                protected void onResult(List<Warehouse> result) {
-                                   ((CommImpl.OnGetWareHousesListener) aty).getWareHousesSuccess(result);
+                                   LocalSpUtil.setListWareHouse(ctx, result);
                                }
 
                                @Override
-                               protected void onResultFail(int errorType,String failString) {
-                                   ((CommImpl.OnGetWareHousesListener) aty).getWareHousesFailed(errorType,failString);
+                               protected void onResultFail(int errorType, String failString) {
+                                   LogUtils.e("获取仓库列表失败", failString);
+                                   CrashReport.postCatchedException(new Exception("获取仓库列表失败 : failString = " + failString));
                                }
                            }
                 );
+    }
+
+    /**
+     * 查询客户等级
+     */
+    public static void getDropDownLevels(final Context ctx, Merchant merchant) {
+        PBaseInfo p = BeanUtil.getDropDownLevels(merchant);
+        App.getApiManager(ctx).getDropDownLevels(p)
+                .compose(new TransformerHelper<ResponseEntity<List<CustomerLevel>>>().get())
+                .subscribe(new ApiSubscribe<List<CustomerLevel>>() {
+
+                    @Override
+                    protected void onResult(List<CustomerLevel> result) {
+                        LocalSpUtil.setListCustomerLevel(ctx, result);
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        LogUtils.e("获取客户等级列表失败", failString);
+                        CrashReport.postCatchedException(new Exception("获取客户等级列表失败 : failString = " + failString));
+                    }
+
+                });
     }
 
     /**
@@ -107,13 +118,12 @@ public class CommPresenter {
                     }
 
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((CommImpl.OnUpLoadPhotoListener) aty).onUpLoadPhotoFailed(errorType,failString);
+                    protected void onResultFail(int errorType, String failString) {
+                        ((CommImpl.OnUpLoadPhotoListener) aty).onUpLoadPhotoFailed(errorType, failString);
                     }
 
                 });
     }
-
 
     /**
      * 查找库存记录
@@ -132,8 +142,8 @@ public class CommPresenter {
                     }
 
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((CommImpl.OnQueryStockListener) aty).onQueryStockFailed(errorType,failString);
+                    protected void onResultFail(int errorType, String failString) {
+                        ((CommImpl.OnQueryStockListener) aty).onQueryStockFailed(errorType, failString);
                     }
                 });
 

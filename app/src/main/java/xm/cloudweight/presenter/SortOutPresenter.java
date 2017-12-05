@@ -1,7 +1,6 @@
 package xm.cloudweight.presenter;
 
 import com.xmzynt.storm.service.sort.SortOutData;
-import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 
 import java.util.List;
@@ -46,28 +45,6 @@ public class SortOutPresenter {
                 });
     }
 
-    /**
-     * 查询客户等级
-     */
-    public static void getDropDownLevels(final BaseActivity aty) {
-        if (!(aty instanceof SortOutImpl.OnGetDropDownLevelsListener)) {
-            return;
-        }
-        PBaseInfo p = BeanUtil.getDropDownLevels(aty);
-        aty.getApiManager().getDropDownLevels(p)
-                .compose(new TransformerHelper<ResponseEntity<List<CustomerLevel>>>().get(aty))
-                .subscribe(new ApiSubscribe<List<CustomerLevel>>() {
-                    @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((SortOutImpl.OnGetDropDownLevelsListener) aty).getDropDownLevelsFailed(errorType,failString);
-                    }
-
-                    @Override
-                    protected void onResult(List<CustomerLevel> result) {
-                        ((SortOutImpl.OnGetDropDownLevelsListener) aty).getDropDownLevelsSuccess(result);
-                    }
-                });
-    }
 
     /**
      * 获取查询列表

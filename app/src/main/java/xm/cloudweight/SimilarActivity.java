@@ -46,6 +46,7 @@ import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.EtMaxLengthUtil;
+import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.BaseTextWatcher;
@@ -67,7 +68,6 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  * @create 2017/10/25
  */
 public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDropdownLeafCategoryListener
-        , CommImpl.OnGetWareHousesListener
         , CommImpl.OnQueryStockListener
         , AdapterView.OnItemSelectedListener, VideoFragment.OnInstrumentListener {
 
@@ -229,7 +229,17 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
 
     @Override
     protected void loadDate() {
-        CommPresenter.getListWareHouse(this);
+        List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
+        if (listWareHouse != null) {
+            mSpWareHouse.setList(listWareHouse);
+            if (mIntType == Common.SIMILAR_ALLOCATE) {
+                mSpWareHouseIn.setList(listWareHouse);
+            }
+            loadWareHouse = true;
+            filterList();
+        } else {
+            ToastUtil.showShortToast(this, "未获取到仓库列表信息");
+        }
         SimilarPresenter.getDropdownLeafCategory(this);
         CommPresenter.queryStock(this, 0, 0, 0, "");
     }
@@ -476,21 +486,6 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     @Override
     public void onGetDropdownLeafCategoryFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
-    }
-
-    @Override
-    public void getWareHousesSuccess(List<Warehouse> list) {
-        mSpWareHouse.setList(list);
-        if (mIntType == Common.SIMILAR_ALLOCATE) {
-            mSpWareHouseIn.setList(list);
-        }
-        loadWareHouse = true;
-        filterList();
-    }
-
-    @Override
-    public void getWareHousesFailed(int errorType, String message) {
-        ToastUtil.showShortToast(getContext(), message);
     }
 
     @Override

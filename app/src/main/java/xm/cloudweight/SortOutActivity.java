@@ -51,6 +51,7 @@ import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.EtMaxLengthUtil;
 import xm.cloudweight.utils.bussiness.FilterUtil;
 import xm.cloudweight.utils.bussiness.ListComparator;
+import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
@@ -71,10 +72,8 @@ import xm.cloudweight.widget.impl.onScanFinishListener;
  * @create 2017/10/29
  */
 public class SortOutActivity extends BaseActivity implements
-        CommImpl.OnGetWareHousesListener
-        , CommImpl.OnQueryStockListener
+        CommImpl.OnQueryStockListener
         , SortOutImpl.OnGetMerchantCustomerListener
-        , SortOutImpl.OnGetDropDownLevelsListener
         , SortOutImpl.OnGetSortOutListListener
         , SortOutImpl.OnCancelSortOutListener
         , AdapterView.OnItemSelectedListener
@@ -85,7 +84,7 @@ public class SortOutActivity extends BaseActivity implements
     public static final int DEFAULT_PAGE_SIZE = 0;
     public static final int PAGE_SIZE = 0;
     public static final int PAGE = 0;
-    public static final int UPLOAD_PAGE_SIZE = 50;
+    public static final int UPLOAD_PAGE_SIZE = 100;
 
     @BindView(R.id.btn_sort_out_history)
     Button mBtnSortOutHistory;
@@ -164,6 +163,7 @@ public class SortOutActivity extends BaseActivity implements
         mSpCustomers.setTitleColor(R.color.color_135c31);
         mSpWareHouse.setTitleColor(R.color.color_135c31);
         mSpCustomersLevel.setTitleColor(R.color.color_135c31);
+
         mSpCustomers.setCustomItemSelectedListener(this);
         mSpCustomersLevel.setCustomItemSelectedListener(this);
         mSpWareHouse.setCustomItemSelectedListener(this);
@@ -201,10 +201,10 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     protected void loadDate() {
-        CommPresenter.getListDate(this);
-        CommPresenter.getListWareHouse(this);
+
+        getLocalInfo();
+
         SortOutPresenter.getDropdownCustomers(this, 0, 0, 0);
-        SortOutPresenter.getDropDownLevels(this);
 
         mBtnSortOutCount.setSelected(false);
         mBtnSortOutWeight.setSelected(true);
@@ -213,6 +213,30 @@ public class SortOutActivity extends BaseActivity implements
         mBtnDate.setText(currentData);
         showP();
         SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, currentData);
+    }
+
+    private void getLocalInfo() {
+        List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
+        if (listWareHouse != null) {
+            mSpWareHouse.setList(listWareHouse);
+        } else {
+            ToastUtil.showShortToast(this, "未获取到仓库列表信息");
+        }
+
+        List<CustomerLevel> listCustomerLevel = LocalSpUtil.getListCustomerLevel(this);
+        if (listCustomerLevel != null) {
+            if (listCustomerLevel.size() > 0) {
+                CustomerLevel e = new CustomerLevel();
+                e.setName("全部");
+                listCustomerLevel.add(0, e);
+                mSpCustomersLevel.setList(listCustomerLevel);
+                loadCustomerLevel = true;
+                filterList();
+            }
+        } else {
+            ToastUtil.showShortToast(this, "未获取到用户等级列表信息");
+        }
+
     }
 
     @Override
@@ -516,31 +540,6 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void getMerchantCustomerFailed(int errorType, String message) {
-        ToastUtil.showShortToast(getContext(), message);
-    }
-
-    @Override
-    public void getWareHousesSuccess(List<Warehouse> list) {
-        mSpWareHouse.setList(list);
-    }
-
-    @Override
-    public void getWareHousesFailed(int errorType, String message) {
-        ToastUtil.showShortToast(getContext(), message);
-    }
-
-    @Override
-    public void getDropDownLevelsSuccess(List<CustomerLevel> list) {
-        CustomerLevel e = new CustomerLevel();
-        e.setName("全部");
-        list.add(0, e);
-        mSpCustomersLevel.setList(list);
-        loadCustomerLevel = true;
-        filterList();
-    }
-
-    @Override
-    public void getDropDownLevelsFailed(int errorType, String message) {
         ToastUtil.showShortToast(getContext(), message);
     }
 

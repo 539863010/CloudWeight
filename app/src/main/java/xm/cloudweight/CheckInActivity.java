@@ -44,9 +44,7 @@ import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CheckInImpl;
-import xm.cloudweight.impl.CommImpl;
 import xm.cloudweight.presenter.CheckInPresenter;
-import xm.cloudweight.presenter.CommPresenter;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.KeyBoardUtils;
@@ -77,8 +75,8 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  * @description: 验收
  * @create 2017/10/30
  */
-public class CheckInActivity extends BaseActivity implements CommImpl.OnGetWareHousesListener
-        , CheckInImpl.OnQueryPurchaseBillListener
+public class CheckInActivity extends BaseActivity implements
+        CheckInImpl.OnQueryPurchaseBillListener
         , CheckInImpl.OnGetPurchaseBillListener
         , CheckInImpl.OnScanToPurchaseDataListener
         , Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener {
@@ -373,8 +371,16 @@ public class CheckInActivity extends BaseActivity implements CommImpl.OnGetWareH
         //设置当前日期
         String currentData = DateUtils.StringData();
         mBtnDate.setText(currentData);
-        CommPresenter.getListWareHouse(this);
+
         CheckInPresenter.getListSupplier(this, 0, 0, 0);
+
+        List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
+        if (listWareHouse != null) {
+            mSpWareHouse.setList(listWareHouse);
+            queryList();
+        } else {
+            ToastUtil.showShortToast(this, "未获取到仓库列表信息");
+        }
     }
 
     @Override
@@ -493,17 +499,6 @@ public class CheckInActivity extends BaseActivity implements CommImpl.OnGetWareH
         } else {
 //            ToastUtil.showShortToast(getContext(), "请选择仓库");
         }
-    }
-
-    @Override
-    public void getWareHousesSuccess(List<Warehouse> list) {
-        mSpWareHouse.setList(list);
-        queryList();
-    }
-
-    @Override
-    public void getWareHousesFailed(int errorType, String message) {
-        ToastUtil.showShortToast(getContext(), message);
     }
 
     @OnClick({R.id.btn_stock_in, R.id.btn_stock_cross, R.id.btn_date, R.id.tv_pop_info, R.id.iv_sort_out_search})

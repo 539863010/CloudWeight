@@ -1,7 +1,6 @@
 package xm.cloudweight.impl;
 
 import com.xmzynt.storm.service.wms.stock.Stock;
-import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 import com.xmzynt.storm.util.query.PageData;
 
 import java.util.List;
@@ -12,17 +11,6 @@ import java.util.List;
  * @creat 2017/10/31
  */
 public class CommImpl {
-
-    /**
-     * 获取仓库列表监听
-     */
-    public interface OnGetWareHousesListener {
-
-        void getWareHousesSuccess(List<Warehouse> list);
-
-        void getWareHousesFailed(int errorType, String message);
-
-    }
 
     /**
      * 获取时间列表监听

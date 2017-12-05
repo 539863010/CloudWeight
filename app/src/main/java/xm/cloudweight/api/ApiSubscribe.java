@@ -20,6 +20,7 @@ import java.util.concurrent.TimeoutException;
 import rx.Subscriber;
 import xm.cloudweight.comm.ServerConstant;
 import xm.cloudweight.utils.TTypeUtil;
+import xm.cloudweight.utils.bussiness.BuglyUtil;
 
 /**
  * @author wyh
@@ -27,7 +28,6 @@ import xm.cloudweight.utils.TTypeUtil;
  * @creat 2017/8/1
  */
 public abstract class ApiSubscribe<T> extends Subscriber<ResponseEntity<T>> {
-
 
     @Override
     public void onNext(ResponseEntity<T> t) {
@@ -45,13 +45,14 @@ public abstract class ApiSubscribe<T> extends Subscriber<ResponseEntity<T>> {
                         onResult((T) GsonUtil.getGson().fromJson(data, type));
                     }
                 } else {
-                    onResultFail(ServerConstant.ERROR_TYPE,"类型有误");
+                    onResultFail(ServerConstant.ERROR_TYPE, "类型有误");
                 }
-            }else{
+            } else {
                 onResult((T) data);
             }
         } else {
-            onResultFail(ServerConstant.ERROR_MESSAGE,t.getMessage());
+            onResultFail(ServerConstant.ERROR_MESSAGE, t.getMessage());
+            BuglyUtil.uploadCrash(t.getData());
         }
     }
 
@@ -70,7 +71,8 @@ public abstract class ApiSubscribe<T> extends Subscriber<ResponseEntity<T>> {
         } else {
             sb.append("未知异常,请联系开发者!");
         }
-        onResultFail(ServerConstant.ERROR_SYSTEM,sb.toString());
+        onResultFail(ServerConstant.ERROR_SYSTEM, sb.toString());
+        BuglyUtil.uploadCrash(e);
     }
 
     @Override
@@ -92,15 +94,17 @@ public abstract class ApiSubscribe<T> extends Subscriber<ResponseEntity<T>> {
 
     /**
      * 请求回调
+     *
      * @param result 返回结果体
      */
     protected abstract void onResult(T result);
 
     /**
      * 请求错误
+     *
      * @param failString 错误信息
      */
-    protected abstract void onResultFail(int errorType,String failString);
+    protected abstract void onResultFail(int errorType, String failString);
 
 }
 

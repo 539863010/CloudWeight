@@ -118,11 +118,12 @@ public class BeanUtil {
     /**
      * 获取仓库列表
      */
-    public static PBaseInfo getWareHouse(Context ctx) {
+    public static PBaseInfo getWareHouse(Merchant merchant) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         return pBaseInfo;
     }
+
 
     /**
      * 查询客户列表
@@ -143,9 +144,9 @@ public class BeanUtil {
     /**
      * 查询客户级别
      */
-    public static PBaseInfo getDropDownLevels(Context ctx) {
+    public static PBaseInfo getDropDownLevels(Merchant merchant) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         return pBaseInfo;
     }
 
