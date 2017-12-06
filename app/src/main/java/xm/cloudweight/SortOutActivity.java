@@ -74,7 +74,6 @@ import xm.cloudweight.widget.impl.onScanFinishListener;
  */
 public class SortOutActivity extends BaseActivity implements
         CommImpl.OnQueryStockListener
-        , SortOutImpl.OnGetMerchantCustomerListener
         , SortOutImpl.OnGetSortOutListListener
         , SortOutImpl.OnCancelSortOutListener
         , AdapterView.OnItemSelectedListener
@@ -128,7 +127,6 @@ public class SortOutActivity extends BaseActivity implements
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private SortOutAdapter mSortOutAdapter;
     private int mIntType = TYPE_WEIGHT;
-    private boolean loadCustomer;
     private boolean loadCustomerLevel;
     private boolean loadWeightSuccess;
     private boolean loadCountSuccess;
@@ -169,40 +167,6 @@ public class SortOutActivity extends BaseActivity implements
         mSpCustomers.setTitleColor(R.color.color_135c31);
         mSpWareHouse.setTitleColor(R.color.color_135c31);
         mSpCustomersLevel.setTitleColor(R.color.color_135c31);
-//        mSpCustomers.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                ToastUtil.showShortToast(getContext(), "---------");
-//
-//                ArrayList<SortOutData> mListAll = new ArrayList<>();
-//                mListAll.addAll(mListAllWeight);
-//                mListAll.addAll(mListAllCount);
-//
-//                List<MerchantCustomer> list = mSpCustomers.getList();
-//                int size = list.size();
-//                if (size > 0) {
-//                    for (int i = 0; i < size; i++) {
-//                        MerchantCustomer merchantCustomer = list.get(i);
-//                        Customer customer = merchantCustomer.getCustomer();
-//                        String name = customer.getName();
-//                        boolean hasInfo = false;
-//                        for (SortOutData sortOutData : mListAll) {
-//                            IdName idName = sortOutData.getCustomer();
-//                            if (name.equals(idName.getName())) {
-//                                hasInfo = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!hasInfo) {
-//                            list.remove(merchantCustomer);
-//                        }
-//                    }
-//                }
-//                mSpCustomers.setList(list);
-//                mSpCustomers.performClick();
-//                return true;
-//            }
-//        });
 
         mSpCustomers.setCustomItemSelectedListener(this);
         mSpCustomersLevel.setCustomItemSelectedListener(this);
@@ -241,11 +205,7 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     protected void loadDate() {
-
         getLocalInfo();
-
-        SortOutPresenter.getDropdownCustomers(this, 0, 0, 0);
-
         mBtnSortOutCount.setSelected(false);
         mBtnSortOutWeight.setSelected(true);
         //设置当前日期
@@ -376,16 +336,8 @@ public class SortOutActivity extends BaseActivity implements
         mBtnSortOutWeight.setSelected(weightSelect);
         mListFilter.clear();
         mListShow.clear();
-        //不会滚动到第一行
-//        mSortOutAdapter.notifyDataSetChanged();
-
-        mGvSortOut.setAdapter(mSortOutAdapter);
-//                mGvSortOut.post(new Runnable() {
-//                    @Override
-//                    public void run() {
+        mSortOutAdapter.notifyDataSetChanged();
         filterList();
-//                    }
-//                });
     }
 
     private Handler mHandlerShotPic = new Handler(new Handler.Callback() {
@@ -400,7 +352,6 @@ public class SortOutActivity extends BaseActivity implements
                     dismissP();
                     //保存图片路径都后台作为请求
                     String path = msg.getData().getString("path", "");
-                    ToastUtil.showShortToast(getContext(), "已添加到分拣上传队列");
                     setDataToDb(path);
                     setBtnEnable();
                     break;
@@ -479,12 +430,6 @@ public class SortOutActivity extends BaseActivity implements
                 }
                 mPreSortOutData.setHasStockOutQty(outAmount);
             }
-
-            // 打印标签
-            if (mPrinterView == null) {
-                mPrinterView = (PrinterView) findViewById(R.id.pv);
-            }
-
             //打印标签
             printer(unitCoefficient);
 
@@ -492,9 +437,12 @@ public class SortOutActivity extends BaseActivity implements
             mPreSortOutData.setStockOutQty(null);
             mPreSortOutData.setWarehouse(null);
 
+            ToastUtil.showShortToast(getContext(), "分拣成功");
+
             //默认设置第一个
             mSortOutAdapter.setIntSelect(0);
             mSortOutAdapter.notifyDataSetChanged();
+
             if (mListShow.size() > 0) {
                 mPreSortOutData = mListShow.get(0);
                 notifyItemClick();
@@ -504,6 +452,10 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     private void printer(BigDecimal unitCoefficient) {
+        // 打印标签
+        if (mPrinterView == null) {
+            mPrinterView = (PrinterView) findViewById(R.id.pv);
+        }
         BeanPrinter beanPrinter = new BeanPrinter();
         beanPrinter.setGoodsName(mPreSortOutData.getGoods().getName());
         if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
@@ -585,23 +537,6 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     @Override
-    public void getMerchantCustomerSuccess(List<MerchantCustomer> list) {
-        MerchantCustomer e = new MerchantCustomer();
-        Customer customer = new Customer();
-        customer.setName("全部");
-        e.setCustomer(customer);
-        list.add(0, e);
-        mSpCustomers.setList(list);
-        loadCustomer = true;
-        filterList();
-    }
-
-    @Override
-    public void getMerchantCustomerFailed(int errorType, String message) {
-        ToastUtil.showShortToast(getContext(), message);
-    }
-
-    @Override
     public void getSortOutListSuccess(int type, List<SortOutData> data) {
         if (type == TYPE_WEIGHT) {
             loadWeightSuccess = true;
@@ -614,10 +549,49 @@ public class SortOutActivity extends BaseActivity implements
         }
         if (loadWeightSuccess && loadCountSuccess) {
             mBtnRequest.setEnabled(true);
-            dismissP();
+            //设置客户列表
+            getListCustomer();
             //筛选条件
             filterList();
+            dismissP();
         }
+    }
+
+    /**
+     * 根据重量数据+数量数据  过滤出客户列表
+     */
+    private void getListCustomer() {
+        List<SortOutData> mListAll = new ArrayList<>();
+        mListAll.addAll(mListAllWeight);
+        mListAll.addAll(mListAllCount);
+        List<MerchantCustomer> list = new ArrayList<>();
+        MerchantCustomer e = new MerchantCustomer();
+        Customer customerAll = new Customer();
+        customerAll.setName("全部");
+        e.setCustomer(customerAll);
+        list.add(0, e);
+        for (SortOutData sortOutData : mListAll) {
+            IdName customer = sortOutData.getCustomer();
+            boolean hasAdd = false;
+            for (MerchantCustomer merchantCustomer : list) {
+                Customer merchantCustomerCustomer = merchantCustomer.getCustomer();
+                //去重
+                if (merchantCustomerCustomer.getName().equals(customer.getName())
+                        &&
+                        merchantCustomerCustomer.getUuid().equals(customer.getId())) {
+                    hasAdd = true;
+                }
+            }
+            if (!hasAdd) {
+                MerchantCustomer merchantCustomerNew = new MerchantCustomer();
+                Customer customerNew = new Customer();
+                customerNew.setName(customer.getName());
+                customerNew.setUuid(customer.getId());
+                merchantCustomerNew.setCustomer(customerNew);
+                list.add(merchantCustomerNew);
+            }
+        }
+        mSpCustomers.setList(list);
     }
 
     @Override
@@ -669,7 +643,7 @@ public class SortOutActivity extends BaseActivity implements
      */
     private void filterList() {
         //等待全部加载后再筛选
-        if (!loadCountSuccess || !loadWeightSuccess || !loadCustomer || !loadCustomerLevel) {
+        if (!loadCountSuccess || !loadWeightSuccess || !loadCustomerLevel) {
             return;
         }
 
@@ -678,10 +652,9 @@ public class SortOutActivity extends BaseActivity implements
         if ((mIntType == TYPE_WEIGHT && (mListAllWeight == null || mListAllWeight.size() == 0))
                 ||
                 (mIntType == TYPE_COUNT && (mListAllCount == null || mListAllCount.size() == 0))) {
-            mSortOutAdapter.setIntSelect(0);
             mListFilter.clear();
             mListShow.clear();
-            mSortOutAdapter.notifyDataSetChanged();
+            scrollToItem(0);
             return;
         }
 
@@ -707,8 +680,7 @@ public class SortOutActivity extends BaseActivity implements
             mPreSortOutData = mListShow.get(0);
             notifyItemClick();
         }
-        mSortOutAdapter.setIntSelect(0);
-        mSortOutAdapter.notifyDataSetChanged();
+        scrollToItem(0);
         //添加汇总
         if (mIntType == TYPE_WEIGHT) {
             if (mListShow.size() > 0
@@ -743,7 +715,7 @@ public class SortOutActivity extends BaseActivity implements
             List<Stock> stocks = result.getValues();
             if (stocks == null || stocks.size() == 0) {
                 mListShow.clear();
-                mSortOutAdapter.notifyDataSetChanged();
+                scrollToItem(0);
                 ToastUtil.showShortToast(getContext(), "该周转筐没有商品");
                 return;
             }
@@ -764,7 +736,7 @@ public class SortOutActivity extends BaseActivity implements
             if (listFilter != null && listFilter.size() > 0) {
                 mListShow.addAll(listFilter);
             }
-            mSortOutAdapter.notifyDataSetChanged();
+            scrollToItem(0);
         }
     }
 
@@ -830,7 +802,6 @@ public class SortOutActivity extends BaseActivity implements
                 holder.setText(R.id.item_goods_weight_all, "总数量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
                 holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
             }
-
             BigDecimal hasStockOutQty = data.getHasStockOutQty();
             if (hasStockOutQty.doubleValue() != 0) {
                 holder.setText(R.id.item_goods_weight_out, "已出" + BigDecimalUtil.toScaleStr(hasStockOutQty) + unit);
@@ -839,6 +810,8 @@ public class SortOutActivity extends BaseActivity implements
                 holder.setText(R.id.item_goods_weight_out, "");
                 holder.setVisible(R.id.item_goods_weight_out, View.INVISIBLE);
             }
+            //设置备注
+            holder.setText(R.id.item_goods_remark, data.getRemark());
             ScalableTextView tvName = holder.getView(R.id.item_goods_name);
             tvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, mDim10Sp);
             tvName.setText(data.getGoods().getName());
@@ -885,8 +858,14 @@ public class SortOutActivity extends BaseActivity implements
                 mListComparator = new ListComparator(douWeight);
             }
             Collections.sort(mListShow, mListComparator);
-            mSortOutAdapter.notifyDataSetChanged();
+            scrollToItem(0);
         }
+    }
+
+    private void scrollToItem(int itemPosition) {
+        mSortOutAdapter.setIntSelect(itemPosition);
+        mSortOutAdapter.notifyDataSetChanged();
+        mGvSortOut.smoothScrollToPosition(itemPosition);
     }
 
     @Override

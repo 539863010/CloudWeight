@@ -722,21 +722,18 @@ public class CheckInActivity extends BaseActivity implements
             db.setDate(DateUtils.StringData());
             db.setImagePath(path);
             db.setLine(GsonUtil.getGson().toJson(record));
-//                        db.setStockInUuid(message);
             db.setType(Common.DbType.TYPE_ChECK_IN_STORE_IN);
             getDbManager().insertDbImageUpload(db);
-            ToastUtil.showShortToast(getContext(), "已添加到入库上传队列");
+            ToastUtil.showShortToast(getContext(), "入库成功");
         } else {
             //越库
             DbImageUpload db = new DbImageUpload();
             db.setDate(DateUtils.StringData());
             db.setImagePath(path);
             db.setLine(GsonUtil.getGson().toJson(record));
-//                        db.setStockInUuid(result.get(0));
-//                        db.setStockOutUuid(result.get(1));
             db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_OUT);
             getDbManager().insertDbImageUpload(db);
-            ToastUtil.showShortToast(getContext(), "已添加到越库上传队列");
+            ToastUtil.showShortToast(getContext(), "越库成功");
         }
         refreshSuccessData();
         dismissP();

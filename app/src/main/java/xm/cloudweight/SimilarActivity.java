@@ -567,7 +567,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             mListBaseketSaved.clear();
             mBasketSavedAdapter.notifyDataSetChanged();
         }
-        ToastUtil.showShortToast(getContext(), "已添加到" + typeStr + "上传队列");
+        ToastUtil.showShortToast(getContext(), typeStr + "成功");
         mEtBasket.requestFocus();
     }
 
@@ -610,7 +610,6 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             mEtCount.setText("");
         }
 
-        // TODO: 2017/11/26
         mListBaseketSaved.clear();
         List<String> basketCodes = mStock.getBasketCodes();
         if (basketCodes != null && basketCodes.size() > 0) {

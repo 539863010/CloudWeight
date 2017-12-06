@@ -58,8 +58,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_goods_weight"
-        android:layout_marginBottom="@dimen/_4dp"
-        android:layout_marginTop="@dimen/_4dp"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginTop="@dimen/_5dp"
         android:singleLine="true"
         android:textSize="@dimen/_10sp"
         tools:text="TextView"
@@ -89,5 +89,19 @@
         android:textSize="@dimen/_10sp"
         tools:text="TextewTextViewTextViewTextView"
         />
+
+    <TextView
+        android:id="@+id/item_goods_remark"
+        android:maxLines="2"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/item_goods_weight_all"
+        android:layout_below="@+id/item_line"
+        android:ellipsize="end"
+        android:layout_marginLeft="@dimen/_100dp"
+        android:lineSpacingExtra="@dimen/_2dp"
+        android:textSize="@dimen/_8sp"
+        tools:text=""/>
 
 </RelativeLayout>
