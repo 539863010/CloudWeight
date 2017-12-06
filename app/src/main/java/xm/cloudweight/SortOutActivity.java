@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.xmzynt.storm.basic.idname.IdName;
@@ -77,7 +78,7 @@ public class SortOutActivity extends BaseActivity implements
         , SortOutImpl.OnGetSortOutListListener
         , SortOutImpl.OnCancelSortOutListener
         , AdapterView.OnItemSelectedListener
-        , SortOutHistoryPopWindow.OnDeleteListener, onInputFinishListener, VideoFragment.OnInstrumentListener, AbsListView.OnScrollListener {
+        , SortOutHistoryPopWindow.OnDeleteListener, onInputFinishListener, VideoFragment.OnInstrumentListener, AbsListView.OnScrollListener, PopupWindow.OnDismissListener {
 
     public static final int TYPE_WEIGHT = 0;
     public static final int TYPE_COUNT = 1;
@@ -130,6 +131,7 @@ public class SortOutActivity extends BaseActivity implements
     private boolean loadCustomerLevel;
     private boolean loadWeightSuccess;
     private boolean loadCountSuccess;
+    private boolean hasCancelSortOut;
     private SortOutData mPreSortOutData;
     private SortOutHistoryPopWindow mHistoryPopWindow;
     private DBManager mDBManager;
@@ -307,24 +309,28 @@ public class SortOutActivity extends BaseActivity implements
                 }
                 break;
             case R.id.btn_request:
-                String time = mBtnDate.getText().toString().trim();
-                if (!TextUtils.isEmpty(time)) {
-                    mBtnRequest.setEnabled(false);
-                    dismissP();
-                    showP();
-                    loadWeightSuccess = false;
-                    loadCountSuccess = false;
-                    mListAllWeight.clear();
-                    mListAllCount.clear();
-                    mListFilter.clear();
-                    mListShow.clear();
-                    mSortOutAdapter.notifyDataSetChanged();
-                    SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-                    SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-                }
+                refreshSortOutList();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void refreshSortOutList() {
+        String time = mBtnDate.getText().toString().trim();
+        if (!TextUtils.isEmpty(time)) {
+            mBtnRequest.setEnabled(false);
+            dismissP();
+            showP();
+            loadWeightSuccess = false;
+            loadCountSuccess = false;
+            mListAllWeight.clear();
+            mListAllCount.clear();
+            mListFilter.clear();
+            mListShow.clear();
+            mSortOutAdapter.notifyDataSetChanged();
+            SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+            SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
         }
     }
 
@@ -414,14 +420,12 @@ public class SortOutActivity extends BaseActivity implements
             if (outAmount.compareTo(qtyOfNinety) > 0) {
                 //界面不显示
                 //从列表中删除
-                if (mListShow.contains(mPreSortOutData)) {
-                    mListShow.remove(mPreSortOutData);
-                }
-                if (mListAllWeight.contains(mPreSortOutData)) {
-                    mListAllWeight.remove(mPreSortOutData);
-                }
-                if (mListAllCount.contains(mPreSortOutData)) {
-                    mListAllCount.remove(mPreSortOutData);
+                removeCurrentItem(mListShow);
+                removeCurrentItem(mListFilter);
+                if (mIntType == TYPE_WEIGHT) {
+                    removeCurrentItem(mListAllWeight);
+                } else {
+                    removeCurrentItem(mListAllCount);
                 }
             } else {
                 //显示已出 数量
@@ -432,23 +436,45 @@ public class SortOutActivity extends BaseActivity implements
             }
             //打印标签
             printer(unitCoefficient);
-
             //先打印后清除数据
             mPreSortOutData.setStockOutQty(null);
             mPreSortOutData.setWarehouse(null);
-
             ToastUtil.showShortToast(getContext(), "分拣成功");
-
             //默认设置第一个
             mSortOutAdapter.setIntSelect(0);
             mSortOutAdapter.notifyDataSetChanged();
-
             if (mListShow.size() > 0) {
                 mPreSortOutData = mListShow.get(0);
                 notifyItemClick();
             }
-
         }
+    }
+
+    /**
+     * 删除当前选中的item
+     */
+    private void removeCurrentItem(List<SortOutData> list) {
+        int indexShow = getListIndex(list);
+        if (indexShow != -1) {
+            list.remove(indexShow);
+        }
+    }
+
+    /**
+     * 获取列表中与当前选中项相同SourceBillLineUuid的下标
+     */
+    private int getListIndex(List<SortOutData> list) {
+        int index = -1;
+        if (list != null && mPreSortOutData != null) {
+            int size = list.size();
+            for (int i = 0; i < size; i++) {
+                SortOutData sortOutData = list.get(i);
+                if (sortOutData.getSourceBillLineUuid().equals(mPreSortOutData.getSourceBillLineUuid())) {
+                    return i;
+                }
+            }
+        }
+        return index;
     }
 
     private void printer(BigDecimal unitCoefficient) {
@@ -503,8 +529,17 @@ public class SortOutActivity extends BaseActivity implements
         if (mHistoryPopWindow == null) {
             mHistoryPopWindow = new SortOutHistoryPopWindow(this, mBtnSortOutHistory);
             mHistoryPopWindow.setOnDeleteListener(this);
+            mHistoryPopWindow.setOnDismissListener(this);
         }
         refreshHistoryList();
+    }
+
+    @Override
+    public void onDismiss() {
+        if (hasCancelSortOut) {
+            refreshSortOutList();
+        }
+        hasCancelSortOut = false;
     }
 
     /**
@@ -533,6 +568,7 @@ public class SortOutActivity extends BaseActivity implements
             getDbManager().deleteDbImageUpload(dbImageUpload);
             refreshHistoryList();
             ToastUtil.showShortToast(getContext(), "撤销分拣成功");
+            hasCancelSortOut = true;
         }
     }
 
@@ -614,6 +650,7 @@ public class SortOutActivity extends BaseActivity implements
         mDbImageUpload = null;
         refreshHistoryList();
         ToastUtil.showShortToast(getContext(), "撤销分拣成功");
+        hasCancelSortOut = true;
     }
 
     @Override
