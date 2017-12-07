@@ -10,21 +10,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.xmzynt.storm.basic.idname.IdName;
-import com.xmzynt.storm.service.sort.SortOutData;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Date;
 
 import xm.cloudweight.R;
 import xm.cloudweight.bean.BeanPrinter;
-import xm.cloudweight.comm.Common;
-import xm.cloudweight.utils.BigDecimalUtil;
-import xm.cloudweight.utils.DateUtils;
 
 /**
  * @author wyh
@@ -75,7 +67,7 @@ public class PrinterView extends LinearLayout {
             } else {
                 mPvCustomerDept.setVisibility(View.GONE);
             }
-            mPvCode.setText(Common.MACHINE_NUM.concat(DateUtils.getTime3(new Date())));
+            mPvCode.setText(check(bean.getCode()));
         }
     }
 

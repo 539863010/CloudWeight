@@ -1,5 +1,9 @@
 package xm.cloudweight.comm;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * @author wyh
  * @Description: 常量类
@@ -13,15 +17,15 @@ public class Common {
 
     public interface DbType {
         /**
-         *  验收-入库
+         * 验收-入库
          */
         int TYPE_ChECK_IN_STORE_IN = 1;
         /**
-         *  验收-越库
+         * 验收-越库
          */
         int TYPE_ChECK_IN_CROSS_OUT = 2;
         /**
-         *  分拣-分拣
+         * 分拣-分拣
          */
         int TYPE_SORT_OUT_STORE_OUT = 3;
         /**
@@ -55,4 +59,19 @@ public class Common {
      * 周转筐长度
      */
     public static final int BasketLength = 6;
+
+    /**
+     * 溯源码
+     */
+    public static String getPlatformTraceCode() {
+        try {
+            SimpleDateFormat dateformat1 = new SimpleDateFormat("yyMMddHHmmssSSS", Locale.getDefault());
+            String format = dateformat1.format(new Date());
+            return Common.MACHINE_NUM.concat(format);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

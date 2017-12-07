@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import xm.cloudweight.comm.Common;
-import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.widget.DataSpinner;
 
@@ -43,7 +42,7 @@ public class BeanSimilar {
     public static StockOutRecord createStoreOutRecord(Context ctx,
                                                       Stock mStock,
                                                       DataSpinner<StockOutType> mSpTypeStockOut,
-                                                      EditText mEtCount ) {
+                                                      EditText mEtCount) {
         StockOutRecord sor = new StockOutRecord();
         sor.setOrg(mStock.getOrg());
         sor.setStockOutType(mSpTypeStockOut.getSelectedItem());
@@ -84,7 +83,7 @@ public class BeanSimilar {
 //        images.add(imageUrl);
 //        sor.setImages(images);
         //  设备号（eg. 001 /002/...） + 年月日时间到毫秒
-        sor.setPlatformTraceCode(Common.MACHINE_NUM.concat(DateUtils.getTime3(new Date())));
+        sor.setPlatformTraceCode(Common.getPlatformTraceCode());
         // 2017/11/7  “ 加个sdStockOutQty  随便数值 就不会报错  现在更新不了   你可以先加上测试下”
         sor.setSdStockOutQty(new BigDecimal(11));
         return sor;

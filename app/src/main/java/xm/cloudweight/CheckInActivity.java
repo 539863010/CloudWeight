@@ -958,6 +958,7 @@ public class CheckInActivity extends BaseActivity implements
         beanPrinter.setCustomer(customer != null && !TextUtils.isEmpty(customer.getName()) ? customer.getName() : null);
         IdName customerDept = mPurchaseBillLine.getCustomerDept();
         beanPrinter.setDepartment(customerDept != null && !TextUtils.isEmpty(customerDept.getName()) ? customerDept.getName() : null);
+        beanPrinter.setCode(Common.getPlatformTraceCode());
         mPrinterView.set(beanPrinter);
         String filePath = mPrinterView.getPath();
         PrinterUtil.printer(this, filePath);

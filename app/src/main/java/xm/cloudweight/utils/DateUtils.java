@@ -34,14 +34,6 @@ public class DateUtils {
         return dateformat1.format(date);
     }
 
-    public static String getTime3(Date date) {
-        if (date == null) {
-            return "";
-        }
-        SimpleDateFormat dateformat1 = new SimpleDateFormat("yyMMddHHmmss");
-        return dateformat1.format(date);
-    }
-
     //把日期转为字符串
     public static String converToString(Date date) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -73,6 +65,7 @@ public class DateUtils {
         }
         return null;
     }
+
     /**
      * 获取当前日期几月几号
      */
@@ -218,4 +211,5 @@ public class DateUtils {
         }
         return weeksList;
     }
+
 }

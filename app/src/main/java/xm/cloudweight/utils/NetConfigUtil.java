@@ -65,7 +65,13 @@ public class NetConfigUtil {
             public void log(@NonNull String message) {
                 //打印retrofit日志
                 if (!TextUtils.isEmpty(message)) {
-                    LogUtils.e("--RetrofitLog--", " - -  " + message);
+                    if (message.startsWith("{\"errorCode") && message.endsWith("}")) {
+                        LogUtils.e("===============", "======================================================================================================================================");
+                        LogUtils.e("===============", message);
+                        LogUtils.e("===============", "======================================================================================================================================");
+                    } else {
+                        LogUtils.e("--RetrofitLog--", " - -  " + message);
+                    }
                 }
             }
         });

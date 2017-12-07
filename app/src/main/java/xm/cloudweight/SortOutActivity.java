@@ -397,6 +397,8 @@ public class SortOutActivity extends BaseActivity implements
             // 保存 仓库
             Warehouse warehouse = mSpWareHouse.getSelectedItem();
             mPreSortOutData.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
+            // 生成追溯码
+            mPreSortOutData.setPlatformTraceCode(Common.getPlatformTraceCode());
             // ** 保存数据到数据库在 setStockOutQty，setWarehouse 后
             DbImageUpload dbImageUpload = new DbImageUpload();
             dbImageUpload.setDate(mBtnDate.getText().toString().trim());
@@ -439,6 +441,7 @@ public class SortOutActivity extends BaseActivity implements
             //先打印后清除数据
             mPreSortOutData.setStockOutQty(null);
             mPreSortOutData.setWarehouse(null);
+            mPreSortOutData.setPlatformTraceCode(null);
             ToastUtil.showShortToast(getContext(), "分拣成功");
             //默认设置第一个
             mSortOutAdapter.setIntSelect(0);
@@ -493,6 +496,7 @@ public class SortOutActivity extends BaseActivity implements
         beanPrinter.setCustomer(customer != null && !TextUtils.isEmpty(customer.getName()) ? customer.getName() : null);
         IdName customerDepartment = mPreSortOutData.getCustomerDepartment();
         beanPrinter.setDepartment(customerDepartment != null && !TextUtils.isEmpty(customerDepartment.getName()) ? customerDepartment.getName() : null);
+        beanPrinter.setCode(mPreSortOutData.getPlatformTraceCode());
         //设置数据
         mPrinterView.set(beanPrinter);
         String filePath = mPrinterView.getPath();
