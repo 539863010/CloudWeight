@@ -11,6 +11,7 @@ import android.util.Log;
 public class LogUtils {
     private static final boolean Debug = true;
     private static final String TAG = "易家患者";
+    private static int LOG_MAXLENGTH = 3500;
 
     public static void d(String tag, String msg) {
         if (Debug) {
@@ -32,7 +33,19 @@ public class LogUtils {
 
     public static void e(String tag, String msg) {
         if (Debug) {
-            Log.e(tag, msg);
+            int strLength = msg.length();
+            int start = 0;
+            int end = LOG_MAXLENGTH;
+            for (int i = 0; i < 100; i++) {
+                if (strLength > end) {
+                    Log.e(tag + i, msg.substring(start, end));
+                    start = end;
+                    end = end + LOG_MAXLENGTH;
+                } else {
+                    Log.e(tag + i, msg.substring(start, strLength));
+                    break;
+                }
+            }
         }
     }
 

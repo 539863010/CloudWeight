@@ -5,20 +5,12 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import xm.cloudweight.utils.bussiness.LocalSpUtil;
 
 /**
  * @author wyh
@@ -46,8 +38,8 @@ public class NetConfigUtil {
                 //是否自动重连
                 .retryOnConnectionFailure(true)
                 //添加头部
-                .addInterceptor(new AddHeaderInterceptor(ctx))
-                .addInterceptor(new GetHeaderInterceptor(ctx))
+//                .addInterceptor(new AddHeaderInterceptor(ctx))
+//                .addInterceptor(new GetHeaderInterceptor(ctx))
                 // 缓存
                 .cache(cache);
         if (true) {
@@ -80,66 +72,66 @@ public class NetConfigUtil {
     /**
      * 获取头部
      */
-    private static class GetHeaderInterceptor implements Interceptor {
-
-        private Context ctx;
-
-        private GetHeaderInterceptor(Context ctx) {
-            this.ctx = ctx;
-        }
-
-        @Override
-        public Response intercept(@NonNull Chain chain) throws IOException {
-            Response originalResponse = chain.proceed(chain.request());
-            if (!originalResponse.headers("Set-cookie").isEmpty()) {
-                final StringBuffer cookieBuffer = new StringBuffer();
-                Observable.from(originalResponse.headers("Set-cookie"))
-                        .map(new Func1<String, String>() {
-                            @Override
-                            public String call(String s) {
-                                String[] cookieArray = s.split(";");
-                                return cookieArray[0];
-                            }
-                        })
-                        .subscribe(new Action1<String>() {
-                            @Override
-                            public void call(String cookie) {
-                                cookieBuffer.append(cookie);
-                            }
-                        });
-                LocalSpUtil.setCookie(ctx, cookieBuffer.toString());
-            }
-            return originalResponse;
-        }
-    }
+//    private static class GetHeaderInterceptor implements Interceptor {
+//
+//        private Context ctx;
+//
+//        private GetHeaderInterceptor(Context ctx) {
+//            this.ctx = ctx;
+//        }
+//
+//        @Override
+//        public Response intercept(@NonNull Chain chain) throws IOException {
+//            Response originalResponse = chain.proceed(chain.request());
+////            if (!originalResponse.headers("Set-cookie").isEmpty()) {
+////                final StringBuffer cookieBuffer = new StringBuffer();
+////                Observable.from(originalResponse.headers("Set-cookie"))
+////                        .map(new Func1<String, String>() {
+////                            @Override
+////                            public String call(String s) {
+////                                String[] cookieArray = s.split(";");
+////                                return cookieArray[0];
+////                            }
+////                        })
+////                        .subscribe(new Action1<String>() {
+////                            @Override
+////                            public void call(String cookie) {
+////                                cookieBuffer.append(cookie);
+////                            }
+////                        });
+////                LocalSpUtil.setCookie(ctx, cookieBuffer.toString());
+////            }
+//            return originalResponse;
+//        }
+//    }
 
     /**
      * 添加头部
      */
-    private static class AddHeaderInterceptor implements Interceptor {
-        private Context ctx;
-
-        private AddHeaderInterceptor(Context ctx) {
-            this.ctx = ctx;
-        }
-
-        @Override
-        public Response intercept(@NonNull Chain chain) throws IOException {
-            final Request.Builder builder = chain.request().newBuilder();
-            Observable.just(LocalSpUtil.getCookie(ctx))
-                    .subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String cookie) {
-                            //添加cookie
-                            if (!TextUtils.isEmpty(cookie)) {
-                                builder.addHeader("Cookie", cookie);
-                            }
-                        }
-                    });
-
-            return chain.proceed(builder.build());
-        }
-    }
+//    private static class AddHeaderInterceptor implements Interceptor {
+//        private Context ctx;
+//
+//        private AddHeaderInterceptor(Context ctx) {
+//            this.ctx = ctx;
+//        }
+//
+//        @Override
+//        public Response intercept(@NonNull Chain chain) throws IOException {
+//            final Request.Builder builder = chain.request().newBuilder();
+////            Observable.just(LocalSpUtil.getCookie(ctx))
+////                    .subscribe(new Action1<String>() {
+////                        @Override
+////                        public void call(String cookie) {
+////                            //添加cookie
+////                            if (!TextUtils.isEmpty(cookie)) {
+////                                builder.addHeader("Cookie", cookie);
+////                            }
+////                        }
+////                    });
+//
+//            return chain.proceed(builder.build());
+//        }
+//    }
 
 //    private static class CacheInterceptor implements Interceptor {
 //
