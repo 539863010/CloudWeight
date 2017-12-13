@@ -79,7 +79,7 @@ public class PrinterView extends LinearLayout {
         setDrawingCacheEnabled(true);
         Bitmap tBitmap = getDrawingCache();
         // 拷贝图片，否则在setDrawingCacheEnabled(false)以后该图片会被释放掉
-        tBitmap = tBitmap.createBitmap(tBitmap);
+        tBitmap = Bitmap.createBitmap(tBitmap);
         setDrawingCacheEnabled(false);
 
         String filePath = Environment.getExternalStorageDirectory().getPath() + "/printer.jpg";

@@ -2,6 +2,7 @@ package xm.cloudweight.utils;
 
 import android.util.Log;
 
+import xm.cloudweight.BuildConfig;
 
 /**
  * 日志工具类
@@ -9,7 +10,7 @@ import android.util.Log;
  * @author ssy
  */
 public class LogUtils {
-    private static final boolean Debug = true;
+    private static final boolean Debug = BuildConfig.DEBUG;
     private static final String TAG = "易家患者";
     private static int LOG_MAXLENGTH = 3500;
 

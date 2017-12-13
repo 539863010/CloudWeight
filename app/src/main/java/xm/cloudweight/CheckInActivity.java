@@ -206,14 +206,15 @@ public class CheckInActivity extends BaseActivity implements
                 if (!TextUtils.isEmpty(key)) {
                     //请求扫描接口
                     CheckInPresenter.scanToPurchaseData(getActivity(), key);
-                    mEtBasket.requestFocus();
+                    if (mEtBasket != null) {
+                        mEtBasket.requestFocus();
+                    }
                 }
             }
         });
         mEtWeightCurrent.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO: 2017/11/30  
                 String strCurrentWeight = s.toString().trim();
                 if (TextUtils.isEmpty(strCurrentWeight)) {
                     return;
@@ -949,7 +950,7 @@ public class CheckInActivity extends BaseActivity implements
         }
         BeanPrinter beanPrinter = new BeanPrinter();
         beanPrinter.setGoodsName(mPurchaseBillLine.getGoods().getName());
-        if (weightCoefficient.doubleValue() != 0) {
+        if (weightCoefficient != null && weightCoefficient.doubleValue() != 0) {
             beanPrinter.setCount(BigDecimalUtil.toScaleStr(numWarehousing.multiply(weightCoefficient)).concat("kg"));
         } else {
             beanPrinter.setCount(BigDecimalUtil.toScaleStr(numWarehousing).concat(mPurchaseBillLine.getGoodsUnit().getName()));

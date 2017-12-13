@@ -19,6 +19,7 @@
 -keep public class com.tencent.bugly.**{*;}
 
 #保留崩溃日志错误信息行号
+-renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
 
 #aidl文件不能去混淆.
