@@ -213,6 +213,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             @Override
             public void onScanFinish(String key) {
                 if (!TextUtils.isEmpty(key) && key.length() == Common.BasketLength) {
+                    showP();
                     CommPresenter.queryStock(getActivity(), 0, 0, 0, key);
                 }
             }
@@ -229,6 +230,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
 
     @Override
     protected void loadDate() {
+        showP();
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
         if (listWareHouse != null) {
             mSpWareHouse.setList(listWareHouse);
@@ -255,6 +257,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                 }
                 break;
             case R.id.iv_similar_search:
+                showP();
                 filterList();
                 break;
             default:
@@ -486,16 +489,19 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     @Override
     public void onGetDropdownLeafCategoryFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
+        dismissP();
     }
 
     @Override
     public void onQueryStockSuccess(PageData<Stock> result) {
         if (result == null) {
+            dismissP();
             return;
         }
         List<Stock> values = result.getValues();
         if (values == null || values.size() == 0) {
             clearContent(null);
+            dismissP();
             return;
         }
         if (values.size() == 1) {
@@ -503,6 +509,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             mEtBasket.setText("");
             clearContent(values.get(0));
             setInfo();
+            dismissP();
         } else {
             mListAll.clear();
             mListAll.addAll(values);
@@ -514,6 +521,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     @Override
     public void onQueryStockFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
+        dismissP();
     }
 
     private DBManager getDbManager() {
@@ -668,6 +676,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         }
         if (mListAll.size() == 0) {
             mGoodsAdapter.notifyDataSetChanged();
+            dismissP();
             return;
         }
         Warehouse warehouse = mSpWareHouse.getSelectedItem();
@@ -713,6 +722,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mListShow.clear();
         mListShow.addAll(listKeyName);
         mGoodsAdapter.notifyDataSetChanged();
+        dismissP();
     }
 
     @Override
@@ -720,6 +730,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         switch (adapterView.getId()) {
             case R.id.sp_ware_house:
             case R.id.sp_goods_category:
+                showP();
                 //清除列表信息
                 mListShow.clear();
                 mGoodsAdapter.notifyDataSetChanged();

@@ -187,6 +187,7 @@ public class SortOutActivity extends BaseActivity implements
             public void onScanFinish(String key) {
                 if (!TextUtils.isEmpty(key)) {
                     if (key.length() == Common.BasketLength) {
+                        showP();
                         CommPresenter.queryStock(getActivity(), 0, 0, 0, key);
                     }
                 } else {
@@ -684,8 +685,8 @@ public class SortOutActivity extends BaseActivity implements
             loadCountSuccess = false;
         }
         if (!loadWeightSuccess && !loadCountSuccess) {
-            dismissP();
             mBtnRequest.setEnabled(true);
+            dismissP();
         }
         ToastUtil.showShortToast(getContext(), message);
     }
@@ -731,9 +732,7 @@ public class SortOutActivity extends BaseActivity implements
         if (!loadCountSuccess || !loadWeightSuccess || !loadCustomerLevel) {
             return;
         }
-
         mTvAmount.setText("汇总：");
-
         if ((mIntType == TYPE_WEIGHT && (mListAllWeight == null || mListAllWeight.size() == 0))
                 ||
                 (mIntType == TYPE_COUNT && (mListAllCount == null || mListAllCount.size() == 0))) {
@@ -802,6 +801,7 @@ public class SortOutActivity extends BaseActivity implements
                 mListShow.clear();
                 scrollToItem(0);
                 ToastUtil.showShortToast(getContext(), "该周转筐没有商品");
+                dismissP();
                 return;
             }
             int size = mListShow.size();
@@ -822,12 +822,16 @@ public class SortOutActivity extends BaseActivity implements
                 mListShow.addAll(listFilter);
             }
             scrollToItem(0);
+            dismissP();
+        } else {
+            dismissP();
         }
     }
 
     @Override
     public void onQueryStockFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
+        dismissP();
     }
 
     @Override

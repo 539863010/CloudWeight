@@ -204,6 +204,7 @@ public class CheckInActivity extends BaseActivity implements
             @Override
             public void onScanFinish(String key) {
                 if (!TextUtils.isEmpty(key)) {
+                    showP();
                     //请求扫描接口
                     CheckInPresenter.scanToPurchaseData(getActivity(), key);
                     if (mEtBasket != null) {
@@ -373,8 +374,6 @@ public class CheckInActivity extends BaseActivity implements
         String currentData = DateUtils.StringData();
         mBtnDate.setText(currentData);
 
-        CheckInPresenter.getListSupplier(this, 0, 0, 0);
-
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
         if (listWareHouse != null) {
             mSpWareHouse.setList(listWareHouse);
@@ -420,6 +419,7 @@ public class CheckInActivity extends BaseActivity implements
                 break;
             case R.id.sp_purchaseBill:
                 //单独获取
+                showP();
                 PurchaseBill purchaseBill = mSpPurchaseBill.getSelectedItem();
                 CheckInPresenter.getPurchaseBill(getActivity(), purchaseBill.getUuid());
                 break;
@@ -432,7 +432,6 @@ public class CheckInActivity extends BaseActivity implements
      * 刷新商品列表数据
      */
     private void setPurchaseBillLine(PurchaseBill purchaseBill) {
-
         mPurchaseBill = purchaseBill;
         mPurchaseData = null;
         mListPurchaseBillLineAll.clear();
@@ -442,7 +441,7 @@ public class CheckInActivity extends BaseActivity implements
         mListPurchaseBillLineShow.clear();
         mListPurchaseBillLineShow.addAll(mListPurchaseBillLineAll);
         mAdapterPurchase.notifyDataSetChanged();
-
+        dismissP();
     }
 
     /**
@@ -493,6 +492,7 @@ public class CheckInActivity extends BaseActivity implements
         String selectedDate = mBtnDate.getText().toString().trim();
         Warehouse selectedWareHouse = mSpWareHouse.getSelectedItem();
         if (selectedWareHouse != null) {
+            showP();
             clearContent();
             //清除商品列表信息
             clearGoodsList();
@@ -873,6 +873,7 @@ public class CheckInActivity extends BaseActivity implements
         mListPurchaseBillLineShow.clear();
         mAdapterPurchase.notifyDataSetChanged();
         ToastUtil.showShortToast(getContext(), message);
+        dismissP();
     }
 
     @Override
@@ -883,6 +884,7 @@ public class CheckInActivity extends BaseActivity implements
     @Override
     public void onGetPurchaseBillFailed(String message) {
         ToastUtil.showShortToast(getContext(), message);
+        dismissP();
     }
 
     @Override
@@ -894,12 +896,14 @@ public class CheckInActivity extends BaseActivity implements
         mPurchaseBillLine = purchaseData.getPurchaseBillLine();
         mEtPurChaseLabel.setText("");
         setPurchaseBillLineInfo();
+        dismissP();
     }
 
     @Override
     public void onScanToPurchaseDataFailed(int errorType, String message) {
         mEtPurChaseLabel.setText("");
         ToastUtil.showShortToast(getContext(), message);
+        dismissP();
     }
 
     private DBManager getDbManager() {

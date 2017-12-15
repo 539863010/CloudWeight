@@ -1,10 +1,11 @@
 package xm.cloudweight.base;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-
-import org.apache.log4j.chainsaw.Main;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -41,12 +40,11 @@ import xm.cloudweight.utils.connect.NetUtil;
  */
 public abstract class BaseActivity extends RxAppCompatActivity implements NetBroadcastReceiver.NetEvent {
     public static NetBroadcastReceiver.NetEvent mNetWorkEvent;
-    /**
-     * 网络类型
-     */
+    //网络类型
     private int netMobile;
-    protected ProgressDialog pd;
     private Unbinder mBind;
+    private AlertDialog mAlertDialog;
+    private AnimationDrawable mAnimationDrawable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,10 +59,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         setTitleInfo();
 
         mBind = ButterKnife.bind(this);
-        if (pd == null) {
-            pd = new ProgressDialog(this);
-            pd.setCancelable(true);
-        }
         initContentView();
         loadDate();
         mNetWorkEvent = this;
@@ -109,24 +103,37 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
             mBind.unbind();
         }
         mNetWorkEvent = null;
+        mAnimationDrawable = null;
+        mAlertDialog = null;
     }
 
     protected void showP() {
-        if (pd != null && !pd.isShowing()) {
-            pd.show();
+        if (mAlertDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog);
+            View v = LayoutInflater.from(this).inflate(R.layout.loading, null);
+            mAnimationDrawable = (AnimationDrawable) (v.findViewById(R.id.img_loading)).getBackground();
+            builder.setView(v);
+            builder.setCancelable(true);
+            mAlertDialog = builder.create();
+        }
+        if (mAlertDialog != null && !mAlertDialog.isShowing()) {
+            if (!mAnimationDrawable.isRunning()) {
+                mAnimationDrawable.start();
+            }
+            mAlertDialog.show();
         }
     }
 
     protected void dismissP() {
-        if (pd != null && pd.isShowing()) {
-            pd.dismiss();
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAnimationDrawable.stop();
+            mAlertDialog.dismiss();
         }
     }
 
     /**
      * 初始化时判断有没有网络
      */
-
     public boolean inspectNet() {
         this.netMobile = NetUtil.getNetWorkState(BaseActivity.this);
         return isNetConnect();
@@ -157,6 +164,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //体重秤清零
         if (this instanceof CheckInActivity
                 || this instanceof SortOutActivity
                 || this instanceof SimilarActivity) {
