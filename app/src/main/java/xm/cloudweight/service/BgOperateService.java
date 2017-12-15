@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.xmzynt.storm.service.sort.SortOutData;
@@ -27,6 +28,7 @@ import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
 import xm.cloudweight.app.App;
 import xm.cloudweight.bean.PBaseInfo;
+import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.comm.ServerConstant;
 import xm.cloudweight.utils.LogUtils;
@@ -363,9 +365,11 @@ public class BgOperateService extends Service {
                         //用于删除
                         sortOutData.setStockOutRecordUuids(result.getStockOutRecordUuids());
                         //保存出库uuid
-                        data.setStockOutUuid(result.getStockOutRecordUuids().get(0));
                         data.setLine(GsonUtil.getGson().toJson(sortOutData));
+                        data.setStockOutUuid(result.getStockOutRecordUuids().get(0));
                         mDBManager.updateDbImageUpload(data);
+                        //通知SortOutActivity更新（当popwindow打开时更新）
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_SORT_OUT_HISTORY));
                         //下一个请求
                         getUnSortOutStoreOutList();
                     }

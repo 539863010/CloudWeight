@@ -2,9 +2,13 @@ package xm.cloudweight;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -39,6 +43,7 @@ import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.BeanPrinter;
 import xm.cloudweight.camera.instrument.Instrument;
+import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CommImpl;
@@ -139,6 +144,7 @@ public class SortOutActivity extends BaseActivity implements
     private PrinterView mPrinterView;
     private boolean mStable;
     private VideoFragment mVideoFragment;
+    private RefreshDbImageUploadReceiver mRefreshDbImageUploadReceiver;
 
     @Override
     protected int getLayoutId() {
@@ -207,12 +213,24 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     protected void loadDate() {
+        mRefreshDbImageUploadReceiver = new RefreshDbImageUploadReceiver();
+        IntentFilter refreshDbImageUploadFilter = new IntentFilter(BrocastFilter.FILTER_REFRESH_SORT_OUT_HISTORY);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mRefreshDbImageUploadReceiver, refreshDbImageUploadFilter);
+
         getLocalInfo();
         mBtnSortOutCount.setSelected(false);
         mBtnSortOutWeight.setSelected(true);
         //设置当前日期
         String currentData = DateUtils.StringData();
         mBtnDate.setText(currentData);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mRefreshDbImageUploadReceiver != null) {
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mRefreshDbImageUploadReceiver);
+        }
     }
 
     private void getLocalInfo() {
@@ -560,12 +578,36 @@ public class SortOutActivity extends BaseActivity implements
         mHistoryPopWindow.notify(mListHistory);
     }
 
+    /**
+     * 后台线程上传分拣接口成功后发送过来的广播
+     */
+    private class RefreshDbImageUploadReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mHistoryPopWindow != null && mHistoryPopWindow.isShowing()) {
+                refreshHistoryList();
+            }
+        }
+    }
+
     @Override
     public void delete(DbImageUpload dbImageUpload) {
-        if (!TextUtils.isEmpty(dbImageUpload.getStockOutUuid())) {
+        String stockOutUuid = dbImageUpload.getStockOutUuid();
+        if (!TextUtils.isEmpty(stockOutUuid)) {
             //已分拣 请求接口撤销
             mDbImageUpload = dbImageUpload;
             SortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), SortOutData.class);
+            //再次保证StockOutRecordUuids有值
+            List<String> stockOutRecordUuids = data.getStockOutRecordUuids();
+            if (stockOutRecordUuids == null) {
+                stockOutRecordUuids = new ArrayList<>();
+            }
+            if (stockOutRecordUuids.size() == 0) {
+                stockOutRecordUuids.add(stockOutUuid);
+                data.setStockOutRecordUuids(stockOutRecordUuids);
+            }
+            showP();
             SortOutPresenter.cancelSortOut(getActivity(), data);
         } else {
             //未分拣 删除本地数据库
@@ -655,10 +697,12 @@ public class SortOutActivity extends BaseActivity implements
         refreshHistoryList();
         ToastUtil.showShortToast(getContext(), "撤销分拣成功");
         hasCancelSortOut = true;
+        dismissP();
     }
 
     @Override
     public void onCancelSortOutFailed(String message) {
+        dismissP();
         ToastUtil.showShortToast(getContext(), message);
     }
 

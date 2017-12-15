@@ -113,7 +113,9 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
         if (mAnchor == null) {
             throw new RuntimeException("must set anchor");
         }
-        showAsDropDown(mAnchor, 0, 0);
+        if (!isShowing()) {
+            showAsDropDown(mAnchor, 0, 0);
+        }
     }
 
     public void notify(List<DbImageUpload> daoList) {
