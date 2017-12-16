@@ -191,7 +191,9 @@ public class SortOutActivity extends BaseActivity implements
                         CommPresenter.queryStock(getActivity(), 0, 0, 0, key);
                     }
                 } else {
-                    SortOutPresenter.getSourOutList(getActivity(), TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, mBtnDate.getText().toString());
+                    if (mBtnDate != null) {
+                        SortOutPresenter.getSourOutList(getActivity(), TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, mBtnDate.getText().toString());
+                    }
                 }
             }
         });
@@ -202,14 +204,19 @@ public class SortOutActivity extends BaseActivity implements
             //显示数量
             BigDecimal hasStockOutQty = mPreSortOutData.getHasStockOutQty() != null ? mPreSortOutData.getHasStockOutQty() : new BigDecimal(0);
             String scaleStr = BigDecimalUtil.toScaleStr(mPreSortOutData.getGoodsQty().subtract(hasStockOutQty));
-            mEtShow.setText(scaleStr);
+            setEditShow(scaleStr);
             mEtShow.setSelection(scaleStr.length());
             String unit = mPreSortOutData.getGoodsUnit().getName();
             mTvTypeUnit.setText(unit);
         } else {
-            mEtShow.setText("");
+            setEditShow("");
             mTvTypeUnit.setText("kg");
         }
+    }
+
+    private void setEditShow(String show) {
+        mEtShow.setText(show);
+        mPreWeight = show;
     }
 
     @Override
@@ -355,7 +362,7 @@ public class SortOutActivity extends BaseActivity implements
 
     private void setClick(String type, boolean showEnable, boolean countSelect, boolean weightSelect) {
         mTvType.setText(type);
-        mEtShow.setText("");
+        setEditShow("");
         mEtShow.setEnabled(showEnable);
         mBtnSortOutCount.setSelected(countSelect);
         mBtnSortOutWeight.setSelected(weightSelect);
@@ -782,8 +789,9 @@ public class SortOutActivity extends BaseActivity implements
             }
             //稳定后 排序
             if (mStable) {
-                String weight = !TextUtils.isEmpty(mEtShow.getText().toString().trim()) ? mEtShow.getText().toString().trim() : "0";
-                sequenceListWeight(weight);
+                String weightStr = mEtShow.getText().toString().trim();
+                String weight = !TextUtils.isEmpty(weightStr) ? weightStr : "0";
+                sequenceListWeight(mListShow, weight);
             }
         }
     }
@@ -928,7 +936,7 @@ public class SortOutActivity extends BaseActivity implements
             mEtShow.setText(weight);
             if (mStable && !weight.equals(mPreWeight)) {
                 mPreWeight = weight;
-                sequenceListWeight(weight);
+                sequenceListWeight(mListShow, weight);
             }
         }
     }
@@ -938,15 +946,15 @@ public class SortOutActivity extends BaseActivity implements
      */
     private ListComparator mListComparator;
 
-    private void sequenceListWeight(String weight) {
-        if (!TextUtils.isEmpty(weight) && mListShow.size() > 0) {
+    private void sequenceListWeight(List<SortOutData> list, String weight) {
+        if (!TextUtils.isEmpty(weight) && list.size() > 0) {
             double douWeight = Double.parseDouble(weight);
             if (mListComparator != null) {
                 mListComparator.setDobWeight(douWeight);
             } else {
                 mListComparator = new ListComparator(douWeight);
             }
-            Collections.sort(mListShow, mListComparator);
+            Collections.sort(list, mListComparator);
             scrollToItem(0);
         }
     }
