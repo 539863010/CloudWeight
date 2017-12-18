@@ -213,7 +213,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             @Override
             public void onScanFinish(String key) {
                 if (!TextUtils.isEmpty(key) && key.length() == Common.BasketLength) {
-                    showP();
+                    showLoadingDialog(false);
                     CommPresenter.queryStock(getActivity(), 0, 0, 0, key);
                 }
             }
@@ -230,7 +230,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
 
     @Override
     protected void loadDate() {
-        showP();
+        showLoadingDialog(true);
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
         if (listWareHouse != null) {
             mSpWareHouse.setList(listWareHouse);
@@ -257,7 +257,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                 }
                 break;
             case R.id.iv_similar_search:
-                showP();
+                showLoadingDialog(false);
                 filterList();
                 break;
             default:
@@ -283,7 +283,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    showP();
+                    showLoadingDialog(false);
                     break;
                 case 2:
                     String path = msg.getData().getString("path", "");
@@ -311,8 +311,8 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         dbImageUpload.setType(Common.DbType.TYPE_STORE_OUT);
         getDbManager().insertDbImageUpload(dbImageUpload);
         showSuccessResult("出库");
-        dismissP();
         setBtnEnable(mBtnStockOut);
+        dismissLoadingDialog();
     }
 
     /**
@@ -332,7 +332,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                     if (mVideoFragment.isLight()) {
                         mVideoFragment.screenshot(mHandlerShotPic);
                     } else {
-                        showP();
+                        showLoadingDialog(false);
                         shotResult(null);
                     }
                 }
@@ -369,18 +369,18 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mBtnAllocate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showP();
+                showLoadingDialog(false);
                 Warehouse warehouse = mSpWareHouse.getSelectedItem();
                 Warehouse wareHouseOut = mSpWareHouseIn.getSelectedItem();
                 if (warehouse == null || wareHouseOut == null
                         || TextUtils.isEmpty(warehouse.getName()) || TextUtils.isEmpty(wareHouseOut.getName())) {
-                    dismissP();
+                    dismissLoadingDialog();
                     return;
                 }
                 if (warehouse.getName().equals(wareHouseOut.getName())
                         && warehouse.getCode().equals(wareHouseOut.getCode())) {
                     ToastUtil.showShortToast(getContext(), "调入仓库不能选择所在仓库");
-                    dismissP();
+                    dismissLoadingDialog();
                     return;
                 }
                 if (checkToRequest("调拨数量不能为空")) {
@@ -397,7 +397,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                     showSuccessResult("调拨");
                     setBtnEnable(mBtnAllocate);
                 }
-                dismissP();
+                dismissLoadingDialog();
             }
         });
     }
@@ -437,7 +437,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mBtnInventory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showP();
+                showLoadingDialog(false);
                 if (checkToRequest("实际数量不能为空")) {
                     mBtnInventory.setEnabled(false);
                     InventoryRecord inventoryRecord = BeanSimilar.createInventoryRecord(getContext(),
@@ -451,7 +451,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                     showSuccessResult("盘点");
                     setBtnEnable(mBtnInventory);
                 }
-                dismissP();
+                dismissLoadingDialog();
             }
         });
     }
@@ -489,19 +489,19 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     @Override
     public void onGetDropdownLeafCategoryFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override
     public void onQueryStockSuccess(PageData<Stock> result) {
         if (result == null) {
-            dismissP();
+            dismissLoadingDialog();
             return;
         }
         List<Stock> values = result.getValues();
         if (values == null || values.size() == 0) {
             clearContent(null);
-            dismissP();
+            dismissLoadingDialog();
             return;
         }
         if (values.size() == 1) {
@@ -509,7 +509,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             mEtBasket.setText("");
             clearContent(values.get(0));
             setInfo();
-            dismissP();
+            dismissLoadingDialog();
         } else {
             mListAll.clear();
             mListAll.addAll(values);
@@ -521,7 +521,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     @Override
     public void onQueryStockFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
-        dismissP();
+        dismissLoadingDialog();
     }
 
     private DBManager getDbManager() {
@@ -676,7 +676,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         }
         if (mListAll.size() == 0) {
             mGoodsAdapter.notifyDataSetChanged();
-            dismissP();
+            dismissLoadingDialog();
             return;
         }
         Warehouse warehouse = mSpWareHouse.getSelectedItem();
@@ -722,7 +722,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mListShow.clear();
         mListShow.addAll(listKeyName);
         mGoodsAdapter.notifyDataSetChanged();
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override
@@ -730,7 +730,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         switch (adapterView.getId()) {
             case R.id.sp_ware_house:
             case R.id.sp_goods_category:
-                showP();
+                showLoadingDialog(false);
                 //清除列表信息
                 mListShow.clear();
                 mGoodsAdapter.notifyDataSetChanged();

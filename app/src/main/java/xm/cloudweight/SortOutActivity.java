@@ -187,7 +187,7 @@ public class SortOutActivity extends BaseActivity implements
             public void onScanFinish(String key) {
                 if (!TextUtils.isEmpty(key)) {
                     if (key.length() == Common.BasketLength) {
-                        showP();
+                        showLoadingDialog(false);
                         CommPresenter.queryStock(getActivity(), 0, 0, 0, key);
                     }
                 } else {
@@ -328,10 +328,10 @@ public class SortOutActivity extends BaseActivity implements
                 if (mVideoFragment.isLight()) {
                     mVideoFragment.screenshot(mHandlerShotPic);
                 } else {
-                    showP();
+                    showLoadingDialog(false);
                     setDataToDb(null);
                     setBtnEnable();
-                    dismissP();
+                    dismissLoadingDialog();
                 }
                 break;
             case R.id.btn_request:
@@ -346,8 +346,8 @@ public class SortOutActivity extends BaseActivity implements
         String time = mBtnDate.getText().toString().trim();
         if (!TextUtils.isEmpty(time)) {
             mBtnRequest.setEnabled(false);
-            dismissP();
-            showP();
+            dismissLoadingDialog();
+            showLoadingDialog(false);
             loadWeightSuccess = false;
             loadCountSuccess = false;
             mListAllWeight.clear();
@@ -377,20 +377,20 @@ public class SortOutActivity extends BaseActivity implements
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    showP();
+                    showLoadingDialog(false);
                     setBtnEnable();
                     break;
                 case 2:
-                    dismissP();
                     //保存图片路径都后台作为请求
                     String path = msg.getData().getString("path", "");
                     setDataToDb(path);
                     setBtnEnable();
+                    dismissLoadingDialog();
                     break;
                 case 3:
-                    dismissP();
                     setDataToDb(null);
                     setBtnEnable();
+                    dismissLoadingDialog();
                     break;
                 default:
                     break;
@@ -615,7 +615,7 @@ public class SortOutActivity extends BaseActivity implements
                 stockOutRecordUuids.add(stockOutUuid);
                 data.setStockOutRecordUuids(stockOutRecordUuids);
             }
-            showP();
+            showLoadingDialog(false);
             SortOutPresenter.cancelSortOut(getActivity(), data);
         } else {
             //未分拣 删除本地数据库
@@ -643,7 +643,7 @@ public class SortOutActivity extends BaseActivity implements
             getListCustomer();
             //筛选条件
             filterList();
-            dismissP();
+            dismissLoadingDialog();
         }
     }
 
@@ -693,7 +693,7 @@ public class SortOutActivity extends BaseActivity implements
         }
         if (!loadWeightSuccess && !loadCountSuccess) {
             mBtnRequest.setEnabled(true);
-            dismissP();
+            dismissLoadingDialog();
         }
         ToastUtil.showShortToast(getContext(), message);
     }
@@ -705,12 +705,12 @@ public class SortOutActivity extends BaseActivity implements
         refreshHistoryList();
         ToastUtil.showShortToast(getContext(), "撤销分拣成功");
         hasCancelSortOut = true;
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override
     public void onCancelSortOutFailed(String message) {
-        dismissP();
+        dismissLoadingDialog();
         ToastUtil.showShortToast(getContext(), message);
     }
 
@@ -809,7 +809,7 @@ public class SortOutActivity extends BaseActivity implements
                 mListShow.clear();
                 scrollToItem(0);
                 ToastUtil.showShortToast(getContext(), "该周转筐没有商品");
-                dismissP();
+                dismissLoadingDialog();
                 return;
             }
             int size = mListShow.size();
@@ -830,16 +830,16 @@ public class SortOutActivity extends BaseActivity implements
                 mListShow.addAll(listFilter);
             }
             scrollToItem(0);
-            dismissP();
+            dismissLoadingDialog();
         } else {
-            dismissP();
+            dismissLoadingDialog();
         }
     }
 
     @Override
     public void onQueryStockFailed(int errorType, String failString) {
         ToastUtil.showShortToast(getContext(), failString);
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override

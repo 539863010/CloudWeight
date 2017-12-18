@@ -204,7 +204,7 @@ public class CheckInActivity extends BaseActivity implements
             @Override
             public void onScanFinish(String key) {
                 if (!TextUtils.isEmpty(key)) {
-                    showP();
+                    showLoadingDialog(false);
                     //请求扫描接口
                     CheckInPresenter.scanToPurchaseData(getActivity(), key);
                     if (mEtBasket != null) {
@@ -377,6 +377,7 @@ public class CheckInActivity extends BaseActivity implements
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
         if (listWareHouse != null) {
             mSpWareHouse.setList(listWareHouse);
+            showLoadingDialog(true);
             queryList();
         } else {
             ToastUtil.showShortToast(this, "未获取到仓库列表信息");
@@ -415,11 +416,12 @@ public class CheckInActivity extends BaseActivity implements
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()) {
             case R.id.sp_ware_house:
+                showLoadingDialog(false);
                 queryList();
                 break;
             case R.id.sp_purchaseBill:
                 //单独获取
-                showP();
+                showLoadingDialog(false);
                 PurchaseBill purchaseBill = mSpPurchaseBill.getSelectedItem();
                 CheckInPresenter.getPurchaseBill(getActivity(), purchaseBill.getUuid());
                 break;
@@ -441,7 +443,7 @@ public class CheckInActivity extends BaseActivity implements
         mListPurchaseBillLineShow.clear();
         mListPurchaseBillLineShow.addAll(mListPurchaseBillLineAll);
         mAdapterPurchase.notifyDataSetChanged();
-        dismissP();
+        dismissLoadingDialog();
     }
 
     /**
@@ -492,12 +494,12 @@ public class CheckInActivity extends BaseActivity implements
         String selectedDate = mBtnDate.getText().toString().trim();
         Warehouse selectedWareHouse = mSpWareHouse.getSelectedItem();
         if (selectedWareHouse != null) {
-            showP();
             clearContent();
             //清除商品列表信息
             clearGoodsList();
             CheckInPresenter.queryPurchaseBill(this, 0, 0, 0, selectedDate, selectedWareHouse.getUuid());
         } else {
+            dismissLoadingDialog();
 //            ToastUtil.showShortToast(getContext(), "请选择仓库");
         }
     }
@@ -520,7 +522,7 @@ public class CheckInActivity extends BaseActivity implements
                 if (mVideoFragment.isLight()) {
                     mVideoFragment.screenshot(mHandlerShotPic);
                 } else {
-                    showP();
+                    showLoadingDialog(false);
                     shotResult(null);
                 }
                 break;
@@ -537,7 +539,7 @@ public class CheckInActivity extends BaseActivity implements
                         if (mVideoFragment.isLight()) {
                             mVideoFragment.screenshot(mHandlerShotPic);
                         } else {
-                            showP();
+                            showLoadingDialog(false);
                             shotResult(null);
                         }
                     } else {
@@ -582,6 +584,7 @@ public class CheckInActivity extends BaseActivity implements
             String date = year + "-" + monthStr + "-" + dayStr;
             mBtnDate.setText(date);
             //请求数据
+            showLoadingDialog(false);
             queryList();
         }
     };
@@ -698,7 +701,7 @@ public class CheckInActivity extends BaseActivity implements
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    showP();
+                    showLoadingDialog(false);
                     setBtnEnable();
                     break;
                 case 2:
@@ -737,8 +740,8 @@ public class CheckInActivity extends BaseActivity implements
             ToastUtil.showShortToast(getContext(), "越库成功");
         }
         refreshSuccessData();
-        dismissP();
         setBtnEnable();
+        dismissLoadingDialog();
     }
 
     private void setBtnEnable() {
@@ -873,7 +876,7 @@ public class CheckInActivity extends BaseActivity implements
         mListPurchaseBillLineShow.clear();
         mAdapterPurchase.notifyDataSetChanged();
         ToastUtil.showShortToast(getContext(), message);
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override
@@ -884,7 +887,7 @@ public class CheckInActivity extends BaseActivity implements
     @Override
     public void onGetPurchaseBillFailed(String message) {
         ToastUtil.showShortToast(getContext(), message);
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override
@@ -896,14 +899,14 @@ public class CheckInActivity extends BaseActivity implements
         mPurchaseBillLine = purchaseData.getPurchaseBillLine();
         mEtPurChaseLabel.setText("");
         setPurchaseBillLineInfo();
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override
     public void onScanToPurchaseDataFailed(int errorType, String message) {
         mEtPurChaseLabel.setText("");
         ToastUtil.showShortToast(getContext(), message);
-        dismissP();
+        dismissLoadingDialog();
     }
 
     private DBManager getDbManager() {

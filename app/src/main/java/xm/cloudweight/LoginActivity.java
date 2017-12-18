@@ -89,12 +89,12 @@ public class LoginActivity extends BaseActivity implements LoginImpl.OnLoginStat
 
     @Override
     public void onLoginStart() {
-        showP();
+        showLoadingDialog(false);
     }
 
     @Override
     public void onLoginComplete() {
-        dismissP();
+        dismissLoadingDialog();
     }
 
     @Override

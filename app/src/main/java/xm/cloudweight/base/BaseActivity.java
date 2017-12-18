@@ -1,6 +1,7 @@
 package xm.cloudweight.base;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -38,13 +39,14 @@ import xm.cloudweight.utils.connect.NetUtil;
  * @Description:
  * @creat 2017/8/1
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements NetBroadcastReceiver.NetEvent {
+public abstract class BaseActivity extends RxAppCompatActivity implements NetBroadcastReceiver.NetEvent, DialogInterface.OnDismissListener {
     public static NetBroadcastReceiver.NetEvent mNetWorkEvent;
     //网络类型
     private int netMobile;
     private Unbinder mBind;
     private AlertDialog mAlertDialog;
     private AnimationDrawable mAnimationDrawable;
+    private boolean isCloseActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,7 +109,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         mAlertDialog = null;
     }
 
-    protected void showP() {
+    private void showP() {
         if (mAlertDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog);
             View v = LayoutInflater.from(this).inflate(R.layout.loading, null);
@@ -115,6 +117,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
             builder.setView(v);
             builder.setCancelable(true);
             mAlertDialog = builder.create();
+            mAlertDialog.setOnDismissListener(this);
         }
         if (mAlertDialog != null && !mAlertDialog.isShowing()) {
             if (!mAnimationDrawable.isRunning()) {
@@ -124,7 +127,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         }
     }
 
-    protected void dismissP() {
+    private void dismissP() {
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAnimationDrawable.stop();
             mAlertDialog.dismiss();
@@ -240,6 +243,24 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
 
     public ApiManager getApiManager() {
         return App.getApiManager(getApplicationContext());
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        //首次加载点击尚未完成，点击取消返回首页
+        if (isCloseActivity) {
+            finish();
+        }
+    }
+
+    protected void showLoadingDialog(boolean isClose) {
+        isCloseActivity = isClose;
+        showP();
+    }
+
+    protected void dismissLoadingDialog() {
+        dismissP();
+        isCloseActivity = false;
     }
 
 }
