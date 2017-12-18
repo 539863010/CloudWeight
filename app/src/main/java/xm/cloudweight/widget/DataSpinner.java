@@ -62,12 +62,15 @@ public class DataSpinner<T> extends android.support.v7.widget.AppCompatSpinner {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView tv = (TextView) view;
-                if (tv != null && mTitleColorRes != -1) {
+                if (tv == null) {
+                    return;
+                }
+                if (mTitleColorRes != -1) {
                     tv.setTextColor(mTitleColorRes);
                 }
                 //供应商显示联系人
                 T t = mList.get(i);
-                if (tv != null && t instanceof PurchaseBill) {
+                if (t instanceof PurchaseBill) {
                     //验收供应商列表默认显示供应商
                     PurchaseBill purchaseBill = (PurchaseBill) t;
                     IdName supplier = purchaseBill.getSupplier();
