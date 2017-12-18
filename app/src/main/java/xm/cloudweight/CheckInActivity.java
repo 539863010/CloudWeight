@@ -682,7 +682,7 @@ public class CheckInActivity extends BaseActivity implements
         mTvInfoPurchaseNum.setText("");
         mTvNumWarehousingUnit.setText("kg");
         mTvInfoPurchaseRemark.setText("采购备注：");
-        mEtWeightCurrent.setText("");
+        setEtWeightCurrent("");
         mEtWeightAccumulate.setText("");
         mTvWeightAccumulateUnit.setText("kg");
         mEtBucklesLeather.setText("");
@@ -1009,7 +1009,7 @@ public class CheckInActivity extends BaseActivity implements
             return;
         }
         if (data == null) {
-            mEtWeightCurrent.setText("");
+            setEtWeightCurrent("");
         } else {
             if (mPurchaseBillLine != null && mPurchaseBillLine.getWeightCoefficient() != null) {
                 //重量商品才进行称重
@@ -1035,6 +1035,11 @@ public class CheckInActivity extends BaseActivity implements
                 mPreWeight = data.weight;
             }
         }
+    }
+
+    private void setEtWeightCurrent(String weight) {
+        mEtWeightCurrent.setText(weight);
+        mPreWeight = weight;
     }
 
     private BigDecimal getEtBigDecimal(EditText et) {

@@ -598,9 +598,10 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         BigDecimal amount = mStock.getAmount();
         if (weightCoefficient != null) {
             //重量单位  amount * 系数
-            mEtStockNum.setText(BigDecimalUtil.toScaleStr(amount.multiply(weightCoefficient)));
+            String weight = BigDecimalUtil.toScaleStr(amount.multiply(weightCoefficient));
+            mEtStockNum.setText(weight);
             mTvTitleStockNumUnit.setText("kg");
-            mEtCurrentWeight.setText(BigDecimalUtil.toScaleStr(amount.multiply(weightCoefficient)));
+            setEtWeightCurrent(weight);
             mTvUnitCount.setText("kg");
             mEtLeather.setEnabled(true);
             mEtDeduct.setEnabled(true);
@@ -642,7 +643,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mEtStockNum.setText("");
         mTvTitleStockNumUnit.setText("");
 
-        mEtCurrentWeight.setText("");
+        setEtWeightCurrent("");
         mEtLeather.setText("");
         mEtDeduct.setText("");
         mEtCount.setText("");
@@ -834,7 +835,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             return;
         }
         if (data == null) {
-            mEtCurrentWeight.setText("");
+            setEtWeightCurrent("");
         } else {
             mStable = data.stable;
             if (mStock != null && mStock.getWeightCoefficient() != null) {
@@ -848,6 +849,11 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             }
             mPreWeight = data.weight;
         }
+    }
+
+    private void setEtWeightCurrent(String weight) {
+        mEtCurrentWeight.setText(weight);
+        mPreWeight = weight;
     }
 
     private BigDecimal getEtToBigdecimal(EditText et) {
