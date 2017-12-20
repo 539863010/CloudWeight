@@ -154,6 +154,7 @@ public class SortOutActivity extends BaseActivity implements
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initContentView() {
+        mTvTypeUnit.setText("kg");
         mVideoFragment = VideoFragment.getInstance();
         mVideoFragment.setInstrumentListener(this);
         getSupportFragmentManager().beginTransaction().add(R.id.container, mVideoFragment).commitAllowingStateLoss();
@@ -209,7 +210,8 @@ public class SortOutActivity extends BaseActivity implements
             String unit = mPreSortOutData.getGoodsUnit().getName();
             mTvTypeUnit.setText(unit);
         } else {
-            setEditShow("");
+            //设置为""后,点击每个item跳回到item=0
+//            setEditShow("");
             mTvTypeUnit.setText("kg");
         }
     }
@@ -315,8 +317,12 @@ public class SortOutActivity extends BaseActivity implements
                     return;
                 }
                 String countStr = mEtShow.getText().toString().trim();
-                if (TextUtils.isEmpty(countStr)) {
-                    ToastUtil.showShortToast(getContext(), "请输入重量/数量");
+                if (TextUtils.isEmpty(countStr) || Double.parseDouble(countStr) == 0) {
+                    if (mIntType == TYPE_WEIGHT) {
+                        ToastUtil.showShortToast(getContext(), "请称重");
+                    } else {
+                        ToastUtil.showShortToast(getContext(), "请输入数量");
+                    }
                     return;
                 }
                 Warehouse selectedWareHouse = mSpWareHouse.getSelectedItem();
@@ -745,7 +751,7 @@ public class SortOutActivity extends BaseActivity implements
                 (mIntType == TYPE_COUNT && (mListAllCount == null || mListAllCount.size() == 0))) {
             mListFilter.clear();
             mListShow.clear();
-            scrollToItem(0);
+            scrollToBottom(0);
             return;
         }
 
@@ -771,8 +777,7 @@ public class SortOutActivity extends BaseActivity implements
             mPreSortOutData = mListShow.get(0);
             notifyItemClick();
         }
-        scrollToItem(0);
-        //添加汇总
+//        scrollToItem(0);
         if (mIntType == TYPE_WEIGHT) {
             if (mListShow.size() > 0
                     &&
@@ -794,6 +799,7 @@ public class SortOutActivity extends BaseActivity implements
                 sequenceListWeight(mListShow, weight);
             }
         }
+        scrollToBottom(0);
     }
 
     @Override
@@ -807,7 +813,7 @@ public class SortOutActivity extends BaseActivity implements
             List<Stock> stocks = result.getValues();
             if (stocks == null || stocks.size() == 0) {
                 mListShow.clear();
-                scrollToItem(0);
+                scrollToBottom(0);
                 ToastUtil.showShortToast(getContext(), "该周转筐没有商品");
                 dismissLoadingDialog();
                 return;
@@ -829,7 +835,7 @@ public class SortOutActivity extends BaseActivity implements
             if (listFilter != null && listFilter.size() > 0) {
                 mListShow.addAll(listFilter);
             }
-            scrollToItem(0);
+            scrollToBottom(0);
             dismissLoadingDialog();
         } else {
             dismissLoadingDialog();
@@ -859,6 +865,12 @@ public class SortOutActivity extends BaseActivity implements
                 } else {
                     mListShow.addAll(mListFilter.subList(sizeShow, sizeFilter));
                 }
+//                if (mIntType == TYPE_WEIGHT) {
+//                    String weight = mEtShow.getText().toString().trim();
+//                    if (!TextUtils.isEmpty(weight)) {
+//                        sequenceListWeight(mListShow, weight);
+//                    }
+//                }
                 mSortOutAdapter.notifyDataSetChanged();
             }
         }
@@ -937,6 +949,7 @@ public class SortOutActivity extends BaseActivity implements
             if (mStable && !weight.equals(mPreWeight)) {
                 mPreWeight = weight;
                 sequenceListWeight(mListShow, weight);
+                scrollToBottom(0);
             }
         }
     }
@@ -955,7 +968,12 @@ public class SortOutActivity extends BaseActivity implements
                 mListComparator = new ListComparator(douWeight);
             }
             Collections.sort(list, mListComparator);
-            scrollToItem(0);
+        }
+    }
+
+    private void scrollToBottom(int position) {
+        if (mListShow.size() > 0) {
+            scrollToItem(position);
         }
     }
 

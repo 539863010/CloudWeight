@@ -52,7 +52,7 @@ public abstract class ApiSubscribe<T> extends Subscriber<ResponseEntity<T>> {
             }
         } else {
             onResultFail(ServerConstant.ERROR_MESSAGE, t.getMessage());
-            BuglyUtil.uploadCrash(GsonUtil.getGson().toJson(t));
+            BuglyUtil.uploadCrash("**请求返回**  " + GsonUtil.getGson().toJson(t));
         }
     }
 
