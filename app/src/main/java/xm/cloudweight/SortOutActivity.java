@@ -481,6 +481,9 @@ public class SortOutActivity extends BaseActivity implements
             if (mListShow.size() > 0) {
                 mPreSortOutData = mListShow.get(0);
                 notifyItemClick();
+            } else if (mListShow.size() == 0) {
+                mPreSortOutData = null;
+                mTvTypeUnit.setText("");
             }
         }
     }
@@ -646,7 +649,10 @@ public class SortOutActivity extends BaseActivity implements
         if (loadWeightSuccess && loadCountSuccess) {
             mBtnRequest.setEnabled(true);
             //设置客户列表
-            getListCustomer();
+            List<MerchantCustomer> list = mSpCustomers.getList();
+            if (list == null) {
+                getListCustomer();
+            }
             //筛选条件
             filterList();
             dismissLoadingDialog();

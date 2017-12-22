@@ -932,7 +932,7 @@ public class CheckInActivity extends BaseActivity implements
                 printer(weightCoefficient, numWarehousing);
             }
             if (weightCoefficient != null) {
-                mMapAccumulate.put(mPurchaseBillLine.getUuid(), BigDecimalUtil.toScaleStr(accumulate.add(numWarehousing).multiply(weightCoefficient)));
+                mMapAccumulate.put(mPurchaseBillLine.getUuid(), BigDecimalUtil.toScaleStr(accumulate.add(numWarehousing.multiply(weightCoefficient))));
             } else {
                 mMapAccumulate.put(mPurchaseBillLine.getUuid(), BigDecimalUtil.toScaleStr(accumulate.add(numWarehousing)));
             }
