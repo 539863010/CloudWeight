@@ -25,6 +25,7 @@ import xm.cloudweight.base.BaseFragment;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.camera.service.CameraService;
 import xm.cloudweight.camera.util.NetUtil;
+import xm.cloudweight.utils.bussiness.ScaleUtil;
 
 /**
  * @author wyh
@@ -33,15 +34,14 @@ import xm.cloudweight.camera.util.NetUtil;
  */
 public class VideoFragment extends BaseFragment {
 
-    private OnInstrumentListener mInstrumentListener ;
+    private OnInstrumentListener mInstrumentListener;
     private ServiceConnection mServiceConnection;
     private ICameraService mICameraService;
     private SNviewer mSNviewer;
-    private Instrument mInstrument;
     private Instrument.OnReceive mInstrumentReceive = new Instrument.OnReceive() {
         @Override
         public void receive(Instrument.InsData data) {
-            if(mInstrumentListener != null){
+            if (mInstrumentListener != null) {
                 mInstrumentListener.receive(data);
             }
         }
@@ -64,18 +64,9 @@ public class VideoFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
-        startInstrument();
+        //用于BaseActivity中f3清除
+        ScaleUtil.startInstrument(mInstrumentReceive);
         startCamera();
-    }
-
-    private void startInstrument() {
-        try {
-            mInstrument = new Instrument();
-            mInstrument.open();
-            mInstrument.setOnReceive(mInstrumentReceive);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void startCamera() {
@@ -199,18 +190,10 @@ public class VideoFragment extends BaseFragment {
         }
     }
 
-    private void stopInstrument() {
-        if (mInstrument != null) {
-            mInstrument.close();
-        }
-        mInstrument = null;
-    }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopInstrument();
+        ScaleUtil.stopInstrument();
         stopCamera();
     }
 
@@ -222,9 +205,9 @@ public class VideoFragment extends BaseFragment {
         mInstrumentListener = instrumentListener;
     }
 
-    public interface OnInstrumentListener{
+    public interface OnInstrumentListener {
 
-       void receive(Instrument.InsData data);
+        void receive(Instrument.InsData data);
 
     }
 

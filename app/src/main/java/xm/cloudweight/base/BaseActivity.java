@@ -51,20 +51,28 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //隐藏标题栏跟状态栏
-        setTitleAndAppBar();
-        //获取数据
-        getDate();
+        if (savedInstanceState == null) {
+            //隐藏标题栏跟状态栏
+            setTitleAndAppBar();
+            //获取数据
+            getDate();
 
-        setContentView(R.layout.layout_base_activity);
-        //设置标题信息
-        setTitleInfo();
+            setContentView(R.layout.layout_base_activity);
+            //设置标题信息
+            setTitleInfo();
 
-        mBind = ButterKnife.bind(this);
-        initContentView();
-        loadDate();
-        mNetWorkEvent = this;
-        inspectNet();
+            mBind = ButterKnife.bind(this);
+            initContentView();
+            loadDate();
+            mNetWorkEvent = this;
+            inspectNet();
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        finish();
     }
 
     /**

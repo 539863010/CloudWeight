@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import xm.cloudweight.R;
-
 /**
  * @author wyh
  * @Description:
@@ -36,6 +34,7 @@ public abstract class BaseFragment extends Fragment {
         loadData();
 
     }
+
     protected abstract int getLayoutId();
 
     protected abstract void getData();
