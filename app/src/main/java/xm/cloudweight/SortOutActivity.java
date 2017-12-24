@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.service.user.customer.Customer;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
@@ -42,6 +41,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.BeanPrinter;
+import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.Common;
@@ -126,10 +126,10 @@ public class SortOutActivity extends BaseActivity implements
     Button mBtnSortOut;
     @BindView(R.id.btn_request)
     Button mBtnRequest;
-    private List<SortOutData> mListShow = new ArrayList<>();
-    private ArrayList<SortOutData> mListFilter = new ArrayList<>();
-    private List<SortOutData> mListAllWeight = new ArrayList<>();
-    private List<SortOutData> mListAllCount = new ArrayList<>();
+    private List<CustomSortOutData> mListShow = new ArrayList<>();
+    private ArrayList<CustomSortOutData> mListFilter = new ArrayList<>();
+    private List<CustomSortOutData> mListAllWeight = new ArrayList<>();
+    private List<CustomSortOutData> mListAllCount = new ArrayList<>();
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private SortOutAdapter mSortOutAdapter;
     private int mIntType = TYPE_WEIGHT;
@@ -137,7 +137,7 @@ public class SortOutActivity extends BaseActivity implements
     private boolean loadWeightSuccess;
     private boolean loadCountSuccess;
     private boolean hasCancelSortOut;
-    private SortOutData mPreSortOutData;
+    private CustomSortOutData mPreSortOutData;
     private SortOutHistoryPopWindow mHistoryPopWindow;
     private DBManager mDBManager;
     private DbImageUpload mDbImageUpload;
@@ -316,6 +316,12 @@ public class SortOutActivity extends BaseActivity implements
                     ToastUtil.showShortToast(getContext(), "请选择商品");
                     return;
                 }
+                if (mIntType == TYPE_WEIGHT
+                        && mPreSortOutData.getCoverToKgQty() != null
+                        && mPreSortOutData.getCoverToKgQty().doubleValue() == 0) {
+                    ToastUtil.showShortToast(getContext(), "已分拣完成");
+                    return;
+                }
                 String countStr = mEtShow.getText().toString().trim();
                 if (TextUtils.isEmpty(countStr) || Double.parseDouble(countStr) == 0) {
                     if (mIntType == TYPE_WEIGHT) {
@@ -421,23 +427,19 @@ public class SortOutActivity extends BaseActivity implements
         if (mPreSortOutData != null) {
             // 保存 称重数（订购数量）   直接上传kg数   不需要转换
             String countStr = mEtShow.getText().toString().trim();
-            if (mPreSortOutData.getUnitCoefficient() != null && mPreSortOutData.getUnitCoefficient().doubleValue() != 0) {
+            boolean isWeight = mPreSortOutData.getUnitCoefficient() != null && mPreSortOutData.getUnitCoefficient().doubleValue() != 0;
+            if (isWeight) {
                 mPreSortOutData.setStockOutQty(new BigDecimal(countStr).divide(mPreSortOutData.getUnitCoefficient(), RoundingMode.HALF_EVEN));
             } else {
                 mPreSortOutData.setStockOutQty(new BigDecimal(countStr));
             }
             // 保存 仓库
             Warehouse warehouse = mSpWareHouse.getSelectedItem();
-            mPreSortOutData.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
+            if (warehouse != null) {
+                mPreSortOutData.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
+            }
             // 生成追溯码
             mPreSortOutData.setPlatformTraceCode(Common.getPlatformTraceCode());
-            // ** 保存数据到数据库在 setStockOutQty，setWarehouse 后
-            DbImageUpload dbImageUpload = new DbImageUpload();
-            dbImageUpload.setDate(mBtnDate.getText().toString().trim());
-            dbImageUpload.setLine(GsonUtil.getGson().toJson(mPreSortOutData));
-            dbImageUpload.setImagePath(path);
-            dbImageUpload.setType(Common.DbType.TYPE_SORT_OUT_STORE_OUT);
-            getDbManager().insertDbImageUpload(dbImageUpload);
 
             //更新数据
             //****已经分拣过的数据，且累计分拣数量>90%采购数量的，状态改成“已分拣”，界面不再显示****
@@ -451,6 +453,22 @@ public class SortOutActivity extends BaseActivity implements
             BigDecimal unitCoefficient = mPreSortOutData.getUnitCoefficient();
             BigDecimal outAmount = hasStockOutQty.add(stockOutQty);
             BigDecimal qtyOfNinety = goodsQty.multiply(new BigDecimal(0.9));
+
+            if (isWeight) {
+                if (outAmount.compareTo(qtyOfNinety) > 0) {
+                    mPreSortOutData.setLastWeight(mPreSortOutData.getCoverToKgQty());
+                } else {
+                    mPreSortOutData.setLastWeight(stockOutQty.multiply(unitCoefficient));
+                }
+            }
+            // ** 保存数据到数据库在 setStockOutQty，setWarehouse 后
+            DbImageUpload dbImageUpload = new DbImageUpload();
+            dbImageUpload.setDate(mBtnDate.getText().toString().trim());
+            dbImageUpload.setLine(GsonUtil.getGson().toJson(mPreSortOutData));
+            dbImageUpload.setImagePath(path);
+            dbImageUpload.setType(Common.DbType.TYPE_SORT_OUT_STORE_OUT);
+            getDbManager().insertDbImageUpload(dbImageUpload);
+
             if (outAmount.compareTo(qtyOfNinety) > 0) {
                 //界面不显示
                 //从列表中删除
@@ -491,7 +509,7 @@ public class SortOutActivity extends BaseActivity implements
     /**
      * 删除当前选中的item
      */
-    private void removeCurrentItem(List<SortOutData> list) {
+    private void removeCurrentItem(List<CustomSortOutData> list) {
         int indexShow = getListIndex(list);
         if (indexShow != -1) {
             list.remove(indexShow);
@@ -501,12 +519,12 @@ public class SortOutActivity extends BaseActivity implements
     /**
      * 获取列表中与当前选中项相同SourceBillLineUuid的下标
      */
-    private int getListIndex(List<SortOutData> list) {
+    private int getListIndex(List<CustomSortOutData> list) {
         int index = -1;
         if (list != null && mPreSortOutData != null) {
             int size = list.size();
             for (int i = 0; i < size; i++) {
-                SortOutData sortOutData = list.get(i);
+                CustomSortOutData sortOutData = list.get(i);
                 if (sortOutData.getSourceBillLineUuid().equals(mPreSortOutData.getSourceBillLineUuid())) {
                     return i;
                 }
@@ -576,7 +594,9 @@ public class SortOutActivity extends BaseActivity implements
     @Override
     public void onDismiss() {
         if (hasCancelSortOut) {
-            refreshSortOutList();
+            mListShow.clear();
+            mListFilter.clear();
+            filterList();
         }
         hasCancelSortOut = false;
     }
@@ -610,11 +630,12 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void delete(DbImageUpload dbImageUpload) {
+        mDbImageUpload = dbImageUpload;
+        showLoadingDialog(false);
         String stockOutUuid = dbImageUpload.getStockOutUuid();
         if (!TextUtils.isEmpty(stockOutUuid)) {
             //已分拣 请求接口撤销
-            mDbImageUpload = dbImageUpload;
-            SortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), SortOutData.class);
+            CustomSortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
             //再次保证StockOutRecordUuids有值
             List<String> stockOutRecordUuids = data.getStockOutRecordUuids();
             if (stockOutRecordUuids == null) {
@@ -624,19 +645,111 @@ public class SortOutActivity extends BaseActivity implements
                 stockOutRecordUuids.add(stockOutUuid);
                 data.setStockOutRecordUuids(stockOutRecordUuids);
             }
-            showLoadingDialog(false);
             SortOutPresenter.cancelSortOut(getActivity(), data);
         } else {
-            //未分拣 删除本地数据库
-            getDbManager().deleteDbImageUpload(dbImageUpload);
-            refreshHistoryList();
-            ToastUtil.showShortToast(getContext(), "撤销分拣成功");
-            hasCancelSortOut = true;
+            onCancelSuccess(dbImageUpload);
         }
     }
 
     @Override
-    public void getSortOutListSuccess(int type, List<SortOutData> data) {
+    public void onCancelSortOutSuccess(CustomSortOutData data) {
+        onCancelSuccess(mDbImageUpload);
+    }
+
+    private void onCancelSuccess(DbImageUpload dbImageUpload) {
+        //先刷新后删除数据库
+        refreshCancelSortOut(dbImageUpload);
+        getDbManager().deleteDbImageUpload(dbImageUpload);
+        refreshHistoryList();
+        ToastUtil.showShortToast(getContext(), "撤销分拣成功");
+        hasCancelSortOut = true;
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+    }
+
+    @Override
+    public void onCancelSortOutFailed(String message) {
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+        ToastUtil.showShortToast(getContext(), message);
+    }
+
+    private void refreshCancelSortOut(DbImageUpload dbImageUpload) {
+        CustomSortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
+        String dataSourceBillLineUuid = data.getSourceBillLineUuid();
+        BigDecimal unitCoefficient = data.getUnitCoefficient();
+        CustomSortOutData currentCancelData = null;
+        if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
+            // 重量列表
+            for (CustomSortOutData d : mListAllWeight) {
+                if (d.getSourceBillLineUuid().equals(dataSourceBillLineUuid)) {
+                    //还存在
+                    currentCancelData = d;
+                    break;
+                }
+            }
+            if (currentCancelData != null) {
+                // 直接添加到item中
+                BigDecimal stockOutQty = data.getStockOutQty();
+                BigDecimal coverToKgQty = currentCancelData.getCoverToKgQty();
+                currentCancelData.setCoverToKgQty(coverToKgQty.add(stockOutQty.multiply(unitCoefficient)));
+                BigDecimal hasStockOutQty = currentCancelData.getHasStockOutQty();
+                currentCancelData.setHasStockOutQty(hasStockOutQty.subtract(stockOutQty));
+            } else {
+                // 重新添加   遍历下历史中所有的该SourceBillLineUuid相同的订单
+                BigDecimal allStockOut = new BigDecimal("0");
+                BigDecimal allLastWeight = new BigDecimal("0");
+                for (DbImageUpload db : mListHistory) {
+                    CustomSortOutData dbData = GsonUtil.getGson().fromJson(db.getLine(), CustomSortOutData.class);
+                    if (dbData.getSourceBillLineUuid().equals(dataSourceBillLineUuid)) {
+                        BigDecimal stockOutQty = dbData.getStockOutQty();
+                        allStockOut = allStockOut.add(stockOutQty.multiply(unitCoefficient));
+                        allLastWeight = allLastWeight.add(dbData.getLastWeight());
+                    }
+                }
+                data.setPlatformTraceCode(null);
+                data.setWarehouse(null);
+                data.setStockOutRecordUuids(null);
+                BigDecimal stockOutQty = data.getStockOutQty();
+                BigDecimal newCoverToKtQty = allLastWeight.subtract(allStockOut).add(stockOutQty.multiply(unitCoefficient));
+                data.setCoverToKgQty(newCoverToKtQty);
+                data.setHasStockOutQty(data.getGoodsQty().subtract(newCoverToKtQty.divide(unitCoefficient, RoundingMode.HALF_EVEN)));
+                mListAllWeight.add(data);
+            }
+        } else {
+            // 数量
+            for (CustomSortOutData d : mListAllCount) {
+                if (d.getSourceBillLineUuid().equals(dataSourceBillLineUuid)) {
+                    //还存在
+                    currentCancelData = d;
+                    break;
+                }
+            }
+            if (currentCancelData != null) {
+                // 撤销的数量
+                BigDecimal stockOutQty = data.getStockOutQty();
+                BigDecimal hasStockOutQty = currentCancelData.getHasStockOutQty();
+                currentCancelData.setHasStockOutQty(hasStockOutQty.subtract(stockOutQty));
+                if (currentCancelData.getStockOutQty() != null) {
+                    currentCancelData.setStockOutQty(currentCancelData.getStockOutQty().add(data.getStockOutQty()));
+                } else {
+                    currentCancelData.setStockOutQty(data.getStockOutQty());
+                }
+            } else {
+                // 重新添加   遍历下历史中所有的该SourceBillLineUuid相同的订单
+                data.setPlatformTraceCode(null);
+                data.setWarehouse(null);
+                data.setStockOutRecordUuids(null);
+                BigDecimal stockOutQty = data.getStockOutQty();
+                data.setStockOutQty(stockOutQty);
+                data.setHasStockOutQty(data.getGoodsQty().subtract(stockOutQty));
+                mListAllCount.add(data);
+            }
+        }
+    }
+
+    @Override
+    public void getSortOutListSuccess(int type, List<CustomSortOutData> data) {
         if (type == TYPE_WEIGHT) {
             loadWeightSuccess = true;
             mListAllWeight.clear();
@@ -663,7 +776,7 @@ public class SortOutActivity extends BaseActivity implements
      * 根据重量数据+数量数据  过滤出客户列表
      */
     private void getListCustomer() {
-        List<SortOutData> mListAll = new ArrayList<>();
+        List<CustomSortOutData> mListAll = new ArrayList<>();
         mListAll.addAll(mListAllWeight);
         mListAll.addAll(mListAllCount);
         List<MerchantCustomer> list = new ArrayList<>();
@@ -672,7 +785,7 @@ public class SortOutActivity extends BaseActivity implements
         customerAll.setName("全部");
         e.setCustomer(customerAll);
         list.add(0, e);
-        for (SortOutData sortOutData : mListAll) {
+        for (CustomSortOutData sortOutData : mListAll) {
             IdName customer = sortOutData.getCustomer();
             boolean hasAdd = false;
             for (MerchantCustomer merchantCustomer : list) {
@@ -707,22 +820,6 @@ public class SortOutActivity extends BaseActivity implements
             mBtnRequest.setEnabled(true);
             dismissLoadingDialog();
         }
-        ToastUtil.showShortToast(getContext(), message);
-    }
-
-    @Override
-    public void onCancelSortOutSuccess(SortOutData data) {
-        getDbManager().deleteDbImageUpload(mDbImageUpload);
-        mDbImageUpload = null;
-        refreshHistoryList();
-        ToastUtil.showShortToast(getContext(), "撤销分拣成功");
-        hasCancelSortOut = true;
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onCancelSortOutFailed(String message) {
-        dismissLoadingDialog();
         ToastUtil.showShortToast(getContext(), message);
     }
 
@@ -762,7 +859,7 @@ public class SortOutActivity extends BaseActivity implements
         }
 
         //逐级删除不符合的数据
-        ArrayList<SortOutData> filter;
+        ArrayList<CustomSortOutData> filter;
         if (mIntType == TYPE_WEIGHT) {
             //重量
             filter = FilterUtil.filter(mListAllWeight, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
@@ -791,7 +888,7 @@ public class SortOutActivity extends BaseActivity implements
                             || !TextUtils.isEmpty(mEtGoodsNameOrId.getText().toString().trim())
                             || !TextUtils.isEmpty(mEtCustomGroup.getText().toString().trim()))) {
                 BigDecimal amount = new BigDecimal(0.0);
-                for (SortOutData sod : mListShow) {
+                for (CustomSortOutData sod : mListShow) {
                     amount = amount.add(sod.getCoverToKgQty());
                 }
                 mTvAmount.setText("汇总：".concat(BigDecimalUtil.toScaleStr(amount)).concat("kg"));
@@ -827,9 +924,9 @@ public class SortOutActivity extends BaseActivity implements
             int size = mListShow.size();
             //筛选出Stock的uuid跟SortOutData的uuid一样的商品
             Stock stock = stocks.get(0);
-            ArrayList<SortOutData> listFilter = null;
+            ArrayList<CustomSortOutData> listFilter = null;
             for (int i = 0; i < size; i++) {
-                SortOutData data = mListShow.get(i);
+                CustomSortOutData data = mListShow.get(i);
                 if (stock.getGoods().getUuid().equals(data.getGoods().getUuid())) {
                     if (listFilter == null) {
                         listFilter = new ArrayList<>();
@@ -885,18 +982,18 @@ public class SortOutActivity extends BaseActivity implements
     /**
      * 商品列表适配器
      */
-    private class SortOutAdapter extends CommonAdapter4Lv<SortOutData> {
+    private class SortOutAdapter extends CommonAdapter4Lv<CustomSortOutData> {
 
         private int mIntSelect;
         private float mDim10Sp;
 
-        private SortOutAdapter(Context context, List<SortOutData> data) {
+        private SortOutAdapter(Context context, List<CustomSortOutData> data) {
             super(context, R.layout.item_sort_out, data);
             mDim10Sp = getResources().getDimension(R.dimen._10sp);
         }
 
         @Override
-        public void doSomething(CommonHolder4Lv holder, SortOutData data, int position) {
+        public void doSomething(CommonHolder4Lv holder, CustomSortOutData data, int position) {
             if (mIntSelect == position) {
                 holder.setBackgroundRes(R.id.item_ll, R.color.color_ffe080);
             } else {
@@ -965,7 +1062,7 @@ public class SortOutActivity extends BaseActivity implements
      */
     private ListComparator mListComparator;
 
-    private void sequenceListWeight(List<SortOutData> list, String weight) {
+    private void sequenceListWeight(List<CustomSortOutData> list, String weight) {
         if (!TextUtils.isEmpty(weight) && list.size() > 0) {
             double douWeight = Double.parseDouble(weight);
             if (mListComparator != null) {

@@ -7,7 +7,6 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
 import com.xmzynt.storm.service.wms.inventory.InventoryRecord;
@@ -27,6 +26,7 @@ import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
 import xm.cloudweight.app.App;
+import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.Common;
@@ -352,13 +352,13 @@ public class BgOperateService extends Service {
      * 请求分拣接口
      */
     private void doSortOutStoreOut(final DbImageUpload data) {
-        final SortOutData sortOutData = GsonUtil.getGson().fromJson(data.getLine(), SortOutData.class);
+        final CustomSortOutData sortOutData = GsonUtil.getGson().fromJson(data.getLine(), CustomSortOutData.class);
         PBaseInfo pBaseInfo = BeanUtil.sortOut(mMerchant, sortOutData);
         mApiManager.sortOut(pBaseInfo)
-                .compose(new TransformerHelper<ResponseEntity<SortOutData>>().get())
-                .subscribe(new ApiSubscribe<SortOutData>() {
+                .compose(new TransformerHelper<ResponseEntity<CustomSortOutData>>().get())
+                .subscribe(new ApiSubscribe<CustomSortOutData>() {
                     @Override
-                    protected void onResult(SortOutData result) {
+                    protected void onResult(CustomSortOutData result) {
                         // TODO: 2017/11/25
                         refreshImageUrl(data);
                         //修改数据库信息

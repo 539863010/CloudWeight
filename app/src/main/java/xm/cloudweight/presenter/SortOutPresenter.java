@@ -1,6 +1,5 @@
 package xm.cloudweight.presenter;
 
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 
 import java.util.List;
@@ -11,6 +10,7 @@ import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
 import xm.cloudweight.base.BaseActivity;
+import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.impl.SortOutImpl;
 import xm.cloudweight.utils.bussiness.BeanUtil;
@@ -54,7 +54,7 @@ public class SortOutPresenter {
             return;
         }
         PBaseInfo pBaseInfo = BeanUtil.getSourOutList(aty, page, pageSize, defaultPageSize, deliveryTime);
-        Observable<ResponseEntity<List<SortOutData>>> observable;
+        Observable<ResponseEntity<List<CustomSortOutData>>> observable;
         if (type == SortOutActivity.TYPE_WEIGHT) {
             //重量
             observable = aty.getApiManager().getsForWeigh(pBaseInfo);
@@ -62,10 +62,10 @@ public class SortOutPresenter {
             //数量
             observable = aty.getApiManager().getsForNotWeigh(pBaseInfo);
         }
-        observable.compose(new TransformerHelper<ResponseEntity<List<SortOutData>>>().get(aty))
-                .subscribe(new ApiSubscribe<List<SortOutData>>() {
+        observable.compose(new TransformerHelper<ResponseEntity<List<CustomSortOutData>>>().get(aty))
+                .subscribe(new ApiSubscribe<List<CustomSortOutData>>() {
                     @Override
-                    protected void onResult(List<SortOutData> result) {
+                    protected void onResult(List<CustomSortOutData> result) {
                         ((SortOutImpl.OnGetSortOutListListener) aty).getSortOutListSuccess(type, result);
                     }
 
@@ -100,16 +100,16 @@ public class SortOutPresenter {
 //
 //    }
 
-    public static void cancelSortOut(final BaseActivity aty, SortOutData data) {
+    public static void cancelSortOut(final BaseActivity aty, CustomSortOutData data) {
         if (!(aty instanceof SortOutImpl.OnCancelSortOutListener)) {
             return;
         }
         PBaseInfo pBaseInfo = BeanUtil.cancelSortOut(aty, data);
         aty.getApiManager().cancelSortOut(pBaseInfo)
-                .compose(new TransformerHelper<ResponseEntity<SortOutData>>().get(aty))
-                .subscribe(new ApiSubscribe<SortOutData>() {
+                .compose(new TransformerHelper<ResponseEntity<CustomSortOutData>>().get(aty))
+                .subscribe(new ApiSubscribe<CustomSortOutData>() {
                     @Override
-                    protected void onResult(SortOutData result) {
+                    protected void onResult(CustomSortOutData result) {
                         ((SortOutImpl.OnCancelSortOutListener) aty).onCancelSortOutSuccess(result);
                     }
 

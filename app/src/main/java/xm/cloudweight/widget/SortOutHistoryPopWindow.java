@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.util.GsonUtil;
 
 import java.math.BigDecimal;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xm.cloudweight.R;
+import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
@@ -93,7 +93,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
                 mListSearch.clear();
                 if (!TextUtils.isEmpty(key) && mList.size() > 0) {
                     for (DbImageUpload dbImageUpload : mList) {
-                        SortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), SortOutData.class);
+                        CustomSortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
                         if (data != null && data.getGoods().getName().contains(key)) {
                             mListSearch.add(dbImageUpload);
                         }
@@ -134,7 +134,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
 
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
-            SortOutData data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), SortOutData.class);
+            CustomSortOutData data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), CustomSortOutData.class);
             holder.setText(R.id.item_goods_name, data.getGoods().getName());
             String goodsUnit = data.getGoodsUnit().getName();
             holder.setText(R.id.item_goods_unit, goodsUnit);
@@ -143,7 +143,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
                 holder.setText(R.id.item_order_num, BigDecimalUtil.toScaleStr(data.getCoverToKgQty()) + "kg");
                 holder.setText(R.id.item_sort_out_num, BigDecimalUtil.toScaleStr(data.getStockOutQty().multiply(unitCoefficient)) + "kg");
             } else {
-                holder.setText(R.id.item_order_num, BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getStockOutQty())) + goodsUnit);
+                holder.setText(R.id.item_order_num, BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getStockOutQty()).subtract(data.getHasStockOutQty())) + goodsUnit);
                 holder.setText(R.id.item_sort_out_num, BigDecimalUtil.toScaleStr(data.getStockOutQty()) + goodsUnit);
             }
             holder.setText(R.id.item_customer, data.getCustomer().getName());

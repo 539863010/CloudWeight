@@ -3,7 +3,6 @@ package xm.cloudweight.api;
 import com.xmzynt.storm.service.goods.GoodsCategory;
 import com.xmzynt.storm.service.purchase.PurchaseBill;
 import com.xmzynt.storm.service.purchase.PurchaseData;
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 import com.xmzynt.storm.service.user.merchant.Merchant;
@@ -20,6 +19,7 @@ import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import rx.Observable;
+import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.bean.PLogin;
 
@@ -112,7 +112,7 @@ public interface ApiManager {
      * @return Observable<ResponseEntity<List<SortOutData>>>
      */
     @POST("/merchant/scaleApi/getsForWeigh.do")
-    Observable<ResponseEntity<List<SortOutData>>> getsForWeigh(@Body PBaseInfo p);
+    Observable<ResponseEntity<List<CustomSortOutData>>> getsForWeigh(@Body PBaseInfo p);
 
     /**
      * 查询分拣数据（数量）
@@ -121,7 +121,7 @@ public interface ApiManager {
      * @return Observable<ResponseEntity<List<SortOutData>>>
      */
     @POST("/merchant/scaleApi/getsForNotWeigh.do")
-    Observable<ResponseEntity<List<SortOutData>>> getsForNotWeigh(@Body PBaseInfo p);
+    Observable<ResponseEntity<List<CustomSortOutData>>> getsForNotWeigh(@Body PBaseInfo p);
 
     /**
      * 分拣
@@ -130,7 +130,7 @@ public interface ApiManager {
      * @return Observable<ResponseEntity<SortOutData>>
      */
     @POST("/merchant/scaleApi/sortOut.do")
-    Observable<ResponseEntity<SortOutData>> sortOut(@Body PBaseInfo p);
+    Observable<ResponseEntity<CustomSortOutData>> sortOut(@Body PBaseInfo p);
 
     /**
      * 撤销分拣
@@ -139,7 +139,7 @@ public interface ApiManager {
      * @return Observable<ResponseEntity<SortOutData>>
      */
     @POST("/merchant/scaleApi/cancelSortOut.do")
-    Observable<ResponseEntity<SortOutData>> cancelSortOut(@Body PBaseInfo p);
+    Observable<ResponseEntity<CustomSortOutData>> cancelSortOut(@Body PBaseInfo p);
 
     /**
      * 出库，调拨，盘点- 获取类别列表

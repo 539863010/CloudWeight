@@ -5,7 +5,6 @@ import android.widget.EditText;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.service.user.customer.Customer;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
@@ -13,6 +12,7 @@ import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 import java.util.ArrayList;
 import java.util.List;
 
+import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.widget.DataSpinner;
 
 /**
@@ -22,7 +22,7 @@ import xm.cloudweight.widget.DataSpinner;
  */
 public class FilterUtil {
 
-    public static ArrayList<SortOutData> filter(List<SortOutData> mListAll
+    public static ArrayList<CustomSortOutData> filter(List<CustomSortOutData> mListAll
             , DataSpinner<CustomerLevel> mSpCustomersLevel
             , DataSpinner<MerchantCustomer> mSpCustomers
             , EditText mEtGoodsNameOrId
@@ -31,10 +31,10 @@ public class FilterUtil {
     ) {
 
         //逐级删除不符合的数据
-        ArrayList<SortOutData> listCustomerLevel = new ArrayList<>();
+        ArrayList<CustomSortOutData> listCustomerLevel = new ArrayList<>();
         CustomerLevel customerLevel = mSpCustomersLevel.getSelectedItem();
         if (customerLevel != null && !customerLevel.getName().equals("全部")) {
-            for (SortOutData data : mListAll) {
+            for (CustomSortOutData data : mListAll) {
                 IdName level = data.getCustomerLevel();
                 if (level != null && customerLevel.getName().equals(level.getName())) {
                     listCustomerLevel.add(data);
@@ -44,10 +44,10 @@ public class FilterUtil {
             listCustomerLevel.addAll(mListAll);
         }
 
-        ArrayList<SortOutData> listMerchantCustomer = new ArrayList<>();
+        ArrayList<CustomSortOutData> listMerchantCustomer = new ArrayList<>();
         MerchantCustomer merchantCustomer = mSpCustomers.getSelectedItem();
         if (merchantCustomer != null && !merchantCustomer.getCustomer().getName().equals("全部")) {
-            for (SortOutData data : listCustomerLevel) {
+            for (CustomSortOutData data : listCustomerLevel) {
                 Customer customer = merchantCustomer.getCustomer();
                 IdName idName = data.getCustomer();
                 if (customer != null && idName != null && customer.getName().equals(idName.getName())) {
@@ -58,10 +58,10 @@ public class FilterUtil {
             listMerchantCustomer.addAll(listCustomerLevel);
         }
 
-        ArrayList<SortOutData> listGoodsNameOrId = new ArrayList<>();
+        ArrayList<CustomSortOutData> listGoodsNameOrId = new ArrayList<>();
         String goodsNameOrId = mEtGoodsNameOrId.getText().toString().trim();
         if (!TextUtils.isEmpty(goodsNameOrId)) {
-            for (SortOutData data : listMerchantCustomer) {
+            for (CustomSortOutData data : listMerchantCustomer) {
                 UCN goods = data.getGoods();
                 if (goods != null && (goods.getName().contains(goodsNameOrId)
                         || goodsNameOrId.equals(goods.getUuid()))) {
@@ -84,10 +84,10 @@ public class FilterUtil {
 //            listBasket.addAll(listGoodsNameOrId);
 //        }
 
-        ArrayList<SortOutData> listCustomGroup = new ArrayList<>();
+        ArrayList<CustomSortOutData> listCustomGroup = new ArrayList<>();
         String customGroup = mEtCustomGroup.getText().toString();
         if (!TextUtils.isEmpty(customGroup)) {
-            for (SortOutData data : listGoodsNameOrId) {
+            for (CustomSortOutData data : listGoodsNameOrId) {
                 if (customGroup.equals(data.getCustomerGroup())) {
                     listCustomGroup.add(data);
                 }

@@ -3,7 +3,6 @@ package xm.cloudweight.utils.bussiness;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
 import com.xmzynt.storm.service.wms.inventory.InventoryRecord;
@@ -14,6 +13,7 @@ import com.xmzynt.storm.util.query.QueryFilter;
 
 import java.util.Map;
 
+import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.bean.PLogin;
 import xm.cloudweight.comm.Common;
@@ -172,7 +172,7 @@ public class BeanUtil {
     /**
      * 分拣
      */
-    public static PBaseInfo sortOut(Merchant merchant, SortOutData data) {
+    public static PBaseInfo sortOut(Merchant merchant, CustomSortOutData data) {
         PBaseInfo pBaseInfo = new PBaseInfo();
         setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
@@ -184,7 +184,7 @@ public class BeanUtil {
     /**
      * 撤销分拣
      */
-    public static PBaseInfo cancelSortOut(Context ctx, SortOutData data) {
+    public static PBaseInfo cancelSortOut(Context ctx, CustomSortOutData data) {
         PBaseInfo pBaseInfo = new PBaseInfo();
         setBaseInfo(ctx, pBaseInfo);
         Map<String, Object> body = pBaseInfo.getBody();

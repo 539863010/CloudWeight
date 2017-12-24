@@ -1,10 +1,11 @@
 package xm.cloudweight.impl;
 
-import com.xmzynt.storm.service.sort.SortOutData;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 
 import java.util.List;
+
+import xm.cloudweight.bean.CustomSortOutData;
 
 /**
  * @author wyh
@@ -40,7 +41,7 @@ public class SortOutImpl {
      */
     public interface OnGetSortOutListListener {
 
-        void getSortOutListSuccess(int type, List<SortOutData> list);
+        void getSortOutListSuccess(int type, List<CustomSortOutData> list);
 
         void getSortOutListFailed(int type, String message);
 
@@ -51,7 +52,7 @@ public class SortOutImpl {
      */
     public interface OnSortOutListener {
 
-        void onSortOutSuccess(SortOutData list);
+        void onSortOutSuccess(CustomSortOutData list);
 
         void onSortOutFailed(String message);
 
@@ -62,7 +63,7 @@ public class SortOutImpl {
      */
     public interface OnCancelSortOutListener {
 
-        void onCancelSortOutSuccess(SortOutData list);
+        void onCancelSortOutSuccess(CustomSortOutData list);
 
         void onCancelSortOutFailed(String message);
 

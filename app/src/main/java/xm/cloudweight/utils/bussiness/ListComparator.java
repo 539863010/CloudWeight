@@ -2,8 +2,6 @@ package xm.cloudweight.utils.bussiness;
 
 import android.util.Log;
 
-import com.xmzynt.storm.service.sort.SortOutData;
-
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -12,12 +10,14 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
 import java.util.Comparator;
 
+import xm.cloudweight.bean.CustomSortOutData;
+
 /**
  * @author wyh
  * @description: 分拣过滤器
  * @create 2017/11/15
  */
-public class ListComparator implements Comparator<SortOutData> {
+public class ListComparator implements Comparator<CustomSortOutData> {
 
     private double mDobWeight = 0;
 
@@ -30,7 +30,7 @@ public class ListComparator implements Comparator<SortOutData> {
     }
 
     @Override
-    public int compare(SortOutData s1, SortOutData s2) {
+    public int compare(CustomSortOutData s1, CustomSortOutData s2) {
 //        double absS1 = Math.abs(s1.getCoverToKgQty().doubleValue() - mDobWeight);
 //        double absS2 = Math.abs(s2.getCoverToKgQty().doubleValue() - mDobWeight);
 //        if (absS1 > absS2) {
