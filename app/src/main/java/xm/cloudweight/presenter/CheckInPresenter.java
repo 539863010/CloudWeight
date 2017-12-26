@@ -1,9 +1,6 @@
 package xm.cloudweight.presenter;
 
-import com.xmzynt.storm.service.purchase.PurchaseBill;
 import com.xmzynt.storm.service.purchase.PurchaseData;
-import com.xmzynt.storm.service.user.supplier.Supplier;
-import com.xmzynt.storm.util.query.PageData;
 
 import java.util.List;
 
@@ -23,71 +20,24 @@ import xm.cloudweight.utils.bussiness.BeanUtil;
 public class CheckInPresenter {
 
     /**
-     * 获取提供商列表
+     * 查询查询采购信息
      */
-    public static void getListSupplier(final BaseActivity aty, int page, int pageSize, int defaultPageSize) {
-        if (!(aty instanceof CheckInImpl.OnGetSuppliersListener)) {
+    public static void queryPurchaseData(final BaseActivity aty, int page, int pageSize, int defaultPageSize, String deliveryTime) {
+        if (!(aty instanceof CheckInImpl.OnQueryPurchaseDataListener)) {
             return;
         }
-        PBaseInfo supplier = BeanUtil.getSupplier(aty, page, pageSize, defaultPageSize);
-        aty.getApiManager().getDropdownSuppliers(supplier)
-                .compose(new TransformerHelper<ResponseEntity<List<Supplier>>>().get(aty))
-                .subscribe(new ApiSubscribe<List<Supplier>>() {
+        PBaseInfo pBaseInfo = BeanUtil.queryPurchaseData(aty, page, pageSize, defaultPageSize, deliveryTime);
+        aty.getApiManager().queryPurchaseData(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<List<PurchaseData>>>().get(aty))
+                .subscribe(new ApiSubscribe<List<PurchaseData>>() {
                     @Override
-                    protected void onResult(List<Supplier> result) {
-                        ((CheckInImpl.OnGetSuppliersListener) aty).getSuppliersSuccess(result);
+                    protected void onResult(List<PurchaseData> result) {
+                        ((CheckInImpl.OnQueryPurchaseDataListener) aty).onQueryPurchaseDataSuccess(result);
                     }
 
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((CheckInImpl.OnGetSuppliersListener) aty).getSuppliersFailed(failString);
-                    }
-                });
-    }
-
-    /**
-     * 分页查询采购订单
-     */
-    public static void queryPurchaseBill(final BaseActivity aty, int page, int pageSize, int defaultPageSize, String deliveryTime, String warehouseUuid) {
-        if (!(aty instanceof CheckInImpl.OnQueryPurchaseBillListener)) {
-            return;
-        }
-        PBaseInfo pBaseInfo = BeanUtil.queryPurchaseBill(aty, page, pageSize, defaultPageSize, deliveryTime, warehouseUuid);
-        aty.getApiManager().queryPurchaseBill(pBaseInfo)
-                .compose(new TransformerHelper<ResponseEntity<PageData<PurchaseBill>>>().get(aty))
-                .subscribe(new ApiSubscribe<PageData<PurchaseBill>>() {
-                    @Override
-                    protected void onResult(PageData<PurchaseBill> result) {
-                        ((CheckInImpl.OnQueryPurchaseBillListener) aty).onQueryPurchaseBillSuccess(result);
-                    }
-
-                    @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((CheckInImpl.OnQueryPurchaseBillListener) aty).onQueryPurchaseBillFailed(failString);
-                    }
-
-                });
-    }
-
-    /**
-     * 查询采购订单
-     */
-    public static void getPurchaseBill(final BaseActivity aty, String uuid) {
-        if (!(aty instanceof CheckInImpl.OnGetPurchaseBillListener)) {
-            return;
-        }
-        PBaseInfo pBaseInfo = BeanUtil.getPurchaseBill(aty, uuid);
-        aty.getApiManager().getPurchaseBill(pBaseInfo)
-                .compose(new TransformerHelper<ResponseEntity<PurchaseBill>>().get(aty))
-                .subscribe(new ApiSubscribe<PurchaseBill>() {
-                    @Override
-                    protected void onResult(PurchaseBill result) {
-                        ((CheckInImpl.OnGetPurchaseBillListener) aty).onGetPurchaseBillSuccess(result);
-                    }
-
-                    @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((CheckInImpl.OnGetPurchaseBillListener) aty).onGetPurchaseBillFailed(failString);
+                    protected void onResultFail(int errorType, String failString) {
+                        ((CheckInImpl.OnQueryPurchaseDataListener) aty).onQueryPurchaseDataFailed(failString);
                     }
 
                 });
@@ -110,8 +60,8 @@ public class CheckInPresenter {
                     }
 
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((CheckInImpl.OnScanToPurchaseDataListener) aty).onScanToPurchaseDataFailed(errorType,failString);
+                    protected void onResultFail(int errorType, String failString) {
+                        ((CheckInImpl.OnScanToPurchaseDataListener) aty).onScanToPurchaseDataFailed(errorType, failString);
                     }
 
                 });

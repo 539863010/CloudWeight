@@ -16,7 +16,6 @@ import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Date;
 
 import xm.cloudweight.comm.Common;
@@ -36,13 +35,17 @@ public class BeanSimilar {
      * @param ctx             上下文
      * @param mStock          Stock对象
      * @param mSpTypeStockOut 出库类型
-     * @param mEtCount        出库数量（重量）
+     * @param countSub        出库数量（重量）
+     * @param leather         扣皮数量（重量）
+     * @param deduct          扣重数量（重量）
      * @return StockOutRecord
      */
     public static StockOutRecord createStoreOutRecord(Context ctx,
                                                       Stock mStock,
                                                       DataSpinner<StockOutType> mSpTypeStockOut,
-                                                      EditText mEtCount) {
+                                                      BigDecimal countSub,
+                                                      BigDecimal leather,
+                                                      BigDecimal deduct) {
         StockOutRecord sor = new StockOutRecord();
         sor.setOrg(mStock.getOrg());
         sor.setStockOutType(mSpTypeStockOut.getSelectedItem());
@@ -50,28 +53,15 @@ public class BeanSimilar {
         sor.setGoods(mStock.getGoods());
         sor.setGoodsSpec(mStock.getGoodsSpec());
         sor.setGoodsUnit(mStock.getGoodsUnit());
-        sor.setPrice(mStock.getPrice());
-        Merchant merchant = LocalSpUtil.getMerchant(ctx);
-        if (merchant != null) {
-            sor.setOperatorName(merchant.getName());
-            OperateInfo info = new OperateInfo();
-            info.setOperateTime(new Date());
-            info.setOperator(new IdName(merchant.getUuid(), merchant.getName()));
-            sor.setCreatorInfo(info);
-        }
         sor.setRemark(mStock.getRemark());
-        sor.setOrigin(mStock.getOrigin());
-        sor.setBatchNumber(mStock.getBatchNumber());
-        sor.setProduceDate(mStock.getProduceDate());
-        sor.setEffectiveDate(mStock.getEffectiveDate());
         sor.setTraceCode(mStock.getTraceCode());
         sor.setMaterials(mStock.getMaterials());
-        sor.setListingCertificateNo(mStock.getListingCertificateNo());
         sor.setPlatformBatchCode(mStock.getPlatformBatchCode());
         sor.setOutDate(new Date());
         sor.setStockUuid(mStock.getUuid());
+        sor.setLeatherQty(leather);
+        sor.setDeductQty(deduct);
         // 出库数量   净重（当前重量-扣皮-扣重）
-        BigDecimal countSub = new BigDecimal(mEtCount.getText().toString().trim());
         BigDecimal weightCoefficient = mStock.getWeightCoefficient();
         if (weightCoefficient != null) {
             sor.setQuantity(countSub.divide(weightCoefficient, RoundingMode.HALF_EVEN));
@@ -95,14 +85,17 @@ public class BeanSimilar {
      * @param ctx            上下文
      * @param mStock         Stock
      * @param mSpWareHouseIn 调拨仓库
-     * @param mEtCount       调拨数量
-     * @param listBasketNum
+     * @param countSub       调拨数量
+     * @param leather        扣皮数量
+     * @param deduct         扣重数量
      * @return AllocateRecord
      */
     public static AllocateRecord createAllocateRecord(Context ctx,
                                                       Stock mStock,
                                                       DataSpinner<Warehouse> mSpWareHouseIn,
-                                                      EditText mEtCount, ArrayList<String> listBasketNum) {
+                                                      BigDecimal countSub,
+                                                      BigDecimal leather,
+                                                      BigDecimal deduct) {
         AllocateRecord ar = new AllocateRecord();
         ar.setOrg(mStock.getOrg());
         ar.setGoods(mStock.getGoods());
@@ -110,16 +103,13 @@ public class BeanSimilar {
         ar.setGoodsSpec(mStock.getGoodsSpec());
         ar.setRemark(mStock.getRemark());
         ar.setSourceStockUuid(mStock.getUuid());
-        if (listBasketNum != null && listBasketNum.size() > 0) {
-            ar.setBasketCodes(listBasketNum);
-        }
+        ar.setLeatherQty(leather);
+        ar.setDeductQty(deduct);
         //出库仓库
         ar.setOutWarehouse(mStock.getWarehouse());
         //调入仓库    仓库列表  不能与出库仓库 重复
         Warehouse wareHouseIn = mSpWareHouseIn.getSelectedItem();
         ar.setInWarehouse(new UCN(wareHouseIn.getUuid(), wareHouseIn.getCode(), wareHouseIn.getName()));
-        //调拨数量
-        BigDecimal countSub = new BigDecimal(mEtCount.getText().toString().trim());
         BigDecimal weightCoefficient = mStock.getWeightCoefficient();
         if (weightCoefficient != null) {
             ar.setAllocateQty(countSub.divide(weightCoefficient, RoundingMode.HALF_EVEN));

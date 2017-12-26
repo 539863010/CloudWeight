@@ -45,4 +45,15 @@ public class CommImpl {
 
     }
 
+    /**
+     * 查询库存记录
+     */
+    public interface OnScanByTraceCodeListener {
+
+        void onScanByTraceCodeSuccess(List<Stock> result);
+
+        void onScanByTraceCodeFailed(int errorType, String failString);
+
+    }
+
 }

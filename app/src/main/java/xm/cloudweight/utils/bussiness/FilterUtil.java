@@ -25,11 +25,13 @@ public class FilterUtil {
     public static ArrayList<CustomSortOutData> filter(List<CustomSortOutData> mListAll
             , DataSpinner<CustomerLevel> mSpCustomersLevel
             , DataSpinner<MerchantCustomer> mSpCustomers
-            , EditText mEtGoodsNameOrId
-//            , EditText mEtBasket
             , EditText mEtCustomGroup
+            , EditText mEtGoodsNameOrId
+            , EditText mEtTag
     ) {
-
+        for (CustomSortOutData data : mListAll) {
+            data.setLabelCode(null);
+        }
         //逐级删除不符合的数据
         ArrayList<CustomSortOutData> listCustomerLevel = new ArrayList<>();
         CustomerLevel customerLevel = mSpCustomersLevel.getSelectedItem();
@@ -72,28 +74,35 @@ public class FilterUtil {
             listGoodsNameOrId.addAll(listMerchantCustomer);
         }
 
-//        ArrayList<SortOutData> listBasket = new ArrayList<>();
-//        String basket = mEtBasket.getText().toString().trim();
-//        if (!TextUtils.isEmpty(basket)) {
-//            for (SortOutData data : listGoodsNameOrId) {
-//                if (basket.equals(data.getBasketCode())) {
-//                    listBasket.add(data);
-//                }
-//            }
-//        } else {
-//            listBasket.addAll(listGoodsNameOrId);
-//        }
+        ArrayList<CustomSortOutData> listTag = new ArrayList<>();
+        String tag = mEtTag.getText().toString().trim();
+        //库存标签码（商品编码+“-”+日期+“-”+流水号）
+        if (!TextUtils.isEmpty(tag)
+                && tag.contains("-")
+                && tag.split("-").length == 3) {
+            String goodsCode = tag.split("-")[0];
+            for (CustomSortOutData data : listGoodsNameOrId) {
+                String code = data.getGoods().getCode();
+                if (goodsCode.equals(code)) {
+                    //设置标签码， 扫描筛选后的数据上传分拣接口要设置到basketCode里面
+                    data.setLabelCode(tag);
+                    listTag.add(data);
+                }
+            }
+        } else {
+            listTag.addAll(listGoodsNameOrId);
+        }
 
         ArrayList<CustomSortOutData> listCustomGroup = new ArrayList<>();
         String customGroup = mEtCustomGroup.getText().toString();
         if (!TextUtils.isEmpty(customGroup)) {
-            for (CustomSortOutData data : listGoodsNameOrId) {
+            for (CustomSortOutData data : listTag) {
                 if (customGroup.equals(data.getCustomerGroup())) {
                     listCustomGroup.add(data);
                 }
             }
         } else {
-            listCustomGroup.addAll(listGoodsNameOrId);
+            listCustomGroup.addAll(listTag);
         }
         return listCustomGroup;
     }

@@ -1,9 +1,6 @@
 package xm.cloudweight.impl;
 
-import com.xmzynt.storm.service.purchase.PurchaseBill;
 import com.xmzynt.storm.service.purchase.PurchaseData;
-import com.xmzynt.storm.service.user.supplier.Supplier;
-import com.xmzynt.storm.util.query.PageData;
 
 import java.util.List;
 
@@ -15,37 +12,16 @@ import java.util.List;
 public class CheckInImpl {
 
     /**
-     * 获取提供商列表监听
-     */
-    public interface OnGetSuppliersListener {
-
-        void getSuppliersSuccess(List<Supplier> list);
-
-        void getSuppliersFailed(String message);
-
-    }
-
-    /**
      * 分页查询采购订单
      */
-    public interface OnQueryPurchaseBillListener {
+    public interface OnQueryPurchaseDataListener {
 
-        void onQueryPurchaseBillSuccess(PageData<PurchaseBill> data);
+        void onQueryPurchaseDataSuccess(List<PurchaseData> data);
 
-        void onQueryPurchaseBillFailed(String message);
-
-    }
-
-    /**
-     * 查询采购订单
-     */
-    public interface OnGetPurchaseBillListener {
-
-        void onGetPurchaseBillSuccess(PurchaseBill purchaseBill);
-
-        void onGetPurchaseBillFailed(String message);
+        void onQueryPurchaseDataFailed(String message);
 
     }
+
 
     /**
      * 扫码获取采购信息

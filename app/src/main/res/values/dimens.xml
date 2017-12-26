@@ -24,6 +24,7 @@
     <dimen name="_90dp">90dp</dimen>
     <dimen name="_100dp">100dp</dimen>
     <dimen name="_200dp">200dp</dimen>
+    <dimen name="_250dp">250dp</dimen>
     <dimen name="_140dp">140dp</dimen>
     <dimen name="_14sp">14sp</dimen>
     <dimen name="_16sp">16sp</dimen>
@@ -55,6 +56,8 @@
     <dimen name="btn_radio">4dp</dimen>
     <dimen name="et_radio">20dp</dimen>
     <dimen name="btn_height">35dp</dimen>
+    <dimen name="btn_clear_height">40dp</dimen>
+    <dimen name="btn_clear_width">80dp</dimen>
     <dimen name="btn_height_large">40dp</dimen>
     <dimen name="btn_height_small">30dp</dimen>
     <dimen name="base_title_height">30dp</dimen>

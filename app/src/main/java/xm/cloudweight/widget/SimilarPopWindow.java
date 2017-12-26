@@ -27,11 +27,6 @@ public class SimilarPopWindow extends PopupWindow {
     private Context mContext;
     private TextView mTvWareHouse;
     private TextView mTvStoreInDate;
-    private TextView mTvOrigin;
-    private TextView mTvBatchNum;
-    private TextView mTvCertificateNum;
-    private TextView mTvProduceDate;
-    private TextView mTvEffeiveDate;
 
     public SimilarPopWindow(Context context, View anchor) {
         super(context);
@@ -55,17 +50,6 @@ public class SimilarPopWindow extends PopupWindow {
         mTvWareHouse = v.findViewById(R.id.similar_ware_house);
         //入库时间
         mTvStoreInDate = v.findViewById(R.id.similar_store_in_date);
-        //产地
-        mTvOrigin = v.findViewById(R.id.similar_origin);
-        //批号
-        mTvBatchNum = v.findViewById(R.id.similar_batch_num);
-        //上市凭证号
-        mTvCertificateNum = v.findViewById(R.id.similar_certificate_num);
-        //生产日期
-        mTvProduceDate = v.findViewById(R.id.similar_produce_date);
-        //有效日期
-        mTvEffeiveDate = v.findViewById(R.id.similar_effetive_date);
-
     }
 
     public void show() {
@@ -79,22 +63,11 @@ public class SimilarPopWindow extends PopupWindow {
         if (stock == null) {
             mTvWareHouse.setText("");
             mTvStoreInDate.setText("");
-            mTvOrigin.setText("");
-            mTvBatchNum.setText("");
-            mTvCertificateNum.setText("");
-            mTvProduceDate.setText("");
-            mTvEffeiveDate.setText("");
             return;
         }
         UCN warehouse = stock.getWarehouse();
         mTvWareHouse.setText((warehouse != null && !TextUtils.isEmpty(warehouse.getName())) ? warehouse.getName() : "");
-        String origin = !TextUtils.isEmpty(stock.getOrigin()) ? stock.getOrigin() : "";
-        mTvOrigin.setText(origin);
-        mTvBatchNum.setText(!TextUtils.isEmpty(stock.getBatchNumber()) ? stock.getBatchNumber() : "");
-        mTvCertificateNum.setText(!TextUtils.isEmpty(stock.getListingCertificateNo()) ? stock.getListingCertificateNo() : "");
         mTvStoreInDate.setText(DateUtils.getTime(stock.getStockInDate()));
-        mTvProduceDate.setText(DateUtils.getTime(stock.getProduceDate()));
-        mTvEffeiveDate.setText(DateUtils.getTime(stock.getEffectiveDate()));
     }
 
 }

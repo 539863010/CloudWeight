@@ -25,6 +25,10 @@ public class Common {
          */
         int TYPE_ChECK_IN_CROSS_OUT = 2;
         /**
+         * 验收-越库调拨
+         */
+        int TYPE_ChECK_IN_CROSS_ALLCOCATE = 7;
+        /**
          * 分拣-分拣
          */
         int TYPE_SORT_OUT_STORE_OUT = 3;

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="@dimen/_250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/_20dp"
+        android:background="@drawable/shape_round"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_18sp"
+            android:textColor="@color/black"
+            android:text="调入仓库"/>
+
+        <xm.cloudweight.widget.DataSpinner
+            android:id="@+id/sp_corss_allocate_warehouse_in"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35dp"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginBottom="@dimen/_20dp"
+            android:background="@drawable/shape_spinner_bg_a"
+            android:minWidth="@dimen/spinner_min_width"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_cross_allocate_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/btn_height_large"
+                android:layout_weight="1"
+                android:background="@drawable/selector_anniu_a_grey"
+                android:text="取消"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sp"/>
+
+            <Button
+                android:id="@+id/btn_cross_allocate_sure"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/btn_height_large"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_anniu_a_grey"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

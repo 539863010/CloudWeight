@@ -78,7 +78,7 @@ public class BeanUtil {
     /**
      * 分页查询采购订单
      */
-    public static PBaseInfo queryPurchaseBill(Context ctx, int page, int pageSize, int defaultPageSize, String deliveryTime, String warehouseUuid) {
+    public static PBaseInfo queryPurchaseData(Context ctx, int page, int pageSize, int defaultPageSize, String deliveryTime) {
         PBaseInfo p = new PBaseInfo();
         setBaseInfo(ctx, p);
         Map<String, Object> body = p.getBody();
@@ -90,27 +90,8 @@ public class BeanUtil {
         if (!TextUtils.isEmpty(deliveryTime)) {
             params.put("deliveryTime", deliveryTime);
         }
-        if (!TextUtils.isEmpty(warehouseUuid)) {
-            params.put("warehouseUuid", warehouseUuid);
-        }
-        //11.16更新
-        params.put("initial", "initial");
-        params.put("complete", "complete");
-        params.put("abort", "abort");
         body.put("queryFilter", queryFilter);
         queryFilter.setParams(params);
-        p.setBody(body);
-        return p;
-    }
-
-    /**
-     * 查询采购订单
-     */
-    public static PBaseInfo getPurchaseBill(Context ctx, String uuid) {
-        PBaseInfo p = new PBaseInfo();
-        setBaseInfo(ctx, p);
-        Map<String, Object> body = p.getBody();
-        body.put("uuid", uuid);
         p.setBody(body);
         return p;
     }
@@ -123,7 +104,6 @@ public class BeanUtil {
         setMerchantInfo(pBaseInfo, merchant);
         return pBaseInfo;
     }
-
 
     /**
      * 查询客户列表
@@ -207,7 +187,18 @@ public class BeanUtil {
      */
     public static PBaseInfo stockIn(Merchant merchant, StockInRecord stockInRecord) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setMerchantInfo(pBaseInfo,merchant);
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("stockInRecord", GsonUtil.getGson().toJson(stockInRecord));
+        return pBaseInfo;
+    }
+
+    /**
+     * 越库调拨
+     */
+    public static PBaseInfo crossAllocate(Merchant merchant, StockInRecord stockInRecord) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         body.put("stockInRecord", GsonUtil.getGson().toJson(stockInRecord));
         return pBaseInfo;
@@ -218,7 +209,7 @@ public class BeanUtil {
      */
     public static PBaseInfo crossDocking(Merchant merchant, StockInRecord stockInRecord) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setMerchantInfo(pBaseInfo,merchant);
+        setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         body.put("stockInRecord", GsonUtil.getGson().toJson(stockInRecord));
         return pBaseInfo;
@@ -251,6 +242,22 @@ public class BeanUtil {
         params.put("moreThanZero", true);
         params.put("basketCode", basketCode);
         body.put("queryFilter", queryFilter);
+        return pBaseInfo;
+    }
+
+    /**
+     * 扫描库存标签
+     */
+    public static PBaseInfo scanByTraceCode(Context ctx, String traceCode, String warehouseUU) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setBaseInfo(ctx, pBaseInfo);
+        Map<String, Object> body = pBaseInfo.getBody();
+        if (!TextUtils.isEmpty(traceCode)) {
+            body.put("traceCode", traceCode);
+        }
+        if (!TextUtils.isEmpty(warehouseUU)) {
+            body.put("warehouseUU", warehouseUU);
+        }
         return pBaseInfo;
     }
 

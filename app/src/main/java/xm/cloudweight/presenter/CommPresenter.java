@@ -148,4 +148,28 @@ public class CommPresenter {
                 });
 
     }
+
+    /**
+     * 扫描库存标签
+     */
+    public static void scanByTraceCode(final BaseActivity aty, String traceCode, String warehouseUU) {
+        if (!(aty instanceof CommImpl.OnScanByTraceCodeListener)) {
+            return;
+        }
+        PBaseInfo pBaseInfo = BeanUtil.scanByTraceCode(aty, traceCode, warehouseUU);
+        aty.getApiManager().scanByTraceCode(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<List<Stock>>>().get(aty))
+                .subscribe(new ApiSubscribe<List<Stock>>() {
+                    @Override
+                    protected void onResult(List<Stock> result) {
+                        ((CommImpl.OnScanByTraceCodeListener) aty).onScanByTraceCodeSuccess(result);
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        ((CommImpl.OnScanByTraceCodeListener) aty).onScanByTraceCodeFailed(errorType, failString);
+                    }
+                });
+
+    }
 }

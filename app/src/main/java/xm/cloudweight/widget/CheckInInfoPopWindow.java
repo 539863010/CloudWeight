@@ -21,16 +21,17 @@ import xm.cloudweight.R;
  * @Description: 验收详情
  * @creat 2017/10/29
  */
+@Deprecated
 public class CheckInInfoPopWindow extends PopupWindow {
 
     private View mAnchor;
     private Context mContext;
     private TextView mTvCustomer;
-    private EditText mEtInfoProduceArea;
-    private EditText mEtInfoBatchNum;
-    private EditText mEtInfoCredentialsNum;
-    private EditText mEtInfoProduceDate;
-    private EditText mEtInfoEffectiveDate;
+    //    private EditText mEtInfoProduceArea;
+//    private EditText mEtInfoBatchNum;
+//    private EditText mEtInfoCredentialsNum;
+//    private EditText mEtInfoProduceDate;
+//    private EditText mEtInfoEffectiveDate;
     private EditText mEtInfoRemark;
 
     public CheckInInfoPopWindow(Context context, View anchor) {
@@ -53,18 +54,19 @@ public class CheckInInfoPopWindow extends PopupWindow {
         //客户信息
         mTvCustomer = v.findViewById(R.id.tv_info_customer);
         //产地
-        mEtInfoProduceArea = v.findViewById(R.id.et_info_produce_are);
+//        mEtInfoProduceArea = v.findViewById(R.id.et_info_produce_are);
         //批号
-        mEtInfoBatchNum = v.findViewById(R.id.et_info_batch_num);
+//        mEtInfoBatchNum = v.findViewById(R.id.et_info_batch_num);
         //上市凭证号
-        mEtInfoCredentialsNum = v.findViewById(R.id.et_info_credentials_num);
+//        mEtInfoCredentialsNum = v.findViewById(R.id.et_info_credentials_num);
         //生产日期
-        mEtInfoProduceDate = v.findViewById(R.id.et_info_produce_date);
+//        mEtInfoProduceDate = v.findViewById(R.id.et_info_produce_date);
         //有效日期
-        mEtInfoEffectiveDate = v.findViewById(R.id.et_info_effective_date);
+//        mEtInfoEffectiveDate = v.findViewById(R.id.et_info_effective_date);
         //验收备注
         mEtInfoRemark = v.findViewById(R.id.et_info_remark);
 
+        mEtInfoRemark.setEnabled(false);
     }
 
     public void show() {
@@ -77,51 +79,18 @@ public class CheckInInfoPopWindow extends PopupWindow {
     public void setInfo(PurchaseBillLine purchaseBillLine) {
         if (purchaseBillLine == null) {
             mTvCustomer.setText("");
-            mEtInfoProduceArea.setText("");
-            mEtInfoBatchNum.setText("");
-            mEtInfoCredentialsNum.setText("");
-            mEtInfoProduceDate.setText("");
-            mEtInfoEffectiveDate.setText("");
+//            mEtInfoProduceArea.setText("");
+//            mEtInfoBatchNum.setText("");
+//            mEtInfoCredentialsNum.setText("");
+//            mEtInfoProduceDate.setText("");
+//            mEtInfoEffectiveDate.setText("");
             mEtInfoRemark.setText("");
             return;
         }
         IdName customer = purchaseBillLine.getCustomer();
         mTvCustomer.setText(customer != null && !TextUtils.isEmpty(customer.getName()) ? customer.getName() : "");
-    }
-
-    /**
-     * 产地
-     */
-    public String getProduceArea() {
-        return mEtInfoProduceArea.getText().toString().trim();
-    }
-
-    /**
-     * 批号
-     */
-    public String getBatchNum() {
-        return mEtInfoBatchNum.getText().toString().trim();
-    }
-
-    /**
-     * 上市凭证号
-     */
-    public String getCredentialsNum() {
-        return mEtInfoCredentialsNum.getText().toString().trim();
-    }
-
-    /**
-     * 有效日期
-     */
-    public String getProduceDate() {
-        return mEtInfoProduceDate.getText().toString().trim();
-    }
-
-    /**
-     * 生产日期
-     */
-    public String getEffectiveDate() {
-        return mEtInfoEffectiveDate.getText().toString().trim();
+        String remark = purchaseBillLine.getRemark();
+        mEtInfoRemark.setText(!TextUtils.isEmpty(remark) ? remark : "");
     }
 
     /**

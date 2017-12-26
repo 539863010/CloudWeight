@@ -63,6 +63,8 @@ public class BgOperateService extends Service {
     private boolean isCurrentCheckInStoreIn;
     //当前是否在验收-越库
     private boolean isCurrentCheckInCrossOut;
+    //当前是否在验收-越库调拨
+    private boolean isCurrentCheckInCrossAllocate;
     //当前是否在出库
     private boolean isCurrentStoreOut;
     //当前是否在调拨
@@ -104,6 +106,10 @@ public class BgOperateService extends Service {
                     if (!isCurrentCheckInCrossOut) {
                         getUnCheckInCrossOutList();
                     }
+                    //请求验收-越库调拨
+                    if (!isCurrentCheckInCrossAllocate) {
+                        getUnCheckInCrossAllocateList();
+                    }
                     //请求分拣
                     if (!isCurrentSortOutStoreOut) {
                         getUnSortOutStoreOutList();
@@ -125,6 +131,7 @@ public class BgOperateService extends Service {
                                     + "\n 正在保存图片 = " + isCurrentSaveImage
                                     + "\n 正在入库 = " + isCurrentCheckInStoreIn
                                     + "\n 正在越库 = " + isCurrentCheckInCrossOut
+                                    + "\n 正在越库调拨 = " + isCurrentCheckInCrossAllocate
                                     + "\n 正在分拣 = " + isCurrentSortOutStoreOut
                                     + "\n 正在出库 = " + isCurrentStoreOut
                                     + "\n 正在调拨 = " + isCurrentAllocate
@@ -181,6 +188,47 @@ public class BgOperateService extends Service {
     }
 
     /**
+     * 获取验收中未越库调拨列表
+     */
+    private void getUnCheckInCrossAllocateList() {
+        List<DbImageUpload> list = mDBManager.getDbListCheckInCrossAllocate();
+        if (list != null && list.size() > 0) {
+            isCurrentCheckInCrossAllocate = true;
+            DbImageUpload data = list.get(0);
+            doCheckInCrossAllocate(data);
+        } else {
+            isCurrentCheckInCrossAllocate = false;
+        }
+    }
+
+    /**
+     * 越库调拨
+     */
+    private void doCheckInCrossAllocate(final DbImageUpload data) {
+        StockInRecord record = GsonUtil.getGson().fromJson(data.getLine(), StockInRecord.class);
+        PBaseInfo pBaseInfo = BeanUtil.crossAllocate(mMerchant, record);
+        mApiManager.crossAllocate(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        refreshImageUrl(data);
+                        data.setStockInUuid(result);
+                        mDBManager.updateDbImageUpload(data);
+                        getUnCheckInCrossAllocateList();
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        isCurrentCheckInCrossAllocate = false;
+                        LogUtils.e("----------越库调拨失败-------------", failString);
+                        doResultFaild(errorType, failString, data);
+                    }
+
+                });
+    }
+
+    /**
      * 获取验收中未越库列表
      */
     private void getUnCheckInCrossOutList() {
@@ -214,7 +262,7 @@ public class BgOperateService extends Service {
                     protected void onResultFail(int errorType, String failString) {
                         isCurrentCheckInCrossOut = false;
                         LogUtils.e("----------越库失败-------------", failString);
-                        doResultFaild(errorType,failString,data);
+                        doResultFaild(errorType, failString, data);
                     }
 
                 });
@@ -253,7 +301,7 @@ public class BgOperateService extends Service {
                     protected void onResultFail(int errorType, String failString) {
                         isCurrentStoreOut = false;
                         LogUtils.e("----------调拨失败-------------", failString);
-                        doResultFaild(errorType,failString,data);
+                        doResultFaild(errorType, failString, data);
                     }
                 });
     }
@@ -291,7 +339,7 @@ public class BgOperateService extends Service {
                     protected void onResultFail(int errorType, String failString) {
                         isCurrentAllocate = false;
                         LogUtils.e("----------调拨失败-------------", failString);
-                        doResultFaild(errorType,failString,data);
+                        doResultFaild(errorType, failString, data);
                     }
                 });
     }
@@ -329,7 +377,7 @@ public class BgOperateService extends Service {
                     protected void onResultFail(int errorType, String failString) {
                         isCurrentCheck = false;
                         LogUtils.e("----------盘点失败-------------", failString);
-                        doResultFaild(errorType,failString,data);
+                        doResultFaild(errorType, failString, data);
                     }
                 });
     }
@@ -355,18 +403,18 @@ public class BgOperateService extends Service {
         final CustomSortOutData sortOutData = GsonUtil.getGson().fromJson(data.getLine(), CustomSortOutData.class);
         PBaseInfo pBaseInfo = BeanUtil.sortOut(mMerchant, sortOutData);
         mApiManager.sortOut(pBaseInfo)
-                .compose(new TransformerHelper<ResponseEntity<CustomSortOutData>>().get())
-                .subscribe(new ApiSubscribe<CustomSortOutData>() {
+                .compose(new TransformerHelper<ResponseEntity<List<String>>>().get())
+                .subscribe(new ApiSubscribe<List<String>>() {
                     @Override
-                    protected void onResult(CustomSortOutData result) {
+                    protected void onResult(List<String> result) {
                         // TODO: 2017/11/25
                         refreshImageUrl(data);
                         //修改数据库信息
                         //用于删除
-                        sortOutData.setStockOutRecordUuids(result.getStockOutRecordUuids());
+                        sortOutData.setStockOutRecordUuids(result);
                         //保存出库uuid
                         data.setLine(GsonUtil.getGson().toJson(sortOutData));
-                        data.setStockOutUuid(result.getStockOutRecordUuids().get(0));
+                        data.setStockOutUuid(result.get(0));
                         mDBManager.updateDbImageUpload(data);
                         //通知SortOutActivity更新（当popwindow打开时更新）
                         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_SORT_OUT_HISTORY));
@@ -378,7 +426,7 @@ public class BgOperateService extends Service {
                     protected void onResultFail(int errorType, String failString) {
                         isCurrentSortOutStoreOut = false;
                         LogUtils.e(" -------分拣上传失败------", failString);
-                        doResultFaild(errorType,failString,data);
+                        doResultFaild(errorType, failString, data);
                     }
                 });
     }
@@ -553,6 +601,9 @@ public class BgOperateService extends Service {
                 break;
             case Common.DbType.TYPE_ChECK_IN_CROSS_OUT:
                 list = mDBManager.getDbListCheckInCrossOut();
+                break;
+            case Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE:
+                list = mDBManager.getDbListCheckInCrossAllocate();
                 break;
             case Common.DbType.TYPE_SORT_OUT_STORE_OUT:
                 list = mDBManager.getDbListSortOutStoreOut();

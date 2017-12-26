@@ -52,6 +52,17 @@ public class CustomSortOutData extends SortOutData implements Serializable {
     //当分拣量<90%时， 等于分拣数量，   当分拣量>90%时，等于剩下的总量
     private BigDecimal lastWeight;
 
+    //保存库存标签码   若有扫码分拣，则记得需要把扫到的库存标签码设置到SortOutData的basketCode字段
+    private String labelCode;
+
+    public String getLabelCode() {
+        return labelCode;
+    }
+
+    public void setLabelCode(String labelCode) {
+        this.labelCode = labelCode;
+    }
+
     public BigDecimal getLastWeight() {
         return lastWeight;
     }

@@ -3,14 +3,10 @@ package xm.cloudweight.utils.dao;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.google.gson.Gson;
-import com.xmzynt.storm.util.GsonUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import xm.cloudweight.comm.Common;
-import xm.cloudweight.utils.LogUtils;
 import xm.cloudweight.utils.dao.bean.DaoMaster;
 import xm.cloudweight.utils.dao.bean.DaoSession;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
@@ -195,6 +191,23 @@ public class DBManager {
                         DbImageUploadDao.Properties.ErrorString.isNull(),
                         DbImageUploadDao.Properties.StockInUuid.isNull(),
                         DbImageUploadDao.Properties.StockOutUuid.isNull()
+                )
+                .list();
+    }
+
+    /**
+     * 获取数据库中  未成功上传的 验收  越库调拨  的列表
+     */
+    public List<DbImageUpload> getDbListCheckInCrossAllocate() {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession.getDbImageUploadDao()
+                .queryBuilder()
+                .where(
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE),
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.ErrorString.isNull(),
+                        DbImageUploadDao.Properties.StockInUuid.isNull()
                 )
                 .list();
     }

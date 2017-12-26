@@ -78,6 +78,18 @@ public class DateUtils {
         return mMonth + "月" + mDay + "日";
     }
 
+    public static String getCurrentMonth() {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        return String.valueOf(c.get(Calendar.MONTH) + 1);
+    }
+
+    public static String getCurrentDay() {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        return String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+    }
+
     /**
      * 获取当前年月日
      *

@@ -11,9 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.goods.GoodsCategory;
-import com.xmzynt.storm.service.purchase.PurchaseBill;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 import com.xmzynt.storm.service.wms.stockout.StockOutType;
@@ -68,14 +66,6 @@ public class DataSpinner<T> extends android.support.v7.widget.AppCompatSpinner {
                 if (mTitleColorRes != -1) {
                     tv.setTextColor(mTitleColorRes);
                 }
-                //供应商显示联系人
-                T t = mList.get(i);
-                if (t instanceof PurchaseBill) {
-                    //验收供应商列表默认显示供应商
-                    PurchaseBill purchaseBill = (PurchaseBill) t;
-                    IdName supplier = purchaseBill.getSupplier();
-                    tv.setText((supplier != null ? supplier.getName() : ""));
-                }
                 //取消第一次加载
                 if (isFirstLoad) {
                     isFirstLoad = false;
@@ -112,11 +102,6 @@ public class DataSpinner<T> extends android.support.v7.widget.AppCompatSpinner {
             } else if (t instanceof Warehouse) {
                 //仓库列表
                 mListTitle.add(((Warehouse) t).getName());
-            } else if (t instanceof PurchaseBill) {
-                //供应商
-                PurchaseBill purchaseBill = (PurchaseBill) t;
-                IdName supplier = purchaseBill.getSupplier();
-                mListTitle.add(purchaseBill.getBillNumber() + "  " + (supplier != null ? supplier.getName() : ""));
             } else if (t instanceof MerchantCustomer) {
                 //客户列表
                 mListTitle.add(((MerchantCustomer) t).getCustomer().getName());

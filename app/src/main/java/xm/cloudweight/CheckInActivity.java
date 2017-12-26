@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
-import com.xmzynt.storm.service.purchase.PurchaseBill;
 import com.xmzynt.storm.service.purchase.PurchaseBillLine;
 import com.xmzynt.storm.service.purchase.PurchaseData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
@@ -26,7 +26,6 @@ import com.xmzynt.storm.service.wms.stockin.StockInRecord;
 import com.xmzynt.storm.service.wms.stockin.StockInType;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 import com.xmzynt.storm.util.GsonUtil;
-import com.xmzynt.storm.util.query.PageData;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -39,7 +38,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
-import xm.cloudweight.bean.BeanPrinter;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.VideoFragment;
@@ -49,22 +47,19 @@ import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.KeyBoardUtils;
 import xm.cloudweight.utils.ToastUtil;
+import xm.cloudweight.utils.bussiness.CrossAllocateUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
-import xm.cloudweight.utils.bussiness.EtMaxLengthUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
-import xm.cloudweight.utils.bussiness.PrinterUtil;
+import xm.cloudweight.utils.bussiness.PrinterInventory;
+import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.BaseTextWatcher;
-import xm.cloudweight.widget.CheckInInfoPopWindow;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
-import xm.cloudweight.widget.PrinterView;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
-import xm.cloudweight.widget.SearchEditText;
-import xm.cloudweight.widget.adapter.BasketAdapter;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
@@ -76,19 +71,15 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  * @create 2017/10/30
  */
 public class CheckInActivity extends BaseActivity implements
-        CheckInImpl.OnQueryPurchaseBillListener
-        , CheckInImpl.OnGetPurchaseBillListener
-        , CheckInImpl.OnScanToPurchaseDataListener
+        CheckInImpl.OnQueryPurchaseDataListener
         , Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener {
 
     @BindView(R.id.sp_ware_house)
     DataSpinner<Warehouse> mSpWareHouse;
     @BindView(R.id.sp_purchaseBill)
-    DataSpinner<PurchaseBill> mSpPurchaseBill;
+    DataSpinner<String> mSpSupplier;
     @BindView(R.id.lv_line)
     ListView mLvPurchase;
-    @BindView(R.id.lv_basket)
-    ListView mLvBasket;
     @BindView(R.id.tv_info_goods)
     TextView mTvInfoGoods;
     @BindView(R.id.tv_info_purchase_num)
@@ -99,45 +90,47 @@ public class CheckInActivity extends BaseActivity implements
     SearchAndFocusEditText mEtKeySearch;
     @BindView(R.id.et_purchase_label)
     ScanEditText mEtPurChaseLabel;
-    @BindView(R.id.et_basket)
-    ScanEditText mEtBasket;
     @BindView(R.id.btn_date)
     Button mBtnDate;
     @BindView(R.id.btn_stock_in)
     Button mBtnStockIn;
     @BindView(R.id.btn_stock_cross)
     Button mBtnStockCross;
-    private List<PurchaseBillLine> mListPurchaseBillLineShow = new ArrayList<>();
-    private List<PurchaseBillLine> mListPurchaseBillLineAll = new ArrayList<>();
-    private List<String> mListBasketNum;
+    @BindView(R.id.btn_cross_allocate)
+    Button mBtnCrossAllocate;
+    @BindView(R.id.iv_print_label_add)
+    ImageView mIvPrintLabelAdd;
+    @BindView(R.id.iv_print_label_sub)
+    ImageView mIvPrintLabelSub;
+    @BindView(R.id.et_print_label_count)
+    EditText mEtPrintLabelCount;
+    private List<PurchaseData> mListShow = new ArrayList<>();
+    private List<PurchaseData> mListAll = new ArrayList<>();
     private PurchaseBillLineAdapter mAdapterPurchase;
-    private BasketAdapter mAdapterBasket;
+    private PurchaseData mPurchaseData;
     private PurchaseBillLine mPurchaseBillLine;
     private EditText mEtWeightCurrent;
     private SearchAndFocusEditText mEtWeightAccumulate;
     private SearchAndFocusEditText mEtBucklesLeather;
     private SearchAndFocusEditText mEtDeductWeight;
     private EditText mEtNumWarehousing;
-    private SearchEditText mEtWarehousingUnitPrice;
-    private SearchEditText mEtWarehousingAmount;
     private TextView mTvNumWarehousingUnit;
-    private BigDecimal mCoefficientStandard;
-    private PurchaseBill mPurchaseBill;
-    private PurchaseData mPurchaseData;
     /**
      * 记录累计重量(已入库数 的 多次累计)
      */
     private Map<String, String> mMapAccumulate = new HashMap<>();
     private TextView mTvWeightAccumulateUnit;
-    private static final int TYPE_STOREIN = 1;
+    private static final int TYPE_STORE_IN = 1;
     private static final int TYPE_CROSS = 2;
+    private static final int TYPE_CROSS_ALLOCATE = 3;
     private int mIntTypeUpload;
     private DBManager mDBManager;
     private ImageView mIvSub;
     private ImageView mIvAdd;
-    private CheckInInfoPopWindow mCheckInInfoPopWindow;
-    private PrinterView mPrinterView;
     private VideoFragment mVideoFragment;
+    private EditText mEtWareHourseIn;
+    private AlertDialog mCrossAllocateDialog;
+    private Warehouse mWareHouseTo;
 
     @Override
     protected int getLayoutId() {
@@ -168,48 +161,26 @@ public class CheckInActivity extends BaseActivity implements
         mTvNumWarehousingUnit = ((TextView) findViewById(R.id.ll_num_warehousing).findViewById(R.id.tv_unit));
         mIvSub = findViewById(R.id.ll_num_warehousing).findViewById(R.id.img_sub);
         mIvAdd = findViewById(R.id.ll_num_warehousing).findViewById(R.id.img_add);
-        mEtWarehousingUnitPrice = (SearchEditText) getEditText(R.id.ll_warehousing_unit_price, "入库单价");
-        mEtWarehousingUnitPrice.setEnabled(false);
-        ((TextView) findViewById(R.id.ll_warehousing_unit_price).findViewById(R.id.tv_unit)).setText("元");
-        mEtWarehousingAmount = (SearchEditText) getEditText(R.id.ll_warehousing_amount, "入库金额");
-        ((TextView) findViewById(R.id.ll_warehousing_amount).findViewById(R.id.tv_unit)).setText("元");
-
-        mAdapterPurchase = new PurchaseBillLineAdapter(this, mListPurchaseBillLineShow);
+        TextView tvWareHouseInUnit = (TextView) findViewById(R.id.ll_warehourse_in).findViewById(R.id.tv_unit);
+        tvWareHouseInUnit.setText("元");
+        tvWareHouseInUnit.setVisibility(View.INVISIBLE);
+        mEtWareHourseIn = (EditText) getEditText(R.id.ll_warehourse_in, "入库仓库");
+        mEtWareHourseIn.setEnabled(false);
+        mAdapterPurchase = new PurchaseBillLineAdapter(this, mListShow);
         mLvPurchase.setAdapter(mAdapterPurchase);
 
         setViewListener();
     }
 
     private void setViewListener() {
-//        mEtNumWarehousing.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mEtNumWarehousing.setText("5.00");
-//                mEtNumWarehousing.postDelayed(this, 100);
-//            }
-//        },100);
         mSpWareHouse.setCustomItemSelectedListener(this);
-        mSpPurchaseBill.setCustomItemSelectedListener(this);
-        mEtBasket.setFilters(EtMaxLengthUtil.getFilter());
-        mEtBasket.setOnScanFinishListener(new onScanFinishListener() {
-            @Override
-            public void onScanFinish(String key) {
-                if (!TextUtils.isEmpty(key) && key.length() == Common.BasketLength) {
-                    addBasketNum(key);
-                }
-            }
-        });
+        mSpSupplier.setCustomItemSelectedListener(this);
         mLvPurchase.setOnItemClickListener(mOnItemPurchaseClickListener);
         mEtPurChaseLabel.setOnScanFinishListener(new onScanFinishListener() {
             @Override
             public void onScanFinish(String key) {
                 if (!TextUtils.isEmpty(key)) {
-                    showLoadingDialog(false);
-                    //请求扫描接口
-                    CheckInPresenter.scanToPurchaseData(getActivity(), key);
-                    if (mEtBasket != null) {
-                        mEtBasket.requestFocus();
-                    }
+                    scanLabel(key);
                 }
             }
         });
@@ -226,75 +197,17 @@ public class CheckInActivity extends BaseActivity implements
                 String strDeduct = mEtDeductWeight.getText().toString().trim();
                 BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeduct) ? strDeduct : "0");
                 BigDecimal weightCoefficient = new BigDecimal(1);
-                if (mPurchaseBillLine != null
-                        && mPurchaseBillLine.getWeightCoefficient() != null
-                        && mPurchaseBillLine.getWeightCoefficient().doubleValue() != 0) {
+                if (isWeight()) {
                     weightCoefficient = mPurchaseBillLine.getWeightCoefficient();
                 }
                 BigDecimal finallyNum = currentWeight.subtract(leather).subtract(deduct).divide(weightCoefficient, RoundingMode.HALF_EVEN);
                 mEtNumWarehousing.setText(BigDecimalUtil.toScaleStr(finallyNum));
             }
         });
-//        mEtKeySearch.setOnInputFinishListener(new onInputFinishListener() {
-//            @Override
-//            public void onFinish(String key) {
-//                keySearch(key);
-//            }
-//        });
-        mEtNumWarehousing.addTextChangedListener(new BaseTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-                String key = s.toString();
-                if (mPurchaseBillLine == null) {
-                    return;
-                }
-                if (!TextUtils.isEmpty(key)) {
-                    BigDecimal numWarehousing = new BigDecimal(key);
-                    BigDecimal unitPrice = getEtBigDecimal(mEtWarehousingUnitPrice);
-                    mEtWarehousingAmount.setText(BigDecimalUtil.toScaleStr(numWarehousing.multiply(unitPrice)));
-                } else {
-                    mEtWarehousingAmount.setText("0.00");
-                }
-            }
-        });
-        mEtWarehousingUnitPrice.setOnInputFinishListener(new onInputFinishListener() {
-            private String mPrePrice;
-
-            @Override
-            public void onFinish(String key) {
-                if (mPurchaseBillLine == null) {
-                    return;
-                }
-                if (!TextUtils.isEmpty(key) && !TextUtils.equals(key, mPrePrice) && isFocusOn()) {
-                    mPrePrice = key;
-                    BigDecimal unitPrice = new BigDecimal(key);
-                    BigDecimal numWarehousing = getEtBigDecimal(mEtNumWarehousing);
-                    mEtWarehousingAmount.setText(BigDecimalUtil.toScaleStr(numWarehousing.multiply(unitPrice)));
-                }
-            }
-        });
-        mEtWarehousingAmount.setOnInputFinishListener(new onInputFinishListener() {
-            private String mPreAmount;
-
-            @Override
-            public void onFinish(String key) {
-                if (mPurchaseBillLine == null) {
-                    return;
-                }
-                if (!TextUtils.isEmpty(key) && !TextUtils.equals(key, mPreAmount) && isFocusOn()) {
-                    mPreAmount = key;
-                    BigDecimal amount = new BigDecimal(key);
-                    BigDecimal numWarehousing = getEtBigDecimal(mEtNumWarehousing);
-                    if (numWarehousing.doubleValue() > 0) {
-                        mEtWarehousingUnitPrice.setText(BigDecimalUtil.toScaleStr(amount.divide(numWarehousing, RoundingMode.HALF_EVEN)));
-                    }
-                }
-            }
-        });
         mIvSub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPurchaseBillLine != null && mPurchaseBillLine.getWeightCoefficient() == null) {
+                if (isCount()) {
                     BigDecimal count = getEtBigDecimal(mEtNumWarehousing);
                     if (count.doubleValue() > 1) {
                         mEtNumWarehousing.setText(BigDecimalUtil.toScaleStr(count.subtract(new BigDecimal(1))));
@@ -307,7 +220,7 @@ public class CheckInActivity extends BaseActivity implements
         mIvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPurchaseBillLine != null && mPurchaseBillLine.getWeightCoefficient() == null) {
+                if (isCount()) {
                     BigDecimal count = getEtBigDecimal(mEtNumWarehousing);
                     mEtNumWarehousing.setText(BigDecimalUtil.toScaleStr(count.add(new BigDecimal(1))));
                 }
@@ -318,11 +231,43 @@ public class CheckInActivity extends BaseActivity implements
         mEtDeductWeight.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
     }
 
+    private void scanLabel(String purchaseBatchScan) {
+        showLoadingDialog(false);
+        KeyBoardUtils.closeKeybord(mEtPurChaseLabel, getContext());
+        if (mListAll.size() == 0) {
+            ToastUtil.showShortToast(getContext(), "暂无数据");
+            return;
+        }
+        for (PurchaseData data : mListAll) {
+            String purchaseBatch = data.getPurchaseBillLine().getPurchaseBatch();
+            if (purchaseBatchScan.equals(purchaseBatch)) {
+                mPurchaseData = data;
+                mPurchaseBillLine = mPurchaseData.getPurchaseBillLine();
+                setPurchaseBillLineInfo();
+                mEtPurChaseLabel.setText("");
+                dismissLoadingDialog();
+                break;
+            }
+        }
+        dismissLoadingDialog();
+    }
+
     /**
-     * 改变单价文本框和金额文本框才改变单价
-     **/
-    private boolean isFocusOn() {
-        return (mEtWarehousingAmount.isFocusable() || mEtWarehousingUnitPrice.isFocusable());
+     * 当前选择为数量单位
+     */
+    private boolean isCount() {
+        return mPurchaseData != null &&
+                (mPurchaseBillLine != null && mPurchaseBillLine.getWeightCoefficient() == null);
+    }
+
+    /**
+     * 当前选择为重量单位
+     */
+    private boolean isWeight() {
+        return mPurchaseData != null &&
+                (mPurchaseBillLine != null
+                        && mPurchaseBillLine.getWeightCoefficient() != null
+                        && mPurchaseBillLine.getWeightCoefficient().doubleValue() != 0);
     }
 
     /**
@@ -331,7 +276,7 @@ public class CheckInActivity extends BaseActivity implements
     private onInputFinishListener mOnInputFinishListenerSetStoreInNum = new onInputFinishListener() {
         @Override
         public void onFinish(String key) {
-            if (mPurchaseBillLine == null) {
+            if (mPurchaseData == null) {
                 return;
             }
             setStoreInNum();
@@ -374,13 +319,23 @@ public class CheckInActivity extends BaseActivity implements
         String currentData = DateUtils.StringData();
         mBtnDate.setText(currentData);
 
+        showLoadingDialog(true);
+        getWareHouseList();
+        CheckInPresenter.queryPurchaseData(this, 0, 0, 0, currentData);
+    }
+
+    private void getWareHouseList() {
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
-        if (listWareHouse != null) {
-            mSpWareHouse.setList(listWareHouse);
-            showLoadingDialog(true);
-            queryList();
-        } else {
+        if (listWareHouse == null) {
+            listWareHouse = new ArrayList<>();
+        }
+        Warehouse warehouse = new Warehouse();
+        warehouse.setName("全部");
+        listWareHouse.add(0, warehouse);
+        if (listWareHouse.size() == 1) {
             ToastUtil.showShortToast(this, "未获取到仓库列表信息");
+        } else {
+            mSpWareHouse.setList(listWareHouse);
         }
     }
 
@@ -389,97 +344,18 @@ public class CheckInActivity extends BaseActivity implements
         return "验收";
     }
 
-    /**
-     * 查找关键字
-     */
-    private void keySearch(String key) {
-        if (!TextUtils.isEmpty(key)) {
-            List<PurchaseBillLine> listSearch = new ArrayList<>();
-            if (mListPurchaseBillLineShow.size() > 0) {
-                for (PurchaseBillLine line : mListPurchaseBillLineShow) {
-                    String name = line.getGoods().getName();
-                    if (!TextUtils.isEmpty(name) && name.contains(key)) {
-                        listSearch.add(line);
-                    }
-                }
-            }
-            mListPurchaseBillLineShow.clear();
-            mListPurchaseBillLineShow.addAll(listSearch);
-        } else {
-            mListPurchaseBillLineShow.clear();
-            mListPurchaseBillLineShow.addAll(mListPurchaseBillLineAll);
-        }
-        mAdapterPurchase.notifyDataSetChanged();
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()) {
             case R.id.sp_ware_house:
-                showLoadingDialog(false);
-                queryList();
-                break;
             case R.id.sp_purchaseBill:
-                //单独获取
                 showLoadingDialog(false);
-                PurchaseBill purchaseBill = mSpPurchaseBill.getSelectedItem();
-                CheckInPresenter.getPurchaseBill(getActivity(), purchaseBill.getUuid());
+                filterList();
+                dismissLoadingDialog();
                 break;
             default:
                 break;
         }
-    }
-
-    /**
-     * 刷新商品列表数据
-     */
-    private void setPurchaseBillLine(PurchaseBill purchaseBill) {
-        mPurchaseBill = purchaseBill;
-        mPurchaseData = null;
-        mListPurchaseBillLineAll.clear();
-        if (purchaseBill != null) {
-            mListPurchaseBillLineAll.addAll(purchaseBill.getLines());
-        }
-        mListPurchaseBillLineShow.clear();
-        mListPurchaseBillLineShow.addAll(mListPurchaseBillLineAll);
-        mAdapterPurchase.notifyDataSetChanged();
-        dismissLoadingDialog();
-    }
-
-    /**
-     * 添加周转筐
-     */
-    private void addBasketNum(String basketNum) {
-        if (TextUtils.isEmpty(basketNum) || basketNum.length() != Common.BasketLength) {
-            return;
-        }
-        if (mListBasketNum == null) {
-            mListBasketNum = new ArrayList<>();
-        } else {
-            //判重
-            for (String basket : mListBasketNum) {
-                if (basket.equals(basketNum)) {
-                    ToastUtil.showShortToast(getContext(), "周转筐已添加");
-                    mEtBasket.setText("");
-                    return;
-                }
-            }
-        }
-        mListBasketNum.add(0, basketNum);
-        if (mAdapterBasket == null) {
-            mAdapterBasket = new BasketAdapter(this, mListBasketNum);
-            mAdapterBasket.setOnBasketRemoveListener(new BasketAdapter.OnBasketRemoveListener() {
-                @Override
-                public void onRemove(String basketNum, int position) {
-                    mListBasketNum.remove(position);
-                    mAdapterBasket.notifyDataSetChanged();
-                }
-            });
-            mLvBasket.setAdapter(mAdapterBasket);
-        } else {
-            mAdapterBasket.notifyDataSetChanged();
-        }
-        mEtBasket.setText("");
     }
 
     @Override
@@ -487,24 +363,8 @@ public class CheckInActivity extends BaseActivity implements
 
     }
 
-    /**
-     * 查找列表
-     */
-    private void queryList() {
-        String selectedDate = mBtnDate.getText().toString().trim();
-        Warehouse selectedWareHouse = mSpWareHouse.getSelectedItem();
-        if (selectedWareHouse != null) {
-            clearContent();
-            //清除商品列表信息
-            clearGoodsList();
-            CheckInPresenter.queryPurchaseBill(this, 0, 0, 0, selectedDate, selectedWareHouse.getUuid());
-        } else {
-            dismissLoadingDialog();
-//            ToastUtil.showShortToast(getContext(), "请选择仓库");
-        }
-    }
-
-    @OnClick({R.id.btn_stock_in, R.id.btn_stock_cross, R.id.btn_date, R.id.tv_pop_info, R.id.iv_sort_out_search})
+    @OnClick({R.id.btn_stock_in, R.id.btn_stock_cross, R.id.btn_date, R.id.btn_clear_zero,
+            R.id.iv_sort_out_search, R.id.btn_cross_allocate, R.id.iv_print_label_sub, R.id.iv_print_label_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -513,33 +373,28 @@ public class CheckInActivity extends BaseActivity implements
                 DatePickerDialogUtil.show(getContext(), dateStr, mOnDateSetListener);
                 break;
             case R.id.btn_stock_in:
-                if (TextUtils.isEmpty(mEtNumWarehousing.getText().toString().trim())) {
-                    ToastUtil.showShortToast(getContext(), "入库数量不能为空");
-                    return;
-                }
-                mIntTypeUpload = TYPE_STOREIN;
-                mBtnStockIn.setEnabled(false);
+                if (check()) return;
+                mIntTypeUpload = TYPE_STORE_IN;
+                setBtnEnable(mBtnCrossAllocate, false, mBtnStockCross, false, mBtnStockIn, false);
+                showLoadingDialog(false);
                 if (mVideoFragment.isLight()) {
                     mVideoFragment.screenshot(mHandlerShotPic);
                 } else {
-                    showLoadingDialog(false);
                     shotResult(null);
                 }
                 break;
             case R.id.btn_stock_cross:
-                if (TextUtils.isEmpty(mEtNumWarehousing.getText().toString().trim())) {
-                    ToastUtil.showShortToast(getContext(), "入库数量不能为空");
-                    return;
-                }
-                if (mPurchaseBillLine != null) {
-                    if (!TextUtils.isEmpty(mPurchaseBillLine.getSourcePlanUuid())
-                            && !TextUtils.isEmpty(mPurchaseBillLine.getGoodsOrderBillNumber())) {
+                if (check()) return;
+                if (mPurchaseData != null && mPurchaseData.getPurchaseBillLine() != null) {
+                    PurchaseBillLine purchaseBillLine = mPurchaseData.getPurchaseBillLine();
+                    if (!TextUtils.isEmpty(purchaseBillLine.getSourcePlanUuid())
+                            && !TextUtils.isEmpty(purchaseBillLine.getGoodsOrderBillNumber())) {
                         mIntTypeUpload = TYPE_CROSS;
-                        mBtnStockCross.setEnabled(false);
+                        setBtnEnable(mBtnCrossAllocate, false, mBtnStockCross, false, mBtnStockIn, false);
+                        showLoadingDialog(false);
                         if (mVideoFragment.isLight()) {
                             mVideoFragment.screenshot(mHandlerShotPic);
                         } else {
-                            showLoadingDialog(false);
                             shotResult(null);
                         }
                     } else {
@@ -547,30 +402,95 @@ public class CheckInActivity extends BaseActivity implements
                     }
                 }
                 break;
-            case R.id.tv_pop_info:
-                if (null != mCheckInInfoPopWindow && mPurchaseBillLine != null) {
-                    mCheckInInfoPopWindow.show();
-                } else {
-                    ToastUtil.showShortToast(getContext(), "请选择商品");
+            case R.id.btn_cross_allocate:
+                if (check()) return;
+                if (mPurchaseData == null || mPurchaseBillLine == null) {
+                    ToastUtil.showShortToast(getContext(), "请先选择商品");
+                    return;
                 }
+                showCrossAllocateDialog();
                 break;
             case R.id.iv_sort_out_search:
-                String key = mEtKeySearch.getText().toString().trim();
-                keySearch(key);
+                keySearch();
+                break;
+            case R.id.iv_print_label_add: {
+                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
+                count++;
+                mEtPrintLabelCount.setText(String.valueOf(count));
+            }
+            break;
+            case R.id.iv_print_label_sub: {
+                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
+                if (count > 1) {
+                    count--;
+                    mEtPrintLabelCount.setText(String.valueOf(count));
+                }
+            }
+            break;
+            case R.id.btn_clear_zero:
+                clearToZero();
                 break;
             default:
                 break;
         }
     }
 
-    /**
-     * 详情
-     */
-    private void initInfoPop() {
-        if (null == mCheckInInfoPopWindow) {
-            mCheckInInfoPopWindow = new CheckInInfoPopWindow(getContext(), mTvInfoPurchaseRemark);
+    private boolean check() {
+        if (Integer.parseInt(mEtPrintLabelCount.getText().toString().trim()) < 1) {
+            ToastUtil.showShortToast(getContext(), "标签数不能小于1");
+            return true;
         }
-        mCheckInInfoPopWindow.setInfo(mPurchaseBillLine);
+        if (TextUtils.isEmpty(mEtNumWarehousing.getText().toString().trim())) {
+            ToastUtil.showShortToast(getContext(), "入库数量不能为空");
+            return true;
+        }
+        return false;
+    }
+
+    private void showCrossAllocateDialog() {
+        if (mCrossAllocateDialog == null) {
+            mCrossAllocateDialog = CrossAllocateUtil.create(getActivity(), new CrossAllocateUtil.onCrossAllocateOperationInterface() {
+                @Override
+                public void cancel() {
+                    mCrossAllocateDialog.dismiss();
+                }
+
+                @Override
+                public void sure(Warehouse warehouse) {
+                    UCN ucn = mPurchaseData.getWarehouse();
+                    if (warehouse.getName().equals(ucn.getName()) && warehouse.getCode().equals(ucn.getCode())) {
+                        ToastUtil.showShortToast(getContext(), "入库仓库与越库调拨仓库相同");
+                        return;
+                    }
+                    mCrossAllocateDialog.dismiss();
+                    mIntTypeUpload = TYPE_CROSS_ALLOCATE;
+                    mWareHouseTo = warehouse;
+                    setBtnEnable(mBtnCrossAllocate, false, mBtnStockCross, false, mBtnStockIn, false);
+                    showLoadingDialog(false);
+                    if (mVideoFragment.isLight()) {
+                        mVideoFragment.screenshot(mHandlerShotPic);
+                    } else {
+                        shotResult(null);
+                    }
+                }
+            });
+        }
+        CrossAllocateUtil.show(mCrossAllocateDialog);
+    }
+
+    /**
+     * 关键字搜索
+     */
+    private void keySearch() {
+        showLoadingDialog(false);
+        mSpWareHouse.setCustomItemSelectedListener(null);
+        mSpSupplier.setCustomItemSelectedListener(null);
+        mSpWareHouse.setSelection(0);
+        mSpSupplier.setSelection(0);
+        filterList();
+        mSpWareHouse.setCustomItemSelectedListener(this);
+        mSpSupplier.setCustomItemSelectedListener(this);
+        dismissLoadingDialog();
     }
 
     /**
@@ -585,7 +505,9 @@ public class CheckInActivity extends BaseActivity implements
             mBtnDate.setText(date);
             //请求数据
             showLoadingDialog(false);
-            queryList();
+
+            clearGoodsList();
+            CheckInPresenter.queryPurchaseData(getActivity(), 0, 0, 0, date);
         }
     };
 
@@ -595,9 +517,8 @@ public class CheckInActivity extends BaseActivity implements
     private AdapterView.OnItemClickListener mOnItemPurchaseClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            mPurchaseBillLine = mListPurchaseBillLineShow.get(i);
-            //初始化详情
-            initInfoPop();
+            mPurchaseData = mListShow.get(i);
+            mPurchaseBillLine = mPurchaseData.getPurchaseBillLine();
             setPurchaseBillLineInfo();
         }
     };
@@ -651,18 +572,19 @@ public class CheckInActivity extends BaseActivity implements
         } else {
             setEditText(mEtNumWarehousing, strPurchaseQty);
         }
-        // 入库单价   入库单价=采购单价
-        setEditText(mEtWarehousingUnitPrice, BigDecimalUtil.toScaleStr(mPurchaseBillLine.getPrice()));
-        // 入库金额   入库金额=入库数量*入库单价   入库金额可以修改，修改后重新计算入库单价
-        setEditText(mEtWarehousingAmount, BigDecimalUtil.toScaleStr(mPurchaseBillLine.getSubtotal()));
+        //设置入库仓库
+        UCN warehouse = mPurchaseData.getWarehouse();
+        if (warehouse != null && !TextUtils.isEmpty(warehouse.getName())) {
+            mEtWareHourseIn.setText(warehouse.getName());
+        }
     }
 
     /**
      * 清空商品列表
      */
     private void clearGoodsList() {
-        if (mListPurchaseBillLineShow.size() > 0) {
-            mListPurchaseBillLineShow.clear();
+        if (mListShow.size() > 0) {
+            mListShow.clear();
         }
         mAdapterPurchase.notifyDataSetChanged();
     }
@@ -671,13 +593,6 @@ public class CheckInActivity extends BaseActivity implements
      * 清除商品信息
      */
     private void clearText() {
-        if (mAdapterBasket != null && mListBasketNum.size() > 0) {
-            mListBasketNum.clear();
-            mAdapterBasket.notifyDataSetChanged();
-        }
-
-        //清空数据
-        mEtBasket.setText("");
         mTvInfoGoods.setText("");
         mTvInfoPurchaseNum.setText("");
         mTvNumWarehousingUnit.setText("kg");
@@ -688,9 +603,7 @@ public class CheckInActivity extends BaseActivity implements
         mEtBucklesLeather.setText("");
         mEtDeductWeight.setText("");
         mEtNumWarehousing.setText("");
-        mEtWarehousingUnitPrice.setText("");
-        mEtWarehousingAmount.setText("");
-
+        mEtWareHourseIn.setText("");
     }
 
     /**
@@ -701,8 +614,7 @@ public class CheckInActivity extends BaseActivity implements
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    showLoadingDialog(false);
-                    setBtnEnable();
+
                     break;
                 case 2:
                     String path = msg.getData().getString("path", "");
@@ -720,7 +632,7 @@ public class CheckInActivity extends BaseActivity implements
 
     private void shotResult(String path) {
         StockInRecord record = prepareConfig();
-        if (mIntTypeUpload == TYPE_STOREIN) {
+        if (mIntTypeUpload == TYPE_STORE_IN) {
             //入库
             DbImageUpload db = new DbImageUpload();
             db.setDate(DateUtils.StringData());
@@ -729,7 +641,7 @@ public class CheckInActivity extends BaseActivity implements
             db.setType(Common.DbType.TYPE_ChECK_IN_STORE_IN);
             getDbManager().insertDbImageUpload(db);
             ToastUtil.showShortToast(getContext(), "入库成功");
-        } else {
+        } else if (mIntTypeUpload == TYPE_CROSS) {
             //越库
             DbImageUpload db = new DbImageUpload();
             db.setDate(DateUtils.StringData());
@@ -738,48 +650,50 @@ public class CheckInActivity extends BaseActivity implements
             db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_OUT);
             getDbManager().insertDbImageUpload(db);
             ToastUtil.showShortToast(getContext(), "越库成功");
+        } else if (mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
+            DbImageUpload db = new DbImageUpload();
+            db.setDate(DateUtils.StringData());
+            db.setImagePath(path);
+            db.setLine(GsonUtil.getGson().toJson(record));
+            db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE);
+            getDbManager().insertDbImageUpload(db);
+            ToastUtil.showShortToast(getContext(), "越库调拨成功");
         }
-        refreshSuccessData();
-        setBtnEnable();
+        refreshSuccessData(record);
+        setBtnEnable(mBtnCrossAllocate, true, mBtnStockCross, true, mBtnStockIn, true);
         dismissLoadingDialog();
     }
 
-    private void setBtnEnable() {
-        if (!mBtnStockIn.isEnabled()) {
-            mBtnStockIn.setEnabled(true);
-        }
-        if (!mBtnStockCross.isEnabled()) {
-            mBtnStockCross.setEnabled(true);
-        }
+    private void setBtnEnable(Button b1, boolean openB1,
+                              Button b2, boolean openB2,
+                              Button b3, boolean openB3) {
+        b1.setEnabled(openB1);
+        b2.setEnabled(openB2);
+        b3.setEnabled(openB3);
     }
 
     /**
      * 创建入库、越库 请求体
      */
     private StockInRecord prepareConfig() {
-        Warehouse warehouse = mSpWareHouse.getSelectedItem();
-        if (warehouse == null) {
-            return null;
-        }
-        if (mPurchaseBillLine != null && (mPurchaseBill != null || mPurchaseData != null)) {
+        if (mPurchaseData != null && mPurchaseBillLine != null) {
             StockInRecord sir = new StockInRecord();
+            UCN warehouse = mPurchaseData.getWarehouse();
             sir.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
             sir.setGoods(mPurchaseBillLine.getGoods());
             //规格
             sir.setGoodsSpec(mPurchaseBillLine.getGoodsSpec());
             sir.setGoodsUnit(mPurchaseBillLine.getGoodsUnit());
-            //操作人名字
-            Merchant merchant = LocalSpUtil.getMerchant(this);
-            sir.setOperatorName(merchant != null ? merchant.getName() : "");
             //备注
             sir.setRemark(mPurchaseBillLine.getRemark());
-            //产地
-            sir.setOrigin(mPurchaseBillLine.getOrigin());
             //来源采购明细uuid
             sir.setSourceBillLineUuid(mPurchaseBillLine.getUuid());
             //扣重数
             BigDecimal deductQty = getEtBigDecimal(mEtDeductWeight);
             sir.setDeductQty(deductQty);
+            // 去皮
+            BigDecimal leather = getEtBigDecimal(mEtBucklesLeather);
+            sir.setLeatherQty(leather);
             BigDecimal storeIn = getEtBigDecimal(mEtNumWarehousing);
             //判断是重量  数量
             BigDecimal weightCoefficient = mPurchaseBillLine.getWeightCoefficient();
@@ -794,49 +708,33 @@ public class CheckInActivity extends BaseActivity implements
             }
             //标准单位
             sir.setSdUnit(mPurchaseBillLine.getGoodsUnit());
-            //入库单价
-            sir.setPrice(getEtBigDecimal(mEtWarehousingUnitPrice));
-            sir.setStockInType(StockInType.purchaseIn);
-            //周转筐列表
-            sir.setBasketCodes(mListBasketNum);
-            if (mPurchaseBill != null && mPurchaseData == null) {
-                //通过查询订单
-                sir.setOrg(mPurchaseBill.getOrg());
-                sir.setSupplier(mPurchaseBill.getSupplier());
-                //来源采购单号
-                sir.setSourceBillNumber(mPurchaseBill.getBillNumber());
-                //交货日期
-                sir.setDeliveryTime(mPurchaseBill.getDeliveryTime());
-            } else {
-                //通过扫描
-                sir.setSupplier(mPurchaseData.getSupplier());
-                Date deliveryTime = DateUtils.converToDate(DateUtils.getTime2(mPurchaseData.getDeliveryTime()));
-                sir.setDeliveryTime(deliveryTime);
-                sir.setSourceBillNumber(mPurchaseData.getPurchaseBillNumber());
+            //类型   	越库的入库类型改为crossDock，入库和越库调拨仍为purchaseIn
+            if (mIntTypeUpload == TYPE_CROSS) {
+                sir.setStockInType(StockInType.crossDock);
+            } else if (mIntTypeUpload == TYPE_STORE_IN) {
+                sir.setStockInType(StockInType.purchaseIn);
+            } else if (mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
+                sir.setStockInType(StockInType.purchaseIn);
+                if (mWareHouseTo != null) {
+                    sir.setToWarehouse(new UCN(mWareHouseTo.getUuid(), mWareHouseTo.getCode(), mWareHouseTo.getName()));
+                }
             }
-            //标准系数
-            sir.setCoefficient(mCoefficientStandard);
-            if (mCheckInInfoPopWindow != null) {
-                //批号
-                sir.setBatchNumber(mCheckInInfoPopWindow.getBatchNum());
-                //上市批号
-                sir.setListingCertificateNo(mCheckInInfoPopWindow.getCredentialsNum());
-                //有效日期
-                Date effectiveDate = DateUtils.converToDate(mCheckInInfoPopWindow.getEffectiveDate());
-                sir.setEffectiveDate(effectiveDate);
-                //生产日期
-                Date produceDate = DateUtils.converToDate(mCheckInInfoPopWindow.getProduceDate());
-                sir.setProduceDate(produceDate);
-                //备注
-                sir.setRemark(mCheckInInfoPopWindow.getRemark());
-                //产地
-                sir.setOrigin(mCheckInInfoPopWindow.getProduceArea());
-            }
+            //设置供应商
+            sir.setSupplier(mPurchaseData.getSupplier());
+            //来源采购单号
+            sir.setSourceBillNumber(mPurchaseData.getPurchaseBillNumber());
+            //交货日期
+            sir.setDeliveryTime(mPurchaseData.getDeliveryTime());
+            //通过扫描
+            sir.setSupplier(mPurchaseData.getSupplier());
+            Date deliveryTime = DateUtils.converToDate(DateUtils.getTime2(mPurchaseData.getDeliveryTime()));
+            sir.setDeliveryTime(deliveryTime);
             //入库时间
             sir.setInDate(new Date());
-            //设置机构
+            //设置机构  //操作人名字
+            Merchant merchant = LocalSpUtil.getMerchant(this);
             if (merchant != null) {
-//                如果没返回org  就是当前登陆的人是公司帐号 就用此帐号的userUuid和name  作为org的IdName
+                //如果没返回org  就是当前登陆的人是公司帐号 就用此帐号的userUuid和name  作为org的IdName
                 IdName org = merchant.getOrg();
                 if (org == null) {
                     sir.setOrg(new IdName(merchant.getUuid(), merchant.getName()));
@@ -844,22 +742,15 @@ public class CheckInActivity extends BaseActivity implements
                     sir.setOrg(org);
                 }
             }
-            showLog(GsonUtil.getGson().toJson(sir));
+            // 原来的扫码获取入库信息改为扫码后，根据扫码内容和上步加载的采购信息匹配即可，
+            // 匹配字段为：purchaseBatch，入库、越库、越库调拨操作时需将此码设到StockInRecord的traceCode字段中
+            String purchaseBatch = mPurchaseBillLine.getPurchaseBatch();
+            if (!TextUtils.isEmpty(purchaseBatch)) {
+                sir.setTraceCode(purchaseBatch);
+            }
             return sir;
         }
         return null;
-    }
-
-    @Override
-    public void onQueryPurchaseBillSuccess(PageData<PurchaseBill> data) {
-        List<PurchaseBill> values = data.getValues();
-        mSpPurchaseBill.setList(values);
-        if (values != null && values.size() > 0) {
-            PurchaseBill purchaseBill = values.get(0);
-            CheckInPresenter.getPurchaseBill(getActivity(), purchaseBill.getUuid());
-        } else {
-            setPurchaseBillLine(null);
-        }
     }
 
     private void clearContent() {
@@ -869,42 +760,89 @@ public class CheckInActivity extends BaseActivity implements
         clearText();
     }
 
+    private void filterList() {
+        if (mListAll.size() > 0) {
+            List<PurchaseData> listWarehouse = new ArrayList<>();
+            Warehouse warehouse = mSpWareHouse.getSelectedItem();
+            if (warehouse != null && !TextUtils.isEmpty(warehouse.getName()) && !warehouse.getName().equals("全部")) {
+                String warehouseName = warehouse.getName();
+                for (PurchaseData data : mListAll) {
+                    UCN ucnWarehouse = data.getWarehouse();
+                    if (ucnWarehouse != null && ucnWarehouse.getName().equals(warehouseName)) {
+                        listWarehouse.add(data);
+                    }
+                }
+            } else {
+                listWarehouse.addAll(mListAll);
+            }
+
+            String supplierName = mSpSupplier.getSelectedItem();
+            List<PurchaseData> listSupplier = new ArrayList<>();
+            if (!TextUtils.isEmpty(supplierName) && !supplierName.equals("全部")) {
+                for (PurchaseData data : listWarehouse) {
+                    IdName supplier = data.getSupplier();
+                    if ((supplier != null && supplier.getName().equals(supplierName))) {
+                        listSupplier.add(data);
+                    }
+                }
+            } else {
+                listSupplier.addAll(listWarehouse);
+            }
+
+            String key = mEtKeySearch.getText().toString().trim();
+            List<PurchaseData> listKeyName = new ArrayList<>();
+            if (!TextUtils.isEmpty(key)) {
+                for (PurchaseData data : listSupplier) {
+                    UCN goods = data.getPurchaseBillLine().getGoods();
+                    if (goods != null && goods.getName().contains(key)) {
+                        listKeyName.add(data);
+                    }
+                }
+            } else {
+                listKeyName.addAll(listSupplier);
+            }
+            mListShow.clear();
+            mListShow.addAll(listKeyName);
+            mAdapterPurchase.notifyDataSetChanged();
+        } else {
+            mListShow.clear();
+            mAdapterPurchase.notifyDataSetChanged();
+        }
+    }
+
     @Override
-    public void onQueryPurchaseBillFailed(String message) {
+    public void onQueryPurchaseDataSuccess(List<PurchaseData> data) {
+        if (data != null && data.size() > 0) {
+            List<String> mListSuppliers = new ArrayList<>();
+            mListSuppliers.add("全部");
+            int size = data.size();
+            for (int i = 0; i < size; i++) {
+                IdName supplier = data.get(i).getSupplier();
+                String supplierName = supplier.getName();
+                if (!mListSuppliers.contains(supplierName)) {
+                    mListSuppliers.add(supplierName);
+                }
+            }
+            mSpSupplier.setList(mListSuppliers);
+            mListAll.clear();
+            mListAll.addAll(data);
+            filterList();
+        } else {
+            mListAll.clear();
+            mListShow.clear();
+            mAdapterPurchase.notifyDataSetChanged();
+            mPurchaseData = null;
+            mPurchaseBillLine = null;
+        }
+        dismissLoadingDialog();
+    }
+
+    @Override
+    public void onQueryPurchaseDataFailed(String message) {
         //清空list跟供应商下拉数据
-        mSpPurchaseBill.setList(new ArrayList<PurchaseBill>());
-        mListPurchaseBillLineShow.clear();
+        mSpSupplier.setList(null);
+        mListShow.clear();
         mAdapterPurchase.notifyDataSetChanged();
-        ToastUtil.showShortToast(getContext(), message);
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onGetPurchaseBillSuccess(PurchaseBill purchaseBill) {
-        setPurchaseBillLine(purchaseBill);
-    }
-
-    @Override
-    public void onGetPurchaseBillFailed(String message) {
-        ToastUtil.showShortToast(getContext(), message);
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onScanToPurchaseDataSuccess(PurchaseData purchaseData) {
-        KeyBoardUtils.closeKeybord(mEtPurChaseLabel, getContext());
-        mPurchaseData = purchaseData;
-        mPurchaseBill = null;
-        mCoefficientStandard = purchaseData.getCoefficient();
-        mPurchaseBillLine = purchaseData.getPurchaseBillLine();
-        mEtPurChaseLabel.setText("");
-        setPurchaseBillLineInfo();
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onScanToPurchaseDataFailed(int errorType, String message) {
-        mEtPurChaseLabel.setText("");
         ToastUtil.showShortToast(getContext(), message);
         dismissLoadingDialog();
     }
@@ -918,19 +856,35 @@ public class CheckInActivity extends BaseActivity implements
 
     /**
      * 入库，越库接口请求成功后刷新数据
+     *
+     * @param record
      */
-    private void refreshSuccessData() {
+    private void refreshSuccessData(StockInRecord record) {
         // 保存累计重量
-        if (mPurchaseBillLine != null) {
+        if (mPurchaseData != null && mPurchaseBillLine != null) {
             BigDecimal accumulate = getEtBigDecimal(mEtWeightAccumulate);
             //转化为kg
             BigDecimal weightCoefficient = mPurchaseBillLine.getWeightCoefficient();
             BigDecimal numWarehousing = getEtBigDecimal(mEtNumWarehousing);
-            //打印越库标签
-            if (mIntTypeUpload == TYPE_CROSS) {
-                // 打印标签
-                printer(weightCoefficient, numWarehousing);
+            // 打印标签
+            if (mIntTypeUpload == TYPE_STORE_IN || mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
+                String goodsName = mPurchaseBillLine.getGoods().getName();
+                String purchaseBatch = mPurchaseBillLine.getPurchaseBatch();
+                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
+                PrinterInventory.printer(getContext(), count, goodsName, purchaseBatch);
+            } else if (mIntTypeUpload == TYPE_CROSS) {
+                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
+                String goodsName = mPurchaseBillLine.getGoods().getName();
+                String crossNum;
+                if (weightCoefficient != null && weightCoefficient.doubleValue() != 0) {
+                    crossNum = BigDecimalUtil.toScaleStr(numWarehousing.multiply(weightCoefficient)).concat("kg");
+                } else {
+                    crossNum = BigDecimalUtil.toScaleStr(numWarehousing).concat(mPurchaseBillLine.getGoodsUnit().getName());
+                }
+                String code = Common.getPlatformTraceCode();
+                PrinterSortOut.printer(getContext(), count, PrinterSortOut.SORT_OUT_QRCODE, goodsName, crossNum, code);
             }
+            //设置累计
             if (weightCoefficient != null) {
                 mMapAccumulate.put(mPurchaseBillLine.getUuid(), BigDecimalUtil.toScaleStr(accumulate.add(numWarehousing.multiply(weightCoefficient))));
             } else {
@@ -939,50 +893,27 @@ public class CheckInActivity extends BaseActivity implements
             //保存已入库数
             mPurchaseBillLine.setHasStockInQty(mPurchaseBillLine.getHasStockInQty().add(getEtBigDecimal(mEtNumWarehousing)));
             clearContent();
-            mPurchaseBillLine = null;
-            mCoefficientStandard = null;
             mAdapterPurchase.notifyDataSetChanged();
+            mPurchaseData = null;
+            mPurchaseBillLine = null;
+            mWareHouseTo = null;
             //光标移动到采购标签
             mEtPurChaseLabel.requestFocus();
-            //清空详情数据
-            if (mCheckInInfoPopWindow != null) {
-                mCheckInInfoPopWindow.setInfo(null);
-            }
         }
-    }
-
-    private void printer(BigDecimal weightCoefficient, BigDecimal numWarehousing) {
-        if (mPrinterView == null) {
-            mPrinterView = (PrinterView) findViewById(R.id.pv);
-        }
-        BeanPrinter beanPrinter = new BeanPrinter();
-        beanPrinter.setGoodsName(mPurchaseBillLine.getGoods().getName());
-        if (weightCoefficient != null && weightCoefficient.doubleValue() != 0) {
-            beanPrinter.setCount(BigDecimalUtil.toScaleStr(numWarehousing.multiply(weightCoefficient)).concat("kg"));
-        } else {
-            beanPrinter.setCount(BigDecimalUtil.toScaleStr(numWarehousing).concat(mPurchaseBillLine.getGoodsUnit().getName()));
-        }
-        IdName customer = mPurchaseBillLine.getCustomer();
-        beanPrinter.setCustomer(customer != null && !TextUtils.isEmpty(customer.getName()) ? customer.getName() : null);
-        IdName customerDept = mPurchaseBillLine.getCustomerDept();
-        beanPrinter.setDepartment(customerDept != null && !TextUtils.isEmpty(customerDept.getName()) ? customerDept.getName() : null);
-        beanPrinter.setCode(Common.getPlatformTraceCode());
-        mPrinterView.set(beanPrinter);
-        String filePath = mPrinterView.getPath();
-        PrinterUtil.printer(this, filePath);
     }
 
     /**
      * 采购订单Adapter
      **/
-    private class PurchaseBillLineAdapter extends CommonAdapter4Lv<PurchaseBillLine> {
+    private class PurchaseBillLineAdapter extends CommonAdapter4Lv<PurchaseData> {
 
-        private PurchaseBillLineAdapter(Context context, List<PurchaseBillLine> data) {
+        private PurchaseBillLineAdapter(Context context, List<PurchaseData> data) {
             super(context, R.layout.item_line, data);
         }
 
         @Override
-        public void doSomething(CommonHolder4Lv holder, PurchaseBillLine line, int position) {
+        public void doSomething(CommonHolder4Lv holder, PurchaseData data, int position) {
+            PurchaseBillLine line = data.getPurchaseBillLine();
             //商品名称
             String name = line.getGoods().getName();
             //采购数
@@ -1011,7 +942,7 @@ public class CheckInActivity extends BaseActivity implements
         if (data == null) {
             setEtWeightCurrent("");
         } else {
-            if (mPurchaseBillLine != null && mPurchaseBillLine.getWeightCoefficient() != null) {
+            if (isWeight()) {
                 //重量商品才进行称重
                 mEtWeightCurrent.setText(data.weight);
                 if (data.stable && !TextUtils.equals(data.weight, mPreWeight)) {

@@ -80,6 +80,7 @@ public class MainActivity extends BaseActivity {
         startActivity(LoginActivity.class);
         finish();
     }
+
     @Override
     public String getBaseTitle() {
         return getResources().getString(R.string.lbhkzs);

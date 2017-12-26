@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -173,28 +172,32 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         return false;
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //体重秤清零
-        if (this instanceof CheckInActivity
-                || this instanceof SortOutActivity
-                || this instanceof SimilarActivity) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_A:
-                    break;
-                case KeyEvent.KEYCODE_B:
-                    Instrument instrument = ScaleUtil.getInstrument();
-                    if (instrument != null) {
-                        instrument.reset();
-                    }
-                    break;
-                case KeyEvent.KEYCODE_C:
-                    break;
-                case KeyEvent.KEYCODE_D:
-                    break;
-            }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        //体重秤清零
+//        if (this instanceof CheckInActivity
+//                || this instanceof SortOutActivity
+//                || this instanceof SimilarActivity) {
+//            switch (keyCode) {
+//                case KeyEvent.KEYCODE_A:
+//                    break;
+//                case KeyEvent.KEYCODE_B:
+//                    clearToZero();
+//                    break;
+//                case KeyEvent.KEYCODE_C:
+//                    break;
+//                case KeyEvent.KEYCODE_D:
+//                    break;
+//            }
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+
+    protected void clearToZero() {
+        Instrument instrument = ScaleUtil.getInstrument();
+        if (instrument != null) {
+            instrument.reset();
         }
-        return super.onKeyDown(keyCode, event);
     }
 
     protected void getDate() {

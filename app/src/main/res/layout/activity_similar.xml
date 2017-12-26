@@ -30,14 +30,14 @@
                 />
 
             <xm.cloudweight.widget.ScanEditText
-                android:id="@+id/et_basket"
+                android:id="@+id/et_tags"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/color_279c70"
                 android:ems="10"
                 android:gravity="center_vertical"
-                android:hint="周转筐"
+                android:hint="库存标签"
                 android:inputType="number"
                 android:paddingLeft="@dimen/_10dp"
                 android:textColor="@color/white"
@@ -95,41 +95,17 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tv_pop_info"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawablePadding="@dimen/_5dp"
-                                android:drawableTop="@drawable/tubiao_d_xiangq_a"
-                                android:paddingBottom="@dimen/_10dp"
-                                android:paddingLeft="@dimen/_30dp"
-                                android:paddingRight="@dimen/_30dp"
-                                android:paddingTop="@dimen/_10dp"
-                                android:text="详情"/>
-
-                            <View
-                                android:layout_width="@dimen/_1dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginBottom="@dimen/_20dp"
-                                android:layout_marginTop="@dimen/_20dp"
-                                android:background="@color/grey"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawablePadding="@dimen/_5dp"
-                                android:drawableTop="@drawable/tubiao_d_zhouzk_a"
-                                android:paddingBottom="@dimen/_10dp"
-                                android:paddingLeft="@dimen/_30dp"
-                                android:paddingRight="@dimen/_30dp"
-                                android:paddingTop="@dimen/_10dp"
-                                android:text="周转筐"/>
-
-                            <ListView
-                                android:id="@+id/lv_basket_saved"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_10dp"/>
+                            <Button
+                                android:id="@+id/btn_clear_zero"
+                                android:layout_width="@dimen/btn_clear_width"
+                                android:layout_height="@dimen/btn_clear_height"
+                                android:background="@drawable/shape_clear_weight"
+                                android:layout_marginLeft="@dimen/_20dp"
+                                android:layout_marginRight="@dimen/_20dp"
+                                android:layout_toLeftOf="@+id/btn_request"
+                                android:text="归零"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_14sp"/>
 
                         </LinearLayout>
                     </LinearLayout>

@@ -61,6 +61,17 @@ public interface ApiManager {
     Observable<ResponseEntity<PageData<PurchaseBill>>> queryPurchaseBill(@Body PBaseInfo p);
 
     /**
+     * 批量查询采购信息
+     *
+     * @param p 批量查询采购信息请求体
+     * @return Observable<ResponseEntity<List<PurchaseData>>>
+     */
+    @POST("/merchant/scaleApi/queryPurchaseData.do")
+    Observable<ResponseEntity<List<PurchaseData>>> queryPurchaseData(@Body PBaseInfo p);
+
+
+
+    /**
      * 查询采购订单
      *
      * @param p 查询采购订单请求体
@@ -127,10 +138,10 @@ public interface ApiManager {
      * 分拣
      *
      * @param p 分拣请求体
-     * @return Observable<ResponseEntity<SortOutData>>
+     * @return Observable<ResponseEntity<List<String>>>
      */
     @POST("/merchant/scaleApi/sortOut.do")
-    Observable<ResponseEntity<CustomSortOutData>> sortOut(@Body PBaseInfo p);
+    Observable<ResponseEntity<List<String>>> sortOut(@Body PBaseInfo p);
 
     /**
      * 撤销分拣
@@ -169,6 +180,15 @@ public interface ApiManager {
     Observable<ResponseEntity<List<String>>> crossDocking(@Body PBaseInfo p);
 
     /**
+     * 越库调拨
+     *
+     * @param p 越库调拨请求体
+     * @return Observable<ResponseEntity<List<String>>>
+     */
+    @POST("/merchant/scaleApi/crossAllocate.do")
+    Observable<ResponseEntity<String>> crossAllocate(@Body PBaseInfo p);
+
+    /**
      * 上传图片
      *
      * @param options     头部参数
@@ -187,6 +207,15 @@ public interface ApiManager {
      */
     @POST("/merchant/scaleApi/queryStock.do")
     Observable<ResponseEntity<PageData<Stock>>> queryStock(@Body PBaseInfo p);
+
+    /**
+     * 扫描库存标签
+     *
+     * @param p 扫描库存标签请求体
+     * @return Observable<ResponseEntity<List<Stock>>>
+     */
+    @POST("/merchant/scaleApi/scanByTraceCode.do")
+    Observable<ResponseEntity<List<Stock>>> scanByTraceCode(@Body PBaseInfo p);
 
     /**
      * 出库

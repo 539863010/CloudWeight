@@ -8,13 +8,6 @@
     android:background="@color/white"
     tools:context="xm.cloudweight.CheckInActivity">
 
-    <!--宽高不动-->
-    <xm.cloudweight.widget.PrinterView
-        android:id="@+id/pv"
-        android:layout_width="@dimen/printer_width"
-        android:layout_height="@dimen/printer_height"
-        android:visibility="invisible"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -135,40 +128,54 @@
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/tv_pop_info"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:drawablePadding="@dimen/_5dp"
-                                    android:drawableTop="@drawable/tubiao_d_xiangq_a"
-                                    android:paddingBottom="@dimen/_5dp"
-                                    android:paddingLeft="@dimen/_30dp"
-                                    android:paddingRight="@dimen/_30dp"
-                                    android:paddingTop="@dimen/_5dp"
-                                    android:text="详情"/>
+                                <Button
+                                    android:id="@+id/btn_clear_zero"
+                                    android:layout_width="@dimen/btn_clear_width"
+                                    android:layout_height="@dimen/btn_clear_height"
+                                    android:background="@drawable/shape_clear_weight"
+                                    android:layout_marginLeft="@dimen/_20dp"
+                                    android:layout_marginRight="@dimen/_20dp"
+                                    android:text="归零"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_14sp"/>
 
                                 <View
-                                    android:layout_width="@dimen/_1dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginBottom="@dimen/_20dp"
-                                    android:layout_marginTop="@dimen/_20dp"
-                                    android:background="@color/grey"/>
+                                    android:layout_width="@dimen/_0dp"
+                                    android:layout_height="@dimen/_0dp"
+                                    android:layout_weight="1"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:drawablePadding="@dimen/_5dp"
-                                    android:drawableTop="@drawable/tubiao_d_zhouzk_a"
-                                    android:paddingBottom="@dimen/_5dp"
-                                    android:paddingLeft="@dimen/_30dp"
-                                    android:paddingRight="@dimen/_30dp"
-                                    android:paddingTop="@dimen/_5dp"
-                                    android:text="周转筐"/>
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/_18sp"
+                                    android:text="库存标签"/>
 
-                                <ListView
-                                    android:id="@+id/lv_basket"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
+                                <ImageView
+                                    android:id="@+id/iv_print_label_sub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_10dp"
+                                    android:layout_marginRight="@dimen/_10dp"
+                                    android:src="@drawable/tubiao_k_sub"/>
+
+                                <EditText
+                                    android:id="@+id/et_print_label_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1"
+                                    android:inputType="number"
+                                    android:background="@null"
+                                    android:paddingLeft="@dimen/_10dp"
+                                    android:paddingRight="@dimen/_10dp"/>
+
+                                <ImageView
+                                    android:id="@+id/iv_print_label_add"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_10dp"
+                                    android:layout_marginRight="@dimen/_10dp"
+                                    android:src="@drawable/tubiao_k_add"/>
 
                             </LinearLayout>
                         </LinearLayout>
@@ -187,6 +194,10 @@
                     android:paddingLeft="@dimen/_10dp"
                     android:paddingRight="@dimen/_10dp"
                     android:paddingTop="@dimen/_10dp">
+
+                    <include
+                        android:id="@+id/ll_warehourse_in"
+                        layout="@layout/layout_item"/>
 
                     <include
                         android:id="@+id/ll_weight_current"
@@ -208,45 +219,39 @@
                         android:id="@+id/ll_num_warehousing"
                         layout="@layout/layout_item_search_editext"/>
 
-                    <include
-                        android:id="@+id/ll_warehousing_unit_price"
-                        layout="@layout/layout_item_search_editext"/>
-
-                    <include
-                        android:id="@+id/ll_warehousing_amount"
-                        layout="@layout/layout_item_search_editext"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_40dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_title"
-                            android:layout_width="@dimen/_60dp"
-                            android:layout_height="wrap_content"
-                            android:text="周转筐"
-                            android:textSize="12sp"
-                            />
-
-                        <xm.cloudweight.widget.ScanEditText
-                            android:id="@+id/et_basket"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_35dp"
-                            android:background="@drawable/shape_edit_round_bg_71bd5c"
-                            android:gravity="center"
-                            android:inputType="number"
-                            android:singleLine="true"
-                            android:textSize="@dimen/_16sp"/>
-
-                    </LinearLayout>
-
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_0dp"
                         android:layout_weight="1"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_5dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_cross_allocate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/btn_height_large"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_anniu_a_grey"
+                            android:text="越库调拨"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sp"/>
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/btn_height_large"
+                            android:layout_marginLeft="@dimen/_10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_anniu_a_grey"
+                            android:text="越库调拨"
+                            android:visibility="invisible"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sp"/>
+
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

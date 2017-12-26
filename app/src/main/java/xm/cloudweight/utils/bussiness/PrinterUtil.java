@@ -13,9 +13,10 @@ import com.citizen.sdk.labelprint.LabelPrinter;
  * @Description: 打印机Util
  * @creat 2017/11/1
  */
+@Deprecated
 public class PrinterUtil {
 
-    public static void printer(Context context,String filePath) {
+    public static void printer(Context context, String filePath, int printCount) {
         // Constructor
         LabelPrinter printer = new LabelPrinter();
 
@@ -29,7 +30,7 @@ public class PrinterUtil {
         int result = printer.connect(LabelConst.CLS_PORT_USB, usbDevice);       // Android 3.1 ( API Level 12 ) or later
         if (LabelConst.CLS_SUCCESS == result) {
             // Print data output
-            print(context, printer,filePath);
+            print(context, printer, filePath, printCount);
 
             // Disconnect
             printer.disconnect();
@@ -42,7 +43,7 @@ public class PrinterUtil {
     //
     // print
     //
-    private static void print(Context context, LabelPrinter printer, String filePath) {
+    private static void print(Context context, LabelPrinter printer, String filePath, int printCount) {
         LabelDesign design = new LabelDesign();
         int errflg = 0;
         int result;
@@ -89,7 +90,7 @@ public class PrinterUtil {
         // Set Property (Tear Off)   显示完整标签
         printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_TEAROFF);
         // Print    1代表印刷数
-        result = printer.print(design, 1);
+        result = printer.print(design, printCount);
         if (LabelConst.CLS_SUCCESS != result) {
             errmsg = errmsg + Integer.toString(result) + ":\tprint Error";
             errflg = 1;

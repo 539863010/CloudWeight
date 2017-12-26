@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingLeft="@dimen/_20dp"
-    android:orientation="vertical"
     android:background="@color/white"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/_20dp">
 
     <View
         android:layout_width="398.5dp"
-        android:layout_marginTop="@dimen/_15dp"
         android:layout_height="@dimen/_0.5dp"
+        android:layout_marginTop="@dimen/_15dp"
         android:background="@color/grey"/>
 
     <LinearLayout
@@ -22,17 +22,17 @@
 
         <TextView
             style="@style/item_title"
-            android:text="出库仓库"
-            android:layout_width="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:text="出库仓库"/>
 
         <TextView
             android:id="@+id/similar_ware_house"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sp"
             android:layout_marginRight="@dimen/_15dp"
             android:layout_weight="1"
             android:gravity="right"
+            android:textSize="@dimen/_12sp"
             tools:text="出库仓库"/>
 
     </LinearLayout>
@@ -41,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0.5dp"
         android:background="@color/grey"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/info_height"
@@ -55,22 +56,24 @@
             android:id="@+id/similar_store_in_date"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sp"
             android:layout_marginRight="@dimen/_15dp"
             android:layout_weight="1"
             android:gravity="right"
-            tools:text="入库时间" />
+            android:textSize="@dimen/_12sp"
+            tools:text="入库时间"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0.5dp"
         android:background="@color/grey"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/info_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <TextView
             style="@style/item_title"
@@ -80,22 +83,25 @@
             android:id="@+id/similar_origin"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sp"
             android:layout_marginRight="@dimen/_15dp"
             android:layout_weight="1"
             android:gravity="right"
-            tools:text="产地" />
+            android:textSize="@dimen/_12sp"
+            tools:text="产地"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0.5dp"
-        android:background="@color/grey"/>
+        android:background="@color/grey"
+        android:visibility="invisible"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/info_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <TextView
             style="@style/item_title"
@@ -105,22 +111,25 @@
             android:id="@+id/similar_batch_num"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sp"
             android:layout_marginRight="@dimen/_15dp"
             android:layout_weight="1"
             android:gravity="right"
-            tools:text="批号" />
+            android:textSize="@dimen/_12sp"
+            tools:text="批号"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0.5dp"
-        android:background="@color/grey"/>
+        android:background="@color/grey"
+        android:visibility="invisible"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/info_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <TextView
             style="@style/item_title"
@@ -130,22 +139,25 @@
             android:id="@+id/similar_certificate_num"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sp"
             android:layout_marginRight="@dimen/_15dp"
             android:layout_weight="1"
             android:gravity="right"
-            tools:text="上市凭证号" />
+            android:textSize="@dimen/_12sp"
+            tools:text="上市凭证号"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0.5dp"
-        android:background="@color/grey"/>
+        android:background="@color/grey"
+        android:visibility="invisible"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/info_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <TextView
             style="@style/item_title"
@@ -155,22 +167,25 @@
             android:id="@+id/similar_produce_date"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sp"
             android:layout_marginRight="@dimen/_15dp"
             android:layout_weight="1"
             android:gravity="right"
-            tools:text="生产日期" />
+            android:textSize="@dimen/_12sp"
+            tools:text="生产日期"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0.5dp"
-        android:background="@color/grey"/>
+        android:background="@color/grey"
+        android:visibility="invisible"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/info_height"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <TextView
             style="@style/item_title"
@@ -180,15 +195,16 @@
             android:id="@+id/similar_effetive_date"
             android:layout_width="@dimen/_0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sp"
             android:layout_marginRight="@dimen/_15dp"
             android:layout_weight="1"
             android:gravity="right"
-            tools:text="有效日期" />
+            android:textSize="@dimen/_12sp"
+            tools:text="有效日期"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0.5dp"
-        android:background="@color/grey"/>
+        android:background="@color/grey"
+        android:visibility="invisible"/>
 </LinearLayout>

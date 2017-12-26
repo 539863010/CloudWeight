@@ -40,7 +40,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
-import xm.cloudweight.bean.BeanPrinter;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.BrocastFilter;
@@ -48,24 +47,21 @@ import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CommImpl;
 import xm.cloudweight.impl.SortOutImpl;
-import xm.cloudweight.presenter.CommPresenter;
 import xm.cloudweight.presenter.SortOutPresenter;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.IsBottomUtil;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
-import xm.cloudweight.utils.bussiness.EtMaxLengthUtil;
 import xm.cloudweight.utils.bussiness.FilterUtil;
 import xm.cloudweight.utils.bussiness.ListComparator;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
-import xm.cloudweight.utils.bussiness.PrinterUtil;
+import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
-import xm.cloudweight.widget.PrinterView;
 import xm.cloudweight.widget.ScalableTextView;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
@@ -112,16 +108,14 @@ public class SortOutActivity extends BaseActivity implements
     TextView mTvTypeUnit;
     @BindView(R.id.et_show)
     EditText mEtShow;
-    @BindView(R.id.et_basket)
-    ScanEditText mEtBasket;
+    @BindView(R.id.et_tag)
+    ScanEditText mEtTag;
     @BindView(R.id.et_goods_name_or_id)
     SearchAndFocusEditText mEtGoodsNameOrId;
     @BindView(R.id.et_custom_group)
     SearchAndFocusEditText mEtCustomGroup;
     @BindView(R.id.btn_date)
     Button mBtnDate;
-    @BindView(R.id.tv_amount)
-    TextView mTvAmount;
     @BindView(R.id.btn_sort_out)
     Button mBtnSortOut;
     @BindView(R.id.btn_request)
@@ -141,7 +135,6 @@ public class SortOutActivity extends BaseActivity implements
     private SortOutHistoryPopWindow mHistoryPopWindow;
     private DBManager mDBManager;
     private DbImageUpload mDbImageUpload;
-    private PrinterView mPrinterView;
     private boolean mStable;
     private VideoFragment mVideoFragment;
     private RefreshDbImageUploadReceiver mRefreshDbImageUploadReceiver;
@@ -182,20 +175,16 @@ public class SortOutActivity extends BaseActivity implements
         mSpWareHouse.setCustomItemSelectedListener(this);
         mEtCustomGroup.setOnInputFinishListener(this);
         mEtGoodsNameOrId.setOnInputFinishListener(this);
-        mEtBasket.setFilters(EtMaxLengthUtil.getFilter());
-        mEtBasket.setOnScanFinishListener(new onScanFinishListener() {
+        mEtTag.setOnScanFinishListener(new onScanFinishListener() {
             @Override
             public void onScanFinish(String key) {
-                if (!TextUtils.isEmpty(key)) {
-                    if (key.length() == Common.BasketLength) {
-                        showLoadingDialog(false);
-                        CommPresenter.queryStock(getActivity(), 0, 0, 0, key);
-                    }
-                } else {
-                    if (mBtnDate != null) {
-                        SortOutPresenter.getSourOutList(getActivity(), TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, mBtnDate.getText().toString());
-                    }
+                if (!loadCountSuccess && !loadWeightSuccess) {
+                    ToastUtil.showShortToast(getContext(), "请先获取数据");
+                    return;
                 }
+                showLoadingDialog(false);
+                filterList();
+                dismissLoadingDialog();
             }
         });
     }
@@ -276,15 +265,16 @@ public class SortOutActivity extends BaseActivity implements
 
     private void changeNetState(boolean netConnect) {
         if (netConnect) {
-            mEtBasket.setEnabled(true);
-            mEtBasket.requestFocus();
+            mEtTag.setEnabled(true);
+            mEtTag.requestFocus();
         } else {
-            mEtBasket.setEnabled(false);
+            mEtTag.setEnabled(false);
             mEtGoodsNameOrId.requestFocus();
         }
     }
 
-    @OnClick({R.id.btn_sort_out_weight, R.id.btn_sort_out_count, R.id.btn_request, R.id.btn_sort_out_history, R.id.btn_sort_out, R.id.btn_date})
+    @OnClick({R.id.btn_sort_out_weight, R.id.btn_sort_out_count, R.id.btn_request,
+            R.id.btn_sort_out_history, R.id.btn_sort_out, R.id.btn_date, R.id.btn_clear_zero})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -348,6 +338,9 @@ public class SortOutActivity extends BaseActivity implements
                 break;
             case R.id.btn_request:
                 refreshSortOutList();
+                break;
+            case R.id.btn_clear_zero:
+                clearToZero();
                 break;
             default:
                 break;
@@ -440,6 +433,12 @@ public class SortOutActivity extends BaseActivity implements
             }
             // 生成追溯码
             mPreSortOutData.setPlatformTraceCode(Common.getPlatformTraceCode());
+            //如果是扫描库存标签过滤出来的列表，设置basketCode
+            String labelCode = mPreSortOutData.getLabelCode();
+            if (!TextUtils.isEmpty(labelCode)) {
+                mPreSortOutData.setBasketCode(labelCode);
+                mPreSortOutData.setLabelCode(null);
+            }
 
             //更新数据
             //****已经分拣过的数据，且累计分拣数量>90%采购数量的，状态改成“已分拣”，界面不再显示****
@@ -535,25 +534,16 @@ public class SortOutActivity extends BaseActivity implements
 
     private void printer(BigDecimal unitCoefficient) {
         // 打印标签
-        if (mPrinterView == null) {
-            mPrinterView = (PrinterView) findViewById(R.id.pv);
-        }
-        BeanPrinter beanPrinter = new BeanPrinter();
-        beanPrinter.setGoodsName(mPreSortOutData.getGoods().getName());
+        String goodsName = mPreSortOutData.getGoods().getName();
+        String sortOutNum;
         if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-            beanPrinter.setCount(BigDecimalUtil.toScaleStr(mPreSortOutData.getStockOutQty().multiply(unitCoefficient)).concat("kg"));
+            sortOutNum = BigDecimalUtil.toScaleStr(mPreSortOutData.getStockOutQty().multiply(unitCoefficient)).concat("kg");
         } else {
-            beanPrinter.setCount(BigDecimalUtil.toScaleStr(mPreSortOutData.getStockOutQty()).concat(mPreSortOutData.getGoodsUnit().getName()));
+            sortOutNum = BigDecimalUtil.toScaleStr(mPreSortOutData.getStockOutQty()).concat(mPreSortOutData.getGoodsUnit().getName());
         }
-        IdName customer = mPreSortOutData.getCustomer();
-        beanPrinter.setCustomer(customer != null && !TextUtils.isEmpty(customer.getName()) ? customer.getName() : null);
-        IdName customerDepartment = mPreSortOutData.getCustomerDepartment();
-        beanPrinter.setDepartment(customerDepartment != null && !TextUtils.isEmpty(customerDepartment.getName()) ? customerDepartment.getName() : null);
-        beanPrinter.setCode(mPreSortOutData.getPlatformTraceCode());
-        //设置数据
-        mPrinterView.set(beanPrinter);
-        String filePath = mPrinterView.getPath();
-        PrinterUtil.printer(this, filePath);
+        String code = mPreSortOutData.getPlatformTraceCode();
+        PrinterSortOut.printer(getContext(), 1, PrinterSortOut.SORT_OUT_QRCODE, goodsName, sortOutNum, code);
+
     }
 
     /**
@@ -848,7 +838,6 @@ public class SortOutActivity extends BaseActivity implements
         if (!loadCountSuccess || !loadWeightSuccess || !loadCustomerLevel) {
             return;
         }
-        mTvAmount.setText("汇总：");
         if ((mIntType == TYPE_WEIGHT && (mListAllWeight == null || mListAllWeight.size() == 0))
                 ||
                 (mIntType == TYPE_COUNT && (mListAllCount == null || mListAllCount.size() == 0))) {
@@ -862,10 +851,10 @@ public class SortOutActivity extends BaseActivity implements
         ArrayList<CustomSortOutData> filter;
         if (mIntType == TYPE_WEIGHT) {
             //重量
-            filter = FilterUtil.filter(mListAllWeight, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
+            filter = FilterUtil.filter(mListAllWeight, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup, mEtTag);
         } else {
             //数量
-            filter = FilterUtil.filter(mListAllCount, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup);
+            filter = FilterUtil.filter(mListAllCount, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup, mEtTag);
         }
         mListFilter.clear();
         mListFilter.addAll(filter);
@@ -882,19 +871,6 @@ public class SortOutActivity extends BaseActivity implements
         }
 //        scrollToItem(0);
         if (mIntType == TYPE_WEIGHT) {
-            if (mListShow.size() > 0
-                    &&
-                    (!TextUtils.isEmpty(mEtBasket.getText().toString().trim())
-                            || !TextUtils.isEmpty(mEtGoodsNameOrId.getText().toString().trim())
-                            || !TextUtils.isEmpty(mEtCustomGroup.getText().toString().trim()))) {
-                BigDecimal amount = new BigDecimal(0.0);
-                for (CustomSortOutData sod : mListShow) {
-                    amount = amount.add(sod.getCoverToKgQty());
-                }
-                mTvAmount.setText("汇总：".concat(BigDecimalUtil.toScaleStr(amount)).concat("kg"));
-            } else {
-                mTvAmount.setText("汇总：");
-            }
             //稳定后 排序
             if (mStable) {
                 String weightStr = mEtShow.getText().toString().trim();
