@@ -5,6 +5,7 @@ import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscription;
 import xm.cloudweight.SortOutActivity;
 import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
@@ -34,8 +35,8 @@ public class SortOutPresenter {
                 .compose(new TransformerHelper<ResponseEntity<List<MerchantCustomer>>>().get(aty))
                 .subscribe(new ApiSubscribe<List<MerchantCustomer>>() {
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((SortOutImpl.OnGetMerchantCustomerListener) aty).getMerchantCustomerFailed(errorType,failString);
+                    protected void onResultFail(int errorType, String failString) {
+                        ((SortOutImpl.OnGetMerchantCustomerListener) aty).getMerchantCustomerFailed(errorType, failString);
                     }
 
                     @Override
@@ -45,13 +46,13 @@ public class SortOutPresenter {
                 });
     }
 
-
     /**
      * 获取查询列表
      */
-    public static void getSourOutList(final BaseActivity aty, final int type, int page, int pageSize, int defaultPageSize, String deliveryTime) {
+    public static Subscription getSourOutList(final BaseActivity aty, final int type, int page, int pageSize, int defaultPageSize, String deliveryTime) {
+
         if (!(aty instanceof SortOutImpl.OnGetSortOutListListener)) {
-            return;
+            return null;
         }
         PBaseInfo pBaseInfo = BeanUtil.getSourOutList(aty, page, pageSize, defaultPageSize, deliveryTime);
         Observable<ResponseEntity<List<CustomSortOutData>>> observable;
@@ -62,7 +63,7 @@ public class SortOutPresenter {
             //数量
             observable = aty.getApiManager().getsForNotWeigh(pBaseInfo);
         }
-        observable.compose(new TransformerHelper<ResponseEntity<List<CustomSortOutData>>>().get(aty))
+        return observable.compose(new TransformerHelper<ResponseEntity<List<CustomSortOutData>>>().get(aty))
                 .subscribe(new ApiSubscribe<List<CustomSortOutData>>() {
                     @Override
                     protected void onResult(List<CustomSortOutData> result) {
@@ -70,7 +71,7 @@ public class SortOutPresenter {
                     }
 
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
+                    protected void onResultFail(int errorType, String failString) {
                         ((SortOutImpl.OnGetSortOutListListener) aty).getSortOutListFailed(type, failString);
                     }
                 });
@@ -114,7 +115,7 @@ public class SortOutPresenter {
                     }
 
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
+                    protected void onResultFail(int errorType, String failString) {
                         ((SortOutImpl.OnCancelSortOutListener) aty).onCancelSortOutFailed(failString);
                     }
                 });

@@ -13,6 +13,8 @@ import com.citizen.sdk.labelprint.LabelPrinter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import xm.cloudweight.utils.ToastUtil;
+
 /**
  * @author wyh
  * @Description: 打印分拣标签
@@ -38,7 +40,8 @@ public class PrinterSortOut {
             printer.disconnect();
         } else {
             // Connect Error
-            Toast.makeText(context, "Connect or Printer Error : " + Integer.toString(result), Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, "Connect or Printer Error : " + Integer.toString(result), Toast.LENGTH_LONG).show();
+            ToastUtil.showShortToast(context, "打印机连接失败");
         }
     }
 
@@ -58,7 +61,7 @@ public class PrinterSortOut {
                     5,
                     LabelConst.CLS_QRCODE_EC_LEVEL_H,
                     20,
-                    188);
+                    18);
             if (LabelConst.CLS_SUCCESS != result) {
                 errmsg = errmsg.concat("二维码  ");
             }
@@ -72,7 +75,7 @@ public class PrinterSortOut {
                 10,
                 (LabelConst.CLS_FNT_BOLD),
                 95,
-                285);
+                115);
 
         design.drawTextLocalFont("国家税务局",
                 Typeface.SERIF,
@@ -82,7 +85,7 @@ public class PrinterSortOut {
                 10,
                 (LabelConst.CLS_FNT_BOLD),
                 105,
-                265);
+                95);
 
         if (!TextUtils.isEmpty(goodsName)) {
             if (goodsName.length() > 6) {
@@ -96,7 +99,7 @@ public class PrinterSortOut {
                     10,
                     (LabelConst.CLS_FNT_BOLD),
                     105,
-                    235);
+                    65);
             if (LabelConst.CLS_SUCCESS != result) {
                 errmsg = errmsg.concat("商品名  ");
             }
@@ -111,7 +114,7 @@ public class PrinterSortOut {
                     10,
                     (LabelConst.CLS_FNT_DEFAULT),
                     120,
-                    218);
+                    48);
             if (LabelConst.CLS_SUCCESS != result) {
                 errmsg = errmsg.concat("分拣数  ");
             }
@@ -127,7 +130,7 @@ public class PrinterSortOut {
                 10,
                 (LabelConst.CLS_FNT_DEFAULT),
                 112,
-                205);
+                35);
         if (LabelConst.CLS_SUCCESS != result) {
             errmsg = errmsg.concat("包装日期  ");
         }
@@ -140,7 +143,7 @@ public class PrinterSortOut {
                 10,
                 (LabelConst.CLS_FNT_DEFAULT),
                 95,
-                195);
+                25);
         if (LabelConst.CLS_SUCCESS != result) {
             errmsg = errmsg.concat("追溯码  ");
         }
@@ -153,7 +156,7 @@ public class PrinterSortOut {
                 10,
                 (LabelConst.CLS_FNT_DEFAULT),
                 97,
-                185);
+                15);
 
         // 设置热敏打印模式
         printer.setPrintMethod(LabelConst.CLS_PRTMETHOD_DT);
@@ -161,6 +164,7 @@ public class PrinterSortOut {
         printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_TEAROFF);
         // Print    1代表印刷数
         result = printer.print(design, printCount);
+        ToastUtil.showShortToast(context, "result = " + result);
         if (LabelConst.CLS_SUCCESS != result) {
             errmsg = errmsg.concat("打印  ");
         }

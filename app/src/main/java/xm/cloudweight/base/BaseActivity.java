@@ -262,6 +262,13 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         if (isCloseActivity) {
             finish();
         }
+        if (!isFinishing()) {
+            onLoadingDismiss();
+        }
+    }
+
+    protected void onLoadingDismiss() {
+
     }
 
     protected void showLoadingDialog(boolean isClose) {

@@ -23,6 +23,7 @@ import xm.cloudweight.R;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
+import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 
 /**
@@ -72,8 +73,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
         titleSortOutNum.setTextColor(color);
         TextView titleCustomer = view.findViewById(R.id.item_customer);
         titleCustomer.setTextColor(color);
-        TextView titleOrderId = view.findViewById(R.id.item_order_id);
-        titleOrderId.setTextColor(color);
+        view.findViewById(R.id.item_printer_label).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.item_revocation).setVisibility(View.INVISIBLE);
 
         mEtHistoryGoodsName = view.findViewById(R.id.et_history_goods_name);
@@ -135,25 +135,40 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
             CustomSortOutData data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), CustomSortOutData.class);
-            holder.setText(R.id.item_goods_name, data.getGoods().getName());
+            final String goodsName = data.getGoods().getName();
+            holder.setText(R.id.item_goods_name, goodsName);
             String goodsUnit = data.getGoodsUnit().getName();
             holder.setText(R.id.item_goods_unit, goodsUnit);
             BigDecimal unitCoefficient = data.getUnitCoefficient();
+            String strOrderNum;
+            String strSortOutNum;
             if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-                holder.setText(R.id.item_order_num, BigDecimalUtil.toScaleStr(data.getCoverToKgQty()) + "kg");
-                holder.setText(R.id.item_sort_out_num, BigDecimalUtil.toScaleStr(data.getStockOutQty().multiply(unitCoefficient)) + "kg");
+                strOrderNum = BigDecimalUtil.toScaleStr(data.getCoverToKgQty()).concat("kg");
+                strSortOutNum = BigDecimalUtil.toScaleStr(data.getStockOutQty().multiply(unitCoefficient)).concat("kg");
             } else {
-                holder.setText(R.id.item_order_num, BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getStockOutQty()).subtract(data.getHasStockOutQty())) + goodsUnit);
-                holder.setText(R.id.item_sort_out_num, BigDecimalUtil.toScaleStr(data.getStockOutQty()) + goodsUnit);
+                strOrderNum = BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getStockOutQty()).subtract(data.getHasStockOutQty())).concat(goodsUnit);
+                strSortOutNum = BigDecimalUtil.toScaleStr(data.getStockOutQty()).concat(goodsUnit);
             }
+            holder.setText(R.id.item_order_num, strOrderNum);
+            holder.setText(R.id.item_sort_out_num, strSortOutNum);
+
             holder.setText(R.id.item_customer, data.getCustomer().getName());
-            holder.setText(R.id.item_order_id, data.getSourceBillNumber());
             holder.setOnClickListener(R.id.item_revocation, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnDeleteListener != null) {
                         mOnDeleteListener.delete(dbSortOutData);
                     }
+                }
+            });
+            final String sortOutNum = strSortOutNum;
+            final String traceCode = data.getPlatformTraceCode();
+            holder.setOnClickListener(R.id.item_printer_label, new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //打印标签
+                    PrinterSortOut.printer(mContext, 1, PrinterSortOut.SORT_OUT_QRCODE, goodsName, sortOutNum, traceCode);
                 }
             });
         }

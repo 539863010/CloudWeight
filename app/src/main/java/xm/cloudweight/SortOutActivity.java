@@ -39,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Subscription;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.camera.instrument.Instrument;
@@ -57,6 +58,7 @@ import xm.cloudweight.utils.bussiness.FilterUtil;
 import xm.cloudweight.utils.bussiness.ListComparator;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
+import xm.cloudweight.utils.bussiness.SubScriptionUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.CommonAdapter4Lv;
@@ -138,6 +140,8 @@ public class SortOutActivity extends BaseActivity implements
     private boolean mStable;
     private VideoFragment mVideoFragment;
     private RefreshDbImageUploadReceiver mRefreshDbImageUploadReceiver;
+    private Subscription mSubScriptionWeight;
+    private Subscription mSubScriptionCount;
 
     @Override
     protected int getLayoutId() {
@@ -360,8 +364,9 @@ public class SortOutActivity extends BaseActivity implements
             mListFilter.clear();
             mListShow.clear();
             mSortOutAdapter.notifyDataSetChanged();
-            SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-            SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
+            mSubScriptionWeight = SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
         }
     }
 
@@ -665,6 +670,11 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     private void refreshCancelSortOut(DbImageUpload dbImageUpload) {
+        //判断分拣的时间 是否跟 现在选择的时间一样
+        String date = mBtnDate.getText().toString().trim();
+        if (!dbImageUpload.getDate().equals(date)) {
+            return;
+        }
         CustomSortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
         String dataSourceBillLineUuid = data.getSourceBillLineUuid();
         BigDecimal unitCoefficient = data.getUnitCoefficient();
@@ -801,16 +811,26 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void getSortOutListFailed(int type, String message) {
-        if (type == TYPE_WEIGHT) {
-            loadWeightSuccess = false;
-        } else {
-            loadCountSuccess = false;
-        }
-        if (!loadWeightSuccess && !loadCountSuccess) {
-            mBtnRequest.setEnabled(true);
-            dismissLoadingDialog();
-        }
+        dismissLoadingDialog();
+        loadWeightSuccess = false;
+        loadCountSuccess = false;
+        mBtnRequest.setEnabled(true);
+        //中断请求
+        SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
         ToastUtil.showShortToast(getContext(), message);
+    }
+
+    @Override
+    protected void onLoadingDismiss() {
+        super.onLoadingDismiss();
+        if ((mSubScriptionWeight != null && !mSubScriptionWeight.isUnsubscribed())
+                || (mSubScriptionCount != null && !mSubScriptionCount.isUnsubscribed())) {
+            loadWeightSuccess = false;
+            loadCountSuccess = false;
+            mBtnRequest.setEnabled(true);
+            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
+            ToastUtil.showShortToast(getContext(), "取消获取数据");
+        }
     }
 
     @Override

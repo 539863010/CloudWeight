@@ -11,6 +11,7 @@ import com.citizen.sdk.labelprint.LabelDesign;
 import com.citizen.sdk.labelprint.LabelPrinter;
 
 import xm.cloudweight.utils.DateUtils;
+import xm.cloudweight.utils.ToastUtil;
 
 /**
  * @author wyh
@@ -35,13 +36,11 @@ public class PrinterInventory {
             printer.disconnect();
         } else {
             // Connect Error
-            Toast.makeText(context, "Connect or Printer Error : " + Integer.toString(result), Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, "Connect or Printer Error : " + Integer.toString(result), Toast.LENGTH_LONG).show();
+            ToastUtil.showShortToast(context, "打印机连接失败");
         }
     }
 
-    //
-    // print
-    //
     private static void print(Context context, LabelPrinter printer, int printCount, String goodsName, String code) {
         LabelDesign design = new LabelDesign();
         int result;
@@ -55,7 +54,7 @@ public class PrinterInventory {
                     5,
                     LabelConst.CLS_QRCODE_EC_LEVEL_H,
                     20,
-                    190);
+                    20);
             if (LabelConst.CLS_SUCCESS != result) {
                 errmsg = errmsg.concat("二维码  ");
             }
@@ -70,7 +69,7 @@ public class PrinterInventory {
                 10,
                 (LabelConst.CLS_FNT_DEFAULT),
                 105,
-                285);
+                115);
         if (LabelConst.CLS_SUCCESS != result) {
             errmsg = errmsg.concat("年份  ");
         }
@@ -84,7 +83,7 @@ public class PrinterInventory {
                 10,
                 (LabelConst.CLS_FNT_DEFAULT),
                 105,
-                265);
+                95);
         if (LabelConst.CLS_SUCCESS != result) {
             errmsg = errmsg.concat("月份  ");
         }
@@ -103,7 +102,7 @@ public class PrinterInventory {
                     10,
                     (LabelConst.CLS_FNT_BOLD),
                     160,
-                    260);
+                    90);
             if (LabelConst.CLS_SUCCESS != result) {
                 errmsg = errmsg.concat("编号  ");
             }
@@ -111,26 +110,53 @@ public class PrinterInventory {
 
         if (!TextUtils.isEmpty(goodsName)) {
             if (goodsName.length() > 5) {
-                goodsName = goodsName.substring(0, 5);
-            }
-            result = design.drawTextLocalFont(goodsName,
-                    Typeface.SERIF,
-                    LabelConst.CLS_RT_NORMAL,
-                    140,
-                    140,
-                    10,
-                    (LabelConst.CLS_FNT_BOLD),
-                    105,
-                    205);
-            if (LabelConst.CLS_SUCCESS != result) {
-                errmsg = errmsg.concat("商品名  ");
+                String goodsNameStart = goodsName.substring(0, 5);
+                String goodsNameEnd = goodsName.substring(5, goodsName.length());
+                result = design.drawTextLocalFont(goodsNameStart,
+                        Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL,
+                        140,
+                        140,
+                        10,
+                        (LabelConst.CLS_FNT_BOLD),
+                        102,
+                        46);
+                if (LabelConst.CLS_SUCCESS != result) {
+                    errmsg = errmsg.concat("商品名  ");
+                }
+                result = design.drawTextLocalFont(goodsNameEnd,
+                        Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL,
+                        140,
+                        140,
+                        10,
+                        (LabelConst.CLS_FNT_BOLD),
+                        105,
+                        25);
+                if (LabelConst.CLS_SUCCESS != result) {
+                    errmsg = errmsg.concat("商品名  ");
+                }
+            } else {
+                result = design.drawTextLocalFont(goodsName,
+                        Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL,
+                        140,
+                        140,
+                        10,
+                        (LabelConst.CLS_FNT_BOLD),
+                        105,
+                        35);
+                if (LabelConst.CLS_SUCCESS != result) {
+                    errmsg = errmsg.concat("商品名  ");
+                }
             }
         }
-
         // 设置热敏打印模式
         printer.setPrintMethod(LabelConst.CLS_PRTMETHOD_DT);
         // Set Property (Tear Off)   显示完整标签
         printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_TEAROFF);
+        // Set Property (Measurement unit)
+        printer.setMeasurementUnit(LabelConst.CLS_UNIT_INCH);
         // Print    1代表印刷数
         result = printer.print(design, printCount);
         if (LabelConst.CLS_SUCCESS != result) {

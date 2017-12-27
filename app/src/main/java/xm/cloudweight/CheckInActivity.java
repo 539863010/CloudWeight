@@ -840,7 +840,7 @@ public class CheckInActivity extends BaseActivity implements
     @Override
     public void onQueryPurchaseDataFailed(String message) {
         //清空list跟供应商下拉数据
-        mSpSupplier.setList(null);
+        mSpSupplier.setList(new ArrayList<String>());
         mListShow.clear();
         mAdapterPurchase.notifyDataSetChanged();
         ToastUtil.showShortToast(getContext(), message);

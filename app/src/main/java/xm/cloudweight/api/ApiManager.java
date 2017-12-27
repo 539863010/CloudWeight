@@ -69,8 +69,6 @@ public interface ApiManager {
     @POST("/merchant/scaleApi/queryPurchaseData.do")
     Observable<ResponseEntity<List<PurchaseData>>> queryPurchaseData(@Body PBaseInfo p);
 
-
-
     /**
      * 查询采购订单
      *
