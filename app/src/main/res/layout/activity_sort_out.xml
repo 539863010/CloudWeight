@@ -50,7 +50,7 @@
                 android:layout_marginRight="@dimen/_5dp"
                 android:layout_weight="1"
                 android:hint="库存标签"
-                android:inputType="number"
+                android:inputType="text"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey"
@@ -154,7 +154,7 @@
                     android:layout_height="@dimen/btn_clear_height"
                     android:background="@drawable/shape_clear_weight"
                     android:layout_marginLeft="@dimen/_20dp"
-                    android:layout_marginRight="@dimen/_20dp"
+                    android:layout_marginRight="@dimen/_10dp"
                     android:layout_toLeftOf="@+id/btn_request"
                     android:text="归零"
                     android:textColor="@color/white"
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="@dimen/_10dp"
-                    android:layout_marginRight="@dimen/_20dp"
+                    android:layout_marginRight="@dimen/_15dp"
                     android:background="@drawable/selector_anniu_d_grey"
                     android:minHeight="@dimen/_40dp"
                     android:text="确认"
@@ -209,14 +209,15 @@
                 android:verticalSpacing="@dimen/_5dp"/>
 
             <LinearLayout
+                android:id="@+id/ll_show"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/_100dp"
+                android:layout_marginLeft="@dimen/_10dp"
                 android:paddingBottom="@dimen/_5dp"
-                android:paddingLeft="@dimen/_20dp"
-                android:paddingRight="@dimen/_20dp"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_10dp"
                 android:paddingTop="@dimen/_5dp">
 
                 <TextView
@@ -226,7 +227,7 @@
                     android:gravity="center"
                     android:text="称重数："
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sp"/>
+                    android:textSize="@dimen/_16sp"/>
 
                 <EditText
                     android:id="@+id/et_show"
@@ -234,8 +235,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:paddingLeft="@dimen/_10dp"
-                    android:paddingRight="@dimen/_10dp"
+                    android:paddingRight="@dimen/_5dp"
                     android:singleLine="true"
                     android:textColor="@color/color_c5f25b"
                     android:textSize="@dimen/_25sp"
@@ -248,11 +248,105 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_18sp"
+                    android:textSize="@dimen/_16sp"
                     tools:text="kg"/>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_leather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:layout_toRightOf="@+id/ll_show"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:paddingBottom="@dimen/_5dp"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_10dp"
+                android:paddingTop="@dimen/_5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="扣皮："
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16sp"/>
+
+                <EditText
+                    android:id="@+id/et_leather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:paddingRight="@dimen/_5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/color_c5f25b"
+                    android:textSize="@dimen/_25sp"
+                    android:text="0"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16sp"
+                    android:text="kg"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:layout_toRightOf="@+id/ll_leather"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:paddingBottom="@dimen/_5dp"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_10dp"
+                android:paddingTop="@dimen/_5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="实重："
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16sp"/>
+
+                <TextView
+                    android:id="@+id/tv_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:paddingRight="@dimen/_5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/color_c5f25b"
+                    android:textSize="@dimen/_25sp"
+                    tools:text="99.9"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16sp"
+                    android:text="kg"/>
+
+                <EditText
+                    android:visibility="invisible"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    />
+            </LinearLayout>
         </RelativeLayout>
 
     </LinearLayout>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="@dimen/_250dp"
@@ -18,18 +19,11 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/_18sp"
             android:textColor="@color/black"
+            android:layout_marginTop="@dimen/_5dp"
             android:text="调入仓库"/>
 
-        <xm.cloudweight.widget.DataSpinner
-            android:id="@+id/sp_corss_allocate_warehouse_in"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35dp"
-            android:layout_marginTop="@dimen/_20dp"
-            android:layout_marginBottom="@dimen/_20dp"
-            android:background="@drawable/shape_spinner_bg_a"
-            android:minWidth="@dimen/spinner_min_width"/>
-
         <LinearLayout
+            android:layout_marginTop="@dimen/_80dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -57,4 +51,33 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_corss_allocate"
+        android:layout_width="210dp"
+        android:layout_height="@dimen/btn_height_large"
+        android:layout_centerInParent="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14sp"
+        android:paddingLeft="@dimen/_20dp"
+        android:gravity="center_vertical"
+        tools:text="四十分是否是四十分是否是四十分是否是"
+        android:singleLine="true"
+        android:paddingRight="@dimen/_25dp"
+        android:background="@drawable/shape_spinner_bg_a"
+        android:minWidth="@dimen/spinner_min_width"/>
+
+    <ListView
+        android:id="@+id/lv_warehouse"
+        android:layout_alignLeft="@id/tv_corss_allocate"
+        android:layout_alignRight="@id/tv_corss_allocate"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="210dp"
+        android:background="@color/white"
+        android:divider="@android:color/transparent"
+        android:listSelector="@android:color/transparent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
 </RelativeLayout>

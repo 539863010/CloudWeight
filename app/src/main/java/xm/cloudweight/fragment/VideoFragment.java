@@ -64,6 +64,12 @@ public class VideoFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         //用于BaseActivity中f3清除
         ScaleUtil.startInstrument(mInstrumentReceive);
         startCamera();
@@ -191,8 +197,8 @@ public class VideoFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         ScaleUtil.stopInstrument();
         stopCamera();
     }

@@ -175,7 +175,7 @@ public interface ApiManager {
      * @return Observable<ResponseEntity<List<String>>>
      */
     @POST("/merchant/scaleApi/crossDocking.do")
-    Observable<ResponseEntity<List<String>>> crossDocking(@Body PBaseInfo p);
+    Observable<ResponseEntity<String>> crossDocking(@Body PBaseInfo p);
 
     /**
      * 越库调拨

@@ -201,9 +201,9 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
 //                if (!TextUtils.isEmpty(key) && key.length() == Common.BasketLength) {
                 if (!TextUtils.isEmpty(key)) {
                     Warehouse warehouse = mSpWareHouse.getSelectedItem();
-                    if (warehouse != null && !TextUtils.isEmpty(warehouse.getCode())) {
+                    if (warehouse != null && !TextUtils.isEmpty(warehouse.getUuid())) {
                         showLoadingDialog(false);
-                        CommPresenter.scanByTraceCode(getActivity(), key, warehouse.getCode());
+                        CommPresenter.scanByTraceCode(getActivity(), key, warehouse.getUuid());
                     }
                 }
             }

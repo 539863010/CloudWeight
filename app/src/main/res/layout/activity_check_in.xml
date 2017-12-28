@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="采购标签"
-                    android:inputType="textPersonName"
+                    android:inputType="text"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textColorHint="@color/grey"

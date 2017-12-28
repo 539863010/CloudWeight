@@ -168,7 +168,6 @@ public class CheckInActivity extends BaseActivity implements
         mEtWareHourseIn.setEnabled(false);
         mAdapterPurchase = new PurchaseBillLineAdapter(this, mListShow);
         mLvPurchase.setAdapter(mAdapterPurchase);
-
         setViewListener();
     }
 
@@ -448,6 +447,7 @@ public class CheckInActivity extends BaseActivity implements
     }
 
     private void showCrossAllocateDialog() {
+
         if (mCrossAllocateDialog == null) {
             mCrossAllocateDialog = CrossAllocateUtil.create(getActivity(), new CrossAllocateUtil.onCrossAllocateOperationInterface() {
                 @Override
@@ -882,7 +882,17 @@ public class CheckInActivity extends BaseActivity implements
                     crossNum = BigDecimalUtil.toScaleStr(numWarehousing).concat(mPurchaseBillLine.getGoodsUnit().getName());
                 }
                 String code = Common.getPlatformTraceCode();
-                PrinterSortOut.printer(getContext(), count, PrinterSortOut.SORT_OUT_QRCODE, goodsName, crossNum, code);
+                String customer = mPurchaseBillLine.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
+                String department = mPurchaseBillLine.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
+                PrinterSortOut.printer(
+                        getContext(),
+                        count,
+                        PrinterSortOut.SORT_OUT_QRCODE,
+                        customer,
+                        department,
+                        goodsName,
+                        crossNum,
+                        code);
             }
             //设置累计
             if (weightCoefficient != null) {

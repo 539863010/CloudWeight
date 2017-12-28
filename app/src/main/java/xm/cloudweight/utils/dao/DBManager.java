@@ -189,7 +189,6 @@ public class DBManager {
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_CROSS_OUT),
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.StockInUuid.isNull(),
                         DbImageUploadDao.Properties.StockOutUuid.isNull()
                 )
                 .list();

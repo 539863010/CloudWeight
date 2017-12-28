@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -61,6 +62,7 @@ import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.bussiness.SubScriptionUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
+import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
@@ -110,6 +112,10 @@ public class SortOutActivity extends BaseActivity implements
     TextView mTvTypeUnit;
     @BindView(R.id.et_show)
     EditText mEtShow;
+    @BindView(R.id.et_leather)
+    EditText mEtLeather;
+    @BindView(R.id.tv_weight)
+    TextView mTvWeight;
     @BindView(R.id.et_tag)
     ScanEditText mEtTag;
     @BindView(R.id.et_goods_name_or_id)
@@ -122,6 +128,10 @@ public class SortOutActivity extends BaseActivity implements
     Button mBtnSortOut;
     @BindView(R.id.btn_request)
     Button mBtnRequest;
+    @BindView(R.id.ll_leather)
+    View mLlLeather;
+    @BindView(R.id.ll_weight)
+    View mLlWeight;
     private List<CustomSortOutData> mListShow = new ArrayList<>();
     private ArrayList<CustomSortOutData> mListFilter = new ArrayList<>();
     private List<CustomSortOutData> mListAllWeight = new ArrayList<>();
@@ -189,6 +199,26 @@ public class SortOutActivity extends BaseActivity implements
                 showLoadingDialog(false);
                 filterList();
                 dismissLoadingDialog();
+            }
+        });
+        mEtLeather.addTextChangedListener(new BaseTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (mIntType != TYPE_WEIGHT) {
+                    return;
+                }
+                String weight = mEtShow.getText().toString().trim();
+                BigDecimal w = new BigDecimal(weight);
+                String leather = s.toString().trim();
+                BigDecimal l;
+                if (!TextUtils.isEmpty(leather)) {
+                    l = new BigDecimal(leather);
+                } else {
+                    l = new BigDecimal(0);
+                }
+                String sub = BigDecimalUtil.toScaleStr(w.subtract(l));
+                mTvWeight.setText(sub);
+                sequenceListWeight(mListShow, sub);
             }
         });
     }
@@ -291,7 +321,11 @@ public class SortOutActivity extends BaseActivity implements
                     return;
                 }
                 mIntType = TYPE_WEIGHT;
-                setClick("称重数：", false, false, true);
+                mEtLeather.setText("0");
+                mTvWeight.setText("0");
+                mLlLeather.setVisibility(View.VISIBLE);
+                mLlWeight.setVisibility(View.VISIBLE);
+                setClick("称重数：", false, true);
                 break;
             }
             case R.id.btn_sort_out_count: {
@@ -299,7 +333,9 @@ public class SortOutActivity extends BaseActivity implements
                     return;
                 }
                 mIntType = TYPE_COUNT;
-                setClick("出库数量：", true, true, false);
+                mLlLeather.setVisibility(View.GONE);
+                mLlWeight.setVisibility(View.GONE);
+                setClick("出库数量：", true, false);
                 break;
             }
             case R.id.btn_sort_out_history:
@@ -370,10 +406,9 @@ public class SortOutActivity extends BaseActivity implements
         }
     }
 
-    private void setClick(String type, boolean showEnable, boolean countSelect, boolean weightSelect) {
+    private void setClick(String type, boolean countSelect, boolean weightSelect) {
         mTvType.setText(type);
         setEditShow("");
-        mEtShow.setEnabled(showEnable);
         mBtnSortOutCount.setSelected(countSelect);
         mBtnSortOutWeight.setSelected(weightSelect);
         mListFilter.clear();
@@ -424,12 +459,20 @@ public class SortOutActivity extends BaseActivity implements
     private void setDataToDb(String path) {
         if (mPreSortOutData != null) {
             // 保存 称重数（订购数量）   直接上传kg数   不需要转换
-            String countStr = mEtShow.getText().toString().trim();
             boolean isWeight = mPreSortOutData.getUnitCoefficient() != null && mPreSortOutData.getUnitCoefficient().doubleValue() != 0;
             if (isWeight) {
+                String countStr = mTvWeight.getText().toString().trim();
                 mPreSortOutData.setStockOutQty(new BigDecimal(countStr).divide(mPreSortOutData.getUnitCoefficient(), RoundingMode.HALF_EVEN));
             } else {
+                String countStr = mEtShow.getText().toString().trim();
                 mPreSortOutData.setStockOutQty(new BigDecimal(countStr));
+            }
+            //去皮
+            String leather = mEtLeather.getText().toString().trim();
+            if (!TextUtils.isEmpty(leather)) {
+                mPreSortOutData.setLeatherQty(new BigDecimal(leather));
+            } else {
+                mPreSortOutData.setLeatherQty(new BigDecimal(0));
             }
             // 保存 仓库
             Warehouse warehouse = mSpWareHouse.getSelectedItem();
@@ -547,8 +590,17 @@ public class SortOutActivity extends BaseActivity implements
             sortOutNum = BigDecimalUtil.toScaleStr(mPreSortOutData.getStockOutQty()).concat(mPreSortOutData.getGoodsUnit().getName());
         }
         String code = mPreSortOutData.getPlatformTraceCode();
-        PrinterSortOut.printer(getContext(), 1, PrinterSortOut.SORT_OUT_QRCODE, goodsName, sortOutNum, code);
-
+        String customer = mPreSortOutData.getCustomer() != null ? mPreSortOutData.getCustomer().getName() : "";
+        String department = mPreSortOutData.getCustomerDepartment() != null ? mPreSortOutData.getCustomerDepartment().getName() : "";
+        PrinterSortOut.printer(
+                getContext(),
+                1,
+                PrinterSortOut.SORT_OUT_QRCODE,
+                customer,
+                department,
+                goodsName,
+                sortOutNum,
+                code);
     }
 
     /**
@@ -866,15 +918,19 @@ public class SortOutActivity extends BaseActivity implements
             scrollToBottom(0);
             return;
         }
-
+        CustomerLevel customerLevel = mSpCustomersLevel.getSelectedItem();
+        MerchantCustomer customer = mSpCustomers.getSelectedItem();
+        String goodsNameOrId = mEtGoodsNameOrId.getText().toString().trim();
+        String customGroup = mEtCustomGroup.getText().toString().trim();
+        String tag = mEtTag.getText().toString().trim();
         //逐级删除不符合的数据
         ArrayList<CustomSortOutData> filter;
         if (mIntType == TYPE_WEIGHT) {
             //重量
-            filter = FilterUtil.filter(mListAllWeight, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup, mEtTag);
+            filter = FilterUtil.filter(mListAllWeight, customerLevel, customer, customGroup, goodsNameOrId, tag);
         } else {
             //数量
-            filter = FilterUtil.filter(mListAllCount, mSpCustomersLevel, mSpCustomers, mEtGoodsNameOrId, mEtCustomGroup, mEtTag);
+            filter = FilterUtil.filter(mListAllCount, customerLevel, customer, customGroup, goodsNameOrId, tag);
         }
         mListFilter.clear();
         mListFilter.addAll(filter);
@@ -895,7 +951,16 @@ public class SortOutActivity extends BaseActivity implements
             if (mStable) {
                 String weightStr = mEtShow.getText().toString().trim();
                 String weight = !TextUtils.isEmpty(weightStr) ? weightStr : "0";
-                sequenceListWeight(mListShow, weight);
+                BigDecimal w = new BigDecimal(weight);
+                String leather = mEtLeather.getText().toString().trim();
+                BigDecimal l;
+                if (!TextUtils.isEmpty(leather)) {
+                    l = new BigDecimal(Double.parseDouble(leather));
+                } else {
+                    l = new BigDecimal(0);
+                }
+                String sub = BigDecimalUtil.toScaleStr(w.subtract(l));
+                sequenceListWeight(mListShow, sub);
             }
         }
         scrollToBottom(0);
@@ -1042,12 +1107,22 @@ public class SortOutActivity extends BaseActivity implements
     @Override
     public void receive(Instrument.InsData data) {
         String weight = data.weight;
-        if ((mIntType == TYPE_WEIGHT) && mEtShow != null) {
+        if ((mIntType == TYPE_WEIGHT)) {
             mStable = data.stable;
             mEtShow.setText(weight);
+            BigDecimal w = new BigDecimal(Double.parseDouble(weight));
+            String leather = mEtLeather.getText().toString().trim();
+            BigDecimal l;
+            if (!TextUtils.isEmpty(leather)) {
+                l = new BigDecimal(Double.parseDouble(leather));
+            } else {
+                l = new BigDecimal(0);
+            }
+            mTvWeight.setText(BigDecimalUtil.toScaleStr(w.subtract(l)));
             if (mStable && !weight.equals(mPreWeight)) {
                 mPreWeight = weight;
-                sequenceListWeight(mListShow, weight);
+                String strW = String.valueOf(w.subtract(l));
+                sequenceListWeight(mListShow, strW);
                 scrollToBottom(0);
             }
         }
@@ -1067,6 +1142,7 @@ public class SortOutActivity extends BaseActivity implements
                 mListComparator = new ListComparator(douWeight);
             }
             Collections.sort(list, mListComparator);
+            mSortOutAdapter.notifyDataSetChanged();
         }
     }
 

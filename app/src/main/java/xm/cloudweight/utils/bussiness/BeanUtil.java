@@ -256,7 +256,7 @@ public class BeanUtil {
             body.put("traceCode", traceCode);
         }
         if (!TextUtils.isEmpty(warehouseUU)) {
-            body.put("warehouseUU", warehouseUU);
+            body.put("warehouseUuid", warehouseUU);
         }
         return pBaseInfo;
     }

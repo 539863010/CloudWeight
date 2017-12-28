@@ -24,7 +24,7 @@ public class PrinterSortOut {
 
     public static final String SORT_OUT_QRCODE = "www.atfresh.cn";
 
-    public static void printer(Context context, int printCount, String qrcodeContent, String goodsName, String sortOutNum, String code) {
+    public static void printer(Context context, int printCount, String qrcodeContent, String customer, String department, String goodsName, String sortOutNum, String code) {
         // Constructor
         LabelPrinter printer = new LabelPrinter();
         // Set context
@@ -35,7 +35,7 @@ public class PrinterSortOut {
         int result = printer.connect(LabelConst.CLS_PORT_USB, usbDevice);       // Android 3.1 ( API Level 12 ) or later
         if (LabelConst.CLS_SUCCESS == result) {
             // Print data output
-            print(context, printer, printCount, qrcodeContent, goodsName, sortOutNum, code);
+            print(context, printer, printCount, qrcodeContent, customer, department, goodsName, sortOutNum, code);
             // Disconnect
             printer.disconnect();
         } else {
@@ -48,7 +48,7 @@ public class PrinterSortOut {
     //
     // print
     //
-    private static void print(Context context, LabelPrinter printer, int printCount, String qrcodeContent, String goodsName, String sortOutNum, String code) {
+    private static void print(Context context, LabelPrinter printer, int printCount, String qrcodeContent, String customer, String department, String goodsName, String sortOutNum, String code) {
         LabelDesign design = new LabelDesign();
         int result;
         String errmsg = "";
@@ -66,26 +66,42 @@ public class PrinterSortOut {
                 errmsg = errmsg.concat("二维码  ");
             }
         }
+        String title = customer.concat("【").concat(department).concat("】");
+        if (!TextUtils.isEmpty(title)) {
+            if (title.length() > 6) {
+                String titleFirst = title.substring(0, 6);
+                String titleSecond = title.substring(6, title.length());
+                design.drawTextLocalFont(titleFirst,
+                        Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL,
+                        120,
+                        120,
+                        10,
+                        (LabelConst.CLS_FNT_BOLD),
+                        95,
+                        115);
 
-        design.drawTextLocalFont("厦门市思明区",
-                Typeface.SERIF,
-                LabelConst.CLS_RT_NORMAL,
-                120,
-                120,
-                10,
-                (LabelConst.CLS_FNT_BOLD),
-                95,
-                115);
-
-        design.drawTextLocalFont("国家税务局",
-                Typeface.SERIF,
-                LabelConst.CLS_RT_NORMAL,
-                120,
-                120,
-                10,
-                (LabelConst.CLS_FNT_BOLD),
-                105,
-                95);
+                design.drawTextLocalFont(titleSecond,
+                        Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL,
+                        120,
+                        120,
+                        10,
+                        (LabelConst.CLS_FNT_BOLD),
+                        105,
+                        95);
+            } else {
+                design.drawTextLocalFont(title,
+                        Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL,
+                        120,
+                        120,
+                        10,
+                        (LabelConst.CLS_FNT_BOLD),
+                        95,
+                        115);
+            }
+        }
 
         if (!TextUtils.isEmpty(goodsName)) {
             if (goodsName.length() > 6) {
@@ -164,7 +180,6 @@ public class PrinterSortOut {
         printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_TEAROFF);
         // Print    1代表印刷数
         result = printer.print(design, printCount);
-        ToastUtil.showShortToast(context, "result = " + result);
         if (LabelConst.CLS_SUCCESS != result) {
             errmsg = errmsg.concat("打印  ");
         }

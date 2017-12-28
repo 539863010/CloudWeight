@@ -1,7 +1,6 @@
 package xm.cloudweight.utils.bussiness;
 
 import android.text.TextUtils;
-import android.widget.EditText;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xm.cloudweight.bean.CustomSortOutData;
-import xm.cloudweight.widget.DataSpinner;
 
 /**
  * @author wyh
@@ -23,18 +21,17 @@ import xm.cloudweight.widget.DataSpinner;
 public class FilterUtil {
 
     public static ArrayList<CustomSortOutData> filter(List<CustomSortOutData> mListAll
-            , DataSpinner<CustomerLevel> mSpCustomersLevel
-            , DataSpinner<MerchantCustomer> mSpCustomers
-            , EditText mEtCustomGroup
-            , EditText mEtGoodsNameOrId
-            , EditText mEtTag
+            , CustomerLevel customerLevel
+            , MerchantCustomer merchantCustomer
+            , String customGroup
+            , String goodsNameOrId
+            , String tag
     ) {
         for (CustomSortOutData data : mListAll) {
             data.setLabelCode(null);
         }
         //逐级删除不符合的数据
         ArrayList<CustomSortOutData> listCustomerLevel = new ArrayList<>();
-        CustomerLevel customerLevel = mSpCustomersLevel.getSelectedItem();
         if (customerLevel != null && !customerLevel.getName().equals("全部")) {
             for (CustomSortOutData data : mListAll) {
                 IdName level = data.getCustomerLevel();
@@ -47,7 +44,6 @@ public class FilterUtil {
         }
 
         ArrayList<CustomSortOutData> listMerchantCustomer = new ArrayList<>();
-        MerchantCustomer merchantCustomer = mSpCustomers.getSelectedItem();
         if (merchantCustomer != null && !merchantCustomer.getCustomer().getName().equals("全部")) {
             for (CustomSortOutData data : listCustomerLevel) {
                 Customer customer = merchantCustomer.getCustomer();
@@ -61,7 +57,6 @@ public class FilterUtil {
         }
 
         ArrayList<CustomSortOutData> listGoodsNameOrId = new ArrayList<>();
-        String goodsNameOrId = mEtGoodsNameOrId.getText().toString().trim();
         if (!TextUtils.isEmpty(goodsNameOrId)) {
             for (CustomSortOutData data : listMerchantCustomer) {
                 UCN goods = data.getGoods();
@@ -75,7 +70,6 @@ public class FilterUtil {
         }
 
         ArrayList<CustomSortOutData> listTag = new ArrayList<>();
-        String tag = mEtTag.getText().toString().trim();
         //库存标签码（商品编码+“-”+日期+“-”+流水号）
         if (!TextUtils.isEmpty(tag)
                 && tag.contains("-")
@@ -94,7 +88,6 @@ public class FilterUtil {
         }
 
         ArrayList<CustomSortOutData> listCustomGroup = new ArrayList<>();
-        String customGroup = mEtCustomGroup.getText().toString();
         if (!TextUtils.isEmpty(customGroup)) {
             for (CustomSortOutData data : listTag) {
                 if (customGroup.equals(data.getCustomerGroup())) {

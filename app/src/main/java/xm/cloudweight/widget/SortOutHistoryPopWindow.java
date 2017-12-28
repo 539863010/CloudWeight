@@ -134,7 +134,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
 
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
-            CustomSortOutData data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), CustomSortOutData.class);
+            final CustomSortOutData data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), CustomSortOutData.class);
             final String goodsName = data.getGoods().getName();
             holder.setText(R.id.item_goods_name, goodsName);
             String goodsUnit = data.getGoodsUnit().getName();
@@ -162,13 +162,23 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
                 }
             });
             final String sortOutNum = strSortOutNum;
-            final String traceCode = data.getPlatformTraceCode();
             holder.setOnClickListener(R.id.item_printer_label, new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     //打印标签
-                    PrinterSortOut.printer(mContext, 1, PrinterSortOut.SORT_OUT_QRCODE, goodsName, sortOutNum, traceCode);
+                    String traceCode = data.getPlatformTraceCode();
+                    String customer = data.getCustomer() != null ? data.getCustomer().getName() : "";
+                    String department = data.getCustomerDepartment() != null ? data.getCustomerDepartment().getName() : "";
+                    PrinterSortOut.printer(
+                            mContext,
+                            1,
+                            PrinterSortOut.SORT_OUT_QRCODE,
+                            customer,
+                            department,
+                            goodsName,
+                            sortOutNum,
+                            traceCode);
                 }
             });
         }

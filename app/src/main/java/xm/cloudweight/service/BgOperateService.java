@@ -246,14 +246,13 @@ public class BgOperateService extends Service {
         StockInRecord record = GsonUtil.getGson().fromJson(data.getLine(), StockInRecord.class);
         PBaseInfo pBaseInfo = BeanUtil.crossDocking(mMerchant, record);
         mApiManager.crossDocking(pBaseInfo)
-                .compose(new TransformerHelper<ResponseEntity<List<String>>>().get())
-                .subscribe(new ApiSubscribe<List<String>>() {
+                .compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
                     @Override
-                    protected void onResult(List<String> result) {
+                    protected void onResult(String result) {
                         // TODO: 2017/11/25
                         refreshImageUrl(data);
-                        data.setStockInUuid(result.get(0));
-                        data.setStockOutUuid(result.get(1));
+                        data.setStockOutUuid(result);
                         mDBManager.updateDbImageUpload(data);
                         getUnCheckInCrossOutList();
                     }
