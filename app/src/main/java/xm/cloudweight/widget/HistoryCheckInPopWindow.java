@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.xmzynt.storm.basic.ucn.UCN;
+import com.xmzynt.storm.service.wms.stockin.StockInRecord;
 import com.xmzynt.storm.util.GsonUtil;
 
 import java.math.BigDecimal;
@@ -20,9 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xm.cloudweight.R;
-import xm.cloudweight.bean.CustomSortOutData;
+import xm.cloudweight.comm.Common;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
+import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 
@@ -31,7 +34,7 @@ import xm.cloudweight.utils.dao.bean.DbImageUpload;
  * @Description:
  * @creat 2017/10/29
  */
-public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClickListener {
+public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClickListener {
 
     private View mAnchor;
     private Context mContext;
@@ -43,7 +46,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
     private ImageView mIvHistorySearch;
     private EditText mEtHistoryGoodsName;
 
-    public SortOutHistoryPopWindow(Context context, View anchor) {
+    public HistoryCheckInPopWindow(Context context, View anchor) {
         super(context);
         this.mAnchor = anchor;
         this.mContext = context;
@@ -52,7 +55,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
 
     private void init() {
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.pop_sort_out_history, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.pop_check_in_history, null);
         setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         setContentView(view);
@@ -63,24 +66,24 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
 
         view.findViewById(R.id.pop_title).setBackgroundColor(mContext.getResources().getColor(R.color.color_c5dcc0));
         int color = mContext.getResources().getColor(R.color.color_135c31);
-        TextView titleName = view.findViewById(R.id.item_goods_name);
+        TextView titleType = view.findViewById(R.id.ci_type);
+        titleType.setTextColor(color);
+        TextView titleName = view.findViewById(R.id.ci_goods);
         titleName.setTextColor(color);
-        TextView titleUnit = view.findViewById(R.id.item_goods_unit);
+        TextView titleNum = view.findViewById(R.id.ci_num);
+        titleNum.setTextColor(color);
+        TextView titleUnit = view.findViewById(R.id.ci_unit);
         titleUnit.setTextColor(color);
-        TextView titleOrderNum = view.findViewById(R.id.item_order_num);
-        titleOrderNum.setTextColor(color);
-        TextView titleSortOutNum = view.findViewById(R.id.item_sort_out_num);
-        titleSortOutNum.setTextColor(color);
-        TextView titleCustomer = view.findViewById(R.id.item_customer);
-        titleCustomer.setTextColor(color);
-        view.findViewById(R.id.item_printer_label).setVisibility(View.INVISIBLE);
-        view.findViewById(R.id.item_revocation).setVisibility(View.INVISIBLE);
+        TextView titleTime = view.findViewById(R.id.ci_operation_time);
+        titleTime.setTextColor(color);
+        view.findViewById(R.id.ci_print_label).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.ci_revocation).setVisibility(View.INVISIBLE);
 
         mEtHistoryGoodsName = view.findViewById(R.id.et_history_goods_name);
         mIvHistorySearch = view.findViewById(R.id.iv_history_search);
         mIvHistorySearch.setOnClickListener(this);
 
-        mLvHistory = view.findViewById(R.id.lv_sort_sort_history);
+        mLvHistory = view.findViewById(R.id.lv_check_in_history);
         mHistoryAdapter = new HistoryAdapter(mContext, mListSearch);
         mLvHistory.setAdapter(mHistoryAdapter);
     }
@@ -93,7 +96,7 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
                 mListSearch.clear();
                 if (!TextUtils.isEmpty(key) && mList.size() > 0) {
                     for (DbImageUpload dbImageUpload : mList) {
-                        CustomSortOutData data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
+                        StockInRecord data = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), StockInRecord.class);
                         if (data != null && data.getGoods().getName().contains(key)) {
                             mListSearch.add(dbImageUpload);
                         }
@@ -129,31 +132,37 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
     private class HistoryAdapter extends CommonAdapter4Lv<DbImageUpload> {
 
         private HistoryAdapter(Context context, List<DbImageUpload> data) {
-            super(context, R.layout.item_sort_out_history, data);
+            super(context, R.layout.item_check_in_history, data);
         }
 
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
-            final CustomSortOutData data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), CustomSortOutData.class);
-            final String goodsName = data.getGoods().getName();
-            holder.setText(R.id.item_goods_name, goodsName);
-            String goodsUnit = data.getGoodsUnit().getName();
-            holder.setText(R.id.item_goods_unit, goodsUnit);
-            BigDecimal unitCoefficient = data.getUnitCoefficient();
-            String strOrderNum;
-            String strSortOutNum;
-            if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-                strOrderNum = BigDecimalUtil.toScaleStr(data.getCoverToKgQty()).concat("kg");
-                strSortOutNum = BigDecimalUtil.toScaleStr(data.getStockOutQty().multiply(unitCoefficient)).concat("kg");
+            final StockInRecord data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), StockInRecord.class);
+            //设置类型
+            final int type = dbSortOutData.getType();
+            if (type == Common.DbType.TYPE_ChECK_IN_STORE_IN) {
+                holder.setText(R.id.ci_type, Common.DbType.STR_TYPE_ChECK_IN_STORE_IN);
+            } else if (type == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
+                holder.setText(R.id.ci_type, Common.DbType.STR_TYPE_ChECK_IN_CROSS_OUT);
+            } else if (type == Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE) {
+                holder.setText(R.id.ci_type, Common.DbType.STR_TYPE_ChECK_IN_CROSS_ALLCOCATE);
             } else {
-                strOrderNum = BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getStockOutQty()).subtract(data.getHasStockOutQty())).concat(goodsUnit);
-                strSortOutNum = BigDecimalUtil.toScaleStr(data.getStockOutQty()).concat(goodsUnit);
+                ToastUtil.showShortToast(mContext, "类型有误");
             }
-            holder.setText(R.id.item_order_num, strOrderNum);
-            holder.setText(R.id.item_sort_out_num, strSortOutNum);
+            //设置操作时间
+            holder.setText(R.id.ci_operation_time, dbSortOutData.getOperatime());
+            //设置商品名
+            UCN goods = data.getGoods();
+            final String goodsName = goods.getName();
+            holder.setText(R.id.ci_goods, goods.getCode().concat(goodsName));
+            //设置单位
+            String goodsUnit = data.getGoodsUnit().getName();
+            holder.setText(R.id.ci_unit, goodsUnit);
+            //设置数量
+            final BigDecimal quantity = data.getQuantity();
+            holder.setText(R.id.ci_num, BigDecimalUtil.toScaleStr(quantity));
 
-            holder.setText(R.id.item_customer, data.getCustomer().getName());
-            holder.setOnClickListener(R.id.item_revocation, new View.OnClickListener() {
+            holder.setOnClickListener(R.id.ci_revocation, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnDeleteListener != null) {
@@ -161,24 +170,36 @@ public class SortOutHistoryPopWindow extends PopupWindow implements View.OnClick
                     }
                 }
             });
-            final String sortOutNum = strSortOutNum;
-            holder.setOnClickListener(R.id.item_printer_label, new View.OnClickListener() {
+            holder.setOnClickListener(R.id.ci_print_label, new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     //打印标签
-                    String traceCode = data.getPlatformTraceCode();
-                    String customer = data.getCustomer() != null ? data.getCustomer().getName() : "";
-                    String department = data.getCustomerDepartment() != null ? data.getCustomerDepartment().getName() : "";
-                    PrinterSortOut.printer(
-                            mContext,
-                            1,
-                            PrinterSortOut.SORT_OUT_QRCODE,
-                            customer,
-                            department,
-                            goodsName,
-                            sortOutNum,
-                            traceCode);
+                    String count = BigDecimalUtil.toScaleStr(quantity);
+                    // 顾客-部门   部门可能为null
+                    String customer = data.getCustomerName();
+                    String department = "";
+                    if (customer.contains("-")) {
+                        String[] s = customer.split("-");
+                        customer = s[0];
+                        department = s[1];
+                    }
+                    if (type == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
+                        String platformTraceCode = data.getPlatformTraceCode();
+                        PrinterSortOut.printer(
+                                mContext,
+                                1,
+                                PrinterSortOut.SORT_OUT_QRCODE,
+                                customer,
+                                department,
+                                goodsName,
+                                count,
+                                platformTraceCode);
+                    } else if (type == Common.DbType.TYPE_ChECK_IN_STORE_IN ||
+                            type == Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE) {
+                        String purchaseBatch = data.getTraceCode();
+                        PrinterInventory.printer(mContext, 1, goodsName, purchaseBatch);
+                    }
                 }
             });
         }

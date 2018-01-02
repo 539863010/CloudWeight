@@ -152,7 +152,9 @@ public class CommonHolder4Lv {
 
     public CommonHolder4Lv setVisible(int viewId, int visible) {
         View view = getView(viewId);
-        view.setVisibility(visible);
+        if (view.getVisibility() != visible) {
+            view.setVisibility(visible);
+        }
         return this;
     }
 

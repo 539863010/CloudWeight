@@ -35,25 +35,15 @@ public class CheckInImpl {
     }
 
     /**
-     * 入库
+     * 撤销入库
      */
-    public interface OnStockInListener {
+    public interface OnCancelStockInListener {
 
-        void onStockInSuccess(String message,String imagePath);
+        void onCancelStockInSuccess(String result);
 
-        void onStockInFailed(String message);
+        void onCancelStockInFailed(String message);
 
     }
 
-    /**
-     * 越库
-     */
-    public interface OnCrossDockingListener {
-
-        void onCrossDockingSuccess(List<String> result,String imagePath);
-
-        void onCrossDockingFailed(String message);
-
-    }
 
 }

@@ -9,6 +9,7 @@ import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.PBaseInfo;
+import xm.cloudweight.comm.Common;
 import xm.cloudweight.impl.CheckInImpl;
 import xm.cloudweight.utils.bussiness.BeanUtil;
 
@@ -67,58 +68,34 @@ public class CheckInPresenter {
                 });
     }
 
-//    /**
-//     * 入库
-//     */
-//    public static void stockIn(final BaseActivity aty, StockInRecord stockInRecord,final String path) {
-//        if (!(aty instanceof CheckInImpl.OnStockInListener)) {
-//            return;
-//        }
-//        if (stockInRecord == null) {
-//            return;
-//        }
-//        PBaseInfo pBaseInfo = BeanUtil.stockIn(aty, stockInRecord);
-//        aty.getApiManager().stockIn(pBaseInfo)
-//                .compose(new TransformerHelper<ResponseEntity<String>>().get(aty))
-//                .subscribe(new ApiSubscribe<String>() {
-//                    @Override
-//                    protected void onResult(String result) {
-//                        ((CheckInImpl.OnStockInListener) aty).onStockInSuccess(result,path);
-//                    }
-//
-//                    @Override
-//                    protected void onResultFail(String failString) {
-//                        ((CheckInImpl.OnStockInListener) aty).onStockInFailed(failString);
-//                    }
-//
-//                });
-//    }
-//
-//    /**
-//     * 越库
-//     */
-//    public static void crossDocking(final BaseActivity aty, StockInRecord stockInRecord,final String path) {
-//        if (!(aty instanceof CheckInImpl.OnCrossDockingListener)) {
-//            return;
-//        }
-//        if (stockInRecord == null) {
-//            return;
-//        }
-//        PBaseInfo pBaseInfo = BeanUtil.crossDocking(aty, stockInRecord);
-//        aty.getApiManager().crossDocking(pBaseInfo)
-//                .compose(new TransformerHelper<ResponseEntity<List<String>>>().get(aty))
-//                .subscribe(new ApiSubscribe<List<String>>() {
-//                    @Override
-//                    protected void onResult(List<String> result) {
-//                        ((CheckInImpl.OnCrossDockingListener) aty).onCrossDockingSuccess(result,path);
-//                    }
-//
-//                    @Override
-//                    protected void onResultFail(String failString) {
-//                        ((CheckInImpl.OnCrossDockingListener) aty).onCrossDockingFailed(failString);
-//                    }
-//
-//                });
-//    }
+    /**
+     * 扫码获取采购信息
+     */
+    public static void cancelStockIn(final BaseActivity aty, String uuid, int type) {
+        if (!(aty instanceof CheckInImpl.OnCancelStockInListener)) {
+            return;
+        }
+        String stockInType;
+        if (type == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
+            stockInType = "crossDock";
+        } else {
+            stockInType = "purchaseIn";
+        }
+        PBaseInfo pBaseInfo = BeanUtil.cancelStockIn(aty, uuid, stockInType);
+        aty.getApiManager().cancelStockIn(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<String>>().get(aty))
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        ((CheckInImpl.OnCancelStockInListener) aty).onCancelStockInSuccess(result);
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        ((CheckInImpl.OnCancelStockInListener) aty).onCancelStockInFailed(failString);
+                    }
+
+                });
+    }
 
 }

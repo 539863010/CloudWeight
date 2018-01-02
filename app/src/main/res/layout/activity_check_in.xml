@@ -27,23 +27,55 @@
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/_20dp">
 
-                <xm.cloudweight.widget.ScanEditText
-                    android:id="@+id/et_purchase_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <LinearLayout
                     android:layout_weight="1"
-                    android:hint="采购标签"
-                    android:inputType="text"
-                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="@dimen/_20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <xm.cloudweight.widget.ScanEditText
+                        android:id="@+id/et_purchase_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="采购标签"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/grey"
+                        android:textSize="@dimen/_12sp"/>
+
+                    <ImageView
+                        android:src="@drawable/delete"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="@dimen/_20dp"
+                        android:layout_height="@dimen/_20dp"
+                        android:visibility="gone"
+                        android:id="@+id/iv_delete"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_check_in_history"
+                    style="@style/btn_border_less"
+                    android:layout_width="@dimen/_80dp"
+                    android:layout_height="@dimen/btn_height_small"
+                    android:background="@drawable/anniu_b"
+                    android:drawableLeft="@drawable/tubiao_l_lishi"
+                    android:text="历史"
+                    android:gravity="center_vertical"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/grey"
-                    android:textSize="@dimen/_12sp"/>
+                    android:drawablePadding="@dimen/_5dp"
+                    android:textSize="@dimen/_10sp"/>
 
                 <Button
                     android:id="@+id/btn_date"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/btn_height_small"
                     android:layout_marginRight="@dimen/_5dp"
+                    android:layout_marginLeft="@dimen/_5dp"
                     android:background="@drawable/anniu_b"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12dp"

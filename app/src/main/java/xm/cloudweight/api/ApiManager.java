@@ -151,6 +151,33 @@ public interface ApiManager {
     Observable<ResponseEntity<CustomSortOutData>> cancelSortOut(@Body PBaseInfo p);
 
     /**
+     * 撤销入库
+     *
+     * @param p 撤销入库请求体
+     * @return Observable<ResponseEntity<String>>
+     */
+    @POST("/merchant/scaleApi/cancelStockIn.do")
+    Observable<ResponseEntity<String>> cancelStockIn(@Body PBaseInfo p);
+
+    /**
+     * 撤销出库
+     *
+     * @param p 撤销出库请求体
+     * @return Observable<ResponseEntity<String>>
+     */
+    @POST("/merchant/scaleApi/cancelStockOut.do")
+    Observable<ResponseEntity<String>> cancelStockOut(@Body PBaseInfo p);
+
+    /**
+     * 撤销调拨
+     *
+     * @param p 撤销调拨请求体
+     * @return Observable<ResponseEntity<String>>
+     */
+    @POST("/merchant/scaleApi/cancelAllocate.do")
+    Observable<ResponseEntity<String>> cancelAllocate(@Body PBaseInfo p);
+
+    /**
      * 出库，调拨，盘点- 获取类别列表
      *
      * @param p 获取类别列表请求体

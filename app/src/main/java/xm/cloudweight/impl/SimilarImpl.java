@@ -1,8 +1,6 @@
 package xm.cloudweight.impl;
 
 import com.xmzynt.storm.service.goods.GoodsCategory;
-import com.xmzynt.storm.service.wms.stock.Stock;
-import com.xmzynt.storm.util.query.PageData;
 
 import java.util.List;
 
@@ -55,6 +53,17 @@ public class SimilarImpl {
         void onInventorySuccess(String result);
 
         void onInventoryFailed(String failString);
+
+    }
+
+    /**
+     * 撤销入库
+     */
+    public interface OnCancelSimilarListener {
+
+        void onCancelSimilarSuccess(String result);
+
+        void onCancelSimilarFailed(String message);
 
     }
 

@@ -4,11 +4,13 @@ import com.xmzynt.storm.service.goods.GoodsCategory;
 
 import java.util.List;
 
+import rx.Observable;
 import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.PBaseInfo;
+import xm.cloudweight.comm.Common;
 import xm.cloudweight.impl.SimilarImpl;
 import xm.cloudweight.utils.bussiness.BeanUtil;
 
@@ -36,81 +38,44 @@ public class SimilarPresenter {
                     }
 
                     @Override
-                    protected void onResultFail(int errorType,String failString) {
-                        ((SimilarImpl.OnGetDropdownLeafCategoryListener) aty).onGetDropdownLeafCategoryFailed(errorType,failString);
+                    protected void onResultFail(int errorType, String failString) {
+                        ((SimilarImpl.OnGetDropdownLeafCategoryListener) aty).onGetDropdownLeafCategoryFailed(errorType, failString);
                     }
                 });
 
     }
 
-//
-//    /**
-//     * 出库
-//     */
-//    public static void stockOut(final BaseActivity aty, StockOutRecord sor,final String path) {
-//        if (!(aty instanceof SimilarImpl.OnStoreOutListener)) {
-//            return;
-//        }
-//        PBaseInfo pBaseInfo = BeanUtil.stockOut(aty, sor);
-//        aty.getApiManager().stockOut(pBaseInfo)
-//                .compose(new TransformerHelper<ResponseEntity<String>>().get(aty))
-//                .subscribe(new ApiSubscribe<String>() {
-//                    @Override
-//                    protected void onResult(String result) {
-//                        ((SimilarImpl.OnStoreOutListener) aty).onStoreOutSuccess(result,path);
-//                    }
-//
-//                    @Override
-//                    protected void onResultFail(String failString) {
-//                        ((SimilarImpl.OnStoreOutListener) aty).onStoreOutFailed(failString);
-//                    }
-//                });
-//    }
-//
-//    /**
-//     * 调拨
-//     */
-//    public static void allocate(final BaseActivity aty, AllocateRecord ar) {
-//        if (!(aty instanceof SimilarImpl.OnAllocateListener)) {
-//            return;
-//        }
-//        PBaseInfo pBaseInfo = BeanUtil.allocate(aty, ar);
-//        LogUtils.e("------调拨----", GsonUtil.getGson().toJson(pBaseInfo));
-//        aty.getApiManager().allocate(pBaseInfo)
-//                .compose(new TransformerHelper<ResponseEntity<String>>().get(aty))
-//                .subscribe(new ApiSubscribe<String>() {
-//                    @Override
-//                    protected void onResult(String result) {
-//                        ((SimilarImpl.OnAllocateListener) aty).onAllocateSuccess(result);
-//                    }
-//
-//                    @Override
-//                    protected void onResultFail(String failString) {
-//                        ((SimilarImpl.OnAllocateListener) aty).onAllocateFailed(failString);
-//                    }
-//                });
-//    }
-//
-//    /**
-//     * 盘点
-//     */
-//    public static void inventory(final BaseActivity aty, InventoryRecord ir) {
-//        if (!(aty instanceof SimilarImpl.OnInventoryListener)) {
-//            return;
-//        }
-//        PBaseInfo pBaseInfo = BeanUtil.inventory(aty, ir);
-//        aty.getApiManager().inventory(pBaseInfo)
-//                .compose(new TransformerHelper<ResponseEntity<String>>().get(aty))
-//                .subscribe(new ApiSubscribe<String>() {
-//                    @Override
-//                    protected void onResult(String result) {
-//                        ((SimilarImpl.OnInventoryListener) aty).onInventorySuccess(result);
-//                    }
-//
-//                    @Override
-//                    protected void onResultFail(String failString) {
-//                        ((SimilarImpl.OnInventoryListener) aty).onInventoryFailed(failString);
-//                    }
-//                });
-//    }
+    /**
+     * 扫码获取采购信息
+     */
+    public static void cancelSimilar(final BaseActivity aty, String uuid, int type) {
+        if (!(aty instanceof SimilarImpl.OnCancelSimilarListener)) {
+            return;
+        }
+        PBaseInfo pBaseInfo = BeanUtil.cancelSimilar(aty, uuid);
+        Observable<ResponseEntity<String>> observable = null;
+        if (type == Common.DbType.TYPE_STORE_OUT) {
+            //出库
+            observable = aty.getApiManager().cancelStockOut(pBaseInfo);
+        } else if (type == Common.DbType.TYPE_ALLOCATE) {
+            //调拨
+            observable = aty.getApiManager().cancelAllocate(pBaseInfo);
+        }
+        if (observable == null) {
+            return;
+        }
+        observable.compose(new TransformerHelper<ResponseEntity<String>>().get(aty))
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        ((SimilarImpl.OnCancelSimilarListener) aty).onCancelSimilarSuccess(result);
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        ((SimilarImpl.OnCancelSimilarListener) aty).onCancelSimilarFailed(failString);
+                    }
+
+                });
+    }
 }

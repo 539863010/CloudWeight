@@ -20,14 +20,17 @@ public class Common {
          * 验收-入库
          */
         int TYPE_ChECK_IN_STORE_IN = 1;
+        String STR_TYPE_ChECK_IN_STORE_IN = "入库";
         /**
          * 验收-越库
          */
         int TYPE_ChECK_IN_CROSS_OUT = 2;
+        String STR_TYPE_ChECK_IN_CROSS_OUT = "越库";
         /**
          * 验收-越库调拨
          */
         int TYPE_ChECK_IN_CROSS_ALLCOCATE = 7;
+        String STR_TYPE_ChECK_IN_CROSS_ALLCOCATE = "越库调拨";
         /**
          * 分拣-分拣
          */

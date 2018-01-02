@@ -174,6 +174,29 @@ public class BeanUtil {
     }
 
     /**
+     * 撤销入库
+     */
+    public static PBaseInfo cancelStockIn(Context ctx, String uuid, String stockInType) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setBaseInfo(ctx, pBaseInfo);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("uuid", uuid);
+        body.put("stockInType", stockInType);
+        pBaseInfo.setBody(body);
+        return pBaseInfo;
+    }
+
+    //撤销 出库，调拨
+    public static PBaseInfo cancelSimilar(Context ctx, String uuid) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setBaseInfo(ctx, pBaseInfo);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("uuid", uuid);
+        pBaseInfo.setBody(body);
+        return pBaseInfo;
+    }
+
+    /**
      * 获取类别列表
      */
     public static PBaseInfo getDropdownLeafCategory(Context ctx) {

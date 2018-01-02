@@ -118,14 +118,6 @@ public class DBManager {
      * //url不为空且（StockInUuid 或 StockOutUuid）不为空，请求保存图片接口
      */
     public List<DbImageUpload> getDbListUnSaveImage() {
-//        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
-//        DaoSession daoSession = daoMaster.newSession();
-//        return daoSession.getDbImageUploadDao()
-//                .queryBuilder()
-//                .where(DbImageUploadDao.Properties.ImageUrl.isNotNull())
-//                .whereOr(DbImageUploadDao.Properties.StockInUuid.isNotNull(),
-//                        DbImageUploadDao.Properties.StockOutUuid.isNotNull())
-//                .list();
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         List<DbImageUpload> list = daoSession.getDbImageUploadDao()
@@ -136,9 +128,9 @@ public class DBManager {
                 .list();
         //已分拣成功的没有删除本地（用于本历史显示）， 以下代码为过滤掉上传分拣接口成功的数据
         List<DbImageUpload> newList = new ArrayList<>();
-        for (DbImageUpload dbImageUpload:list ) {
-            if(!(dbImageUpload.getType() == Common.DbType.TYPE_SORT_OUT_STORE_OUT
-                    && dbImageUpload.getIsUploadStockOutImage())){
+        for (DbImageUpload dbImageUpload : list) {
+            if (!(dbImageUpload.getType() == Common.DbType.TYPE_SORT_OUT_STORE_OUT
+                    && dbImageUpload.getIsUploadStockOutImage())) {
                 newList.add(dbImageUpload);
             }
         }
@@ -158,6 +150,54 @@ public class DBManager {
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
                         DbImageUploadDao.Properties.Date.eq(date))
+                .list();
+    }
+
+    /**
+     * 获取数据库中  验收历史  三种情况   越库调拨，入库，越库
+     */
+    public List<DbImageUpload> getDbListCheckInHistory(String date) {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession.getDbImageUploadDao()
+                .queryBuilder()
+                .whereOr(DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_STORE_IN),
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_CROSS_OUT),
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE))
+                .where(
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.ErrorString.isNull(),
+                        DbImageUploadDao.Properties.Date.eq(date))
+                .list();
+    }
+
+    /**
+     * 获取数据库中  出库历史
+     */
+    public List<DbImageUpload> getDbListSimilarStoreOutHistory() {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession.getDbImageUploadDao()
+                .queryBuilder()
+                .where(
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_STORE_OUT),
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.ErrorString.isNull())
+                .list();
+    }
+
+    /**
+     * 获取数据库中  调拨历史
+     */
+    public List<DbImageUpload> getDbListSimilarAllocateHistory() {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession.getDbImageUploadDao()
+                .queryBuilder()
+                .where(
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ALLOCATE),
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.ErrorString.isNull())
                 .list();
     }
 

@@ -8,6 +8,7 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 
 import xm.cloudweight.bean.CustomSortOutData;
@@ -38,8 +39,20 @@ public class ListComparator implements Comparator<CustomSortOutData> {
 //        } else {
 //            return -1;
 //        }
-        double absS1 = Math.abs(s1.getCoverToKgQty().doubleValue() - mDobWeight);
-        double absS2 = Math.abs(s2.getCoverToKgQty().doubleValue() - mDobWeight);
+        BigDecimal coverToKgQty1 = s1.getCoverToKgQty();
+        double absS1;
+        if (coverToKgQty1 != null) {
+            absS1 = Math.abs(coverToKgQty1.doubleValue() - mDobWeight);
+        } else {
+            absS1 = Math.abs(0 - mDobWeight);
+        }
+        BigDecimal coverToKgQty2 = s2.getCoverToKgQty();
+        double absS2;
+        if (coverToKgQty2 != null) {
+            absS2 = Math.abs(coverToKgQty2.doubleValue() - mDobWeight);
+        } else {
+            absS2 = Math.abs(0 - mDobWeight);
+        }
         if (absS1 > absS2) {
             return 1;
         } else if (absS1 == absS2) {

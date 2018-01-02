@@ -16,6 +16,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:background="@color/color_279c70"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -43,6 +44,28 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey"
                 android:textSize="@dimen/_12sp"/>
+
+            <ImageView
+                android:src="@drawable/delete"
+                android:layout_alignParentRight="true"
+                android:layout_width="@dimen/_20dp"
+                android:layout_height="@dimen/_20dp"
+                android:layout_marginRight="@dimen/_10dp"
+                android:visibility="gone"
+                android:id="@+id/iv_delete"/>
+
+            <Button
+                android:id="@+id/btn_similar_history"
+                style="@style/btn_border_less"
+                android:layout_width="@dimen/_80dp"
+                android:layout_height="@dimen/btn_height_small"
+                android:background="@drawable/anniu_b"
+                android:drawableLeft="@drawable/tubiao_l_lishi"
+                android:text="历史"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                android:drawablePadding="@dimen/_5dp"
+                android:textSize="@dimen/_10sp"/>
 
         </LinearLayout>
 

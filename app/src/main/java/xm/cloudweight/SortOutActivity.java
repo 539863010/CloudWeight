@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,10 +68,10 @@ import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
+import xm.cloudweight.widget.HistorySortOutPopWindow;
 import xm.cloudweight.widget.ScalableTextView;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
-import xm.cloudweight.widget.SortOutHistoryPopWindow;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
@@ -83,7 +85,7 @@ public class SortOutActivity extends BaseActivity implements
         , SortOutImpl.OnGetSortOutListListener
         , SortOutImpl.OnCancelSortOutListener
         , AdapterView.OnItemSelectedListener
-        , SortOutHistoryPopWindow.OnDeleteListener, onInputFinishListener, VideoFragment.OnInstrumentListener, AbsListView.OnScrollListener, PopupWindow.OnDismissListener {
+        , HistorySortOutPopWindow.OnDeleteListener, onInputFinishListener, VideoFragment.OnInstrumentListener, AbsListView.OnScrollListener, PopupWindow.OnDismissListener {
 
     public static final int TYPE_WEIGHT = 0;
     public static final int TYPE_COUNT = 1;
@@ -128,6 +130,8 @@ public class SortOutActivity extends BaseActivity implements
     Button mBtnSortOut;
     @BindView(R.id.btn_request)
     Button mBtnRequest;
+    @BindView(R.id.iv_delete)
+    ImageView mIvDelete;
     @BindView(R.id.ll_leather)
     View mLlLeather;
     @BindView(R.id.ll_weight)
@@ -144,7 +148,7 @@ public class SortOutActivity extends BaseActivity implements
     private boolean loadCountSuccess;
     private boolean hasCancelSortOut;
     private CustomSortOutData mPreSortOutData;
-    private SortOutHistoryPopWindow mHistoryPopWindow;
+    private HistorySortOutPopWindow mHistoryPopWindow;
     private DBManager mDBManager;
     private DbImageUpload mDbImageUpload;
     private boolean mStable;
@@ -192,6 +196,13 @@ public class SortOutActivity extends BaseActivity implements
         mEtTag.setOnScanFinishListener(new onScanFinishListener() {
             @Override
             public void onScanFinish(String key) {
+                if (!TextUtils.isEmpty(key)) {
+                    if (mIvDelete.getVisibility() != View.VISIBLE) {
+                        mIvDelete.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    mIvDelete.setVisibility(View.GONE);
+                }
                 if (!loadCountSuccess && !loadWeightSuccess) {
                     ToastUtil.showShortToast(getContext(), "请先获取数据");
                     return;
@@ -207,14 +218,21 @@ public class SortOutActivity extends BaseActivity implements
                 if (mIntType != TYPE_WEIGHT) {
                     return;
                 }
-                String weight = mEtShow.getText().toString().trim();
-                BigDecimal w = new BigDecimal(weight);
                 String leather = s.toString().trim();
-                BigDecimal l;
+                if (!TextUtils.isEmpty(leather) && leather.equals(".")) {
+                    String pre = "0.";
+                    mEtLeather.setText(pre);
+                    mEtLeather.setSelection(pre.length());
+                    return;
+                }
+                String weight = mEtShow.getText().toString().trim();
+                BigDecimal w = new BigDecimal(0);
+                if (!TextUtils.isEmpty(weight)) {
+                    w = new BigDecimal(weight);
+                }
+                BigDecimal l = new BigDecimal(0);
                 if (!TextUtils.isEmpty(leather)) {
                     l = new BigDecimal(leather);
-                } else {
-                    l = new BigDecimal(0);
                 }
                 String sub = BigDecimalUtil.toScaleStr(w.subtract(l));
                 mTvWeight.setText(sub);
@@ -308,7 +326,7 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     @OnClick({R.id.btn_sort_out_weight, R.id.btn_sort_out_count, R.id.btn_request,
-            R.id.btn_sort_out_history, R.id.btn_sort_out, R.id.btn_date, R.id.btn_clear_zero})
+            R.id.btn_sort_out_history, R.id.btn_sort_out, R.id.btn_date, R.id.btn_clear_zero, R.id.iv_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -321,8 +339,6 @@ public class SortOutActivity extends BaseActivity implements
                     return;
                 }
                 mIntType = TYPE_WEIGHT;
-                mEtLeather.setText("0");
-                mTvWeight.setText("0");
                 mLlLeather.setVisibility(View.VISIBLE);
                 mLlWeight.setVisibility(View.VISIBLE);
                 setClick("称重数：", false, true);
@@ -335,6 +351,8 @@ public class SortOutActivity extends BaseActivity implements
                 mIntType = TYPE_COUNT;
                 mLlLeather.setVisibility(View.GONE);
                 mLlWeight.setVisibility(View.GONE);
+                mEtLeather.setText("0");
+                mTvWeight.setText("0");
                 setClick("出库数量：", true, false);
                 break;
             }
@@ -381,6 +399,12 @@ public class SortOutActivity extends BaseActivity implements
                 break;
             case R.id.btn_clear_zero:
                 clearToZero();
+                break;
+            case R.id.iv_delete:
+                String tag = mEtTag.getText().toString().trim();
+                if (!TextUtils.isEmpty(tag)) {
+                    mEtTag.setText("");
+                }
                 break;
             default:
                 break;
@@ -511,6 +535,7 @@ public class SortOutActivity extends BaseActivity implements
             // ** 保存数据到数据库在 setStockOutQty，setWarehouse 后
             DbImageUpload dbImageUpload = new DbImageUpload();
             dbImageUpload.setDate(mBtnDate.getText().toString().trim());
+            dbImageUpload.setOperatime(DateUtils.getTime2(new Date()));
             dbImageUpload.setLine(GsonUtil.getGson().toJson(mPreSortOutData));
             dbImageUpload.setImagePath(path);
             dbImageUpload.setType(Common.DbType.TYPE_SORT_OUT_STORE_OUT);
@@ -539,7 +564,6 @@ public class SortOutActivity extends BaseActivity implements
             mPreSortOutData.setStockOutQty(null);
             mPreSortOutData.setWarehouse(null);
             mPreSortOutData.setPlatformTraceCode(null);
-            ToastUtil.showShortToast(getContext(), "分拣成功");
             //默认设置第一个
             mSortOutAdapter.setIntSelect(0);
             mSortOutAdapter.notifyDataSetChanged();
@@ -550,6 +574,12 @@ public class SortOutActivity extends BaseActivity implements
                 mPreSortOutData = null;
                 mTvTypeUnit.setText("");
             }
+            if (mIntType == TYPE_WEIGHT) {
+                if (!TextUtils.isEmpty(leather)) {
+                    mEtLeather.setText("");
+                }
+            }
+            ToastUtil.showShortToast(getContext(), "分拣成功");
         }
     }
 
@@ -631,7 +661,7 @@ public class SortOutActivity extends BaseActivity implements
      */
     private void toHistory() {
         if (mHistoryPopWindow == null) {
-            mHistoryPopWindow = new SortOutHistoryPopWindow(this, mBtnSortOutHistory);
+            mHistoryPopWindow = new HistorySortOutPopWindow(this, mBtnSortOutHistory);
             mHistoryPopWindow.setOnDeleteListener(this);
             mHistoryPopWindow.setOnDismissListener(this);
         }
@@ -1114,7 +1144,7 @@ public class SortOutActivity extends BaseActivity implements
             String leather = mEtLeather.getText().toString().trim();
             BigDecimal l;
             if (!TextUtils.isEmpty(leather)) {
-                l = new BigDecimal(Double.parseDouble(leather));
+                l = new BigDecimal(leather);
             } else {
                 l = new BigDecimal(0);
             }

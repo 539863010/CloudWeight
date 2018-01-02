@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.xmzynt.storm.util.GsonUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +60,7 @@ import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
+import xm.cloudweight.widget.HistoryCheckInPopWindow;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
 import xm.cloudweight.widget.impl.onInputFinishListener;
@@ -71,8 +74,9 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  * @create 2017/10/30
  */
 public class CheckInActivity extends BaseActivity implements
-        CheckInImpl.OnQueryPurchaseDataListener
-        , Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener {
+        CheckInImpl.OnQueryPurchaseDataListener,
+        CheckInImpl.OnCancelStockInListener
+        , Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, HistoryCheckInPopWindow.OnDeleteListener {
 
     @BindView(R.id.sp_ware_house)
     DataSpinner<Warehouse> mSpWareHouse;
@@ -90,6 +94,8 @@ public class CheckInActivity extends BaseActivity implements
     SearchAndFocusEditText mEtKeySearch;
     @BindView(R.id.et_purchase_label)
     ScanEditText mEtPurChaseLabel;
+    @BindView(R.id.iv_delete)
+    ImageView mIvDelete;
     @BindView(R.id.btn_date)
     Button mBtnDate;
     @BindView(R.id.btn_stock_in)
@@ -131,6 +137,11 @@ public class CheckInActivity extends BaseActivity implements
     private EditText mEtWareHourseIn;
     private AlertDialog mCrossAllocateDialog;
     private Warehouse mWareHouseTo;
+    private HistoryCheckInPopWindow mHistoryCheckInPopWindow;
+    private List<DbImageUpload> mListHistory = new ArrayList<>();
+    private DbImageUpload mDbImageUpload;
+    private boolean hasCancelCheckIn;
+    private onScanFinishListener mOnScanFinishListener;
 
     @Override
     protected int getLayoutId() {
@@ -175,14 +186,7 @@ public class CheckInActivity extends BaseActivity implements
         mSpWareHouse.setCustomItemSelectedListener(this);
         mSpSupplier.setCustomItemSelectedListener(this);
         mLvPurchase.setOnItemClickListener(mOnItemPurchaseClickListener);
-        mEtPurChaseLabel.setOnScanFinishListener(new onScanFinishListener() {
-            @Override
-            public void onScanFinish(String key) {
-                if (!TextUtils.isEmpty(key)) {
-                    scanLabel(key);
-                }
-            }
-        });
+        mEtPurChaseLabel.setOnScanFinishListener(mLabelOnScanFinishListener);
         mEtWeightCurrent.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -229,6 +233,26 @@ public class CheckInActivity extends BaseActivity implements
         mEtBucklesLeather.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
         mEtDeductWeight.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
     }
+
+    private onScanFinishListener mLabelOnScanFinishListener = new onScanFinishListener() {
+        @Override
+        public void onScanFinish(String key) {
+            if (!TextUtils.isEmpty(key)) {
+                scanLabel(key);
+            }
+            setIvDeleteVis(key);
+        }
+
+        private void setIvDeleteVis(String key) {
+            if (!TextUtils.isEmpty(key)) {
+                if (mIvDelete.getVisibility() != View.VISIBLE) {
+                    mIvDelete.setVisibility(View.VISIBLE);
+                }
+            } else {
+                mIvDelete.setVisibility(View.GONE);
+            }
+        }
+    };
 
     private void scanLabel(String purchaseBatchScan) {
         showLoadingDialog(false);
@@ -363,7 +387,9 @@ public class CheckInActivity extends BaseActivity implements
     }
 
     @OnClick({R.id.btn_stock_in, R.id.btn_stock_cross, R.id.btn_date, R.id.btn_clear_zero,
-            R.id.iv_sort_out_search, R.id.btn_cross_allocate, R.id.iv_print_label_sub, R.id.iv_print_label_add})
+            R.id.iv_sort_out_search, R.id.btn_cross_allocate, R.id.iv_print_label_sub,
+            R.id.iv_print_label_add, R.id.btn_check_in_history
+            , R.id.iv_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -429,9 +455,112 @@ public class CheckInActivity extends BaseActivity implements
             case R.id.btn_clear_zero:
                 clearToZero();
                 break;
+            case R.id.btn_check_in_history:
+                showHistory();
+                break;
+            case R.id.iv_delete:
+                String label = mEtPurChaseLabel.getText().toString().trim();
+                if (!TextUtils.isEmpty(label)) {
+                    mEtPurChaseLabel.setOnScanFinishListener(null);
+                    mEtPurChaseLabel.setText("");
+                    mEtPurChaseLabel.setOnScanFinishListener(mLabelOnScanFinishListener);
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    private void showHistory() {
+        if (mHistoryCheckInPopWindow == null) {
+            mHistoryCheckInPopWindow = new HistoryCheckInPopWindow(getContext(), mSpWareHouse);
+            mHistoryCheckInPopWindow.setOnDeleteListener(this);
+            mHistoryCheckInPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    if (hasCancelCheckIn) {
+                        mAdapterPurchase.notifyDataSetChanged();
+                    }
+                    hasCancelCheckIn = false;
+                }
+            });
+        }
+        refreshHistoryList();
+    }
+
+    @Override
+    public void delete(DbImageUpload data) {
+        mDbImageUpload = data;
+        int type = data.getType();
+        if (type == Common.DbType.TYPE_ChECK_IN_STORE_IN || type == Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE) {
+            requestCancel(type, data.getStockInUuid());
+        } else if (type == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
+            requestCancel(type, data.getStockOutUuid());
+        }
+    }
+
+    private void requestCancel(int type, String uuid) {
+        if (!TextUtils.isEmpty(uuid)) {
+            CheckInPresenter.cancelStockIn(getActivity(), uuid, type);
+        } else {
+            onCancelSuccess();
+        }
+    }
+
+    private void onCancelSuccess() {
+        //先刷新后删除数据库
+        refreshCancelCheckIn();
+        getDbManager().deleteDbImageUpload(mDbImageUpload);
+        refreshHistoryList();
+        ToastUtil.showShortToast(getContext(), "撤销成功");
+        hasCancelCheckIn = true;
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+    }
+
+    private void refreshCancelCheckIn() {
+        String date = mDbImageUpload.getDate();
+        String currentSelectedDate = mBtnDate.getText().toString().trim();
+        if (!date.equals(currentSelectedDate)) {
+            return;
+        }
+        StockInRecord stockInRecord = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), StockInRecord.class);
+        String cancelUuid = stockInRecord.getSourceBillLineUuid();
+        for (PurchaseData data : mListAll) {
+            PurchaseBillLine purchaseBillLine = data.getPurchaseBillLine();
+            if (cancelUuid.equals(purchaseBillLine.getUuid())) {
+                BigDecimal quantity = stockInRecord.getQuantity();
+                BigDecimal hasStockInQty = purchaseBillLine.getHasStockInQty();
+                purchaseBillLine.setHasStockInQty(hasStockInQty.subtract(quantity));
+                break;
+            }
+        }
+    }
+
+    /**
+     * 刷新历史列表
+     */
+    private void refreshHistoryList() {
+        //获取数据库当天的数据
+        String date = mBtnDate.getText().toString().trim();
+        List<DbImageUpload> daoList = getDbManager().getDbListCheckInHistory(date);
+        Collections.reverse(daoList);
+        mListHistory.clear();
+        mListHistory.addAll(daoList);
+        mHistoryCheckInPopWindow.show();
+        mHistoryCheckInPopWindow.notify(mListHistory);
+    }
+
+    @Override
+    public void onCancelStockInSuccess(String result) {
+        onCancelSuccess();
+    }
+
+    @Override
+    public void onCancelStockInFailed(String message) {
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+        ToastUtil.showShortToast(getContext(), message);
     }
 
     private boolean check() {
@@ -447,7 +576,6 @@ public class CheckInActivity extends BaseActivity implements
     }
 
     private void showCrossAllocateDialog() {
-
         if (mCrossAllocateDialog == null) {
             mCrossAllocateDialog = CrossAllocateUtil.create(getActivity(), new CrossAllocateUtil.onCrossAllocateOperationInterface() {
                 @Override
@@ -632,10 +760,12 @@ public class CheckInActivity extends BaseActivity implements
 
     private void shotResult(String path) {
         StockInRecord record = prepareConfig();
+        String date = mBtnDate.getText().toString().trim();
         if (mIntTypeUpload == TYPE_STORE_IN) {
             //入库
             DbImageUpload db = new DbImageUpload();
-            db.setDate(DateUtils.StringData());
+            db.setDate(date);
+            db.setOperatime(DateUtils.getTime2(new Date()));
             db.setImagePath(path);
             db.setLine(GsonUtil.getGson().toJson(record));
             db.setType(Common.DbType.TYPE_ChECK_IN_STORE_IN);
@@ -644,7 +774,8 @@ public class CheckInActivity extends BaseActivity implements
         } else if (mIntTypeUpload == TYPE_CROSS) {
             //越库
             DbImageUpload db = new DbImageUpload();
-            db.setDate(DateUtils.StringData());
+            db.setDate(date);
+            db.setOperatime(DateUtils.getTime2(new Date()));
             db.setImagePath(path);
             db.setLine(GsonUtil.getGson().toJson(record));
             db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_OUT);
@@ -652,7 +783,8 @@ public class CheckInActivity extends BaseActivity implements
             ToastUtil.showShortToast(getContext(), "越库成功");
         } else if (mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
             DbImageUpload db = new DbImageUpload();
-            db.setDate(DateUtils.StringData());
+            db.setDate(date);
+            db.setOperatime(DateUtils.getTime2(new Date()));
             db.setImagePath(path);
             db.setLine(GsonUtil.getGson().toJson(record));
             db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE);
@@ -711,6 +843,8 @@ public class CheckInActivity extends BaseActivity implements
             //类型   	越库的入库类型改为crossDock，入库和越库调拨仍为purchaseIn
             if (mIntTypeUpload == TYPE_CROSS) {
                 sir.setStockInType(StockInType.crossDock);
+                //生成追溯码，打印分拣标签用
+                sir.setPlatformTraceCode(Common.getPlatformTraceCode());
             } else if (mIntTypeUpload == TYPE_STORE_IN) {
                 sir.setStockInType(StockInType.purchaseIn);
             } else if (mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
@@ -719,14 +853,16 @@ public class CheckInActivity extends BaseActivity implements
                     sir.setToWarehouse(new UCN(mWareHouseTo.getUuid(), mWareHouseTo.getCode(), mWareHouseTo.getName()));
                 }
             }
+            //保存顾客，部门信息，打印标签用
+            String customer = mPurchaseBillLine.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
+            String department = mPurchaseBillLine.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
+            sir.setCustomerName(customer.concat(department));
             //设置供应商
             sir.setSupplier(mPurchaseData.getSupplier());
             //来源采购单号
             sir.setSourceBillNumber(mPurchaseData.getPurchaseBillNumber());
             //交货日期
             sir.setDeliveryTime(mPurchaseData.getDeliveryTime());
-            //通过扫描
-            sir.setSupplier(mPurchaseData.getSupplier());
             Date deliveryTime = DateUtils.converToDate(DateUtils.getTime2(mPurchaseData.getDeliveryTime()));
             sir.setDeliveryTime(deliveryTime);
             //入库时间
@@ -881,7 +1017,7 @@ public class CheckInActivity extends BaseActivity implements
                 } else {
                     crossNum = BigDecimalUtil.toScaleStr(numWarehousing).concat(mPurchaseBillLine.getGoodsUnit().getName());
                 }
-                String code = Common.getPlatformTraceCode();
+                String code = record.getPlatformTraceCode();
                 String customer = mPurchaseBillLine.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
                 String department = mPurchaseBillLine.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
                 PrinterSortOut.printer(

@@ -20,7 +20,7 @@ import xm.cloudweight.utils.ToastUtil;
  */
 public class PrinterInventory {
 
-    public static void printer(Context context, int printCount, String goodsName, String code) {
+    public static void printer(Context context, int printCount, String goodsName, String qrcode) {
         // Constructor
         LabelPrinter printer = new LabelPrinter();
         // Set context
@@ -31,7 +31,7 @@ public class PrinterInventory {
         int result = printer.connect(LabelConst.CLS_PORT_USB, usbDevice);       // Android 3.1 ( API Level 12 ) or later
         if (LabelConst.CLS_SUCCESS == result) {
             // Print data output
-            print(context, printer, printCount, goodsName, code);
+            print(context, printer, printCount, goodsName, qrcode);
             // Disconnect
             printer.disconnect();
         } else {
@@ -41,14 +41,14 @@ public class PrinterInventory {
         }
     }
 
-    private static void print(Context context, LabelPrinter printer, int printCount, String goodsName, String code) {
+    private static void print(Context context, LabelPrinter printer, int printCount, String goodsName, String qrcode) {
         LabelDesign design = new LabelDesign();
         int result;
         String errmsg = "";
 
         // QRCode
-        if (!TextUtils.isEmpty(code)) {
-            result = design.drawQRCode(code,
+        if (!TextUtils.isEmpty(qrcode)) {
+            result = design.drawQRCode(qrcode,
                     LabelConst.CLS_ENC_CDPG_US_ASCII,
                     LabelConst.CLS_RT_NORMAL,
                     5,
@@ -88,12 +88,12 @@ public class PrinterInventory {
             errmsg = errmsg.concat("月份  ");
         }
 
-        if (!TextUtils.isEmpty(code)
-                && code.contains("-")
-                && code.split("-").length == 3
-                && !TextUtils.isEmpty(code.split("-")[2])) {
+        if (!TextUtils.isEmpty(qrcode)
+                && qrcode.contains("-")
+                && qrcode.split("-").length == 3
+                && !TextUtils.isEmpty(qrcode.split("-")[2])) {
             //去0  001 ->  1
-            int num = Integer.parseInt(code.split("-")[2]);
+            int num = Integer.parseInt(qrcode.split("-")[2]);
             result = design.drawTextLocalFont(String.valueOf(num),
                     Typeface.SERIF,
                     LabelConst.CLS_RT_NORMAL,

@@ -327,10 +327,11 @@ public class BgOperateService extends Service {
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        // TODO: 2017/11/25  需要上传图片时 添加以下代码
+                        // 需要上传图片时 添加以下代码
 //                        refreshImageUrl(data);
+                        data.setStockOutUuid(result);
                         //调拨成功删除数据库
-                        mDBManager.deleteDbImageUpload(data);
+                        mDBManager.updateDbImageUpload(data);
                         getUnAllocateList();
                     }
 
@@ -612,6 +613,7 @@ public class BgOperateService extends Service {
                 break;
             //当这两个模块需要保存图片时添加
 //            case Common.DbType.TYPE_ALLOCATE:
+//
 //                break;
 //            case Common.DbType.TYPE_CHECK:
 //                break;

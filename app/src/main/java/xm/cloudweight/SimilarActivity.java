@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.xmzynt.storm.basic.idname.IdName;
@@ -28,6 +30,8 @@ import com.xmzynt.storm.util.query.PageData;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,6 +55,7 @@ import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
+import xm.cloudweight.widget.HistorySimilarPopWindow;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
 import xm.cloudweight.widget.impl.onInputFinishListener;
@@ -65,8 +70,9 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  */
 public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDropdownLeafCategoryListener
         , CommImpl.OnQueryStockListener
+        , SimilarImpl.OnCancelSimilarListener
         , CommImpl.OnScanByTraceCodeListener
-        , AdapterView.OnItemSelectedListener, VideoFragment.OnInstrumentListener {
+        , AdapterView.OnItemSelectedListener, VideoFragment.OnInstrumentListener, HistorySimilarPopWindow.OnDeleteListener {
 
     public static final String KEY_TYPE = "type";
     @BindView(R.id.ll_type)
@@ -85,6 +91,10 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     ListView mLvGoods;
     @BindView(R.id.tv_goods)
     TextView mTvGoods;
+    @BindView(R.id.btn_similar_history)
+    Button mBtnHistory;
+    @BindView(R.id.iv_delete)
+    ImageView mIvDelete;
     private int mIntType;
     private List<Stock> mListShow = new ArrayList<>();
     private List<Stock> mListAll = new ArrayList<>();
@@ -108,6 +118,10 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     private Button mBtnAllocate;
     private Button mBtnInventory;
     private VideoFragment mVideoFragment;
+    private HistorySimilarPopWindow mSimilarPopWindow;
+    private List<DbImageUpload> mListHistory = new ArrayList<>();
+    private DbImageUpload mDbImageUpload;
+    private boolean hasCancel;
 
     @Override
     protected int getLayoutId() {
@@ -167,6 +181,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                 break;
             case Common.SIMILAR_CHECK:
                 tvCount.setText("实际数量");
+                mBtnHistory.setVisibility(View.GONE);
                 initCheckParams();
                 break;
             default:
@@ -187,18 +202,9 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
 
         mSpGoodsCategory.setCustomItemSelectedListener(this);
         mSpWareHouse.setCustomItemSelectedListener(this);
-//        mEtKeySearch.setOnInputFinishListener(new onInputFinishListener() {
-//            @Override
-//            public void onFinish(String key) {
-//                filterList();
-//            }
-//        });
-
-//        mEtTag.setFilters(EtMaxLengthUtil.getFilter());
         mEtTag.setOnScanFinishListener(new onScanFinishListener() {
             @Override
             public void onScanFinish(String key) {
-//                if (!TextUtils.isEmpty(key) && key.length() == Common.BasketLength) {
                 if (!TextUtils.isEmpty(key)) {
                     Warehouse warehouse = mSpWareHouse.getSelectedItem();
                     if (warehouse != null && !TextUtils.isEmpty(warehouse.getUuid())) {
@@ -236,7 +242,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         CommPresenter.queryStock(this, 0, 0, 0, "");
     }
 
-    @OnClick({R.id.iv_similar_search, R.id.btn_clear_zero})
+    @OnClick({R.id.iv_similar_search, R.id.btn_clear_zero, R.id.btn_similar_history, R.id.iv_delete})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.iv_similar_search:
@@ -246,9 +252,121 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             case R.id.btn_clear_zero:
                 clearToZero();
                 break;
+            case R.id.btn_similar_history:
+                showHistory();
+                break;
+            case R.id.iv_delete:
+                String tag = mEtTag.getText().toString().trim();
+                if (!TextUtils.isEmpty(tag)) {
+                    mEtTag.setText("");
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    private void showHistory() {
+        if (mSimilarPopWindow == null) {
+            mSimilarPopWindow = new HistorySimilarPopWindow(getContext(), mIntType, mSpGoodsCategory);
+            mSimilarPopWindow.setOnDeleteListener(this);
+            mSimilarPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    if (hasCancel) {
+                        mGoodsAdapter.notifyDataSetChanged();
+                    }
+                    hasCancel = false;
+                }
+            });
+        }
+        refreshHistoryList();
+    }
+
+    /**
+     * 刷新历史列表
+     */
+    private void refreshHistoryList() {
+        if (mIntType == Common.SIMILAR_CHECK) {
+            return;
+        }
+        //获取数据库当天的数据
+        List<DbImageUpload> daoList;
+        if (mIntType == Common.SIMILAR_STOCKOUT) {
+            daoList = getDbManager().getDbListSimilarStoreOutHistory();
+        } else {
+            daoList = getDbManager().getDbListSimilarAllocateHistory();
+        }
+        Collections.reverse(daoList);
+        mListHistory.clear();
+        mListHistory.addAll(daoList);
+        mSimilarPopWindow.show();
+        mSimilarPopWindow.notify(mListHistory);
+    }
+
+    @Override
+    public void delete(DbImageUpload data) {
+        mDbImageUpload = data;
+        int type = data.getType();
+        String stockOutUuid = data.getStockOutUuid();
+        requestCancel(type, stockOutUuid);
+    }
+
+    private void requestCancel(int type, String uuid) {
+        if (!TextUtils.isEmpty(uuid)) {
+            SimilarPresenter.cancelSimilar(getActivity(), uuid, type);
+        } else {
+            onCancelSuccess();
+        }
+    }
+
+    private void onCancelSuccess() {
+        //先刷新后删除数据库
+        refreshCancel();
+        getDbManager().deleteDbImageUpload(mDbImageUpload);
+        refreshHistoryList();
+        ToastUtil.showShortToast(getContext(), "撤销成功");
+        hasCancel = true;
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+    }
+
+    private void refreshCancel() {
+        String cancelUuid = null;
+        BigDecimal quantity = null;
+        int type = mDbImageUpload.getType();
+        if (type == Common.DbType.TYPE_STORE_OUT) {
+            //出库
+            StockOutRecord stockOutRecord = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), StockOutRecord.class);
+            cancelUuid = stockOutRecord.getStockUuid();
+            quantity = stockOutRecord.getQuantity();
+        } else if (type == Common.DbType.TYPE_ALLOCATE) {
+            AllocateRecord allocateRecord = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), AllocateRecord.class);
+            cancelUuid = allocateRecord.getSourceStockUuid();
+            quantity = allocateRecord.getAllocateQty();
+        }
+        if (TextUtils.isEmpty(cancelUuid) || quantity == null) {
+            return;
+        }
+        for (Stock stock : mListAll) {
+            if (cancelUuid.equals(stock.getUuid())) {
+                BigDecimal amount = stock.getAmount();
+                stock.setAmount(amount.add(quantity));
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onCancelSimilarSuccess(String result) {
+        onCancelSuccess();
+    }
+
+    @Override
+    public void onCancelSimilarFailed(String message) {
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+        ToastUtil.showShortToast(getContext(), message);
     }
 
     /**
@@ -287,7 +405,9 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                 deduct);
         DbImageUpload dbImageUpload = new DbImageUpload();
         dbImageUpload.setImagePath(path);
-        dbImageUpload.setDate(DateUtils.StringData());
+        Date date = new Date();
+        dbImageUpload.setDate(DateUtils.getTime(date));
+        dbImageUpload.setOperatime(DateUtils.getTime2(date));
         dbImageUpload.setLine(GsonUtil.getGson().toJson(record));
         dbImageUpload.setType(Common.DbType.TYPE_STORE_OUT);
         getDbManager().insertDbImageUpload(dbImageUpload);
@@ -367,7 +487,9 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                             leather,
                             deduct);
                     DbImageUpload dbImageUpload = new DbImageUpload();
-                    dbImageUpload.setDate(DateUtils.StringData());
+                    Date date = new Date();
+                    dbImageUpload.setDate(DateUtils.getTime(date));
+                    dbImageUpload.setOperatime(DateUtils.getTime2(date));
                     dbImageUpload.setLine(GsonUtil.getGson().toJson(allocateRecord));
                     dbImageUpload.setType(Common.DbType.TYPE_ALLOCATE);
                     getDbManager().insertDbImageUpload(dbImageUpload);
@@ -421,7 +543,9 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                             mStock,
                             mEtCount);
                     DbImageUpload dbImageUpload = new DbImageUpload();
-                    dbImageUpload.setDate(DateUtils.StringData());
+                    Date date = new Date();
+                    dbImageUpload.setDate(DateUtils.getTime(date));
+                    dbImageUpload.setDate(DateUtils.getTime2(date));
                     dbImageUpload.setLine(GsonUtil.getGson().toJson(inventoryRecord));
                     dbImageUpload.setType(Common.DbType.TYPE_CHECK);
                     getDbManager().insertDbImageUpload(dbImageUpload);

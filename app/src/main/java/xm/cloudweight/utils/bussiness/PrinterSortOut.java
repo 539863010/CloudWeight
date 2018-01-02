@@ -66,7 +66,13 @@ public class PrinterSortOut {
                 errmsg = errmsg.concat("二维码  ");
             }
         }
-        String title = customer.concat("【").concat(department).concat("】");
+        String title = "";
+        if (!TextUtils.isEmpty(customer)) {
+            title = customer;
+        }
+        if (!TextUtils.isEmpty(department)) {
+            title = title.concat("【").concat(department).concat("】");
+        }
         if (!TextUtils.isEmpty(title)) {
             if (title.length() > 6) {
                 String titleFirst = title.substring(0, 6);
