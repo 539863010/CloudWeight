@@ -286,7 +286,7 @@ public class DBManager {
     }
 
     /**
-     * 获取数据库中  未成功上传的 调拨  的列表 （接口请求成功后删除db数据）
+     * 获取数据库中  未成功上传的 调拨  的列表 （接口请求成功后更新db数据）
      */
     public List<DbImageUpload> getDbListAllocate() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -296,13 +296,14 @@ public class DBManager {
                 .where(
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ALLOCATE),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.Line.isNotNull()
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.StockOutUuid.isNull()
                 )
                 .list();
     }
 
     /**
-     * 获取数据库中  未成功上传的 盘点  的列表  （接口请求成功后删除db数据）
+     * 获取数据库中  未成功上传的 盘点  的列表
      */
     public List<DbImageUpload> getDbListCheck() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());

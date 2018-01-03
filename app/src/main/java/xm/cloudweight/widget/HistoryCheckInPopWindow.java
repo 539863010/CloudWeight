@@ -154,7 +154,7 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
             //设置商品名
             UCN goods = data.getGoods();
             final String goodsName = goods.getName();
-            holder.setText(R.id.ci_goods, goods.getCode().concat(goodsName));
+            holder.setText(R.id.ci_goods, goodsName);
             //设置单位
             String goodsUnit = data.getGoodsUnit().getName();
             holder.setText(R.id.ci_unit, goodsUnit);
@@ -189,7 +189,7 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
                         PrinterSortOut.printer(
                                 mContext,
                                 1,
-                                PrinterSortOut.SORT_OUT_QRCODE,
+                                PrinterSortOut.SORT_OUT_QRCODE.concat(platformTraceCode),
                                 customer,
                                 department,
                                 goodsName,

@@ -32,6 +32,7 @@ import xm.cloudweight.bean.PLogin;
 public interface ApiManager {
 
     String BASE_URL = "http://beta.shipments.atfresh.cn";
+//    String BASE_URL = "http://erp.lbh.atfresh.cn";
 
     /**
      * 登录

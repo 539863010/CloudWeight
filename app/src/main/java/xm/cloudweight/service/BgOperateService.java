@@ -330,7 +330,7 @@ public class BgOperateService extends Service {
                         // 需要上传图片时 添加以下代码
 //                        refreshImageUrl(data);
                         data.setStockOutUuid(result);
-                        //调拨成功删除数据库
+                        //调拨成功更新数据库
                         mDBManager.updateDbImageUpload(data);
                         getUnAllocateList();
                     }

@@ -625,7 +625,7 @@ public class SortOutActivity extends BaseActivity implements
         PrinterSortOut.printer(
                 getContext(),
                 1,
-                PrinterSortOut.SORT_OUT_QRCODE,
+                PrinterSortOut.SORT_OUT_QRCODE.concat(code),
                 customer,
                 department,
                 goodsName,

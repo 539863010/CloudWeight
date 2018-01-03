@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/ci_goods"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_100dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/_10dp"
         android:ellipsize="end"

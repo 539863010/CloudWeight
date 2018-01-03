@@ -173,7 +173,7 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
                     PrinterSortOut.printer(
                             mContext,
                             1,
-                            PrinterSortOut.SORT_OUT_QRCODE,
+                            PrinterSortOut.SORT_OUT_QRCODE.concat(traceCode),
                             customer,
                             department,
                             goodsName,

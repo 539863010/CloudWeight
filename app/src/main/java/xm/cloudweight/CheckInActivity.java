@@ -1023,7 +1023,7 @@ public class CheckInActivity extends BaseActivity implements
                 PrinterSortOut.printer(
                         getContext(),
                         count,
-                        PrinterSortOut.SORT_OUT_QRCODE,
+                        PrinterSortOut.SORT_OUT_QRCODE.concat(code),
                         customer,
                         department,
                         goodsName,

@@ -22,7 +22,7 @@ import xm.cloudweight.utils.ToastUtil;
  */
 public class PrinterSortOut {
 
-    public static final String SORT_OUT_QRCODE = "www.atfresh.cn";
+    public static final String SORT_OUT_QRCODE = "http://trace.lbh.atfresh.cn/h5/#/index/";
 
     public static void printer(Context context, int printCount, String qrcodeContent, String customer, String department, String goodsName, String sortOutNum, String code) {
         // Constructor
@@ -58,7 +58,7 @@ public class PrinterSortOut {
             result = design.drawQRCode(qrcodeContent,
                     LabelConst.CLS_ENC_CDPG_US_ASCII,
                     LabelConst.CLS_RT_NORMAL,
-                    5,
+                    3,
                     LabelConst.CLS_QRCODE_EC_LEVEL_H,
                     20,
                     18);
