@@ -2,6 +2,7 @@ package xm.cloudweight.utils.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,11 +127,14 @@ public class DBManager {
                 .whereOr(DbImageUploadDao.Properties.StockInUuid.isNotNull(),
                         DbImageUploadDao.Properties.StockOutUuid.isNotNull())
                 .list();
-        //已分拣成功的没有删除本地（用于本历史显示）， 以下代码为过滤掉上传分拣接口成功的数据
         List<DbImageUpload> newList = new ArrayList<>();
         for (DbImageUpload dbImageUpload : list) {
-            if (!(dbImageUpload.getType() == Common.DbType.TYPE_SORT_OUT_STORE_OUT
-                    && dbImageUpload.getIsUploadStockOutImage())) {
+            //已分拣成功的没有删除本地（用于本历史显示）， 以下代码为过滤掉上传分拣接口成功的数据
+            boolean noSortOut = !(dbImageUpload.getType() == Common.DbType.TYPE_SORT_OUT_STORE_OUT && dbImageUpload.getIsUploadStockOutImage());
+            //未保存的
+            boolean isSaveIn = !TextUtils.isEmpty(dbImageUpload.getStockInUuid()) && !dbImageUpload.getIsUploadStockInImage();
+            boolean isSaveOut = !TextUtils.isEmpty(dbImageUpload.getStockOutUuid()) && !dbImageUpload.getIsUploadStockOutImage();
+            if (noSortOut && (isSaveIn || isSaveOut)) {
                 newList.add(dbImageUpload);
             }
         }

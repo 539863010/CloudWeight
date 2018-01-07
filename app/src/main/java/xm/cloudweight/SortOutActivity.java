@@ -425,8 +425,9 @@ public class SortOutActivity extends BaseActivity implements
             mListShow.clear();
             mSortOutAdapter.notifyDataSetChanged();
             SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
+            // 请求重量列表后在请求数量， 优化UnknownHostException异常（待测试）
             mSubScriptionWeight = SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+//            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
         }
     }
 
@@ -841,6 +842,13 @@ public class SortOutActivity extends BaseActivity implements
             mListAllCount.clear();
             mListAllCount.addAll(data);
         }
+        //  2018/01/04  ----------------------------------------------
+        //待重量加载完后，在加载数量，优化出现UnknownHostException异常(待测试)
+        if (loadWeightSuccess && !loadCountSuccess) {
+            String time = mBtnDate.getText().toString().trim();
+            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+        }
+        //--------------------------------------------------------------
         if (loadWeightSuccess && loadCountSuccess) {
             mBtnRequest.setEnabled(true);
             //设置客户列表
@@ -1137,7 +1145,7 @@ public class SortOutActivity extends BaseActivity implements
     @Override
     public void receive(Instrument.InsData data) {
         String weight = data.weight;
-        if ((mIntType == TYPE_WEIGHT)) {
+        if ((mIntType == TYPE_WEIGHT) && !TextUtils.isEmpty(weight)) {
             mStable = data.stable;
             mEtShow.setText(weight);
             BigDecimal w = new BigDecimal(Double.parseDouble(weight));

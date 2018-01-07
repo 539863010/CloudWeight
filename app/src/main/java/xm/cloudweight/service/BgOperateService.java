@@ -170,7 +170,6 @@ public class BgOperateService extends Service {
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        // TODO: 2017/11/25
                         refreshImageUrl(data);
                         data.setStockInUuid(result);
                         mDBManager.updateDbImageUpload(data);
@@ -250,7 +249,6 @@ public class BgOperateService extends Service {
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        // TODO: 2017/11/25
                         refreshImageUrl(data);
                         data.setStockOutUuid(result);
                         mDBManager.updateDbImageUpload(data);
@@ -289,7 +287,6 @@ public class BgOperateService extends Service {
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        // TODO: 2017/11/25
                         refreshImageUrl(data);
                         data.setStockOutUuid(result);
                         mDBManager.updateDbImageUpload(data);
@@ -366,7 +363,7 @@ public class BgOperateService extends Service {
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        // TODO: 2017/11/25  需要上传图片时 添加以下代码
+                        //  需要上传图片时 添加以下代码
 //                        refreshImageUrl(data);
                         //盘点成功删除数据库
                         mDBManager.deleteDbImageUpload(data);
@@ -407,7 +404,6 @@ public class BgOperateService extends Service {
                 .subscribe(new ApiSubscribe<List<String>>() {
                     @Override
                     protected void onResult(List<String> result) {
-                        // TODO: 2017/11/25
                         refreshImageUrl(data);
                         //修改数据库信息
                         //用于删除
@@ -466,7 +462,6 @@ public class BgOperateService extends Service {
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        // TODO: 2017/11/25
                         refreshUUid(dbImageUpload);
                         dbImageUpload.setImageUrl(result);
                         mDBManager.updateDbImageUpload(dbImageUpload);
@@ -490,32 +485,46 @@ public class BgOperateService extends Service {
         List<DbImageUpload> list = mDBManager.getDbListUnSaveImage();
         if (list != null && list.size() > 0) {
             DbImageUpload dbImageUpload = list.get(0);
-            if (!TextUtils.isEmpty(dbImageUpload.getImagePath())
-                    && new File(dbImageUpload.getImagePath()).exists()) {
-                preSaveImage(dbImageUpload);
+            if (new File(dbImageUpload.getImagePath()).exists()) {
+                String imageUrl = dbImageUpload.getImageUrl();
+                String stockInUuid = dbImageUpload.getStockInUuid();
+                String stockOutUuid = dbImageUpload.getStockOutUuid();
+                if (!TextUtils.isEmpty(stockInUuid) && !dbImageUpload.getIsUploadStockInImage()) {
+                    isCurrentSaveImage = true;
+                    doSaveImage(stockInUuid, imageUrl, SAVE_IMAGE_TYPE_IN, dbImageUpload);
+                } else if (!TextUtils.isEmpty(stockOutUuid) && !dbImageUpload.getIsUploadStockOutImage()) {
+                    isCurrentSaveImage = true;
+                    doSaveImage(stockOutUuid, imageUrl, SAVE_IMAGE_TYPE_OUT, dbImageUpload);
+                }
             } else {
                 isCurrentSaveImage = false;
             }
+
+//            boolean hasDataToSave = false;
+//            for (DbImageUpload upload:list) {
+//                String imageUrl = upload.getImageUrl();
+//                String stockInUuid = upload.getStockInUuid();
+//                String stockOutUuid = upload.getStockOutUuid();
+//                if (!TextUtils.isEmpty(stockInUuid) && !upload.getIsUploadStockInImage()) {
+//                    isCurrentSaveImage = true;
+//                    hasDataToSave = true;
+//                    doSaveImage(stockInUuid, imageUrl, SAVE_IMAGE_TYPE_IN, upload);
+//                    break;
+//                } else if (!TextUtils.isEmpty(stockOutUuid) && !upload.getIsUploadStockOutImage()) {
+//                    isCurrentSaveImage = true;
+//                    hasDataToSave = true;
+//                    doSaveImage(stockOutUuid, imageUrl, SAVE_IMAGE_TYPE_OUT, upload);
+//                    break;
+//                }
+//            }
+//            if(!hasDataToSave){
+//                isCurrentSaveImage = false;
+//            }
         } else {
             isCurrentSaveImage = false;
         }
     }
 
-    /**
-     * 保存图片接口准备
-     */
-    private void preSaveImage(DbImageUpload dbImageUpload) {
-        String imageUrl = dbImageUpload.getImageUrl();
-        String stockInUuid = dbImageUpload.getStockInUuid();
-        String stockOutUuid = dbImageUpload.getStockOutUuid();
-        if (!TextUtils.isEmpty(stockInUuid) && !dbImageUpload.getIsUploadStockInImage()) {
-            isCurrentSaveImage = true;
-            doSaveImage(stockInUuid, imageUrl, SAVE_IMAGE_TYPE_IN, dbImageUpload);
-        } else if (!TextUtils.isEmpty(stockOutUuid) && !dbImageUpload.getIsUploadStockOutImage()) {
-            isCurrentSaveImage = true;
-            doSaveImage(stockOutUuid, imageUrl, SAVE_IMAGE_TYPE_OUT, dbImageUpload);
-        }
-    }
 
     /**
      * 请求保存图片接口
@@ -540,29 +549,29 @@ public class BgOperateService extends Service {
                         mDBManager.updateDbImageUpload(data);
                         //如果请求完成   删除数据  1. 验收-入库  2.验收-越库 3.分拣 4.出库 （盘点，调拨暂时不需要上传图片）
                         // 1. 验收-入库
-                        boolean isCheckInStoreIn = data.getType() == Common.DbType.TYPE_ChECK_IN_STORE_IN
-                                && !TextUtils.isEmpty(data.getStockInUuid())
-                                && data.getIsUploadStockInImage();
-                        // 2.验收-越库
-                        boolean isCheckInCrossOut = data.getType() == Common.DbType.TYPE_ChECK_IN_CROSS_OUT
-                                && (!TextUtils.isEmpty(data.getStockInUuid()) && data.getIsUploadStockInImage())
-                                && (!TextUtils.isEmpty(data.getStockOutUuid()) && data.getIsUploadStockOutImage());
-                        // 3.分拣   不删除，历史中使用
-                        boolean isSortOutStoreOut = data.getType() == Common.DbType.TYPE_SORT_OUT_STORE_OUT
-                                && !TextUtils.isEmpty(data.getStockOutUuid())
-                                && data.getIsUploadStockOutImage();
-                        // 4.出库
-                        boolean isStoreOut = data.getType() == Common.DbType.TYPE_STORE_OUT
-                                && !TextUtils.isEmpty(data.getStockOutUuid())
-                                && data.getIsUploadStockOutImage();
+//                        boolean isCheckInStoreIn = data.getType() == Common.DbType.TYPE_ChECK_IN_STORE_IN
+//                                && !TextUtils.isEmpty(data.getStockInUuid())
+//                                && data.getIsUploadStockInImage();
+//                        // 2.验收-越库
+//                        boolean isCheckInCrossOut = data.getType() == Common.DbType.TYPE_ChECK_IN_CROSS_OUT
+//                                && (!TextUtils.isEmpty(data.getStockInUuid()) && data.getIsUploadStockInImage())
+//                                && (!TextUtils.isEmpty(data.getStockOutUuid()) && data.getIsUploadStockOutImage());
+//                        // 3.分拣   不删除，历史中使用
+//                        boolean isSortOutStoreOut = data.getType() == Common.DbType.TYPE_SORT_OUT_STORE_OUT
+//                                && !TextUtils.isEmpty(data.getStockOutUuid())
+//                                && data.getIsUploadStockOutImage();
+//                        // 4.出库
+//                        boolean isStoreOut = data.getType() == Common.DbType.TYPE_STORE_OUT
+//                                && !TextUtils.isEmpty(data.getStockOutUuid())
+//                                && data.getIsUploadStockOutImage();
 
-                        if (isCheckInStoreIn || isCheckInCrossOut || isStoreOut) {
+//                        if (isCheckInStoreIn || isCheckInCrossOut || isStoreOut) {
                             //删除本地图片
                             String imagePath = data.getImagePath();
                             deleteImage(imagePath);
                             //将该条数据从数据库移除
-                            mDBManager.deleteDbImageUpload(data);
-                        }
+//                            mDBManager.deleteDbImageUpload(data);
+//                        }
                         getUnSaveImageList();
                     }
 
@@ -640,6 +649,9 @@ public class BgOperateService extends Service {
                 int t = dbImageUpload.getType();
                 switch (t) {
                     case Common.DbType.TYPE_ChECK_IN_STORE_IN:
+                        dbImageUpload.setStockInUuid(upload.getStockInUuid());
+                        break;
+                    case Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE:
                         dbImageUpload.setStockInUuid(upload.getStockInUuid());
                         break;
                     case Common.DbType.TYPE_ChECK_IN_CROSS_OUT:

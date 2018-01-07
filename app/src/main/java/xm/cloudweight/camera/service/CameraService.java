@@ -496,7 +496,10 @@ public class CameraService extends Service {
         if (!file.exists()) {
             file.mkdir();
         }
-        return path + File.separator + (new SimpleDateFormat("yyyyMMddHHmmss")).format(System.currentTimeMillis()) + ".jpg";
+//        return path + File.separator + (new SimpleDateFormat("yyyyMMddHHmmss")).format(System.currentTimeMillis()) + ".jpg";
+        //四位随机数
+        int randomNum = (int) (Math.random() * 9000) + 1000;
+        return path + File.separator + (new SimpleDateFormat("yyyyMMddHHmmssSSS")).format(randomNum) + ".jpg";
     }
 
     /**
@@ -607,13 +610,6 @@ public class CameraService extends Service {
         }
 
     }
-
-
-
-
-
-
-
 
 //
 //    public final String IP = "192.168.1.100";

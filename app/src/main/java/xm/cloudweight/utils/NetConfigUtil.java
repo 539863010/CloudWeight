@@ -30,7 +30,7 @@ public class NetConfigUtil {
         builder
 //                 .addNetworkInterceptor(new CacheInterceptor(ctx))
                 //连接超时
-                .connectTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(20, TimeUnit.SECONDS)
                 //设置写超时
                 .writeTimeout(20, TimeUnit.SECONDS)
                 //设置读超时

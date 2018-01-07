@@ -77,29 +77,6 @@ public class SortOutPresenter {
                 });
     }
 
-//    /**
-//     * 分拣
-//     */
-//    public static void sortOut(final BaseActivity aty, SortOutData data) {
-//        if (!(aty instanceof SortOutImpl.OnSortOutListener)) {
-//            return;
-//        }
-//        PBaseInfo pBaseInfo = BeanUtil.sortOut(aty, data);
-//        aty.getApiManager().sortOut(pBaseInfo)
-//                .compose(new TransformerHelper<ResponseEntity<SortOutData>>().get(aty))
-//                .subscribe(new ApiSubscribe<SortOutData>() {
-//                    @Override
-//                    protected void onResult(SortOutData result) {
-//                        ((SortOutImpl.OnSortOutListener) aty).onSortOutSuccess(result);
-//                    }
-//
-//                    @Override
-//                    protected void onResultFail(String failString) {
-//                        ((SortOutImpl.OnSortOutListener) aty).onSortOutFailed(failString);
-//                    }
-//                });
-//
-//    }
 
     public static void cancelSortOut(final BaseActivity aty, CustomSortOutData data) {
         if (!(aty instanceof SortOutImpl.OnCancelSortOutListener)) {
