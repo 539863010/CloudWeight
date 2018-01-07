@@ -1,7 +1,6 @@
 package xm.cloudweight.bean;
 
 import android.content.Context;
-import android.widget.EditText;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.operateinfo.OperateInfo;
@@ -132,10 +131,10 @@ public class BeanSimilar {
      *
      * @param ctx      上下文
      * @param mStock   Stock
-     * @param mEtCount 盘点数量
+     * @param count 盘点数量
      * @return InventoryRecord
      */
-    public static InventoryRecord createInventoryRecord(Context ctx, Stock mStock, EditText mEtCount) {
+    public static InventoryRecord createInventoryRecord(Context ctx, Stock mStock, BigDecimal count) {
         InventoryRecord ir = new InventoryRecord();
         ir.setOrg(mStock.getOrg());
         ir.setGoods(mStock.getGoods());
@@ -145,12 +144,11 @@ public class BeanSimilar {
         ir.setSourceStockUuid(mStock.getUuid());
         ir.setStockQty(mStock.getAmount());
         //实际数量
-        BigDecimal countSub = new BigDecimal(mEtCount.getText().toString().trim());
         BigDecimal weightCoefficient = mStock.getWeightCoefficient();
         if (weightCoefficient != null) {
-            ir.setInventoryQty(countSub.divide(weightCoefficient, RoundingMode.HALF_EVEN));
+            ir.setInventoryQty(count.divide(weightCoefficient, RoundingMode.HALF_EVEN));
         } else {
-            ir.setInventoryQty(countSub);
+            ir.setInventoryQty(count);
         }
         // 当前操作人   时间为当前时间
         Merchant merchant = LocalSpUtil.getMerchant(ctx);

@@ -31,6 +31,7 @@ import com.xmzynt.storm.util.GsonUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.DBManager;
+import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
@@ -232,6 +234,20 @@ public class CheckInActivity extends BaseActivity implements
         mEtWeightAccumulate.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
         mEtBucklesLeather.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
         mEtDeductWeight.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
+        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mHistoryCheckInPopWindow != null && mHistoryCheckInPopWindow.isShowing()) {
+                    refreshHistoryList();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DbRefreshUtil.refreshUnRegist(this);
     }
 
     private onScanFinishListener mLabelOnScanFinishListener = new onScanFinishListener() {
@@ -758,15 +774,15 @@ public class CheckInActivity extends BaseActivity implements
         }
     });
 
-    private void shotResult(String path) {
-        StockInRecord record = prepareConfig();
+    private void shotResult(String imagePath) {
+        StockInRecord record = prepareConfig(imagePath);
         String date = mBtnDate.getText().toString().trim();
         if (mIntTypeUpload == TYPE_STORE_IN) {
             //入库
             DbImageUpload db = new DbImageUpload();
             db.setDate(date);
             db.setOperatime(DateUtils.getTime2(new Date()));
-            db.setImagePath(path);
+            db.setImagePath(imagePath);
             db.setLine(GsonUtil.getGson().toJson(record));
             db.setType(Common.DbType.TYPE_ChECK_IN_STORE_IN);
             getDbManager().insertDbImageUpload(db);
@@ -776,7 +792,7 @@ public class CheckInActivity extends BaseActivity implements
             DbImageUpload db = new DbImageUpload();
             db.setDate(date);
             db.setOperatime(DateUtils.getTime2(new Date()));
-            db.setImagePath(path);
+            db.setImagePath(imagePath);
             db.setLine(GsonUtil.getGson().toJson(record));
             db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_OUT);
             getDbManager().insertDbImageUpload(db);
@@ -785,7 +801,7 @@ public class CheckInActivity extends BaseActivity implements
             DbImageUpload db = new DbImageUpload();
             db.setDate(date);
             db.setOperatime(DateUtils.getTime2(new Date()));
-            db.setImagePath(path);
+            db.setImagePath(imagePath);
             db.setLine(GsonUtil.getGson().toJson(record));
             db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE);
             getDbManager().insertDbImageUpload(db);
@@ -807,12 +823,16 @@ public class CheckInActivity extends BaseActivity implements
     /**
      * 创建入库、越库 请求体
      */
-    private StockInRecord prepareConfig() {
+    private StockInRecord prepareConfig(String imagePath) {
         if (mPurchaseData != null && mPurchaseBillLine != null) {
             StockInRecord sir = new StockInRecord();
             UCN warehouse = mPurchaseData.getWarehouse();
             sir.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
             sir.setGoods(mPurchaseBillLine.getGoods());
+            //保存图片
+            if (!TextUtils.isEmpty(imagePath)) {
+                sir.setImages(Arrays.asList(imagePath));
+            }
             //规格
             sir.setGoodsSpec(mPurchaseBillLine.getGoodsSpec());
             sir.setGoodsUnit(mPurchaseBillLine.getGoodsUnit());

@@ -1,15 +1,15 @@
 [
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\image_manager_video_sound.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\image_manager_video_sound.png"
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\about_icon.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\about_icon.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\btn_round_bg_short.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\btn_round_bg_short.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\about_icon.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\about_icon.png"
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\image_manager_video_sound.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\image_manager_video_sound.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\fullscreen_sound_on_sel.png",
@@ -48,12 +48,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\fullscreen_bar_back_sel.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\fullscreen_delete.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\fullscreen_delete.png"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\search_clear_normal.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\search_clear_normal.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\fullscreen_delete.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\fullscreen_delete.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\fullscreen_sound_off_sel.png",
@@ -88,12 +88,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\guide_2.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\checkswitch_bottom.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\checkswitch_bottom.png"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\toggle_btn_unchecked.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\toggle_btn_unchecked.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\checkswitch_bottom.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\checkswitch_bottom.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\right_2.png",
@@ -120,12 +120,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\left_down_3.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\image_play_btn_sel.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\image_play_btn_sel.png"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\toolbar_alarm.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\toolbar_alarm.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\image_play_btn_sel.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\image_play_btn_sel.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\image_below_bar.png",
@@ -176,16 +176,16 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\fullscreen_recording_sel.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\liveview_top_bar.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\liveview_top_bar.png"
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\fullscreen_alarm_sel.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\fullscreen_alarm_sel.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\channel_listview_preview_pressed.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\channel_listview_preview_pressed.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\fullscreen_alarm_sel.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\fullscreen_alarm_sel.png"
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\liveview_top_bar.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\liveview_top_bar.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\mm_listitem_pressed.png",

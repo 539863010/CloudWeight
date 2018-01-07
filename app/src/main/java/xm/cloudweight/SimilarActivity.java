@@ -30,6 +30,7 @@ import com.xmzynt.storm.util.query.PageData;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,7 @@ import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.dao.DBManager;
+import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
@@ -226,6 +228,14 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
 
     @Override
     protected void loadDate() {
+        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mSimilarPopWindow != null && mSimilarPopWindow.isShowing()) {
+                    refreshHistoryList();
+                }
+            }
+        });
         showLoadingDialog(true);
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
         if (listWareHouse != null) {
@@ -240,6 +250,12 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         }
         SimilarPresenter.getDropdownLeafCategory(this);
         CommPresenter.queryStock(this, 0, 0, 0, "");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DbRefreshUtil.refreshUnRegist(this);
     }
 
     @OnClick({R.id.iv_similar_search, R.id.btn_clear_zero, R.id.btn_similar_history, R.id.iv_delete})
@@ -393,26 +409,59 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         }
     });
 
-    private void shotResult(String path) {
+    private void shotResult(String imagePath) {
         BigDecimal leather = getEtToBigdecimal(mEtLeather);
         BigDecimal deduct = getEtToBigdecimal(mEtDeduct);
         BigDecimal count = getEtToBigdecimal(mEtCount);
-        StockOutRecord record = BeanSimilar.createStoreOutRecord(getContext(),
-                mStock,
-                mSpTypeStockOut,
-                count,
-                leather,
-                deduct);
+
         DbImageUpload dbImageUpload = new DbImageUpload();
-        dbImageUpload.setImagePath(path);
+        dbImageUpload.setImagePath(imagePath);
         Date date = new Date();
         dbImageUpload.setDate(DateUtils.getTime(date));
         dbImageUpload.setOperatime(DateUtils.getTime2(date));
-        dbImageUpload.setLine(GsonUtil.getGson().toJson(record));
-        dbImageUpload.setType(Common.DbType.TYPE_STORE_OUT);
-        getDbManager().insertDbImageUpload(dbImageUpload);
-        showSuccessResult("出库");
-        setBtnEnable(mBtnStockOut);
+        if (mIntType == Common.SIMILAR_STOCKOUT) {
+            //出库
+            StockOutRecord record = BeanSimilar.createStoreOutRecord(getContext(),
+                    mStock,
+                    mSpTypeStockOut,
+                    count,
+                    leather,
+                    deduct);
+            record.setImages(Arrays.asList(imagePath));
+            dbImageUpload.setLine(GsonUtil.getGson().toJson(record));
+            dbImageUpload.setType(Common.DbType.TYPE_STORE_OUT);
+            dbImageUpload.setImagePath(imagePath);
+            getDbManager().insertDbImageUpload(dbImageUpload);
+            showSuccessResult("出库");
+            setBtnEnable(mBtnStockOut);
+        } else if (mIntType == Common.SIMILAR_ALLOCATE) {
+            //调拨
+            AllocateRecord allocateRecord = BeanSimilar.createAllocateRecord(getContext(),
+                    mStock,
+                    mSpWareHouseIn,
+                    count,
+                    leather,
+                    deduct);
+            allocateRecord.setImages(Arrays.asList(imagePath));
+            dbImageUpload.setLine(GsonUtil.getGson().toJson(allocateRecord));
+            dbImageUpload.setType(Common.DbType.TYPE_ALLOCATE);
+            dbImageUpload.setImagePath(imagePath);
+            getDbManager().insertDbImageUpload(dbImageUpload);
+            showSuccessResult("调拨");
+            setBtnEnable(mBtnAllocate);
+        } else {
+            //盘点
+            InventoryRecord inventoryRecord = BeanSimilar.createInventoryRecord(getContext(),
+                    mStock,
+                    count);
+            inventoryRecord.setImages(Arrays.asList(imagePath));
+            dbImageUpload.setLine(GsonUtil.getGson().toJson(inventoryRecord));
+            dbImageUpload.setType(Common.DbType.TYPE_CHECK);
+            dbImageUpload.setImagePath(imagePath);
+            getDbManager().insertDbImageUpload(dbImageUpload);
+            showSuccessResult("盘点");
+            setBtnEnable(mBtnInventory);
+        }
         dismissLoadingDialog();
     }
 
@@ -460,43 +509,26 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mBtnAllocate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLoadingDialog(false);
                 Warehouse warehouse = mSpWareHouse.getSelectedItem();
                 Warehouse wareHouseOut = mSpWareHouseIn.getSelectedItem();
                 if (warehouse == null || wareHouseOut == null
                         || TextUtils.isEmpty(warehouse.getName()) || TextUtils.isEmpty(wareHouseOut.getName())) {
-                    dismissLoadingDialog();
                     return;
                 }
                 if (warehouse.getName().equals(wareHouseOut.getName())
                         && warehouse.getCode().equals(wareHouseOut.getCode())) {
                     ToastUtil.showShortToast(getContext(), "调入仓库不能选择所在仓库");
-                    dismissLoadingDialog();
                     return;
                 }
                 if (checkToRequest("调拨数量不能为空")) {
                     mBtnAllocate.setEnabled(false);
-                    BigDecimal leather = getEtToBigdecimal(mEtLeather);
-                    BigDecimal deduct = getEtToBigdecimal(mEtDeduct);
-                    //调拨数量
-                    BigDecimal countSub = getEtToBigdecimal(mEtCount);
-                    AllocateRecord allocateRecord = BeanSimilar.createAllocateRecord(getContext(),
-                            mStock,
-                            mSpWareHouseIn,
-                            countSub,
-                            leather,
-                            deduct);
-                    DbImageUpload dbImageUpload = new DbImageUpload();
-                    Date date = new Date();
-                    dbImageUpload.setDate(DateUtils.getTime(date));
-                    dbImageUpload.setOperatime(DateUtils.getTime2(date));
-                    dbImageUpload.setLine(GsonUtil.getGson().toJson(allocateRecord));
-                    dbImageUpload.setType(Common.DbType.TYPE_ALLOCATE);
-                    getDbManager().insertDbImageUpload(dbImageUpload);
-                    showSuccessResult("调拨");
-                    setBtnEnable(mBtnAllocate);
+                    if (mVideoFragment.isLight()) {
+                        mVideoFragment.screenshot(mHandlerShotPic);
+                    } else {
+                        showLoadingDialog(false);
+                        shotResult(null);
+                    }
                 }
-                dismissLoadingDialog();
             }
         });
     }
@@ -536,23 +568,15 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mBtnInventory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLoadingDialog(false);
                 if (checkToRequest("实际数量不能为空")) {
                     mBtnInventory.setEnabled(false);
-                    InventoryRecord inventoryRecord = BeanSimilar.createInventoryRecord(getContext(),
-                            mStock,
-                            mEtCount);
-                    DbImageUpload dbImageUpload = new DbImageUpload();
-                    Date date = new Date();
-                    dbImageUpload.setDate(DateUtils.getTime(date));
-                    dbImageUpload.setDate(DateUtils.getTime2(date));
-                    dbImageUpload.setLine(GsonUtil.getGson().toJson(inventoryRecord));
-                    dbImageUpload.setType(Common.DbType.TYPE_CHECK);
-                    getDbManager().insertDbImageUpload(dbImageUpload);
-                    showSuccessResult("盘点");
-                    setBtnEnable(mBtnInventory);
+                    if (mVideoFragment.isLight()) {
+                        mVideoFragment.screenshot(mHandlerShotPic);
+                    } else {
+                        showLoadingDialog(false);
+                        shotResult(null);
+                    }
                 }
-                dismissLoadingDialog();
             }
         });
     }

@@ -7,6 +7,6 @@ package xm.cloudweight.comm;
  */
 public class BrocastFilter {
 
-    public static final String FILTER_REFRESH_SORT_OUT_HISTORY = "filter_refresh_sort_out_history";
+    public static final String FILTER_REFRESH_HISTORY = "filter_refresh_history";
 
 }

@@ -2,13 +2,9 @@ package xm.cloudweight;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -36,6 +32,7 @@ import com.xmzynt.storm.util.query.PageData;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +43,6 @@ import rx.Subscription;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.camera.instrument.Instrument;
-import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CommImpl;
@@ -63,6 +59,7 @@ import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.bussiness.SubScriptionUtil;
 import xm.cloudweight.utils.dao.DBManager;
+import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
@@ -153,7 +150,6 @@ public class SortOutActivity extends BaseActivity implements
     private DbImageUpload mDbImageUpload;
     private boolean mStable;
     private VideoFragment mVideoFragment;
-    private RefreshDbImageUploadReceiver mRefreshDbImageUploadReceiver;
     private Subscription mSubScriptionWeight;
     private Subscription mSubScriptionCount;
 
@@ -264,9 +260,14 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     protected void loadDate() {
-        mRefreshDbImageUploadReceiver = new RefreshDbImageUploadReceiver();
-        IntentFilter refreshDbImageUploadFilter = new IntentFilter(BrocastFilter.FILTER_REFRESH_SORT_OUT_HISTORY);
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mRefreshDbImageUploadReceiver, refreshDbImageUploadFilter);
+        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mHistoryPopWindow != null && mHistoryPopWindow.isShowing()) {
+                    refreshHistoryList();
+                }
+            }
+        });
 
         getLocalInfo();
         mBtnSortOutCount.setSelected(false);
@@ -279,9 +280,7 @@ public class SortOutActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mRefreshDbImageUploadReceiver != null) {
-            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mRefreshDbImageUploadReceiver);
-        }
+        DbRefreshUtil.refreshUnRegist(this);
     }
 
     private void getLocalInfo() {
@@ -341,6 +340,7 @@ public class SortOutActivity extends BaseActivity implements
                 mIntType = TYPE_WEIGHT;
                 mLlLeather.setVisibility(View.VISIBLE);
                 mLlWeight.setVisibility(View.VISIBLE);
+                mEtShow.setEnabled(false);
                 setClick("称重数：", false, true);
                 break;
             }
@@ -353,6 +353,7 @@ public class SortOutActivity extends BaseActivity implements
                 mLlWeight.setVisibility(View.GONE);
                 mEtLeather.setText("0");
                 mTvWeight.setText("0");
+                mEtShow.setEnabled(true);
                 setClick("出库数量：", true, false);
                 break;
             }
@@ -481,7 +482,7 @@ public class SortOutActivity extends BaseActivity implements
     /**
      * 保存数据到数据库   更新列表
      */
-    private void setDataToDb(String path) {
+    private void setDataToDb(String iamgePath) {
         if (mPreSortOutData != null) {
             // 保存 称重数（订购数量）   直接上传kg数   不需要转换
             boolean isWeight = mPreSortOutData.getUnitCoefficient() != null && mPreSortOutData.getUnitCoefficient().doubleValue() != 0;
@@ -533,12 +534,17 @@ public class SortOutActivity extends BaseActivity implements
                     mPreSortOutData.setLastWeight(stockOutQty.multiply(unitCoefficient));
                 }
             }
+
+            if (!TextUtils.isEmpty(iamgePath)) {
+                mPreSortOutData.setImages(Arrays.asList(iamgePath));
+            }
+
             // ** 保存数据到数据库在 setStockOutQty，setWarehouse 后
             DbImageUpload dbImageUpload = new DbImageUpload();
             dbImageUpload.setDate(mBtnDate.getText().toString().trim());
             dbImageUpload.setOperatime(DateUtils.getTime2(new Date()));
             dbImageUpload.setLine(GsonUtil.getGson().toJson(mPreSortOutData));
-            dbImageUpload.setImagePath(path);
+            dbImageUpload.setImagePath(iamgePath);
             dbImageUpload.setType(Common.DbType.TYPE_SORT_OUT_STORE_OUT);
             getDbManager().insertDbImageUpload(dbImageUpload);
 
@@ -562,6 +568,7 @@ public class SortOutActivity extends BaseActivity implements
             //打印标签
             printer(unitCoefficient);
             //先打印后清除数据
+            mPreSortOutData.setImages(null);
             mPreSortOutData.setStockOutQty(null);
             mPreSortOutData.setWarehouse(null);
             mPreSortOutData.setPlatformTraceCode(null);
@@ -691,19 +698,6 @@ public class SortOutActivity extends BaseActivity implements
         mListHistory.addAll(daoList);
         mHistoryPopWindow.show();
         mHistoryPopWindow.notify(mListHistory);
-    }
-
-    /**
-     * 后台线程上传分拣接口成功后发送过来的广播
-     */
-    private class RefreshDbImageUploadReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mHistoryPopWindow != null && mHistoryPopWindow.isShowing()) {
-                refreshHistoryList();
-            }
-        }
     }
 
     @Override

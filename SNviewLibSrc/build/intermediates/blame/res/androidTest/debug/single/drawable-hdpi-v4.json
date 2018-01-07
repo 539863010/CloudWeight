@@ -1,11 +1,11 @@
 [
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\video_num_front.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\video_num_front.png"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\md__category_background.9.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\md__category_background.9.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\video_num_front.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\video_num_front.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\zz_empty_select.png",

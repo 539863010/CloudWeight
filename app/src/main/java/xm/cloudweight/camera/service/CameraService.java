@@ -491,7 +491,8 @@ public class CameraService extends Service {
     }
 
     private String getFilePath() {
-        String path = FileUtil.getFilePath(CameraService.this, "screen") + (new SimpleDateFormat("yyyy-MM-dd")).format(System.currentTimeMillis());
+        long currentTimeMillis = System.currentTimeMillis();
+        String path = FileUtil.getFilePath(CameraService.this, "screen") + (new SimpleDateFormat("yyyy-MM-dd")).format(currentTimeMillis);
         File file = new File(path);
         if (!file.exists()) {
             file.mkdir();
@@ -499,7 +500,7 @@ public class CameraService extends Service {
 //        return path + File.separator + (new SimpleDateFormat("yyyyMMddHHmmss")).format(System.currentTimeMillis()) + ".jpg";
         //四位随机数
         int randomNum = (int) (Math.random() * 9000) + 1000;
-        return path + File.separator + (new SimpleDateFormat("yyyyMMddHHmmssSSS")).format(randomNum) + ".jpg";
+        return path + File.separator + (new SimpleDateFormat("yyyyMMddHHmmssSSS")).format(currentTimeMillis).concat(String.valueOf(randomNum)) + ".jpg";
     }
 
     /**

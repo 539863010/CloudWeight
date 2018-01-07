@@ -110,7 +110,8 @@ public class DBManager {
         return daoSession.getDbImageUploadDao()
                 .queryBuilder()
                 .where(DbImageUploadDao.Properties.ImagePath.isNotNull(),
-                        DbImageUploadDao.Properties.ImageUrl.isNull())
+                        DbImageUploadDao.Properties.ImageUrl.isNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(true))
                 .list();
     }
 
@@ -206,7 +207,7 @@ public class DBManager {
     }
 
     /**
-     * 获取数据库中  未成功上传的 验收  入库  的列表
+     *  验收  入库
      */
     public List<DbImageUpload> getDbListCheckInStoreIn() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -217,12 +218,13 @@ public class DBManager {
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_STORE_IN),
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.StockInUuid.isNull())
+                        DbImageUploadDao.Properties.StockInUuid.isNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false))
                 .list();
     }
 
     /**
-     * 获取数据库中  未成功上传的 验收  越库  的列表
+     * 验收  越库
      */
     public List<DbImageUpload> getDbListCheckInCrossOut() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -233,13 +235,14 @@ public class DBManager {
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_CROSS_OUT),
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.StockOutUuid.isNull()
+                        DbImageUploadDao.Properties.StockOutUuid.isNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false)
                 )
                 .list();
     }
 
     /**
-     * 获取数据库中  未成功上传的 验收  越库调拨  的列表
+     *  验收  越库调拨
      */
     public List<DbImageUpload> getDbListCheckInCrossAllocate() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -250,13 +253,14 @@ public class DBManager {
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE),
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.StockInUuid.isNull()
+                        DbImageUploadDao.Properties.StockInUuid.isNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false)
                 )
                 .list();
     }
 
     /**
-     * 获取数据库中  未成功上传的 分拣  的列表
+     * 分拣
      */
     public List<DbImageUpload> getDbListSortOutStoreOut() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -267,13 +271,14 @@ public class DBManager {
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_SORT_OUT_STORE_OUT),
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.StockOutUuid.isNull()
+                        DbImageUploadDao.Properties.StockOutUuid.isNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false)
                 )
                 .list();
     }
 
     /**
-     * 获取数据库中  未成功上传的 出库  的列表
+     *  出库
      */
     public List<DbImageUpload> getDbListStoreOut() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -284,13 +289,14 @@ public class DBManager {
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_STORE_OUT),
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.StockOutUuid.isNull()
+                        DbImageUploadDao.Properties.StockOutUuid.isNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false)
                 )
                 .list();
     }
 
     /**
-     * 获取数据库中  未成功上传的 调拨  的列表 （接口请求成功后更新db数据）
+     *  调拨
      */
     public List<DbImageUpload> getDbListAllocate() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -301,13 +307,14 @@ public class DBManager {
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ALLOCATE),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
                         DbImageUploadDao.Properties.Line.isNotNull(),
-                        DbImageUploadDao.Properties.StockOutUuid.isNull()
+                        DbImageUploadDao.Properties.StockOutUuid.isNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false)
                 )
                 .list();
     }
 
     /**
-     * 获取数据库中  未成功上传的 盘点  的列表
+     *  盘点
      */
     public List<DbImageUpload> getDbListCheck() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -317,7 +324,8 @@ public class DBManager {
                 .where(
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_CHECK),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
-                        DbImageUploadDao.Properties.Line.isNotNull()
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false)
                 )
                 .list();
     }
