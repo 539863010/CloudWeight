@@ -41,6 +41,7 @@ import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.BeanSimilar;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.Common;
+import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CommImpl;
 import xm.cloudweight.impl.SimilarImpl;
@@ -124,6 +125,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private DbImageUpload mDbImageUpload;
     private boolean hasCancel;
+    private InputFragment mInputFragment;
 
     @Override
     protected int getLayoutId() {
@@ -138,9 +140,6 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
 
     @Override
     protected void initContentView() {
-        mVideoFragment = VideoFragment.getInstance();
-        mVideoFragment.setInstrumentListener(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, mVideoFragment).commitAllowingStateLoss();
         //库存数
         View llStockNum = findViewById(R.id.ll_stock_num);
         TextView tvTitleStockNum = llStockNum.findViewById(R.id.tv_title);
@@ -199,6 +198,9 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                 //先清除数据
                 clearContent(mListShow.get(i));
                 setInfo();
+                if (mInputFragment != null) {
+                    mInputFragment.hide();
+                }
             }
         });
 
@@ -224,6 +226,16 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         });
         mEtLeather.setOnInputFinishListener(mOnInputFinishListener);
         mEtDeduct.setOnInputFinishListener(mOnInputFinishListener);
+
+        mVideoFragment = VideoFragment.getInstance();
+        mVideoFragment.setInstrumentListener(this);
+        //设置小键盘
+        mInputFragment = InputFragment.newInstance();
+        mInputFragment.setEditTexts(mEtLeather, mEtDeduct, mEtCount);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, mVideoFragment).add(R.id.container, mInputFragment)
+                .hide(mInputFragment).show(mVideoFragment)
+                .commitAllowingStateLoss();
     }
 
     @Override

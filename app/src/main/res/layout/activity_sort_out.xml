@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context="xm.cloudweight.SortOutActivity">
 
-    <!--宽高不动-->
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:visibility="invisible"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
-
-    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -359,5 +350,13 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_centerInParent="true"
+        android:layout_width="350dp"
+        android:layout_height="300dp">
+
+    </FrameLayout>
 
 </RelativeLayout>

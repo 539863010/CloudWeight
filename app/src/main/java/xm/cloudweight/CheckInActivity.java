@@ -43,6 +43,7 @@ import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.Common;
+import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CheckInImpl;
 import xm.cloudweight.presenter.CheckInPresenter;
@@ -144,6 +145,7 @@ public class CheckInActivity extends BaseActivity implements
     private DbImageUpload mDbImageUpload;
     private boolean hasCancelCheckIn;
     private onScanFinishListener mOnScanFinishListener;
+    private InputFragment mInputFragment;
 
     @Override
     protected int getLayoutId() {
@@ -152,9 +154,6 @@ public class CheckInActivity extends BaseActivity implements
 
     @Override
     protected void initContentView() {
-        mVideoFragment = VideoFragment.getInstance();
-        mVideoFragment.setInstrumentListener(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, mVideoFragment).commitAllowingStateLoss();
         //请求焦点  解决监听EditText问题
         findViewById(R.id.activity_check_in).requestFocus();
         mEtWeightCurrent = (EditText) getEditText(R.id.ll_weight_current, "当前重量");
@@ -234,6 +233,20 @@ public class CheckInActivity extends BaseActivity implements
         mEtWeightAccumulate.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
         mEtBucklesLeather.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
         mEtDeductWeight.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
+
+        //初始化视频
+        mVideoFragment = VideoFragment.getInstance();
+        mVideoFragment.setInstrumentListener(this);
+        //禁止弹软键盘
+        mInputFragment = InputFragment.newInstance();
+        mInputFragment.setEditTexts(mEtBucklesLeather, mEtDeductWeight, mEtNumWarehousing);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, mVideoFragment)
+                .add(R.id.container, mInputFragment)
+                .hide(mInputFragment)
+                .show(mVideoFragment)
+                .commitAllowingStateLoss();
+
         DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
             @Override
             public void onRefresh() {
@@ -343,7 +356,12 @@ public class CheckInActivity extends BaseActivity implements
             amount = accumulate;
         }
         BigDecimal weightCoefficient = mPurchaseBillLine.getWeightCoefficient();
-        BigDecimal finallyCount = amount.subtract(leather).subtract(deduct).divide(weightCoefficient, ROUND_HALF_EVEN);
+        BigDecimal finallyCount;
+        if (weightCoefficient != null) {
+            finallyCount = amount.subtract(leather).subtract(deduct).divide(weightCoefficient, ROUND_HALF_EVEN);
+        } else {
+            finallyCount = amount;
+        }
         if (finallyCount.doubleValue() < 0) {
             mEtNumWarehousing.setText("0.00");
         } else {
@@ -720,6 +738,10 @@ public class CheckInActivity extends BaseActivity implements
         UCN warehouse = mPurchaseData.getWarehouse();
         if (warehouse != null && !TextUtils.isEmpty(warehouse.getName())) {
             mEtWareHourseIn.setText(warehouse.getName());
+        }
+        //关闭数字键盘
+        if (mInputFragment != null) {
+            mInputFragment.hide();
         }
     }
 
@@ -1155,6 +1177,7 @@ public class CheckInActivity extends BaseActivity implements
     private void setEditText(EditText et, String content) {
         if (!TextUtils.isEmpty(content)) {
             et.setText(content);
+            et.setSelection(content.length());
         } else {
             et.setText("");
         }

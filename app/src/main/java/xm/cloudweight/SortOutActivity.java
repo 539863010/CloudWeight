@@ -44,6 +44,7 @@ import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.Common;
+import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CommImpl;
 import xm.cloudweight.impl.SortOutImpl;
@@ -152,6 +153,7 @@ public class SortOutActivity extends BaseActivity implements
     private VideoFragment mVideoFragment;
     private Subscription mSubScriptionWeight;
     private Subscription mSubScriptionCount;
+    private InputFragment mInputFragment;
 
     @Override
     protected int getLayoutId() {
@@ -162,9 +164,6 @@ public class SortOutActivity extends BaseActivity implements
     @Override
     protected void initContentView() {
         mTvTypeUnit.setText("kg");
-        mVideoFragment = VideoFragment.getInstance();
-        mVideoFragment.setInstrumentListener(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, mVideoFragment).commitAllowingStateLoss();
         //判断有没网络
         changeNetState(inspectNet());
         mEtShow.setEnabled(false);
@@ -235,6 +234,18 @@ public class SortOutActivity extends BaseActivity implements
                 sequenceListWeight(mListShow, sub);
             }
         });
+
+        mVideoFragment = VideoFragment.getInstance();
+        mVideoFragment.setInstrumentListener(this);
+        //数字键盘
+        mInputFragment = InputFragment.newInstance();
+        mInputFragment.setEditTexts(mEtShow, mEtLeather);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, mVideoFragment)
+                .add(R.id.container, mInputFragment)
+                .hide(mVideoFragment)
+                .hide(mInputFragment)
+                .commitAllowingStateLoss();
     }
 
     private void notifyItemClick() {
