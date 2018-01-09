@@ -121,12 +121,16 @@ public class InputFragment extends BaseFragment {
     };
 
     private View.OnFocusChangeListener mOnFocusChangeListener = new View.OnFocusChangeListener() {
+
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
+            EditText editText = (EditText) v;
             if (!hasFocus) {
-                return;
+                editText.setTextColor(getResources().getColor(R.color.white));
+            } else {
+                editText.setTextColor(getResources().getColor(R.color.yellow));
+                show(editText);
             }
-            show((EditText) v);
         }
     };
 

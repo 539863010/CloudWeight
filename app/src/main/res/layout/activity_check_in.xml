@@ -221,7 +221,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3"
-                    android:background="@color/color_e2e2e2"
+                    android:background="@color/color_f7f6f6"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/_10dp"
                     android:paddingRight="@dimen/_10dp"

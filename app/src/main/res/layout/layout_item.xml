@@ -2,8 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_40dp"
+    android:layout_height="@dimen/_45dp"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_item_edit_de4c25"
+    android:layout_marginBottom="@dimen/_3dp"
     android:orientation="horizontal"
     android:gravity="center_vertical">
 
@@ -12,7 +14,9 @@
         android:layout_width="@dimen/_60dp"
         android:layout_height="wrap_content"
         android:text="当前重量"
-        android:textSize="12sp"
+        android:layout_marginLeft="@dimen/_5dp"
+        android:textSize="13sp"
+        android:textColor="@color/white"
         />
 
     <xm.cloudweight.widget.SearchAndFocusEditText
@@ -26,6 +30,7 @@
         android:inputType="numberDecimal"
         android:background="@drawable/shape_edit_round_bg_71bd5c"
         android:singleLine="true"
+        android:textColor="@color/white"
         android:textSize="@dimen/_16sp"/>
 
     <TextView
@@ -33,7 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="kg"
+        android:textColor="@color/white"
         android:layout_marginLeft="@dimen/_5dp"
+        android:layout_marginRight="@dimen/_5dp"
         android:textSize="@dimen/_12sp"/>
 
 </LinearLayout>

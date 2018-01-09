@@ -159,13 +159,13 @@ public class CheckInActivity extends BaseActivity implements
         mEtWeightCurrent = (EditText) getEditText(R.id.ll_weight_current, "当前重量");
         mEtWeightCurrent.setEnabled(false);
         mEtWeightCurrent.setBackground(null);
-        mEtWeightCurrent.setTextColor(getResources().getColor(R.color.red));
+//        mEtWeightCurrent.setTextColor(getResources().getColor(R.color.red));
         mEtWeightCurrent.setTextSize(getResources().getDimension(R.dimen._16sp));
         mEtWeightAccumulate = (SearchAndFocusEditText) getEditText(R.id.ll_weight_accumulate, "累计重量");
         mTvWeightAccumulateUnit = ((TextView) findViewById(R.id.ll_weight_accumulate).findViewById(R.id.tv_unit));
         mEtWeightAccumulate.setEnabled(false);
         mEtWeightAccumulate.setBackground(null);
-        mEtWeightAccumulate.setTextColor(getResources().getColor(R.color.blue));
+//        mEtWeightAccumulate.setTextColor(getResources().getColor(R.color.blue));
         mEtWeightCurrent.setTextSize(getResources().getDimension(R.dimen._16sp));
         mEtBucklesLeather = (SearchAndFocusEditText) getEditText(R.id.ll_buckles_leather, "扣皮");
         mEtDeductWeight = (SearchAndFocusEditText) getEditText(R.id.ll_deduct_weight, "扣重");

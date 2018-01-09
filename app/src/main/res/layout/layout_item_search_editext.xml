@@ -2,9 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_40dp"
+    android:layout_height="@dimen/_45dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
+    android:background="@drawable/shape_item_edit_279c70"
     android:gravity="center_vertical">
 
     <TextView
@@ -13,6 +14,8 @@
         android:layout_height="wrap_content"
         android:text="当前重量"
         android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/_5dp"
         />
 
     <RelativeLayout
@@ -28,6 +31,7 @@
             android:background="@drawable/shape_edit_round_bg_71bd5c"
             android:ems="10"
             tools:text="140.22"
+            android:textColor="@color/white"
             android:gravity="center"
             android:inputType="numberDecimal"
             android:singleLine="true"
@@ -60,6 +64,8 @@
         android:layout_height="wrap_content"
         android:text="kg"
         android:layout_marginLeft="@dimen/_5dp"
+        android:textColor="@color/white"
+        android:layout_marginRight="@dimen/_5dp"
         android:textSize="@dimen/_12sp"/>
 
 </LinearLayout>

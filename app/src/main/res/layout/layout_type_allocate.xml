@@ -7,7 +7,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40dp"
+        android:layout_height="@dimen/_45dp"
+        android:background="@drawable/shape_item_edit_279c70"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -16,6 +17,8 @@
             android:layout_width="@dimen/_60dp"
             android:text="调入仓库"
             android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/_5dp"
             />
 
         <RelativeLayout
@@ -29,13 +32,14 @@
                 android:layout_width="match_parent"
                 android:background="@drawable/shape_spinner_round"
                 android:layout_height="@dimen/_35dp"
+                android:layout_marginRight="@dimen/_5dp"
                 />
 
             <ImageView
                 android:src="@drawable/tubiao_k_xial"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/_2dp"
+                android:layout_marginRight="@dimen/_7dp"
                 android:layout_width="@dimen/_30dp"
                 android:layout_height="@dimen/_30dp"/>
 

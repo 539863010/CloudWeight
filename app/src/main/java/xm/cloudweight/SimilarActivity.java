@@ -148,14 +148,14 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         mEtStockNum = (SearchAndFocusEditText) llStockNum.findViewById(R.id.ed_content);
         mEtStockNum.setEnabled(false);
         mEtStockNum.setBackground(null);
-        mEtStockNum.setTextColor(getResources().getColor(R.color.black));
+//        mEtStockNum.setTextColor(getResources().getColor(R.color.black));
         mEtStockNum.setTextSize(getResources().getDimension(R.dimen._16sp));
         View llCurrentWeight = findViewById(R.id.ll_current_weight);
         TextView tvTitleCurrentWeight = llCurrentWeight.findViewById(R.id.tv_title);
         mEtCurrentWeight = (SearchAndFocusEditText) llCurrentWeight.findViewById(R.id.ed_content);
         mEtCurrentWeight.setEnabled(false);
         mEtCurrentWeight.setBackground(null);
-        mEtCurrentWeight.setTextColor(getResources().getColor(R.color.red));
+//        mEtCurrentWeight.setTextColor(getResources().getColor(R.color.red));
         mEtCurrentWeight.setTextSize(getResources().getDimension(R.dimen._16sp));
         tvTitleCurrentWeight.setText("当前重量");
         View llLeather = findViewById(R.id.ll_buckles_leather);

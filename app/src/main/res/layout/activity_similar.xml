@@ -140,10 +140,11 @@
                 android:id="@+id/ll_type"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/_10dp"
-                android:layout_marginRight="@dimen/_10dp"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_10dp"
                 android:layout_weight="0.3"
                 android:orientation="vertical"
+                android:background="@color/color_f7f6f6"
                 android:paddingTop="@dimen/_20dp">
 
                 <include

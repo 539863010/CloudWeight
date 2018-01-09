@@ -6,6 +6,7 @@
     <dimen name="_4dp">4dp</dimen>
     <dimen name="_8dp">8dp</dimen>
     <dimen name="_2dp">2dp</dimen>
+    <dimen name="_7dp">7dp</dimen>
     <dimen name="_12dp">12dp</dimen>
     <dimen name="_15dp">15dp</dimen>
     <dimen name="_20dp">20dp</dimen>
@@ -47,6 +48,7 @@
     <dimen name="_0dp">0dp</dimen>
     <dimen name="_26sp">26sp</dimen>
     <dimen name="_5dp">5dp</dimen>
+    <dimen name="_3dp">3dp</dimen>
     <dimen name="_28sp">28sp</dimen>
     <dimen name="_135dp">135dp</dimen>
     <dimen name="spinner_min_width">120dp</dimen>
