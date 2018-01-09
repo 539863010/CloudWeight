@@ -275,7 +275,7 @@
                     android:textSize="@dimen/_16sp"/>
 
                 <EditText
-                    android:id="@+id/et_leather"
+                    android:id="@+id/et_leather_sort_out"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"

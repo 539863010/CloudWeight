@@ -126,7 +126,10 @@ public class InputFragment extends BaseFragment {
         public void onFocusChange(View v, boolean hasFocus) {
             EditText editText = (EditText) v;
             if (!hasFocus) {
-                editText.setTextColor(getResources().getColor(R.color.white));
+                //分拣的去皮不改变白色
+                if (v.getId() != R.id.et_leather_sort_out) {
+                    editText.setTextColor(getResources().getColor(R.color.white));
+                }
             } else {
                 editText.setTextColor(getResources().getColor(R.color.yellow));
                 show(editText);

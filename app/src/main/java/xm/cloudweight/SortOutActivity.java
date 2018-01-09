@@ -112,7 +112,7 @@ public class SortOutActivity extends BaseActivity implements
     TextView mTvTypeUnit;
     @BindView(R.id.et_show)
     EditText mEtShow;
-    @BindView(R.id.et_leather)
+    @BindView(R.id.et_leather_sort_out)
     EditText mEtLeather;
     @BindView(R.id.tv_weight)
     TextView mTvWeight;
@@ -237,7 +237,7 @@ public class SortOutActivity extends BaseActivity implements
 
         mVideoFragment = VideoFragment.getInstance();
         mVideoFragment.setInstrumentListener(this);
-        //数字键盘
+        //数字键盘   InputFragment中设置mEtLeather文本焦点不在时不改变为白色
         mInputFragment = InputFragment.newInstance();
         mInputFragment.setEditTexts(mEtShow, mEtLeather);
         getSupportFragmentManager().beginTransaction()
