@@ -1,5 +1,6 @@
 package xm.cloudweight.presenter;
 
+import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.purchase.PurchaseData;
 
 import java.util.List;
@@ -47,22 +48,22 @@ public class CheckInPresenter {
     /**
      * 扫码获取采购信息
      */
-    public static void scanToPurchaseData(final BaseActivity aty, String uuid) {
-        if (!(aty instanceof CheckInImpl.OnScanToPurchaseDataListener)) {
+    public static void getDropdownOperator(final BaseActivity aty, int page, int pageSize, int defaultPageSize) {
+        if (!(aty instanceof CheckInImpl.OnGetDropdownOperatorListener)) {
             return;
         }
-        PBaseInfo pBaseInfo = BeanUtil.scanToPurchaseData(aty, uuid);
-        aty.getApiManager().scanToPurchaseData(pBaseInfo)
-                .compose(new TransformerHelper<ResponseEntity<PurchaseData>>().get(aty))
-                .subscribe(new ApiSubscribe<PurchaseData>() {
+        PBaseInfo pBaseInfo = BeanUtil.getDropdownOperator(aty, page, pageSize, defaultPageSize);
+        aty.getApiManager().getDropdownOperator(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<List<IdName>>>().get(aty))
+                .subscribe(new ApiSubscribe<List<IdName>>() {
                     @Override
-                    protected void onResult(PurchaseData result) {
-                        ((CheckInImpl.OnScanToPurchaseDataListener) aty).onScanToPurchaseDataSuccess(result);
+                    protected void onResult(List<IdName> result) {
+                        ((CheckInImpl.OnGetDropdownOperatorListener) aty).onGetDropdownOperatorSuccess(result);
                     }
 
                     @Override
                     protected void onResultFail(int errorType, String failString) {
-                        ((CheckInImpl.OnScanToPurchaseDataListener) aty).onScanToPurchaseDataFailed(errorType, failString);
+                        ((CheckInImpl.OnGetDropdownOperatorListener) aty).onGetDropdownOperatorFailed(failString);
                     }
 
                 });

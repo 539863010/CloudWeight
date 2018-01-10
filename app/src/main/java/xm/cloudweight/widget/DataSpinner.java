@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.goods.GoodsCategory;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
@@ -114,6 +115,9 @@ public class DataSpinner<T> extends android.support.v7.widget.AppCompatSpinner {
             } else if (t instanceof StockOutType) {
                 //出库类型
                 mListTitle.add(((StockOutType) t).getCaption());
+            } else if (t instanceof IdName) {
+                //验收人
+                mListTitle.add(((IdName) t).getName());
             } else {
                 throw new RuntimeException("----请设置类型----");
             }

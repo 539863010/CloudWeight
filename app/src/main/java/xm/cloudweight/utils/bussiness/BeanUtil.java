@@ -76,6 +76,25 @@ public class BeanUtil {
     }
 
     /**
+     * 获取经办人
+     */
+    public static PBaseInfo getDropdownOperator(Context ctx, int page, int pageSize, int defaultPageSize) {
+        PBaseInfo p = new PBaseInfo();
+        setBaseInfo(ctx, p);
+        Map<String, Object> body = p.getBody();
+        QueryFilter queryFilter = new QueryFilter();
+        queryFilter.setPage(page);
+        queryFilter.setPageSize(pageSize);
+        queryFilter.setDefaultPageSize(defaultPageSize);
+        Map<String, Object> params = queryFilter.getParams();
+        params.put("uuid", p.getUserUuid());
+        queryFilter.setParams(params);
+        body.put("queryFilter", queryFilter);
+        p.setBody(body);
+        return p;
+    }
+
+    /**
      * 分页查询采购订单
      */
     public static PBaseInfo queryPurchaseData(Context ctx, int page, int pageSize, int defaultPageSize, String deliveryTime) {

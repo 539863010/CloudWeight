@@ -1,5 +1,6 @@
 package xm.cloudweight.api;
 
+import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.goods.GoodsCategory;
 import com.xmzynt.storm.service.purchase.PurchaseBill;
 import com.xmzynt.storm.service.purchase.PurchaseData;
@@ -278,5 +279,14 @@ public interface ApiManager {
      */
     @POST("/merchant/scaleApi/saveImage.do")
     Observable<ResponseEntity<String>> saveImage(@Body PBaseInfo p);
+
+    /**
+     * 经办人
+     *
+     * @param p 经办人请求体
+     * @return Observable<ResponseEntity>
+     */
+    @POST("/merchant/pda/purchase/getDropdownOperator.do")
+    Observable<ResponseEntity<List<IdName>>> getDropdownOperator(@Body PBaseInfo p);
 
 }

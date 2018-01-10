@@ -333,6 +333,15 @@
                 />
 
             <xm.cloudweight.widget.DataSpinner
+                android:id="@+id/sp_operator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35dp"
+                android:layout_marginTop="@dimen/_1dp"
+                android:background="@drawable/shape_spinner_bg_a"
+                android:minWidth="@dimen/spinner_min_width"
+                />
+
+            <xm.cloudweight.widget.DataSpinner
                 android:id="@+id/sp_purchaseBill"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35dp"

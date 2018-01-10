@@ -78,13 +78,16 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  */
 public class CheckInActivity extends BaseActivity implements
         CheckInImpl.OnQueryPurchaseDataListener,
-        CheckInImpl.OnCancelStockInListener
-        , Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, HistoryCheckInPopWindow.OnDeleteListener {
+        CheckInImpl.OnCancelStockInListener,
+        CheckInImpl.OnGetDropdownOperatorListener,
+        Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, HistoryCheckInPopWindow.OnDeleteListener {
 
     @BindView(R.id.sp_ware_house)
     DataSpinner<Warehouse> mSpWareHouse;
     @BindView(R.id.sp_purchaseBill)
     DataSpinner<String> mSpSupplier;
+    @BindView(R.id.sp_operator)
+    DataSpinner<IdName> mSpOperator;
     @BindView(R.id.lv_line)
     ListView mLvPurchase;
     @BindView(R.id.tv_info_goods)
@@ -186,6 +189,7 @@ public class CheckInActivity extends BaseActivity implements
     private void setViewListener() {
         mSpWareHouse.setCustomItemSelectedListener(this);
         mSpSupplier.setCustomItemSelectedListener(this);
+        mSpOperator.setCustomItemSelectedListener(this);
         mLvPurchase.setOnItemClickListener(mOnItemPurchaseClickListener);
         mEtPurChaseLabel.setOnScanFinishListener(mLabelOnScanFinishListener);
         mEtWeightCurrent.addTextChangedListener(new BaseTextWatcher() {
@@ -378,7 +382,7 @@ public class CheckInActivity extends BaseActivity implements
 
         showLoadingDialog(true);
         getWareHouseList();
-        CheckInPresenter.queryPurchaseData(this, 0, 0, 0, currentData);
+        CheckInPresenter.getDropdownOperator(this, 0, 0, 0);
     }
 
     private void getWareHouseList() {
@@ -406,6 +410,7 @@ public class CheckInActivity extends BaseActivity implements
         switch (adapterView.getId()) {
             case R.id.sp_ware_house:
             case R.id.sp_purchaseBill:
+            case R.id.sp_operator:
                 showLoadingDialog(false);
                 filterList();
                 dismissLoadingDialog();
@@ -647,11 +652,14 @@ public class CheckInActivity extends BaseActivity implements
         showLoadingDialog(false);
         mSpWareHouse.setCustomItemSelectedListener(null);
         mSpSupplier.setCustomItemSelectedListener(null);
+        mSpOperator.setCustomItemSelectedListener(null);
         mSpWareHouse.setSelection(0);
         mSpSupplier.setSelection(0);
+        mSpOperator.setSelection(0);
         filterList();
         mSpWareHouse.setCustomItemSelectedListener(this);
         mSpSupplier.setCustomItemSelectedListener(this);
+        mSpOperator.setCustomItemSelectedListener(this);
         dismissLoadingDialog();
     }
 
@@ -954,17 +962,34 @@ public class CheckInActivity extends BaseActivity implements
                 listWarehouse.addAll(mListAll);
             }
 
+            IdName operatorSelect = mSpOperator.getSelectedItem();
+            List<PurchaseData> listOperator = new ArrayList<>();
+            if (operatorSelect != null && !operatorSelect.getName().equals("全部")) {
+                String operatorSelectId = operatorSelect.getId();
+                for (PurchaseData data : listWarehouse) {
+                    IdName operator = data.getOperator();
+                    if (operator != null) {
+                        String id = operator.getId();
+                        if (id.equals(operatorSelectId)) {
+                            listOperator.add(data);
+                        }
+                    }
+                }
+            } else {
+                listOperator.addAll(listWarehouse);
+            }
+
             String supplierName = mSpSupplier.getSelectedItem();
             List<PurchaseData> listSupplier = new ArrayList<>();
             if (!TextUtils.isEmpty(supplierName) && !supplierName.equals("全部")) {
-                for (PurchaseData data : listWarehouse) {
+                for (PurchaseData data : listOperator) {
                     IdName supplier = data.getSupplier();
                     if ((supplier != null && supplier.getName().equals(supplierName))) {
                         listSupplier.add(data);
                     }
                 }
             } else {
-                listSupplier.addAll(listWarehouse);
+                listSupplier.addAll(listOperator);
             }
 
             String key = mEtKeySearch.getText().toString().trim();
@@ -1032,10 +1057,29 @@ public class CheckInActivity extends BaseActivity implements
         return mDBManager;
     }
 
+    @Override
+    public void onGetDropdownOperatorSuccess(List<IdName> result) {
+        List<IdName> listOperator = new ArrayList<>();
+        listOperator.add(new IdName("", "全部"));
+        if (result != null && result.size() > 0) {
+            listOperator.addAll(result);
+        }
+        mSpOperator.setList(listOperator);
+
+        //请求列表数据
+        String currentData = mBtnDate.getText().toString().trim();
+        CheckInPresenter.queryPurchaseData(this, 0, 0, 0, currentData);
+    }
+
+    @Override
+    public void onGetDropdownOperatorFailed(String message) {
+        mSpOperator.setList(new ArrayList<IdName>());
+        ToastUtil.showShortToast(getContext(), message);
+        dismissLoadingDialog();
+    }
+
     /**
      * 入库，越库接口请求成功后刷新数据
-     *
-     * @param record
      */
     private void refreshSuccessData(StockInRecord record) {
         // 保存累计重量

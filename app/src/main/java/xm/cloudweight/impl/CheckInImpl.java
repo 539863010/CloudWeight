@@ -1,5 +1,6 @@
 package xm.cloudweight.impl;
 
+import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.purchase.PurchaseData;
 
 import java.util.List;
@@ -24,17 +25,6 @@ public class CheckInImpl {
 
 
     /**
-     * 扫码获取采购信息
-     */
-    public interface OnScanToPurchaseDataListener {
-
-        void onScanToPurchaseDataSuccess(PurchaseData purchaseBill);
-
-        void onScanToPurchaseDataFailed(int errorType, String message);
-
-    }
-
-    /**
      * 撤销入库
      */
     public interface OnCancelStockInListener {
@@ -42,6 +32,17 @@ public class CheckInImpl {
         void onCancelStockInSuccess(String result);
 
         void onCancelStockInFailed(String message);
+
+    }
+
+    /**
+     * 撤销入库
+     */
+    public interface OnGetDropdownOperatorListener {
+
+        void onGetDropdownOperatorSuccess(List<IdName> result);
+
+        void onGetDropdownOperatorFailed(String message);
 
     }
 

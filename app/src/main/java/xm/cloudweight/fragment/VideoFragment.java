@@ -59,7 +59,9 @@ public class VideoFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-
+        mSNviewer = new SNviewer(mActivity);
+        ((FrameLayout) mView.findViewById(R.id.container_video)).addView(mSNviewer);
+        mSNviewer.setDeviceParams("192.168.1.100", "8080", "admin", "123456", 0, "");
     }
 
     @Override
@@ -88,10 +90,6 @@ public class VideoFragment extends BaseFragment {
                 mICameraService = null;
             }
         };
-
-        mSNviewer = new SNviewer(mActivity);
-        mSNviewer.setDeviceParams("192.168.1.100", "8080", "admin", "123456", 0, "");
-        ((FrameLayout) mView.findViewById(R.id.container_video)).addView(mSNviewer);
         mSNviewer.setConnectionStatusListener(new Connection.StatusListener() {
             @Override
             public void OnConnectionTrying(View v) {
@@ -158,7 +156,6 @@ public class VideoFragment extends BaseFragment {
             mActivity.unbindService(mServiceConnection);
         }
         NetUtil.setProcessDefaultNetwork(mActivity, null);
-        mSNviewer = null;
         mServiceConnection = null;
         mICameraService = null;
     }
@@ -201,6 +198,12 @@ public class VideoFragment extends BaseFragment {
         super.onPause();
         ScaleUtil.stopInstrument();
         stopCamera();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSNviewer = null;
     }
 
     public static VideoFragment getInstance() {
