@@ -37,7 +37,6 @@ public interface ApiManager {
 
     /**
      * 登录
-     *
      * @param p 登录请求体
      * @return Observable<ResponseEntity<Merchant>>
      */
