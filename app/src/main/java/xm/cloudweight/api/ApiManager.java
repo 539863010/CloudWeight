@@ -32,8 +32,8 @@ import xm.cloudweight.bean.PLogin;
 @SuppressWarnings("AlibabaAbstractMethodOrInterfaceMethodMustUseJavadoc")
 public interface ApiManager {
 
-    String BASE_URL = "http://beta.shipments.atfresh.cn";
-//    String BASE_URL = "http://erp.lbh.atfresh.cn";
+    //    String BASE_URL = "http://beta.shipments.atfresh.cn";
+    String BASE_URL = "http://erp.lbh.atfresh.cn";
 
     /**
      * 登录
@@ -222,9 +222,9 @@ public interface ApiManager {
      * @param requestBody 请求体
      * @return Observable<ResponseEntity<String>>
      */
-    @POST("/mdata-controller/mdata/ossUtil/uploadPhoto.do")
-    Observable<ResponseEntity<String>> uploadPhoto(@HeaderMap Map<String, Object> options,
-                                                   @Body RequestBody requestBody);
+    @POST("/mdata-controller/mdata/ossUtil/uploadPhotoFromAndroid.do")
+    Observable<ResponseEntity<String>> uploadPhotoFromAndroid(@HeaderMap Map<String, Object> options,
+                                                              @Body RequestBody requestBody);
 
     /**
      * 查询库存记录

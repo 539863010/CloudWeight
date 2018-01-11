@@ -1,22 +1,16 @@
 package xm.cloudweight.presenter;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.tencent.bugly.crashreport.CrashReport;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.wms.stock.Stock;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
-import com.xmzynt.storm.util.IMGType;
 import com.xmzynt.storm.util.query.PageData;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
@@ -27,7 +21,6 @@ import xm.cloudweight.impl.CommImpl;
 import xm.cloudweight.utils.LogUtils;
 import xm.cloudweight.utils.bussiness.BeanUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
-import xm.cloudweight.utils.bussiness.UploadPhotoUtil;
 
 /**
  * @author wyh
@@ -80,46 +73,6 @@ public class CommPresenter {
                     protected void onResultFail(int errorType, String failString) {
                         LogUtils.e("获取客户等级列表失败", failString);
                         CrashReport.postCatchedException(new Exception("获取客户等级列表失败 : failString = " + failString));
-                    }
-
-                });
-    }
-
-    /**
-     * 上传图片
-     */
-    public static void uploadPhoto(final BaseActivity aty, String filePath) {
-        if (!(aty instanceof CommImpl.OnUpLoadPhotoListener)) {
-            return;
-        }
-        Merchant merchant = LocalSpUtil.getMerchant(aty);
-        if (merchant == null || TextUtils.isEmpty(filePath)) {
-            return;
-        }
-        File file = new File(filePath);
-        if (!file.exists()) {
-            return;
-        }
-        String uuid = merchant.getUuid();
-        HashMap<String, Object> map = new HashMap<>(2);
-        map.put("uuid", uuid);
-        String type = IMGType.GOODS_IMG.toString();
-        map.put("IMG-TYPE", type);
-
-        RequestBody requestBody =
-                RequestBody.create(MediaType.parse("multipart/form-data;boundary=android"), UploadPhotoUtil.getFileByte(filePath));
-
-        aty.getApiManager().uploadPhoto(map, requestBody)
-                .compose(new TransformerHelper<ResponseEntity<String>>().get(aty))
-                .subscribe(new ApiSubscribe<String>() {
-                    @Override
-                    protected void onResult(String result) {
-                        ((CommImpl.OnUpLoadPhotoListener) aty).onUpLoadPhotoSuccess(result);
-                    }
-
-                    @Override
-                    protected void onResultFail(int errorType, String failString) {
-                        ((CommImpl.OnUpLoadPhotoListener) aty).onUpLoadPhotoFailed(errorType, failString);
                     }
 
                 });

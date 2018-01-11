@@ -53,6 +53,7 @@ import xm.cloudweight.utils.KeyBoardUtils;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.CrossAllocateUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
+import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
@@ -860,9 +861,7 @@ public class CheckInActivity extends BaseActivity implements
             sir.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
             sir.setGoods(mPurchaseBillLine.getGoods());
             //保存图片
-            if (!TextUtils.isEmpty(imagePath)) {
-                sir.setImages(Arrays.asList(imagePath));
-            }
+            sir.setImages(Arrays.asList(GetImageFile.getName(imagePath)));
             //规格
             sir.setGoodsSpec(mPurchaseBillLine.getGoodsSpec());
             sir.setGoodsUnit(mPurchaseBillLine.getGoodsUnit());

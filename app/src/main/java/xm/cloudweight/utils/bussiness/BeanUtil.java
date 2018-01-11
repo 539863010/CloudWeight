@@ -86,9 +86,6 @@ public class BeanUtil {
         queryFilter.setPage(page);
         queryFilter.setPageSize(pageSize);
         queryFilter.setDefaultPageSize(defaultPageSize);
-        Map<String, Object> params = queryFilter.getParams();
-        params.put("uuid", p.getUserUuid());
-        queryFilter.setParams(params);
         body.put("queryFilter", queryFilter);
         p.setBody(body);
         return p;

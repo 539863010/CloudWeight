@@ -55,6 +55,7 @@ import xm.cloudweight.utils.IsBottomUtil;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.FilterUtil;
+import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.ListComparator;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
@@ -493,7 +494,7 @@ public class SortOutActivity extends BaseActivity implements
     /**
      * 保存数据到数据库   更新列表
      */
-    private void setDataToDb(String iamgePath) {
+    private void setDataToDb(String imagePath) {
         if (mPreSortOutData != null) {
             // 保存 称重数（订购数量）   直接上传kg数   不需要转换
             boolean isWeight = mPreSortOutData.getUnitCoefficient() != null && mPreSortOutData.getUnitCoefficient().doubleValue() != 0;
@@ -546,16 +547,14 @@ public class SortOutActivity extends BaseActivity implements
                 }
             }
 
-            if (!TextUtils.isEmpty(iamgePath)) {
-                mPreSortOutData.setImages(Arrays.asList(iamgePath));
-            }
+            mPreSortOutData.setImages(Arrays.asList(GetImageFile.getName(imagePath)));
 
             // ** 保存数据到数据库在 setStockOutQty，setWarehouse 后
             DbImageUpload dbImageUpload = new DbImageUpload();
             dbImageUpload.setDate(mBtnDate.getText().toString().trim());
             dbImageUpload.setOperatime(DateUtils.getTime2(new Date()));
             dbImageUpload.setLine(GsonUtil.getGson().toJson(mPreSortOutData));
-            dbImageUpload.setImagePath(iamgePath);
+            dbImageUpload.setImagePath(imagePath);
             dbImageUpload.setType(Common.DbType.TYPE_SORT_OUT_STORE_OUT);
             getDbManager().insertDbImageUpload(dbImageUpload);
 

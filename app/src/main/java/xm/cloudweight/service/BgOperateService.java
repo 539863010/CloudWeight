@@ -32,6 +32,7 @@ import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.ServerConstant;
 import xm.cloudweight.utils.LogUtils;
 import xm.cloudweight.utils.bussiness.BeanUtil;
+import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.UploadPhotoUtil;
 import xm.cloudweight.utils.dao.DBManager;
@@ -444,11 +445,11 @@ public class BgOperateService extends Service {
         String type = IMGType.GOODS_IMG.toString();
         map.put("IMG-TYPE", type);
         // 取文件名
-        String fileName = imagePath.substring(imagePath.lastIndexOf("/") + 1, imagePath.length());
+        String fileName = GetImageFile.getName(imagePath);
         map.put("fileName", fileName);
         RequestBody requestBody =
                 RequestBody.create(MediaType.parse("multipart/form-data;boundary=android"), UploadPhotoUtil.getFileByte(imagePath));
-        mApiManager.uploadPhoto(map, requestBody)
+        mApiManager.uploadPhotoFromAndroid(map, requestBody)
                 .compose(new TransformerHelper<ResponseEntity<String>>().get())
                 .subscribe(new ApiSubscribe<String>() {
                     @Override

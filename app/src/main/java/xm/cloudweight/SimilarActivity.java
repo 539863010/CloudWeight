@@ -50,6 +50,7 @@ import xm.cloudweight.presenter.SimilarPresenter;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.ToastUtil;
+import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
@@ -439,7 +440,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                     count,
                     leather,
                     deduct);
-            record.setImages(Arrays.asList(imagePath));
+            record.setImages(Arrays.asList(GetImageFile.getName(imagePath)));
             dbImageUpload.setLine(GsonUtil.getGson().toJson(record));
             dbImageUpload.setType(Common.DbType.TYPE_STORE_OUT);
             dbImageUpload.setImagePath(imagePath);
