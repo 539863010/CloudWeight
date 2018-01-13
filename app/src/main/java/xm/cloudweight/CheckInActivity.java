@@ -651,16 +651,16 @@ public class CheckInActivity extends BaseActivity implements
      */
     private void keySearch() {
         showLoadingDialog(false);
-        mSpWareHouse.setCustomItemSelectedListener(null);
-        mSpSupplier.setCustomItemSelectedListener(null);
-        mSpOperator.setCustomItemSelectedListener(null);
-        mSpWareHouse.setSelection(0);
-        mSpSupplier.setSelection(0);
-        mSpOperator.setSelection(0);
+//        mSpWareHouse.setCustomItemSelectedListener(null);
+//        mSpSupplier.setCustomItemSelectedListener(null);
+//        mSpOperator.setCustomItemSelectedListener(null);
+//        mSpWareHouse.setSelection(0);
+//        mSpSupplier.setSelection(0);
+//        mSpOperator.setSelection(0);
         filterList();
-        mSpWareHouse.setCustomItemSelectedListener(this);
-        mSpSupplier.setCustomItemSelectedListener(this);
-        mSpOperator.setCustomItemSelectedListener(this);
+//        mSpWareHouse.setCustomItemSelectedListener(this);
+//        mSpSupplier.setCustomItemSelectedListener(this);
+//        mSpOperator.setCustomItemSelectedListener(this);
         dismissLoadingDialog();
     }
 

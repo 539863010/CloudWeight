@@ -86,6 +86,8 @@ public class BeanUtil {
         queryFilter.setPage(page);
         queryFilter.setPageSize(pageSize);
         queryFilter.setDefaultPageSize(defaultPageSize);
+        Map<String, Object> params = queryFilter.getParams();
+        params.put("isDriver", true);
         body.put("queryFilter", queryFilter);
         p.setBody(body);
         return p;
