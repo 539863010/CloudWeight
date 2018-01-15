@@ -74,8 +74,8 @@
 
         <service
             android:name=".service.BgOperateService"
-            android:enabled="true"
-            android:exported="true">
+            android:process=":bg"
+            >
         </service>
         <receiver android:name=".utils.connect.NetBroadcastReceiver" >
             <intent-filter>

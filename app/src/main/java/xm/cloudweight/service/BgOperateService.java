@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.xmzynt.storm.service.user.merchant.Merchant;
@@ -161,7 +160,7 @@ public class BgOperateService extends Service {
                         data.setStockInUuid(result);
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);
-                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         getUnCheckInStoreInList();
                     }
 
@@ -200,7 +199,7 @@ public class BgOperateService extends Service {
                         data.setStockInUuid(result);
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);
-                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         getUnCheckInCrossAllocateList();
                     }
 
@@ -239,7 +238,7 @@ public class BgOperateService extends Service {
                         data.setStockOutUuid(result);
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);
-                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         getUnCheckInCrossOutList();
                     }
 
@@ -278,7 +277,7 @@ public class BgOperateService extends Service {
                         data.setStockOutUuid(result);
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);
-                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         getUnSortOutList();
                     }
 
@@ -318,7 +317,7 @@ public class BgOperateService extends Service {
                         data.setIsRequestSuccess(true);
                         //调拨成功更新数据库
                         mDBManager.updateDbImageUpload(data);
-                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         getUnAllocateList();
                     }
 
@@ -358,7 +357,7 @@ public class BgOperateService extends Service {
                         //盘点成功删除数据库
                         mDBManager.updateDbImageUpload(data);
                         //有历史时添加通知
-//                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+//                       sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         getUnCheckList();
                     }
 
@@ -402,7 +401,7 @@ public class BgOperateService extends Service {
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);
                         //通知SortOutActivity更新（当popwindow打开时更新）
-                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         //下一个请求
                         getUnSortOutStoreOutList();
                     }
@@ -498,6 +497,12 @@ public class BgOperateService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new BgOperateServiceImpl();
     }
+
+    public class BgOperateServiceImpl extends xm.cloudweight.BgOperateService.Stub {
+
+    }
+
+
 }

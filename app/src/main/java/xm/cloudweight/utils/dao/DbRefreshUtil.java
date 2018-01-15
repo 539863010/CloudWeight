@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 
 import xm.cloudweight.comm.BrocastFilter;
 
@@ -20,13 +19,13 @@ public class DbRefreshUtil {
     public static void refreshRegist(Context ctx, onDbRefreshListener listener) {
         mRefreshDbImageUploadReceiver = new RefreshDbImageUploadReceiver(listener);
         IntentFilter refreshDbImageUploadFilter = new IntentFilter(BrocastFilter.FILTER_REFRESH_HISTORY);
-        LocalBroadcastManager.getInstance(ctx).registerReceiver(mRefreshDbImageUploadReceiver, refreshDbImageUploadFilter);
+        ctx.registerReceiver(mRefreshDbImageUploadReceiver, refreshDbImageUploadFilter);
 
     }
 
     public static void refreshUnRegist(Context ctx) {
         if (mRefreshDbImageUploadReceiver != null) {
-            LocalBroadcastManager.getInstance(ctx).unregisterReceiver(mRefreshDbImageUploadReceiver);
+            ctx.unregisterReceiver(mRefreshDbImageUploadReceiver);
             mRefreshDbImageUploadReceiver = null;
         }
     }

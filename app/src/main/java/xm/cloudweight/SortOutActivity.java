@@ -35,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -63,6 +65,7 @@ import xm.cloudweight.utils.bussiness.SubScriptionUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
+import xm.cloudweight.utils.onNoDoubleClickListener;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
@@ -183,12 +186,17 @@ public class SortOutActivity extends BaseActivity implements
         mSpCustomers.setTitleColor(R.color.color_135c31);
         mSpWareHouse.setTitleColor(R.color.color_135c31);
         mSpCustomersLevel.setTitleColor(R.color.color_135c31);
-
         mSpCustomers.setCustomItemSelectedListener(this);
         mSpCustomersLevel.setCustomItemSelectedListener(this);
         mSpWareHouse.setCustomItemSelectedListener(this);
         mEtCustomGroup.setOnInputFinishListener(this);
         mEtGoodsNameOrId.setOnInputFinishListener(this);
+        mBtnSortOut.setOnClickListener(new onNoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                sortOut();
+            }
+        });
         mEtTag.setOnScanFinishListener(new onScanFinishListener() {
             @Override
             public void onScanFinish(String key) {
@@ -337,7 +345,7 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     @OnClick({R.id.btn_sort_out_weight, R.id.btn_sort_out_count, R.id.btn_request,
-            R.id.btn_sort_out_history, R.id.btn_sort_out, R.id.btn_date, R.id.btn_clear_zero, R.id.iv_delete})
+            R.id.btn_sort_out_history, R.id.btn_date, R.id.btn_clear_zero, R.id.iv_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -372,41 +380,6 @@ public class SortOutActivity extends BaseActivity implements
             case R.id.btn_sort_out_history:
                 toHistory();
                 break;
-            case R.id.btn_sort_out:
-                if (mPreSortOutData == null) {
-                    ToastUtil.showShortToast(getContext(), "请选择商品");
-                    return;
-                }
-                if (mIntType == TYPE_WEIGHT
-                        && mPreSortOutData.getCoverToKgQty() != null
-                        && mPreSortOutData.getCoverToKgQty().doubleValue() == 0) {
-                    ToastUtil.showShortToast(getContext(), "已分拣完成");
-                    return;
-                }
-                String countStr = mEtShow.getText().toString().trim();
-                if (TextUtils.isEmpty(countStr) || Double.parseDouble(countStr) == 0) {
-                    if (mIntType == TYPE_WEIGHT) {
-                        ToastUtil.showShortToast(getContext(), "请称重");
-                    } else {
-                        ToastUtil.showShortToast(getContext(), "请输入数量");
-                    }
-                    return;
-                }
-                Warehouse selectedWareHouse = mSpWareHouse.getSelectedItem();
-                if (selectedWareHouse == null) {
-                    ToastUtil.showShortToast(getContext(), "请选择仓库");
-                    return;
-                }
-                mBtnSortOut.setEnabled(false);
-                if (mVideoFragment.isLight()) {
-                    mVideoFragment.screenshot(mHandlerShotPic);
-                } else {
-                    showLoadingDialog(false);
-                    setDataToDb(null);
-                    setBtnEnable();
-                    dismissLoadingDialog();
-                }
-                break;
             case R.id.btn_request:
                 refreshSortOutList();
                 break;
@@ -421,6 +394,42 @@ public class SortOutActivity extends BaseActivity implements
                 break;
             default:
                 break;
+        }
+    }
+
+    private void sortOut() {
+        if (mPreSortOutData == null) {
+            ToastUtil.showShortToast(getContext(), "请选择商品");
+            return;
+        }
+        if (mIntType == TYPE_WEIGHT
+                && mPreSortOutData.getCoverToKgQty() != null
+                && mPreSortOutData.getCoverToKgQty().doubleValue() == 0) {
+            ToastUtil.showShortToast(getContext(), "已分拣完成");
+            return;
+        }
+        String countStr = mEtShow.getText().toString().trim();
+        if (TextUtils.isEmpty(countStr) || Double.parseDouble(countStr) == 0) {
+            if (mIntType == TYPE_WEIGHT) {
+                ToastUtil.showShortToast(getContext(), "请称重");
+            } else {
+                ToastUtil.showShortToast(getContext(), "请输入数量");
+            }
+            return;
+        }
+        Warehouse selectedWareHouse = mSpWareHouse.getSelectedItem();
+        if (selectedWareHouse == null) {
+            ToastUtil.showShortToast(getContext(), "请选择仓库");
+            return;
+        }
+        mBtnSortOut.setEnabled(false);
+        if (mVideoFragment.isLight()) {
+            mVideoFragment.screenshot(mHandlerShotPic);
+        } else {
+            showLoadingDialog(false);
+            setDataToDb(null);
+            setBtnEnable();
+            dismissLoadingDialog();
         }
     }
 
@@ -858,7 +867,7 @@ public class SortOutActivity extends BaseActivity implements
             //设置客户列表
             List<MerchantCustomer> list = mSpCustomers.getList();
             if (list == null) {
-                getListCustomer();
+                getListCustomerAndRemoveDbUnLoad();
             }
             //筛选条件
             filterList();
@@ -867,9 +876,9 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     /**
-     * 根据重量数据+数量数据  过滤出客户列表
+     * 根据重量数据+数量数据  过滤出客户列表    和    扣除数据库中未上传的数据
      */
-    private void getListCustomer() {
+    private void getListCustomerAndRemoveDbUnLoad() {
         List<CustomSortOutData> mListAll = new ArrayList<>();
         mListAll.addAll(mListAllWeight);
         mListAll.addAll(mListAllCount);
@@ -879,7 +888,17 @@ public class SortOutActivity extends BaseActivity implements
         customerAll.setName("全部");
         e.setCustomer(customerAll);
         list.add(0, e);
+        //获取数据库中未上传的数据   扣除数据库中未上传的数据
+        List<DbImageUpload> dbListSortOutStoreOut = getDbManager().getDbListSortOutStoreOut();
+        Map<String, CustomSortOutData> dbMap = new HashMap<>();
+        //扣除数据库中未上传的数据
+        for (DbImageUpload dbImageUpload : dbListSortOutStoreOut) {
+            CustomSortOutData dbData = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
+            String sourceBillLineUuid = dbData.getSourceBillLineUuid();
+            dbMap.put(sourceBillLineUuid, dbData);
+        }
         for (CustomSortOutData sortOutData : mListAll) {
+            //根据重量数据+数量数据  过滤出客户列表
             IdName customer = sortOutData.getCustomer();
             boolean hasAdd = false;
             for (MerchantCustomer merchantCustomer : list) {
@@ -898,6 +917,30 @@ public class SortOutActivity extends BaseActivity implements
                 customerNew.setUuid(customer.getId());
                 merchantCustomerNew.setCustomer(customerNew);
                 list.add(merchantCustomerNew);
+            }
+            //----------------------------------扣除数据库中未上传的数据---------------------------------------------
+            String sourceBillLineUuid = sortOutData.getSourceBillLineUuid();
+            if (dbMap.containsKey(sourceBillLineUuid)) {
+                CustomSortOutData dbData = dbMap.get(sourceBillLineUuid);
+                //数据库中即将上传的数量
+                BigDecimal dbStockOutQty = dbData.getStockOutQty();
+                BigDecimal unitCoefficient = sortOutData.getUnitCoefficient();
+                if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
+                    BigDecimal coverToKgQty = sortOutData.getCoverToKgQty();
+                    if (coverToKgQty != null) {
+                        //服务器获取的数据-数据库未上传的数据=列表显示的数据
+                        sortOutData.setCoverToKgQty(coverToKgQty.subtract(dbStockOutQty));
+                    }
+                } else {
+                    BigDecimal hasStockOutQty = sortOutData.getHasStockOutQty();
+                    if (hasStockOutQty != null && hasStockOutQty.doubleValue() != 0) {
+                        //已经有已出的数据   则在基础上在加上数据库中待上传的数据
+                        sortOutData.setHasStockOutQty(hasStockOutQty.add(dbStockOutQty));
+                    } else {
+                        //无已出的数据   则设置数据库中待上传的数据为已出数据
+                        sortOutData.setHasStockOutQty(dbStockOutQty);
+                    }
+                }
             }
         }
         mSpCustomers.setList(list);
