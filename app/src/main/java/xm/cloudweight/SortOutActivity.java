@@ -890,12 +890,16 @@ public class SortOutActivity extends BaseActivity implements
         list.add(0, e);
         //获取数据库中未上传的数据   扣除数据库中未上传的数据
         List<DbImageUpload> dbListSortOutStoreOut = getDbManager().getDbListSortOutStoreOut();
-        Map<String, CustomSortOutData> dbMap = new HashMap<>();
+        Map<String, BigDecimal> dbMap = new HashMap<>();
         //扣除数据库中未上传的数据
         for (DbImageUpload dbImageUpload : dbListSortOutStoreOut) {
             CustomSortOutData dbData = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
             String sourceBillLineUuid = dbData.getSourceBillLineUuid();
-            dbMap.put(sourceBillLineUuid, dbData);
+            BigDecimal stockOutAll = dbData.getStockOutQty();
+            if (dbMap.containsKey(sourceBillLineUuid)) {
+                stockOutAll = dbMap.get(sourceBillLineUuid).add(stockOutAll);
+            }
+            dbMap.put(sourceBillLineUuid, stockOutAll);
         }
         for (CustomSortOutData sortOutData : mListAll) {
             //根据重量数据+数量数据  过滤出客户列表
@@ -921,25 +925,23 @@ public class SortOutActivity extends BaseActivity implements
             //----------------------------------扣除数据库中未上传的数据---------------------------------------------
             String sourceBillLineUuid = sortOutData.getSourceBillLineUuid();
             if (dbMap.containsKey(sourceBillLineUuid)) {
-                CustomSortOutData dbData = dbMap.get(sourceBillLineUuid);
                 //数据库中即将上传的数量
-                BigDecimal dbStockOutQty = dbData.getStockOutQty();
+                BigDecimal dbStockOutQty = dbMap.get(sourceBillLineUuid);
                 BigDecimal unitCoefficient = sortOutData.getUnitCoefficient();
+                BigDecimal hasStockOutQty = sortOutData.getHasStockOutQty();
                 if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
                     BigDecimal coverToKgQty = sortOutData.getCoverToKgQty();
                     if (coverToKgQty != null) {
                         //服务器获取的数据-数据库未上传的数据=列表显示的数据
-                        sortOutData.setCoverToKgQty(coverToKgQty.subtract(dbStockOutQty));
+                        sortOutData.setCoverToKgQty(coverToKgQty.subtract(dbStockOutQty.multiply(unitCoefficient)));
                     }
+                }
+                if (hasStockOutQty != null && hasStockOutQty.doubleValue() != 0) {
+                    //已经有已出的数据   则在基础上在加上数据库中待上传的数据
+                    sortOutData.setHasStockOutQty(hasStockOutQty.add(dbStockOutQty));
                 } else {
-                    BigDecimal hasStockOutQty = sortOutData.getHasStockOutQty();
-                    if (hasStockOutQty != null && hasStockOutQty.doubleValue() != 0) {
-                        //已经有已出的数据   则在基础上在加上数据库中待上传的数据
-                        sortOutData.setHasStockOutQty(hasStockOutQty.add(dbStockOutQty));
-                    } else {
-                        //无已出的数据   则设置数据库中待上传的数据为已出数据
-                        sortOutData.setHasStockOutQty(dbStockOutQty);
-                    }
+                    //无已出的数据   则设置数据库中待上传的数据为已出数据
+                    sortOutData.setHasStockOutQty(dbStockOutQty);
                 }
             }
         }
