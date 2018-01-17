@@ -46,6 +46,7 @@ public class VideoFragment extends BaseFragment {
             }
         }
     };
+    private boolean mInitCamera = true;
 
     @Override
     protected int getLayoutId() {
@@ -74,7 +75,9 @@ public class VideoFragment extends BaseFragment {
         super.onResume();
         //用于BaseActivity中f3清除
         ScaleUtil.startInstrument(mInstrumentReceive);
-        startCamera();
+        if (mInitCamera) {
+            startCamera();
+        }
     }
 
     private void startCamera() {
@@ -197,7 +200,9 @@ public class VideoFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         ScaleUtil.stopInstrument();
-        stopCamera();
+        if (mInitCamera) {
+            stopCamera();
+        }
     }
 
     @Override
@@ -212,6 +217,10 @@ public class VideoFragment extends BaseFragment {
 
     public void setInstrumentListener(OnInstrumentListener instrumentListener) {
         mInstrumentListener = instrumentListener;
+    }
+
+    public void setInitCamera(boolean initCamera) {
+        mInitCamera = initCamera;
     }
 
     public interface OnInstrumentListener {

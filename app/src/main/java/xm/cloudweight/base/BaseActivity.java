@@ -32,6 +32,7 @@ import xm.cloudweight.utils.LogUtils;
 import xm.cloudweight.utils.bussiness.ScaleUtil;
 import xm.cloudweight.utils.connect.NetBroadcastReceiver;
 import xm.cloudweight.utils.connect.NetUtil;
+import xm.cloudweight.utils.dao.DBManager;
 
 /**
  * @author wyh
@@ -254,6 +255,10 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
 
     public ApiManager getApiManager() {
         return App.getApiManager(getApplicationContext());
+    }
+
+    public DBManager getDbManager() {
+        return App.getDbManager(getApplicationContext());
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
 import com.xmzynt.storm.service.user.customer.Customer;
@@ -118,8 +119,8 @@ public class SortOutActivity extends BaseActivity implements
     EditText mEtShow;
     @BindView(R.id.et_leather_sort_out)
     EditText mEtLeather;
-    @BindView(R.id.tv_weight)
-    TextView mTvWeight;
+    @BindView(R.id.et_weight)
+    EditText mEtWeight;
     @BindView(R.id.et_tag)
     ScanEditText mEtTag;
     @BindView(R.id.et_goods_name_or_id)
@@ -142,6 +143,7 @@ public class SortOutActivity extends BaseActivity implements
     private ArrayList<CustomSortOutData> mListFilter = new ArrayList<>();
     private List<CustomSortOutData> mListAllWeight = new ArrayList<>();
     private List<CustomSortOutData> mListAllCount = new ArrayList<>();
+    private List<CustomSortOutData> mListAll = new ArrayList<>();
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private SortOutAdapter mSortOutAdapter;
     private int mIntType = TYPE_WEIGHT;
@@ -219,36 +221,42 @@ public class SortOutActivity extends BaseActivity implements
         mEtLeather.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if (mIntType != TYPE_WEIGHT) {
-                    return;
+                try {
+                    if (mIntType != TYPE_WEIGHT) {
+                        return;
+                    }
+                    String leather = s.toString().trim();
+                    if (!TextUtils.isEmpty(leather) && leather.equals(".")) {
+                        String pre = "0.";
+                        mEtLeather.setText(pre);
+                        mEtLeather.setSelection(pre.length());
+                        return;
+                    }
+                    String weight = mEtShow.getText().toString().trim();
+                    BigDecimal w = new BigDecimal(0);
+                    if (!TextUtils.isEmpty(weight)) {
+                        w = new BigDecimal(weight);
+                    }
+                    BigDecimal l = new BigDecimal(0);
+                    if (!TextUtils.isEmpty(leather)) {
+                        l = new BigDecimal(leather);
+                    }
+                    String sub = BigDecimalUtil.toScaleStr(w.subtract(l));
+                    mEtWeight.setText(sub);
+                    sequenceListWeight(mListShow, sub);
+                    scrollToBottom(0);
+                } catch (Exception e) {
+                    CrashReport.postCatchedException(e);
                 }
-                String leather = s.toString().trim();
-                if (!TextUtils.isEmpty(leather) && leather.equals(".")) {
-                    String pre = "0.";
-                    mEtLeather.setText(pre);
-                    mEtLeather.setSelection(pre.length());
-                    return;
-                }
-                String weight = mEtShow.getText().toString().trim();
-                BigDecimal w = new BigDecimal(0);
-                if (!TextUtils.isEmpty(weight)) {
-                    w = new BigDecimal(weight);
-                }
-                BigDecimal l = new BigDecimal(0);
-                if (!TextUtils.isEmpty(leather)) {
-                    l = new BigDecimal(leather);
-                }
-                String sub = BigDecimalUtil.toScaleStr(w.subtract(l));
-                mTvWeight.setText(sub);
-                sequenceListWeight(mListShow, sub);
             }
         });
 
         mVideoFragment = VideoFragment.getInstance();
         mVideoFragment.setInstrumentListener(this);
+        mVideoFragment.setInitCamera(false);
         //数字键盘   InputFragment中设置mEtLeather文本焦点不在时不改变为白色
         mInputFragment = InputFragment.newInstance();
-        mInputFragment.setEditTexts(mEtShow, mEtLeather);
+        mInputFragment.setEditTexts(mEtShow, mEtLeather, mEtWeight);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, mVideoFragment)
                 .add(R.id.container, mInputFragment)
@@ -372,7 +380,7 @@ public class SortOutActivity extends BaseActivity implements
                 mLlLeather.setVisibility(View.GONE);
                 mLlWeight.setVisibility(View.GONE);
                 mEtLeather.setText("0");
-                mTvWeight.setText("0");
+                mEtWeight.setText("0");
                 mEtShow.setEnabled(true);
                 setClick("出库数量：", true, false);
                 break;
@@ -441,6 +449,7 @@ public class SortOutActivity extends BaseActivity implements
             showLoadingDialog(false);
             loadWeightSuccess = false;
             loadCountSuccess = false;
+            mListAll.clear();
             mListAllWeight.clear();
             mListAllCount.clear();
             mListFilter.clear();
@@ -508,7 +517,7 @@ public class SortOutActivity extends BaseActivity implements
             // 保存 称重数（订购数量）   直接上传kg数   不需要转换
             boolean isWeight = mPreSortOutData.getUnitCoefficient() != null && mPreSortOutData.getUnitCoefficient().doubleValue() != 0;
             if (isWeight) {
-                String countStr = mTvWeight.getText().toString().trim();
+                String countStr = mEtWeight.getText().toString().trim();
                 mPreSortOutData.setStockOutQty(new BigDecimal(countStr).divide(mPreSortOutData.getUnitCoefficient(), RoundingMode.HALF_EVEN));
             } else {
                 String countStr = mEtShow.getText().toString().trim();
@@ -567,23 +576,37 @@ public class SortOutActivity extends BaseActivity implements
             dbImageUpload.setType(Common.DbType.TYPE_SORT_OUT_STORE_OUT);
             getDbManager().insertDbImageUpload(dbImageUpload);
 
-            if (outAmount.compareTo(qtyOfNinety) > 0) {
-                //界面不显示
-                //从列表中删除
-                removeCurrentItem(mListShow);
-                removeCurrentItem(mListFilter);
-                if (mIntType == TYPE_WEIGHT) {
+            if (mIntType == TYPE_WEIGHT) {
+                if (outAmount.compareTo(qtyOfNinety) > 0) {
+                    //界面不显示
+                    //从列表中删除
+                    removeCurrentItem(mListShow);
+                    removeCurrentItem(mListFilter);
                     removeCurrentItem(mListAllWeight);
                 } else {
+                    //显示已出 数量
+                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
+                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
+                    }
+                    mPreSortOutData.setHasStockOutQty(outAmount);
+                }
+            } else if (mIntType == TYPE_COUNT) {
+                BigDecimal qty = mPreSortOutData.getGoodsQty();
+                if (qty.subtract(outAmount).doubleValue() <= 0) {
+                    //界面不显示
+                    //从列表中删除
+                    removeCurrentItem(mListShow);
+                    removeCurrentItem(mListFilter);
                     removeCurrentItem(mListAllCount);
+                } else {
+                    //显示已出 数量
+                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
+                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
+                    }
+                    mPreSortOutData.setHasStockOutQty(outAmount);
                 }
-            } else {
-                //显示已出 数量
-                if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-                    mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
-                }
-                mPreSortOutData.setHasStockOutQty(outAmount);
             }
+
             //打印标签
             printer(unitCoefficient);
             //先打印后清除数据
@@ -658,16 +681,6 @@ public class SortOutActivity extends BaseActivity implements
                 goodsName,
                 sortOutNum,
                 code);
-    }
-
-    /**
-     * 获取数据库管理器
-     */
-    private DBManager getDbManager() {
-        if (mDBManager == null) {
-            mDBManager = DBManager.getInstance(this.getApplicationContext());
-        }
-        return mDBManager;
     }
 
     /**
@@ -850,10 +863,12 @@ public class SortOutActivity extends BaseActivity implements
             loadWeightSuccess = true;
             mListAllWeight.clear();
             mListAllWeight.addAll(data);
+            mListAll.addAll(mListAllWeight);
         } else if (type == TYPE_COUNT) {
             loadCountSuccess = true;
             mListAllCount.clear();
             mListAllCount.addAll(data);
+            mListAll.addAll(mListAllCount);
         }
         //  2018/01/04  ----------------------------------------------
         //待重量加载完后，在加载数量，优化出现UnknownHostException异常(待测试)
@@ -867,8 +882,10 @@ public class SortOutActivity extends BaseActivity implements
             //设置客户列表
             List<MerchantCustomer> list = mSpCustomers.getList();
             if (list == null) {
-                getListCustomerAndRemoveDbUnLoad();
+                getListCustomer();
             }
+            //listAll中扣除未上传的分拣数
+            removeUnSortOut();
             //筛选条件
             filterList();
             dismissLoadingDialog();
@@ -876,18 +893,9 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     /**
-     * 根据重量数据+数量数据  过滤出客户列表    和    扣除数据库中未上传的数据
+     *  扣除数据库中未上传的数据
      */
-    private void getListCustomerAndRemoveDbUnLoad() {
-        List<CustomSortOutData> mListAll = new ArrayList<>();
-        mListAll.addAll(mListAllWeight);
-        mListAll.addAll(mListAllCount);
-        List<MerchantCustomer> list = new ArrayList<>();
-        MerchantCustomer e = new MerchantCustomer();
-        Customer customerAll = new Customer();
-        customerAll.setName("全部");
-        e.setCustomer(customerAll);
-        list.add(0, e);
+    private void removeUnSortOut() {
         //获取数据库中未上传的数据   扣除数据库中未上传的数据
         List<DbImageUpload> dbListSortOutStoreOut = getDbManager().getDbListSortOutStoreOut();
         Map<String, BigDecimal> dbMap = new HashMap<>();
@@ -902,26 +910,6 @@ public class SortOutActivity extends BaseActivity implements
             dbMap.put(sourceBillLineUuid, stockOutAll);
         }
         for (CustomSortOutData sortOutData : mListAll) {
-            //根据重量数据+数量数据  过滤出客户列表
-            IdName customer = sortOutData.getCustomer();
-            boolean hasAdd = false;
-            for (MerchantCustomer merchantCustomer : list) {
-                Customer merchantCustomerCustomer = merchantCustomer.getCustomer();
-                //去重
-                if (merchantCustomerCustomer.getName().equals(customer.getName())
-                        &&
-                        merchantCustomerCustomer.getUuid().equals(customer.getId())) {
-                    hasAdd = true;
-                }
-            }
-            if (!hasAdd) {
-                MerchantCustomer merchantCustomerNew = new MerchantCustomer();
-                Customer customerNew = new Customer();
-                customerNew.setName(customer.getName());
-                customerNew.setUuid(customer.getId());
-                merchantCustomerNew.setCustomer(customerNew);
-                list.add(merchantCustomerNew);
-            }
             //----------------------------------扣除数据库中未上传的数据---------------------------------------------
             String sourceBillLineUuid = sortOutData.getSourceBillLineUuid();
             if (dbMap.containsKey(sourceBillLineUuid)) {
@@ -943,6 +931,40 @@ public class SortOutActivity extends BaseActivity implements
                     //无已出的数据   则设置数据库中待上传的数据为已出数据
                     sortOutData.setHasStockOutQty(dbStockOutQty);
                 }
+            }
+        }
+    }
+
+    /**
+     * 过滤出客户列表
+     */
+    private void getListCustomer() {
+        List<MerchantCustomer> list = new ArrayList<>();
+        MerchantCustomer e = new MerchantCustomer();
+        Customer customerAll = new Customer();
+        customerAll.setName("全部");
+        e.setCustomer(customerAll);
+        list.add(0, e);
+        for (CustomSortOutData sortOutData : mListAll) {
+            //根据重量数据+数量数据  过滤出客户列表
+            IdName customer = sortOutData.getCustomer();
+            boolean hasAdd = false;
+            for (MerchantCustomer merchantCustomer : list) {
+                Customer merchantCustomerCustomer = merchantCustomer.getCustomer();
+                //去重
+                if (merchantCustomerCustomer.getName().equals(customer.getName())
+                        &&
+                        merchantCustomerCustomer.getUuid().equals(customer.getId())) {
+                    hasAdd = true;
+                }
+            }
+            if (!hasAdd) {
+                MerchantCustomer merchantCustomerNew = new MerchantCustomer();
+                Customer customerNew = new Customer();
+                customerNew.setName(customer.getName());
+                customerNew.setUuid(customer.getId());
+                merchantCustomerNew.setCustomer(customerNew);
+                list.add(merchantCustomerNew);
             }
         }
         mSpCustomers.setList(list);
@@ -1205,7 +1227,7 @@ public class SortOutActivity extends BaseActivity implements
             } else {
                 l = new BigDecimal(0);
             }
-            mTvWeight.setText(BigDecimalUtil.toScaleStr(w.subtract(l)));
+            mEtWeight.setText(BigDecimalUtil.toScaleStr(w.subtract(l)));
             if (mStable && !weight.equals(mPreWeight)) {
                 mPreWeight = weight;
                 String strW = String.valueOf(w.subtract(l));
@@ -1240,6 +1262,7 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     private void scrollToItem(int itemPosition) {
+        mPreSortOutData = mListShow.get(itemPosition);
         mSortOutAdapter.setIntSelect(itemPosition);
         mSortOutAdapter.notifyDataSetChanged();
         mGvSortOut.smoothScrollToPosition(itemPosition);

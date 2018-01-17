@@ -72,6 +72,10 @@ public class MainActivity extends BaseActivity {
      * 退出登录
      */
     private void requestLogout() {
+        Intent intent = new Intent(xm.cloudweight.service.BgOperateService.ACTION_REFRESH_MERCHANT);
+        intent.putExtra(xm.cloudweight.service.BgOperateService.KEY_REFRESH_MERCHANT, "");
+        sendBroadcast(intent);
+
         Context ctx = getContext();
         LocalSpUtil.setMerchant(ctx, "");
         LocalSpUtil.setCookie(ctx, "");

@@ -25,22 +25,26 @@ public class DBManager {
     private final Context mContext;
     private final static String dbName = "db";
 
-    private DBManager(Context context) {
+//    private DBManager(Context context) {
+//        mContext = context;
+//        mDevOpenHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
+//    }
+//
+//    public static DBManager getInstance(Context context) {
+//        if (mInstance == null) {
+//            synchronized (DBManager.class) {
+//                if (mInstance == null) {
+//                    mInstance = new DBManager(context);
+//                }
+//            }
+//        }
+//        return mInstance;
+//    }
+
+    public DBManager(Context context) {
         mContext = context;
         mDevOpenHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
     }
-
-    public static DBManager getInstance(Context context) {
-        if (mInstance == null) {
-            synchronized (DBManager.class) {
-                if (mInstance == null) {
-                    mInstance = new DBManager(context);
-                }
-            }
-        }
-        return mInstance;
-    }
-
     /**
      * 获取可读数据库
      */

@@ -1,6 +1,7 @@
 package xm.cloudweight;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.impl.LoginImpl;
 import xm.cloudweight.presenter.CommPresenter;
 import xm.cloudweight.presenter.LoginPresenter;
+import xm.cloudweight.service.BgOperateService;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 
@@ -108,9 +110,15 @@ public class LoginActivity extends BaseActivity implements LoginImpl.OnLoginStat
         String user = mEtName.getText().toString().trim();
         String pwd = mEtPwd.getText().toString().trim();
         LocalSpUtil.setUserInfo(getContext(), user, pwd);
-        LocalSpUtil.setMerchant(getContext(), GsonUtil.getGson().toJson(merchant));
+        String jsonMerchant = GsonUtil.getGson().toJson(merchant);
+        LocalSpUtil.setMerchant(getContext(), jsonMerchant);
         startActivity(MainActivity.class);
         finish();
+
+        Intent intent = new Intent(BgOperateService.ACTION_REFRESH_MERCHANT);
+        intent.putExtra(BgOperateService.KEY_REFRESH_MERCHANT, jsonMerchant);
+        sendBroadcast(intent);
+
     }
 
     @Override

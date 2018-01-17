@@ -684,13 +684,6 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         dismissLoadingDialog();
     }
 
-    private DBManager getDbManager() {
-        if (mDBManager == null) {
-            mDBManager = DBManager.getInstance(this.getApplicationContext());
-        }
-        return mDBManager;
-    }
-
     /**
      * 处理成功后的结果
      */

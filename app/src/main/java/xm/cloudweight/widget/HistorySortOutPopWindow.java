@@ -140,15 +140,13 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
             String goodsUnit = data.getGoodsUnit().getName();
             holder.setText(R.id.item_goods_unit, goodsUnit);
             BigDecimal unitCoefficient = data.getUnitCoefficient();
-            String strOrderNum;
             String strSortOutNum;
             if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-                strOrderNum = BigDecimalUtil.toScaleStr(data.getCoverToKgQty()).concat("kg");
                 strSortOutNum = BigDecimalUtil.toScaleStr(data.getStockOutQty().multiply(unitCoefficient)).concat("kg");
             } else {
-                strOrderNum = BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getStockOutQty()).subtract(data.getHasStockOutQty())).concat(goodsUnit);
                 strSortOutNum = BigDecimalUtil.toScaleStr(data.getStockOutQty()).concat(goodsUnit);
             }
+            String strOrderNum = BigDecimalUtil.toScaleStr(data.getGoodsQty()).concat(goodsUnit);
             holder.setText(R.id.item_order_num, strOrderNum);
             holder.setText(R.id.item_sort_out_num, strSortOutNum);
 

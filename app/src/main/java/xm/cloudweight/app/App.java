@@ -11,9 +11,10 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import xm.cloudweight.BuildConfig;
 import xm.cloudweight.api.ApiManager;
+import xm.cloudweight.camera.service.CameraService;
 import xm.cloudweight.service.BgOperateService;
 import xm.cloudweight.utils.NetConfigUtil;
-import xm.cloudweight.camera.service.CameraService;
+import xm.cloudweight.utils.dao.DBManager;
 
 /**
  * @author wyh
@@ -23,6 +24,7 @@ import xm.cloudweight.camera.service.CameraService;
 public class App extends Application {
 
     private static ApiManager mApiManager;
+    private static DBManager mDbManager;
     private Intent mCameraService;
     private Intent mImageUploadService;
 
@@ -61,5 +63,13 @@ public class App extends Application {
         }
         return mApiManager;
     }
+
+    public static DBManager getDbManager(Context ctx) {
+        if (mDbManager == null) {
+            mDbManager = new DBManager(ctx.getApplicationContext());
+        }
+        return mDbManager;
+    }
+
 
 }

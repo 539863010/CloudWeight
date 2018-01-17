@@ -1,7 +1,10 @@
 package xm.cloudweight.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.text.TextUtils;
@@ -20,19 +23,21 @@ import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import xm.cloudweight.api.ApiManager;
 import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
 import xm.cloudweight.api.TransformerHelper;
-import xm.cloudweight.app.App;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.ServerConstant;
 import xm.cloudweight.utils.LogUtils;
+import xm.cloudweight.utils.NetConfigUtil;
 import xm.cloudweight.utils.bussiness.BeanUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
-import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.UploadPhotoUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
@@ -43,6 +48,9 @@ import xm.cloudweight.utils.dao.bean.DbImageUpload;
  * @create 2017/11/20
  */
 public class BgOperateService extends Service {
+
+    public static final String ACTION_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
+    public static final String KEY_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
 
     private DBManager mDBManager;
     private ApiManager mApiManager;
@@ -63,6 +71,7 @@ public class BgOperateService extends Service {
     private boolean isCurrentAllocate;
     //当前是否在盘点
     private boolean isCurrentCheck;
+    private RefreshMerchant mRefreshMerchant;
 
     public BgOperateService() {
     }
@@ -70,17 +79,52 @@ public class BgOperateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mApiManager = App.getApiManager(this.getApplicationContext());
-        mDBManager = DBManager.getInstance(getApplicationContext());
+
+        mRefreshMerchant = new RefreshMerchant();
+        registerReceiver(mRefreshMerchant, new IntentFilter(ACTION_REFRESH_MERCHANT));
+
+        mApiManager = getApiManager();
+        mDBManager = new DBManager(this);
         //创建计时器定期轮询
         createTimer();
+    }
+
+    private ApiManager getApiManager() {
+        return mApiManager = new Retrofit.Builder()
+                .baseUrl(ApiManager.BASE_URL)
+                .client(NetConfigUtil.getOkHttpClient(this))
+//                    .addConverterFactory(StringConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build()
+                .create(ApiManager.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mRefreshMerchant != null) {
+            unregisterReceiver(mRefreshMerchant);
+        }
+    }
+
+    private class RefreshMerchant extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String strMerchant = intent.getStringExtra(KEY_REFRESH_MERCHANT);
+            if (!TextUtils.isEmpty(strMerchant)) {
+                mMerchant = GsonUtil.getGson().fromJson(strMerchant, Merchant.class);
+            } else {
+                mMerchant = null;
+            }
+        }
     }
 
     private void createTimer() {
         CountDownTimer timer = new CountDownTimer(Long.MAX_VALUE, 5000) {
             @Override
             public void onTick(long l) {
-                mMerchant = LocalSpUtil.getMerchant(getApplicationContext());
                 if (mMerchant != null) {
                     //根据本地path获取url
                     if (!isCurrentUploadImage) {

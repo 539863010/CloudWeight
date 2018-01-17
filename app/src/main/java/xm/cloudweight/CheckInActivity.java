@@ -1049,13 +1049,6 @@ public class CheckInActivity extends BaseActivity implements
         dismissLoadingDialog();
     }
 
-    private DBManager getDbManager() {
-        if (mDBManager == null) {
-            mDBManager = DBManager.getInstance(this.getApplicationContext());
-        }
-        return mDBManager;
-    }
-
     @Override
     public void onGetDropdownOperatorSuccess(List<IdName> result) {
         List<IdName> listOperator = new ArrayList<>();
