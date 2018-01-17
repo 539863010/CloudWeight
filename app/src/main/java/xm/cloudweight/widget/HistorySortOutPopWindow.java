@@ -76,6 +76,9 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
         view.findViewById(R.id.item_printer_label).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.item_revocation).setVisibility(View.INVISIBLE);
 
+        //父布局设置不自动弹出
+        //   android:focusable="true"
+        //   android:focusableInTouchMode="true"
         mEtHistoryGoodsName = view.findViewById(R.id.et_history_goods_name);
         mIvHistorySearch = view.findViewById(R.id.iv_history_search);
         mIvHistorySearch.setOnClickListener(this);

@@ -807,6 +807,7 @@ public class SortOutActivity extends BaseActivity implements
             }
             if (currentCancelData != null) {
                 // 直接添加到item中
+                setParamsNull(currentCancelData);
                 BigDecimal stockOutQty = data.getStockOutQty();
                 BigDecimal coverToKgQty = currentCancelData.getCoverToKgQty();
                 currentCancelData.setCoverToKgQty(coverToKgQty.add(stockOutQty.multiply(unitCoefficient)));
@@ -829,6 +830,7 @@ public class SortOutActivity extends BaseActivity implements
             }
             if (currentCancelData != null) {
                 // 撤销的数量
+                setParamsNull(currentCancelData);
                 BigDecimal stockOutQty = data.getStockOutQty();
                 BigDecimal hasStockOutQty = currentCancelData.getHasStockOutQty();
                 currentCancelData.setHasStockOutQty(hasStockOutQty.subtract(stockOutQty));
