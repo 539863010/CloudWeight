@@ -547,23 +547,23 @@ public class SortOutActivity extends BaseActivity implements
             //更新数据
             //****已经分拣过的数据，且累计分拣数量>90%采购数量的，状态改成“已分拣”，界面不再显示****
             //采购数(数量.重量)
-            BigDecimal goodsQty = mPreSortOutData.getGoodsQty();
-            //出库数
-            BigDecimal stockOutQty = mPreSortOutData.getStockOutQty();
-            //已出出库数
-            BigDecimal hasStockOutQty = mPreSortOutData.getHasStockOutQty();
+//            BigDecimal goodsQty = mPreSortOutData.getGoodsQty();
+//            //出库数
+//            BigDecimal stockOutQty = mPreSortOutData.getStockOutQty();
+//            //已出出库数
+//            BigDecimal hasStockOutQty = mPreSortOutData.getHasStockOutQty();
             //总出库数   hasStockOutQty总是有值，不用判空
             BigDecimal unitCoefficient = mPreSortOutData.getUnitCoefficient();
-            BigDecimal outAmount = hasStockOutQty.add(stockOutQty);
-            BigDecimal qtyOfNinety = goodsQty.multiply(new BigDecimal(0.9));
+//            BigDecimal outAmount = hasStockOutQty.add(stockOutQty);
+//            BigDecimal qtyOfNinety = goodsQty.multiply(new BigDecimal(0.9));
 
-            if (isWeight) {
-                if (outAmount.compareTo(qtyOfNinety) > 0) {
-                    mPreSortOutData.setLastWeight(mPreSortOutData.getCoverToKgQty());
-                } else {
-                    mPreSortOutData.setLastWeight(stockOutQty.multiply(unitCoefficient));
-                }
-            }
+//            if (isWeight) {
+//                if (outAmount.compareTo(qtyOfNinety) > 0) {
+//                    mPreSortOutData.setLastWeight(mPreSortOutData.getCoverToKgQty());
+//                } else {
+//                    mPreSortOutData.setLastWeight(stockOutQty.multiply(unitCoefficient));
+//                }
+//            }
 
             mPreSortOutData.setImages(Arrays.asList(GetImageFile.getName(imagePath)));
 
@@ -576,44 +576,52 @@ public class SortOutActivity extends BaseActivity implements
             dbImageUpload.setType(Common.DbType.TYPE_SORT_OUT_STORE_OUT);
             getDbManager().insertDbImageUpload(dbImageUpload);
 
+            //界面不显示
+            //从列表中删除
+            removeCurrentItem(mListShow);
+            removeCurrentItem(mListFilter);
+            removeCurrentItem(mListAll);
             if (mIntType == TYPE_WEIGHT) {
-                if (outAmount.compareTo(qtyOfNinety) > 0) {
-                    //界面不显示
-                    //从列表中删除
-                    removeCurrentItem(mListShow);
-                    removeCurrentItem(mListFilter);
-                    removeCurrentItem(mListAllWeight);
-                } else {
-                    //显示已出 数量
-                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
-                    }
-                    mPreSortOutData.setHasStockOutQty(outAmount);
-                }
+                removeCurrentItem(mListAllWeight);
             } else if (mIntType == TYPE_COUNT) {
-                BigDecimal qty = mPreSortOutData.getGoodsQty();
-                if (qty.subtract(outAmount).doubleValue() <= 0) {
-                    //界面不显示
-                    //从列表中删除
-                    removeCurrentItem(mListShow);
-                    removeCurrentItem(mListFilter);
-                    removeCurrentItem(mListAllCount);
-                } else {
-                    //显示已出 数量
-                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
-                    }
-                    mPreSortOutData.setHasStockOutQty(outAmount);
-                }
+                removeCurrentItem(mListAllCount);
             }
+
+//            if (mIntType == TYPE_WEIGHT) {
+//                if (outAmount.compareTo(qtyOfNinety) > 0) {
+//                    //界面不显示
+//                    //从列表中删除
+//                    removeCurrentItem(mListShow);
+//                    removeCurrentItem(mListFilter);
+//                    removeCurrentItem(mListAllWeight);
+//                } else {
+//                    //显示已出 数量
+//                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
+//                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
+//                    }
+//                    mPreSortOutData.setHasStockOutQty(outAmount);
+//                }
+//            } else if (mIntType == TYPE_COUNT) {
+//                BigDecimal qty = mPreSortOutData.getGoodsQty();
+//                if (qty.subtract(outAmount).doubleValue() <= 0) {
+//                    //界面不显示
+//                    //从列表中删除
+//                    removeCurrentItem(mListShow);
+//                    removeCurrentItem(mListFilter);
+//                    removeCurrentItem(mListAllCount);
+//                } else {
+//                    //显示已出 数量
+//                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
+//                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
+//                    }
+//                    mPreSortOutData.setHasStockOutQty(outAmount);
+//                }
+//            }
 
             //打印标签
             printer(unitCoefficient);
             //先打印后清除数据
-            mPreSortOutData.setImages(null);
-            mPreSortOutData.setStockOutQty(null);
-            mPreSortOutData.setWarehouse(null);
-            mPreSortOutData.setPlatformTraceCode(null);
+            setParamsNull(mPreSortOutData);
             if (mListShow.size() > 0) {
                 mPreSortOutData = mListShow.get(0);
                 //默认设置第一个
@@ -806,24 +814,9 @@ public class SortOutActivity extends BaseActivity implements
                 currentCancelData.setHasStockOutQty(hasStockOutQty.subtract(stockOutQty));
             } else {
                 // 重新添加   遍历下历史中所有的该SourceBillLineUuid相同的订单
-                BigDecimal allStockOut = new BigDecimal("0");
-                BigDecimal allLastWeight = new BigDecimal("0");
-                for (DbImageUpload db : mListHistory) {
-                    CustomSortOutData dbData = GsonUtil.getGson().fromJson(db.getLine(), CustomSortOutData.class);
-                    if (dbData.getSourceBillLineUuid().equals(dataSourceBillLineUuid)) {
-                        BigDecimal stockOutQty = dbData.getStockOutQty();
-                        allStockOut = allStockOut.add(stockOutQty.multiply(unitCoefficient));
-                        allLastWeight = allLastWeight.add(dbData.getLastWeight());
-                    }
-                }
-                data.setPlatformTraceCode(null);
-                data.setWarehouse(null);
-                data.setStockOutRecordUuids(null);
-                BigDecimal stockOutQty = data.getStockOutQty();
-                BigDecimal newCoverToKtQty = allLastWeight.subtract(allStockOut).add(stockOutQty.multiply(unitCoefficient));
-                data.setCoverToKgQty(newCoverToKtQty);
-                data.setHasStockOutQty(data.getGoodsQty().subtract(newCoverToKtQty.divide(unitCoefficient, RoundingMode.HALF_EVEN)));
+                setParamsNull(data);
                 mListAllWeight.add(data);
+                mListAll.add(data);
             }
         } else {
             // 数量
@@ -846,15 +839,20 @@ public class SortOutActivity extends BaseActivity implements
                 }
             } else {
                 // 重新添加   遍历下历史中所有的该SourceBillLineUuid相同的订单
-                data.setPlatformTraceCode(null);
-                data.setWarehouse(null);
-                data.setStockOutRecordUuids(null);
-                BigDecimal stockOutQty = data.getStockOutQty();
-                data.setStockOutQty(stockOutQty);
-                data.setHasStockOutQty(data.getGoodsQty().subtract(stockOutQty));
+                setParamsNull(data);
                 mListAllCount.add(data);
+                mListAll.add(data);
             }
         }
+    }
+
+    private void setParamsNull(CustomSortOutData data) {
+        data.setPlatformTraceCode(null);
+        data.setWarehouse(null);
+        data.setStockOutRecordUuids(null);
+        data.setImages(null);
+        data.setStockOutQty(null);
+        data.setLeatherQty(null);
     }
 
     @Override
@@ -893,7 +891,7 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     /**
-     *  扣除数据库中未上传的数据
+     * 扣除数据库中未上传的数据
      */
     private void removeUnSortOut() {
         //获取数据库中未上传的数据   扣除数据库中未上传的数据
@@ -1184,14 +1182,14 @@ public class SortOutActivity extends BaseActivity implements
                 holder.setText(R.id.item_goods_weight_all, "总数量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
                 holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
             }
-            BigDecimal hasStockOutQty = data.getHasStockOutQty();
-            if (hasStockOutQty.doubleValue() != 0) {
-                holder.setText(R.id.item_goods_weight_out, "已出" + BigDecimalUtil.toScaleStr(hasStockOutQty) + unit);
-                holder.setVisible(R.id.item_goods_weight_out, View.VISIBLE);
-            } else {
-                holder.setText(R.id.item_goods_weight_out, "");
-                holder.setVisible(R.id.item_goods_weight_out, View.INVISIBLE);
-            }
+//            BigDecimal hasStockOutQty = data.getHasStockOutQty();
+//            if (hasStockOutQty.doubleValue() != 0) {
+//                holder.setText(R.id.item_goods_weight_out, "已出" + BigDecimalUtil.toScaleStr(hasStockOutQty) + unit);
+//                holder.setVisible(R.id.item_goods_weight_out, View.VISIBLE);
+//            } else {
+//                holder.setText(R.id.item_goods_weight_out, "");
+//                holder.setVisible(R.id.item_goods_weight_out, View.INVISIBLE);
+//            }
             //设置备注
             holder.setText(R.id.item_goods_remark, data.getRemark());
             ScalableTextView tvName = holder.getView(R.id.item_goods_name);
