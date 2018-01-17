@@ -614,11 +614,11 @@ public class SortOutActivity extends BaseActivity implements
             mPreSortOutData.setStockOutQty(null);
             mPreSortOutData.setWarehouse(null);
             mPreSortOutData.setPlatformTraceCode(null);
-            //默认设置第一个
-            mSortOutAdapter.setIntSelect(0);
-            mSortOutAdapter.notifyDataSetChanged();
             if (mListShow.size() > 0) {
                 mPreSortOutData = mListShow.get(0);
+                //默认设置第一个
+                mSortOutAdapter.setIntSelect(0);
+                mSortOutAdapter.notifyDataSetChanged();
                 notifyItemClick();
             } else if (mListShow.size() == 0) {
                 mPreSortOutData = null;
