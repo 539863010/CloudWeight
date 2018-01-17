@@ -1,10 +1,7 @@
 package xm.cloudweight.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.text.TextUtils;
@@ -23,9 +20,6 @@ import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import xm.cloudweight.api.ApiManager;
 import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
@@ -34,10 +28,11 @@ import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.comm.BrocastFilter;
 import xm.cloudweight.comm.ServerConstant;
+import xm.cloudweight.net.RetrofitUtil;
 import xm.cloudweight.utils.LogUtils;
-import xm.cloudweight.utils.NetConfigUtil;
 import xm.cloudweight.utils.bussiness.BeanUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
+import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 import xm.cloudweight.utils.bussiness.UploadPhotoUtil;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
@@ -47,10 +42,8 @@ import xm.cloudweight.utils.dao.bean.DbImageUpload;
  * @description: 用来请求保存图片url接口
  * @create 2017/11/20
  */
-public class BgOperateService extends Service {
+public class BgOperateService extends Service implements RefreshMerchantHelper.onRefreshMerchantListener {
 
-    public static final String ACTION_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
-    public static final String KEY_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
 
     private DBManager mDBManager;
     private ApiManager mApiManager;
@@ -71,7 +64,7 @@ public class BgOperateService extends Service {
     private boolean isCurrentAllocate;
     //当前是否在盘点
     private boolean isCurrentCheck;
-    private RefreshMerchant mRefreshMerchant;
+    private RefreshMerchantHelper mRefreshMerchantHelper;
 
     public BgOperateService() {
     }
@@ -80,46 +73,26 @@ public class BgOperateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        mRefreshMerchant = new RefreshMerchant();
-        registerReceiver(mRefreshMerchant, new IntentFilter(ACTION_REFRESH_MERCHANT));
+        mRefreshMerchantHelper = new RefreshMerchantHelper();
+        mRefreshMerchantHelper.regist(this, this);
 
-        mApiManager = getApiManager();
+        mApiManager = RetrofitUtil.getApiManager(this);
         mDBManager = new DBManager(this);
         //创建计时器定期轮询
         createTimer();
     }
 
-    private ApiManager getApiManager() {
-        return mApiManager = new Retrofit.Builder()
-                .baseUrl(ApiManager.BASE_URL)
-                .client(NetConfigUtil.getOkHttpClient(this))
-//                    .addConverterFactory(StringConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-                .create(ApiManager.class);
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mRefreshMerchant != null) {
-            unregisterReceiver(mRefreshMerchant);
-        }
+        mRefreshMerchantHelper.unregist(this);
     }
 
-    private class RefreshMerchant extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String strMerchant = intent.getStringExtra(KEY_REFRESH_MERCHANT);
-            if (!TextUtils.isEmpty(strMerchant)) {
-                mMerchant = GsonUtil.getGson().fromJson(strMerchant, Merchant.class);
-            } else {
-                mMerchant = null;
-            }
-        }
+    @Override
+    public void get(Merchant merchant) {
+        mMerchant = merchant;
     }
+
 
     private void createTimer() {
         CountDownTimer timer = new CountDownTimer(Long.MAX_VALUE, 5000) {
@@ -544,7 +517,7 @@ public class BgOperateService extends Service {
         return new BgOperateServiceImpl();
     }
 
-    public class BgOperateServiceImpl extends xm.cloudweight.BgOperateService.Stub {
+    public class BgOperateServiceImpl extends xm.cloudweight.IBgOperateService.Stub {
 
     }
 

@@ -1,19 +1,24 @@
 package xm.cloudweight.app;
 
 import android.app.Application;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
 import com.tencent.bugly.crashreport.CrashReport;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import xm.cloudweight.BuildConfig;
+import xm.cloudweight.IRequestDataService;
 import xm.cloudweight.api.ApiManager;
 import xm.cloudweight.camera.service.CameraService;
+import xm.cloudweight.net.RetrofitUtil;
 import xm.cloudweight.service.BgOperateService;
-import xm.cloudweight.utils.NetConfigUtil;
+import xm.cloudweight.service.RequestDataService;
 import xm.cloudweight.utils.dao.DBManager;
 
 /**
@@ -27,16 +32,36 @@ public class App extends Application {
     private static DBManager mDbManager;
     private Intent mCameraService;
     private Intent mImageUploadService;
+    private Intent mRequestDataService;
+    private static IRequestDataService mIRequestDataService;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mIRequestDataService = IRequestDataService.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+        QueryBuilder.LOG_VALUES = true;
+        QueryBuilder.LOG_SQL = true;
+
         CrashReport.initCrashReport(getApplicationContext(), "dfead879d1", BuildConfig.DEBUG);
         mCameraService = new Intent(this, CameraService.class);
         startService(mCameraService);
+
         mImageUploadService = new Intent(this, BgOperateService.class);
         startService(mImageUploadService);
-        initApiManager(getApplicationContext());
+
+        mRequestDataService = new Intent(this, RequestDataService.class);
+        bindService(mRequestDataService, mServiceConnection, Service.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -44,22 +69,15 @@ public class App extends Application {
         super.onTerminate();
         stopService(mCameraService);
         stopService(mImageUploadService);
-    }
-
-    private static void initApiManager(Context ctx) {
-        mApiManager = new Retrofit.Builder()
-                .baseUrl(ApiManager.BASE_URL)
-                .client(NetConfigUtil.getOkHttpClient(ctx))
-//                    .addConverterFactory(StringConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-                .create(ApiManager.class);
+        stopService(mRequestDataService);
+        unbindService(mServiceConnection);
+        mServiceConnection = null;
+        mIRequestDataService = null;
     }
 
     public static ApiManager getApiManager(Context ctx) {
         if (mApiManager == null) {
-            initApiManager(ctx.getApplicationContext());
+            mApiManager = RetrofitUtil.getApiManager(ctx);
         }
         return mApiManager;
     }
@@ -71,5 +89,7 @@ public class App extends Application {
         return mDbManager;
     }
 
-
+    public static IRequestDataService getIRequestDataService() {
+        return mIRequestDataService;
+    }
 }

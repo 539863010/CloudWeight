@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
@@ -42,7 +44,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Subscription;
+import xm.cloudweight.app.App;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.camera.instrument.Instrument;
@@ -52,6 +54,7 @@ import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CommImpl;
 import xm.cloudweight.impl.SortOutImpl;
 import xm.cloudweight.presenter.SortOutPresenter;
+import xm.cloudweight.service.RequestDataService;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.IsBottomUtil;
@@ -62,8 +65,7 @@ import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.ListComparator;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
-import xm.cloudweight.utils.bussiness.SubScriptionUtil;
-import xm.cloudweight.utils.dao.DBManager;
+import xm.cloudweight.utils.bussiness.SplitParamUtil;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.onNoDoubleClickListener;
@@ -88,7 +90,10 @@ public class SortOutActivity extends BaseActivity implements
         , SortOutImpl.OnGetSortOutListListener
         , SortOutImpl.OnCancelSortOutListener
         , AdapterView.OnItemSelectedListener
-        , HistorySortOutPopWindow.OnDeleteListener, onInputFinishListener, VideoFragment.OnInstrumentListener, AbsListView.OnScrollListener, PopupWindow.OnDismissListener {
+        , HistorySortOutPopWindow.OnDeleteListener,
+        onInputFinishListener, VideoFragment.OnInstrumentListener,
+        AbsListView.OnScrollListener,
+        PopupWindow.OnDismissListener {
 
     public static final int TYPE_WEIGHT = 0;
     public static final int TYPE_COUNT = 1;
@@ -141,25 +146,20 @@ public class SortOutActivity extends BaseActivity implements
     View mLlWeight;
     private List<CustomSortOutData> mListShow = new ArrayList<>();
     private ArrayList<CustomSortOutData> mListFilter = new ArrayList<>();
-    private List<CustomSortOutData> mListAllWeight = new ArrayList<>();
-    private List<CustomSortOutData> mListAllCount = new ArrayList<>();
+    private List<CustomSortOutData> mListAllWeight;
+    private List<CustomSortOutData> mListAllCount;
     private List<CustomSortOutData> mListAll = new ArrayList<>();
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private SortOutAdapter mSortOutAdapter;
     private int mIntType = TYPE_WEIGHT;
-    private boolean loadCustomerLevel;
-    private boolean loadWeightSuccess;
-    private boolean loadCountSuccess;
     private boolean hasCancelSortOut;
     private CustomSortOutData mPreSortOutData;
     private HistorySortOutPopWindow mHistoryPopWindow;
-    private DBManager mDBManager;
     private DbImageUpload mDbImageUpload;
     private boolean mStable;
     private VideoFragment mVideoFragment;
-    private Subscription mSubScriptionWeight;
-    private Subscription mSubScriptionCount;
-    private InputFragment mInputFragment;
+//    private Subscription mSubScriptionWeight;
+//    private Subscription mSubScriptionCount;
 
     @Override
     protected int getLayoutId() {
@@ -209,7 +209,7 @@ public class SortOutActivity extends BaseActivity implements
                 } else {
                     mIvDelete.setVisibility(View.GONE);
                 }
-                if (!loadCountSuccess && !loadWeightSuccess) {
+                if (mListAllWeight == null || mListAllCount == null) {
                     ToastUtil.showShortToast(getContext(), "请先获取数据");
                     return;
                 }
@@ -253,16 +253,34 @@ public class SortOutActivity extends BaseActivity implements
 
         mVideoFragment = VideoFragment.getInstance();
         mVideoFragment.setInstrumentListener(this);
-        mVideoFragment.setInitCamera(false);
         //数字键盘   InputFragment中设置mEtLeather文本焦点不在时不改变为白色
-        mInputFragment = InputFragment.newInstance();
-        mInputFragment.setEditTexts(mEtShow, mEtLeather, mEtWeight);
+        InputFragment inputFragment = InputFragment.newInstance();
+        inputFragment.setEditTexts(mEtShow, mEtLeather, mEtWeight);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, mVideoFragment)
-                .add(R.id.container, mInputFragment)
+                .add(R.id.container, inputFragment)
                 .hide(mVideoFragment)
-                .hide(mInputFragment)
+                .hide(inputFragment)
                 .commitAllowingStateLoss();
+    }
+
+    @Override
+    protected void loadDate() {
+        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mHistoryPopWindow != null && mHistoryPopWindow.isShowing()) {
+                    refreshHistoryList();
+                }
+            }
+        });
+
+        getLocalInfo();
+        mBtnSortOutCount.setSelected(false);
+        mBtnSortOutWeight.setSelected(true);
+        //设置当前日期
+        String currentData = DateUtils.converToString(new Date());
+        mBtnDate.setText(currentData);
     }
 
     private void notifyItemClick() {
@@ -287,25 +305,6 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     @Override
-    protected void loadDate() {
-        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mHistoryPopWindow != null && mHistoryPopWindow.isShowing()) {
-                    refreshHistoryList();
-                }
-            }
-        });
-
-        getLocalInfo();
-        mBtnSortOutCount.setSelected(false);
-        mBtnSortOutWeight.setSelected(true);
-        //设置当前日期
-        String currentData = DateUtils.StringData();
-        mBtnDate.setText(currentData);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         DbRefreshUtil.refreshUnRegist(this);
@@ -326,7 +325,6 @@ public class SortOutActivity extends BaseActivity implements
                 e.setName("全部");
                 listCustomerLevel.add(0, e);
                 mSpCustomersLevel.setList(listCustomerLevel);
-                loadCustomerLevel = true;
                 filterList();
             }
         } else {
@@ -447,18 +445,98 @@ public class SortOutActivity extends BaseActivity implements
             mBtnRequest.setEnabled(false);
             dismissLoadingDialog();
             showLoadingDialog(false);
-            loadWeightSuccess = false;
-            loadCountSuccess = false;
             mListAll.clear();
-            mListAllWeight.clear();
-            mListAllCount.clear();
+            mListAllWeight = null;
+            mListAllCount = null;
             mListFilter.clear();
             mListShow.clear();
             mSortOutAdapter.notifyDataSetChanged();
-            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
-            // 请求重量列表后在请求数量， 优化UnknownHostException异常（待测试）
-            mSubScriptionWeight = SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-//            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+
+            requestListWeight(time);
+            requestListCount(time);
+
+//            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
+//            // 请求重量列表后在请求数量， 优化UnknownHostException异常（待测试）
+//            mSubScriptionWeight = SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+////            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+        }
+    }
+
+    private void requestListWeight(String time) {
+        try {
+            String params = SplitParamUtil.concat(TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+            App.getIRequestDataService().onGetDataListener(
+                    RequestDataService.TYPE_REQUEST_DATA_SORT_OUT,
+                    params,
+                    new OnRequestDataListener.Stub() {
+                        @Override
+                        public void onReceive(int type, String data) throws RemoteException {
+                            Message message = new Message();
+                            message.what = TYPE_WEIGHT;
+                            message.obj = data;
+                            mRequestData.sendMessage(message);
+                        }
+
+                        @Override
+                        public void onError(int type, String message) throws RemoteException {
+                            onGetListFailed(message);
+                        }
+
+                    }
+            );
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestListCount(String time) {
+        try {
+            String params = SplitParamUtil.concat(TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+            App.getIRequestDataService().onGetDataListener(
+                    RequestDataService.TYPE_REQUEST_DATA_SORT_OUT,
+                    params,
+                    new OnRequestDataListener.Stub() {
+                        @Override
+                        public void onReceive(int type, String data) throws RemoteException {
+                            Message message = new Message();
+                            message.what = TYPE_COUNT;
+                            message.obj = data;
+                            mRequestData.sendMessage(message);
+                        }
+
+                        @Override
+                        public void onError(int type, String message) throws RemoteException {
+                            onGetListFailed(message);
+                        }
+
+                    }
+            );
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onGetListSuccess() {
+        if (mListAllCount != null && mListAllWeight != null) {
+            //设置客户列表
+            List<MerchantCustomer> list = mSpCustomers.getList();
+            if (list == null) {
+                getListCustomer();
+            }
+            //listAll中扣除未上传的分拣数
+            removeUnSortOut();
+            //筛选条件
+            filterList();
+            dismissLoadingDialog();
+            mBtnRequest.setEnabled(true);
+        }
+    }
+
+    private void onGetListFailed(String message) {
+        dismissLoadingDialog();
+        mBtnRequest.setEnabled(true);
+        if (!TextUtils.isEmpty(message)) {
+            ToastUtil.showShortToast(getContext(), message);
         }
     }
 
@@ -472,6 +550,38 @@ public class SortOutActivity extends BaseActivity implements
         mSortOutAdapter.notifyDataSetChanged();
         filterList();
     }
+
+    private Handler mRequestData = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            String data = (String) msg.obj;
+            switch (msg.what) {
+                case TYPE_WEIGHT:
+                    if (!TextUtils.isEmpty(data)) {
+                        List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
+                        }.getType());
+                        mListAllWeight = new ArrayList<>();
+                        mListAllWeight.clear();
+                        mListAllWeight.addAll(list);
+                        mListAll.addAll(mListAllWeight);
+                        onGetListSuccess();
+                    }
+                    break;
+                case TYPE_COUNT:
+                    if (!TextUtils.isEmpty(data)) {
+                        List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
+                        }.getType());
+                        mListAllCount = new ArrayList<>();
+                        mListAllCount.clear();
+                        mListAllCount.addAll(list);
+                        mListAll.addAll(mListAllCount);
+                        onGetListSuccess();
+                    }
+                    break;
+            }
+            return false;
+        }
+    });
 
     private Handler mHandlerShotPic = new Handler(new Handler.Callback() {
         @Override
@@ -586,37 +696,6 @@ public class SortOutActivity extends BaseActivity implements
             } else if (mIntType == TYPE_COUNT) {
                 removeCurrentItem(mListAllCount);
             }
-
-//            if (mIntType == TYPE_WEIGHT) {
-//                if (outAmount.compareTo(qtyOfNinety) > 0) {
-//                    //界面不显示
-//                    //从列表中删除
-//                    removeCurrentItem(mListShow);
-//                    removeCurrentItem(mListFilter);
-//                    removeCurrentItem(mListAllWeight);
-//                } else {
-//                    //显示已出 数量
-//                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-//                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
-//                    }
-//                    mPreSortOutData.setHasStockOutQty(outAmount);
-//                }
-//            } else if (mIntType == TYPE_COUNT) {
-//                BigDecimal qty = mPreSortOutData.getGoodsQty();
-//                if (qty.subtract(outAmount).doubleValue() <= 0) {
-//                    //界面不显示
-//                    //从列表中删除
-//                    removeCurrentItem(mListShow);
-//                    removeCurrentItem(mListFilter);
-//                    removeCurrentItem(mListAllCount);
-//                } else {
-//                    //显示已出 数量
-//                    if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-//                        mPreSortOutData.setCoverToKgQty(mPreSortOutData.getCoverToKgQty().subtract(stockOutQty.multiply(unitCoefficient)));
-//                    }
-//                    mPreSortOutData.setHasStockOutQty(outAmount);
-//                }
-//            }
 
             //打印标签
             printer(unitCoefficient);
@@ -859,37 +938,25 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void getSortOutListSuccess(int type, List<CustomSortOutData> data) {
-        if (type == TYPE_WEIGHT) {
-            loadWeightSuccess = true;
-            mListAllWeight.clear();
-            mListAllWeight.addAll(data);
-            mListAll.addAll(mListAllWeight);
-        } else if (type == TYPE_COUNT) {
-            loadCountSuccess = true;
-            mListAllCount.clear();
-            mListAllCount.addAll(data);
-            mListAll.addAll(mListAllCount);
-        }
-        //  2018/01/04  ----------------------------------------------
-        //待重量加载完后，在加载数量，优化出现UnknownHostException异常(待测试)
-        if (loadWeightSuccess && !loadCountSuccess) {
-            String time = mBtnDate.getText().toString().trim();
-            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-        }
-        //--------------------------------------------------------------
-        if (loadWeightSuccess && loadCountSuccess) {
-            mBtnRequest.setEnabled(true);
-            //设置客户列表
-            List<MerchantCustomer> list = mSpCustomers.getList();
-            if (list == null) {
-                getListCustomer();
-            }
-            //listAll中扣除未上传的分拣数
-            removeUnSortOut();
-            //筛选条件
-            filterList();
-            dismissLoadingDialog();
-        }
+//        if (type == TYPE_WEIGHT) {
+//            loadWeightSuccess = true;
+//            mListAllWeight.clear();
+//            mListAllWeight.addAll(data);
+//            mListAll.addAll(mListAllWeight);
+//        } else if (type == TYPE_COUNT) {
+//            loadCountSuccess = true;
+//            mListAllCount.clear();
+//            mListAllCount.addAll(data);
+//            mListAll.addAll(mListAllCount);
+//        }
+//        //  2018/01/04  ----------------------------------------------
+//        //待重量加载完后，在加载数量，优化出现UnknownHostException异常(待测试)
+//        if (loadWeightSuccess && !loadCountSuccess) {
+//            String time = mBtnDate.getText().toString().trim();
+//            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
+//        }
+//        //--------------------------------------------------------------
+//        onSuccessList();
     }
 
     /**
@@ -972,26 +1039,25 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void getSortOutListFailed(int type, String message) {
-        dismissLoadingDialog();
-        loadWeightSuccess = false;
-        loadCountSuccess = false;
-        mBtnRequest.setEnabled(true);
-        //中断请求
-        SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
-        ToastUtil.showShortToast(getContext(), message);
+//        dismissLoadingDialog();
+//        loadWeightSuccess = false;
+//        loadCountSuccess = false;
+//        mBtnRequest.setEnabled(true);
+//        //中断请求
+//        SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
+//        ToastUtil.showShortToast(getContext(), message);
     }
 
     @Override
     protected void onLoadingDismiss() {
         super.onLoadingDismiss();
-        if ((mSubScriptionWeight != null && !mSubScriptionWeight.isUnsubscribed())
-                || (mSubScriptionCount != null && !mSubScriptionCount.isUnsubscribed())) {
-            loadWeightSuccess = false;
-            loadCountSuccess = false;
-            mBtnRequest.setEnabled(true);
-            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
-            ToastUtil.showShortToast(getContext(), "取消获取数据");
-        }
+//        if ((mSubScriptionWeight != null && !mSubScriptionWeight.isUnsubscribed())
+//                || (mSubScriptionCount != null && !mSubScriptionCount.isUnsubscribed())) {
+
+        mBtnRequest.setEnabled(true);
+//            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
+//            ToastUtil.showShortToast(getContext(), "取消获取数据");
+//        }
     }
 
     @Override
@@ -1016,12 +1082,12 @@ public class SortOutActivity extends BaseActivity implements
      */
     private void filterList() {
         //等待全部加载后再筛选
-        if (!loadCountSuccess || !loadWeightSuccess || !loadCustomerLevel) {
+        if (mListAllWeight == null || mListAllCount == null) {
             return;
         }
-        if ((mIntType == TYPE_WEIGHT && (mListAllWeight == null || mListAllWeight.size() == 0))
+        if ((mIntType == TYPE_WEIGHT && mListAllWeight.size() == 0)
                 ||
-                (mIntType == TYPE_COUNT && (mListAllCount == null || mListAllCount.size() == 0))) {
+                (mIntType == TYPE_COUNT && mListAllCount.size() == 0)) {
             mListFilter.clear();
             mListShow.clear();
             scrollToBottom(0);
@@ -1176,13 +1242,13 @@ public class SortOutActivity extends BaseActivity implements
                     holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(coverToKgQty));
                     holder.setText(R.id.item_goods_weight_unit, "kg");
                 }
-                holder.setText(R.id.item_goods_weight_all, "总重量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
-                holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
+//                holder.setText(R.id.item_goods_weight_all, "总重量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
+//                holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
             } else if (mIntType == TYPE_COUNT) {
                 holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getHasStockOutQty())));
                 holder.setText(R.id.item_goods_weight_unit, unit);
-                holder.setText(R.id.item_goods_weight_all, "总数量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
-                holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
+//                holder.setText(R.id.item_goods_weight_all, "总数量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
+//                holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
             }
 //            BigDecimal hasStockOutQty = data.getHasStockOutQty();
 //            if (hasStockOutQty.doubleValue() != 0) {

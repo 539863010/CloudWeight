@@ -1,7 +1,6 @@
 package xm.cloudweight;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,9 +17,9 @@ import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.impl.LoginImpl;
 import xm.cloudweight.presenter.CommPresenter;
 import xm.cloudweight.presenter.LoginPresenter;
-import xm.cloudweight.service.BgOperateService;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
+import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 
 /**
  * @author wyh
@@ -115,10 +114,7 @@ public class LoginActivity extends BaseActivity implements LoginImpl.OnLoginStat
         startActivity(MainActivity.class);
         finish();
 
-        Intent intent = new Intent(BgOperateService.ACTION_REFRESH_MERCHANT);
-        intent.putExtra(BgOperateService.KEY_REFRESH_MERCHANT, jsonMerchant);
-        sendBroadcast(intent);
-
+        RefreshMerchantHelper.send(this, jsonMerchant);
     }
 
     @Override

@@ -482,7 +482,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
      * 初始化出库布局
      */
     private void initStockOutParams() {
-        View layout = LayoutInflater.from(this).inflate(R.layout.layout_type_stockout, null);
+        View layout = LayoutInflater.from(this).inflate(R.layout.layout_type_stock_out, null);
         mSpTypeStockOut = layout.findViewById(R.id.sp_type_stock_out);
         mSpTypeStockOut.setTitleColor(R.color.color_135c31);
         mLlType.addView(layout);

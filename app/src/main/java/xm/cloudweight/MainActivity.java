@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.xmzynt.storm.service.user.merchant.Merchant;
+import com.xmzynt.storm.util.GsonUtil;
+
 import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
+import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 
 /**
  * @author wyh
@@ -27,7 +31,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void loadDate() {
-
+        // 发送广播更新远程服务里面Merchant
+        Merchant merchant = LocalSpUtil.getMerchant(this);
+        RefreshMerchantHelper.send(this, GsonUtil.getGson().toJson(merchant));
     }
 
     @OnClick({R.id.btn_accepting, R.id.btn_sorting, R.id.btn_stockout, R.id.btn_allocating, R.id.btn_checking, R.id.btn_logout})
@@ -72,9 +78,7 @@ public class MainActivity extends BaseActivity {
      * 退出登录
      */
     private void requestLogout() {
-        Intent intent = new Intent(xm.cloudweight.service.BgOperateService.ACTION_REFRESH_MERCHANT);
-        intent.putExtra(xm.cloudweight.service.BgOperateService.KEY_REFRESH_MERCHANT, "");
-        sendBroadcast(intent);
+        RefreshMerchantHelper.send(this, "");
 
         Context ctx = getContext();
         LocalSpUtil.setMerchant(ctx, "");

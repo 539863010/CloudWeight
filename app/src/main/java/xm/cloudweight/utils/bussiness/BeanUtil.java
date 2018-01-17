@@ -168,6 +168,25 @@ public class BeanUtil {
     }
 
     /**
+     * 查询分拣数据
+     */
+    public static PBaseInfo getSourOutListService(Merchant merchant, int page, int pageSize, int defaultPageSize, String deliveryTime) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        QueryFilter queryFilter = new QueryFilter();
+        queryFilter.setOrders(null);
+        queryFilter.setPage(page);
+        queryFilter.setPageSize(pageSize);
+        queryFilter.setDefaultPageSize(defaultPageSize);
+        Map<String, Object> params = queryFilter.getParams();
+        params.put("deliveryTime", deliveryTime);
+        body.put("queryFilter", queryFilter);
+        pBaseInfo.setBody(body);
+        return pBaseInfo;
+    }
+
+    /**
      * 分拣
      */
     public static PBaseInfo sortOut(Merchant merchant, CustomSortOutData data) {
