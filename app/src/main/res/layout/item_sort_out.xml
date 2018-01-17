@@ -53,35 +53,35 @@
         android:textSize="@dimen/_12sp"
         tools:text="kg"/>
 
-    <TextView
-        android:id="@+id/item_goods_weight_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/item_goods_weight"
-        android:layout_marginBottom="@dimen/_5dp"
-        android:layout_marginTop="@dimen/_5dp"
-        android:singleLine="true"
-        android:textSize="@dimen/_10sp"
-        tools:text="TextView"
-        />
+    <!--<TextView-->
+    <!--android:id="@+id/item_goods_weight_all"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/item_goods_weight"-->
+    <!--android:layout_marginBottom="@dimen/_5dp"-->
+    <!--android:layout_marginTop="@dimen/_5dp"-->
+    <!--android:singleLine="true"-->
+    <!--android:textSize="@dimen/_10sp"-->
+    <!--tools:text="TextView"-->
+    <!--/>-->
 
-    <TextView
-        android:id="@+id/item_goods_weight_out"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/item_goods_weight_all"
-        android:layout_toRightOf="@id/item_goods_weight_all"
-        android:singleLine="true"
-        android:gravity="end"
-        android:textSize="@dimen/_10sp"
-        tools:text="TextView"
-        />
+    <!--<TextView-->
+    <!--android:id="@+id/item_goods_weight_out"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignBaseline="@id/item_goods_weight_all"-->
+    <!--android:layout_toRightOf="@id/item_goods_weight_all"-->
+    <!--android:singleLine="true"-->
+    <!--android:gravity="end"-->
+    <!--android:textSize="@dimen/_10sp"-->
+    <!--tools:text="TextView"-->
+    <!--/>-->
 
     <xm.cloudweight.widget.ScalableTextView
         android:id="@+id/item_goods_customer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_12dp"
-        android:layout_below="@id/item_goods_weight_all"
+        android:layout_below="@id/item_goods_weight"
         android:layout_marginTop="@dimen/_2dp"
         android:gravity="center_vertical"
         android:singleLine="true"

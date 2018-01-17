@@ -1227,9 +1227,9 @@ public class SortOutActivity extends BaseActivity implements
             } else {
                 l = new BigDecimal(0);
             }
-            mEtWeight.setText(BigDecimalUtil.toScaleStr(w.subtract(l)));
             if (mStable && !weight.equals(mPreWeight)) {
                 mPreWeight = weight;
+                mEtWeight.setText(BigDecimalUtil.toScaleStr(w.subtract(l)));
                 String strW = String.valueOf(w.subtract(l));
                 sequenceListWeight(mListShow, strW);
                 scrollToBottom(0);
