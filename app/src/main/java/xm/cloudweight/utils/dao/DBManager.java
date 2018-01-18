@@ -23,34 +23,18 @@ public class DBManager {
     private static DBManager mInstance = null;
     private DaoMaster.DevOpenHelper mDevOpenHelper;
     private final Context mContext;
-    private final static String dbName = "db";
-
-//    private DBManager(Context context) {
-//        mContext = context;
-//        mDevOpenHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
-//    }
-//
-//    public static DBManager getInstance(Context context) {
-//        if (mInstance == null) {
-//            synchronized (DBManager.class) {
-//                if (mInstance == null) {
-//                    mInstance = new DBManager(context);
-//                }
-//            }
-//        }
-//        return mInstance;
-//    }
+    public final static String DB_NAME = "db";
 
     public DBManager(Context context) {
         mContext = context;
-        mDevOpenHelper = new DaoMaster.DevOpenHelper(context, dbName, null);
+        mDevOpenHelper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
     }
     /**
      * 获取可读数据库
      */
     private SQLiteDatabase getReadableDatabase() {
         if (mDevOpenHelper == null) {
-            mDevOpenHelper = new DaoMaster.DevOpenHelper(mContext, dbName, null);
+            mDevOpenHelper = new DaoMaster.DevOpenHelper(mContext, DB_NAME, null);
         }
         return mDevOpenHelper.getReadableDatabase();
     }
@@ -60,7 +44,7 @@ public class DBManager {
      */
     private SQLiteDatabase getWritableDatabase() {
         if (mDevOpenHelper == null) {
-            mDevOpenHelper = new DaoMaster.DevOpenHelper(mContext, dbName, null);
+            mDevOpenHelper = new DaoMaster.DevOpenHelper(mContext, DB_NAME, null);
         }
         return mDevOpenHelper.getWritableDatabase();
     }

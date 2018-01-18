@@ -6,11 +6,12 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.xmzynt.storm.service.user.merchant.Merchant;
-import com.xmzynt.storm.util.GsonUtil;
 
-import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
+import rx.Observer;
+import rx.schedulers.Schedulers;
 import xm.cloudweight.IRequestDataService;
 import xm.cloudweight.OnRequestDataListener;
 import xm.cloudweight.SortOutActivity;
@@ -23,7 +24,8 @@ import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.net.RetrofitUtil;
 import xm.cloudweight.utils.bussiness.BeanUtil;
 import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
-import xm.cloudweight.utils.bussiness.SplitParamUtil;
+import xm.cloudweight.utils.dao.DBRequestManager;
+import xm.cloudweight.utils.dao.bean.DbRequestData;
 
 /**
  * @author wyh
@@ -32,30 +34,10 @@ import xm.cloudweight.utils.bussiness.SplitParamUtil;
  */
 public class RequestDataService extends Service implements RefreshMerchantHelper.onRefreshMerchantListener {
 
-    private RequestDataImpl mRequestDataImpl = new RequestDataImpl();
     private ApiManager mApiManager;
-    /**
-     * 获取验收数据
-     */
-    public static final int TYPE_REQUEST_DATA_CHECK_IN = 1;
-    /**
-     * 获取分拣数据
-     */
-    public static final int TYPE_REQUEST_DATA_SORT_OUT = 2;
-    /**
-     * 获取出库
-     */
-    public static final int TYPE_REQUEST_DATA_STOCK_OUT = 3;
-    /**
-     * 获取调拨
-     */
-    public static final int TYPE_REQUEST_DATA_ALLOCTE = 4;
-    /**
-     * 获取盘点
-     */
-    public static final int TYPE_REQUEST_DATA_CHECK = 5;
     private RefreshMerchantHelper mRefreshMerchantHelper;
     private Merchant mMerchant;
+    private DBRequestManager mDBRequestManager;
 
     @Override
     public void onCreate() {
@@ -65,6 +47,9 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
         mRefreshMerchantHelper.regist(this, this);
 
         mApiManager = RetrofitUtil.getApiManager(this);
+
+        mDBRequestManager = new DBRequestManager(this);
+
     }
 
     @Override
@@ -72,19 +57,21 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
         mMerchant = merchant;
     }
 
-    private void sortOut(String param, final OnRequestDataListener listener) throws RemoteException {
-        String[] params = SplitParamUtil.split(param);
+    /**
+     * 获取分拣列表（数量，重量）
+     */
+    private void getListSortOut(Map params, final OnRequestDataListener listener) throws RemoteException {
         if (params == null) {
             return;
         }
         // 格式  TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time
-        final int type = Integer.parseInt(params[0]);
-        int page = Integer.parseInt(params[1]);
-        int pageSize = Integer.parseInt(params[2]);
-        int defaultPageSize = Integer.parseInt(params[3]);
-        String deliveryTime = params[4];
+        final int type = (int) params.get("TYPE");
+        int page = (int) params.get("PAGE");
+        int pageSize = (int) params.get("PAGE_SIZE");
+        int defaultPageSize = (int) params.get("DEFAULT_PAGE_SIZE");
+        String deliveryTime = (String) params.get("DATE");
         PBaseInfo pBaseInfo = BeanUtil.getSourOutListService(mMerchant, page, pageSize, defaultPageSize, deliveryTime);
-        Observable<ResponseEntity<List<CustomSortOutData>>> observable;
+        Observable<ResponseEntity> observable;
         if (type == SortOutActivity.TYPE_WEIGHT) {
             //重量
             observable = mApiManager.getsForWeigh(pBaseInfo);
@@ -92,12 +79,65 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
             //数量
             observable = mApiManager.getsForNotWeigh(pBaseInfo);
         }
-        observable.compose(new TransformerHelper<ResponseEntity<List<CustomSortOutData>>>().get())
-                .subscribe(new ApiSubscribe<List<CustomSortOutData>>() {
+        observable.subscribeOn(Schedulers.io())
+                .subscribe(new Observer<ResponseEntity>() {
                     @Override
-                    protected void onResult(List<CustomSortOutData> result) {
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
                         try {
-                            listener.onReceive(type, GsonUtil.getGson().toJson(result));
+                            if (type == SortOutActivity.TYPE_WEIGHT) {
+                                listener.onError(TYPE_SORT_OUT_WEIGHT_FAILED, "获取分拣-重量列表失败");
+                            } else {
+                                listener.onError(TYPE_SORT_OUT_COUNT_FAILED, "获取分拣-数量列表失败");
+                            }
+                        } catch (RemoteException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(ResponseEntity re) {
+                        try {
+                            String result = re.getData();
+                            DbRequestData data = new DbRequestData();
+                            if (type == SortOutActivity.TYPE_WEIGHT) {
+                                data.setId(TYPE_SORT_OUT_WEIGHT);
+                                data.setData(result);
+                                mDBRequestManager.insertOrReplace(data);
+                                listener.onReceive(TYPE_SORT_OUT_WEIGHT);
+                            } else {
+                                data.setId(TYPE_SORT_OUT_COUNT);
+                                data.setData(result);
+                                mDBRequestManager.insertOrReplace(data);
+                                listener.onReceive(TYPE_SORT_OUT_COUNT);
+                            }
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 分拣撤销
+     */
+    private void sortOutCancel(Map params, final OnRequestDataListener listener) {
+        if (params == null) {
+            return;
+        }
+        CustomSortOutData data = (CustomSortOutData) params.get("CustomSortOutData");
+        PBaseInfo pBaseInfo = BeanUtil.cancelSortOut(mMerchant, data);
+        mApiManager.cancelSortOut(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<CustomSortOutData>>().get())
+                .subscribe(new ApiSubscribe<CustomSortOutData>() {
+                    @Override
+                    protected void onResult(CustomSortOutData result) {
+                        try {
+                            listener.onReceive(TYPE_SORT_OUT_CANCEL);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -106,7 +146,7 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
                     @Override
                     protected void onResultFail(int errorType, String failString) {
                         try {
-                            listener.onError(type, failString);
+                            listener.onError(TYPE_SORT_OUT_CANCEL_FAILED, failString);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -114,43 +154,45 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
                 });
     }
 
-    private class RequestDataImpl extends IRequestDataService.Stub {
+    private final IRequestDataService.Stub mBinder = new IRequestDataService.Stub() {
 
         @Override
-        public void onGetDataListener(int type, String params, OnRequestDataListener listener) throws RemoteException {
+        public void onGetDataListener(long type, Map params, OnRequestDataListener listener) throws RemoteException {
             // type 请求数据类型   listener 返回监听
-            if (type == -1 || listener == null) {
+            if (type == -1) {
                 return;
             }
             if (mMerchant == null) {
-                listener.onError(type, "RequestDataService中未获取用户信息");
+                if (listener != null) {
+                    listener.onError(type, "RequestDataService中未获取用户信息");
+                }
                 return;
             }
-            switch (type) {
-                case TYPE_REQUEST_DATA_CHECK_IN:
-
-                    break;
-                case TYPE_REQUEST_DATA_SORT_OUT:
-                    sortOut(params, listener);
-                    break;
-                case TYPE_REQUEST_DATA_STOCK_OUT:
-
-                    break;
-                case TYPE_REQUEST_DATA_ALLOCTE:
-
-                    break;
-                case TYPE_REQUEST_DATA_CHECK:
-
-                    break;
-                default:
-                    break;
+            if (type == TYPE_SORT_OUT_COUNT || type == TYPE_SORT_OUT_WEIGHT) {
+                getListSortOut(params, listener);
+            } else if (type == TYPE_SORT_OUT_CANCEL) {
+                sortOutCancel(params, listener);
             }
         }
-    }
+
+    };
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mRequestDataImpl;
+        return mBinder;
     }
+
+    /**
+     * 保存到数据库的接口类型,用type来保存主键id, 确保数据库中只有一条该type数据
+     */
+    //获取分拣数据-重量
+    public static final long TYPE_SORT_OUT_WEIGHT = 1L;
+    public static final long TYPE_SORT_OUT_WEIGHT_FAILED = 11L;
+    //获取分拣数据-数量
+    public static final long TYPE_SORT_OUT_COUNT = 2L;
+    public static final long TYPE_SORT_OUT_COUNT_FAILED = 22L;
+    //获取分拣数据-取消
+    public static final long TYPE_SORT_OUT_CANCEL = 3L;
+    public static final long TYPE_SORT_OUT_CANCEL_FAILED = 33L;
 
 }

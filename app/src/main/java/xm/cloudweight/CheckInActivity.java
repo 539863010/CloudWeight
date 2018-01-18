@@ -83,6 +83,10 @@ public class CheckInActivity extends BaseActivity implements
         CheckInImpl.OnGetDropdownOperatorListener,
         Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, HistoryCheckInPopWindow.OnDeleteListener {
 
+    private static final String DEFAULT_SPINNER_WAREHOURE = "采购入库仓库";
+    private static final String DEFAULT_SPINNER_OPERATOR = "制单员";
+    private static final String DEFAULT_SPINNER_SUPPLIER = "供应商";
+
     @BindView(R.id.sp_ware_house)
     DataSpinner<Warehouse> mSpWareHouse;
     @BindView(R.id.sp_purchaseBill)
@@ -392,7 +396,7 @@ public class CheckInActivity extends BaseActivity implements
             listWareHouse = new ArrayList<>();
         }
         Warehouse warehouse = new Warehouse();
-        warehouse.setName("全部");
+        warehouse.setName(DEFAULT_SPINNER_WAREHOURE);
         listWareHouse.add(0, warehouse);
         if (listWareHouse.size() == 1) {
             ToastUtil.showShortToast(this, "未获取到仓库列表信息");
@@ -949,7 +953,7 @@ public class CheckInActivity extends BaseActivity implements
         if (mListAll.size() > 0) {
             List<PurchaseData> listWarehouse = new ArrayList<>();
             Warehouse warehouse = mSpWareHouse.getSelectedItem();
-            if (warehouse != null && !TextUtils.isEmpty(warehouse.getName()) && !warehouse.getName().equals("全部")) {
+            if (warehouse != null && !TextUtils.isEmpty(warehouse.getName()) && !warehouse.getName().equals(DEFAULT_SPINNER_WAREHOURE)) {
                 String warehouseName = warehouse.getName();
                 for (PurchaseData data : mListAll) {
                     UCN ucnWarehouse = data.getWarehouse();
@@ -963,7 +967,7 @@ public class CheckInActivity extends BaseActivity implements
 
             IdName operatorSelect = mSpOperator.getSelectedItem();
             List<PurchaseData> listOperator = new ArrayList<>();
-            if (operatorSelect != null && !operatorSelect.getName().equals("全部")) {
+            if (operatorSelect != null && !operatorSelect.getName().equals(DEFAULT_SPINNER_OPERATOR)) {
                 String operatorSelectId = operatorSelect.getId();
                 for (PurchaseData data : listWarehouse) {
                     IdName operator = data.getOperator();
@@ -980,7 +984,7 @@ public class CheckInActivity extends BaseActivity implements
 
             String supplierName = mSpSupplier.getSelectedItem();
             List<PurchaseData> listSupplier = new ArrayList<>();
-            if (!TextUtils.isEmpty(supplierName) && !supplierName.equals("全部")) {
+            if (!TextUtils.isEmpty(supplierName) && !supplierName.equals(DEFAULT_SPINNER_SUPPLIER)) {
                 for (PurchaseData data : listOperator) {
                     IdName supplier = data.getSupplier();
                     if ((supplier != null && supplier.getName().equals(supplierName))) {
@@ -1016,7 +1020,7 @@ public class CheckInActivity extends BaseActivity implements
     public void onQueryPurchaseDataSuccess(List<PurchaseData> data) {
         if (data != null && data.size() > 0) {
             List<String> mListSuppliers = new ArrayList<>();
-            mListSuppliers.add("全部");
+            mListSuppliers.add(DEFAULT_SPINNER_SUPPLIER);
             int size = data.size();
             for (int i = 0; i < size; i++) {
                 IdName supplier = data.get(i).getSupplier();
@@ -1052,7 +1056,7 @@ public class CheckInActivity extends BaseActivity implements
     @Override
     public void onGetDropdownOperatorSuccess(List<IdName> result) {
         List<IdName> listOperator = new ArrayList<>();
-        listOperator.add(new IdName("", "全部"));
+        listOperator.add(new IdName("", DEFAULT_SPINNER_OPERATOR));
         if (result != null && result.size() > 0) {
             listOperator.addAll(result);
         }

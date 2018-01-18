@@ -65,8 +65,6 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
         int color = mContext.getResources().getColor(R.color.color_135c31);
         TextView titleName = view.findViewById(R.id.item_goods_name);
         titleName.setTextColor(color);
-        TextView titleUnit = view.findViewById(R.id.item_goods_unit);
-        titleUnit.setTextColor(color);
         TextView titleOrderNum = view.findViewById(R.id.item_order_num);
         titleOrderNum.setTextColor(color);
         TextView titleSortOutNum = view.findViewById(R.id.item_sort_out_num);
@@ -141,7 +139,6 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
             final String goodsName = data.getGoods().getName();
             holder.setText(R.id.item_goods_name, goodsName);
             String goodsUnit = data.getGoodsUnit().getName();
-            holder.setText(R.id.item_goods_unit, goodsUnit);
             BigDecimal unitCoefficient = data.getUnitCoefficient();
             String strSortOutNum;
             if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {

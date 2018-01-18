@@ -4,11 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -22,26 +20,28 @@ public class NetConfigUtil {
     public static HashSet<String> mSetCookies = new HashSet<>();
 
     public static OkHttpClient getOkHttpClient(Context ctx) {
-        File file = new File(ctx.getCacheDir(), "OkHttpCache");
-        int cacheSize = 1024 * 1024 * 10;
-        Cache cache = new Cache(file, cacheSize);
-
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+//        File file = new File(ctx.getCacheDir(), "OkHttpCache");
+//        int cacheSize = 1024 * 1024 * 10;
+//        Cache cache = new Cache(file, cacheSize);
+
         builder
 //                 .addNetworkInterceptor(new CacheInterceptor(ctx))
                 //连接超时
-                .connectTimeout(20, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
                 //设置写超时
                 .writeTimeout(20, TimeUnit.SECONDS)
                 //设置读超时
                 .readTimeout(20, TimeUnit.SECONDS)
                 //是否自动重连
                 .retryOnConnectionFailure(true)
-                //添加头部
+        //添加头部
 //                .addInterceptor(new AddHeaderInterceptor(ctx))
 //                .addInterceptor(new GetHeaderInterceptor(ctx))
-                // 缓存
-                .cache(cache);
+        // 缓存
+//        .cache(cache)
+        ;
         if (true) {
             //log日志
             HttpLoggingInterceptor loggingInterceptor = getHttpLoggingInterceptor();

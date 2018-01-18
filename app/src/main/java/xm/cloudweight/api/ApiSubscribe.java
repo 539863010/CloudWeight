@@ -45,7 +45,7 @@ public abstract class ApiSubscribe<T> extends Subscriber<ResponseEntity<T>> {
                         onResult((T) GsonUtil.getGson().fromJson(data, type));
                     }
                 } else {
-                    onResultFail(ServerConstant.ERROR_TYPE, "类型有误");
+                    onResult((T) data);
                 }
             } else {
                 onResult((T) data);

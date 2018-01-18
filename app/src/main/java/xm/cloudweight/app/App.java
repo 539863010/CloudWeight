@@ -10,8 +10,6 @@ import android.os.IBinder;
 
 import com.tencent.bugly.crashreport.CrashReport;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
 import xm.cloudweight.BuildConfig;
 import xm.cloudweight.IRequestDataService;
 import xm.cloudweight.api.ApiManager;
@@ -20,6 +18,7 @@ import xm.cloudweight.net.RetrofitUtil;
 import xm.cloudweight.service.BgOperateService;
 import xm.cloudweight.service.RequestDataService;
 import xm.cloudweight.utils.dao.DBManager;
+import xm.cloudweight.utils.dao.DBRequestManager;
 
 /**
  * @author wyh
@@ -30,6 +29,7 @@ public class App extends Application {
 
     private static ApiManager mApiManager;
     private static DBManager mDbManager;
+    private static DBRequestManager mDbRequestManager;
     private Intent mCameraService;
     private Intent mImageUploadService;
     private Intent mRequestDataService;
@@ -50,8 +50,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        QueryBuilder.LOG_VALUES = true;
-        QueryBuilder.LOG_SQL = true;
+//        QueryBuilder.LOG_VALUES = true;
+//        QueryBuilder.LOG_SQL = true;
 
         CrashReport.initCrashReport(getApplicationContext(), "dfead879d1", BuildConfig.DEBUG);
         mCameraService = new Intent(this, CameraService.class);
@@ -87,6 +87,13 @@ public class App extends Application {
             mDbManager = new DBManager(ctx.getApplicationContext());
         }
         return mDbManager;
+    }
+
+    public static DBRequestManager getDbRequestDataManager(Context ctx) {
+        if (mDbManager == null) {
+            mDbRequestManager = new DBRequestManager(ctx.getApplicationContext());
+        }
+        return mDbRequestManager;
     }
 
     public static IRequestDataService getIRequestDataService() {

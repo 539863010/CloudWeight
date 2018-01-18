@@ -19,19 +19,8 @@
         android:textSize="@dimen/history_item_size"/>
 
     <TextView
-        android:id="@+id/item_goods_unit"
-        android:layout_width="@dimen/_50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/_10dp"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:singleLine="true"
-        android:text="单位"
-        android:textSize="@dimen/history_item_size"/>
-
-    <TextView
         android:id="@+id/item_order_num"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_80dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/_10dp"
         android:ellipsize="end"
@@ -42,7 +31,7 @@
 
     <TextView
         android:id="@+id/item_sort_out_num"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_80dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/_10dp"
         android:ellipsize="end"

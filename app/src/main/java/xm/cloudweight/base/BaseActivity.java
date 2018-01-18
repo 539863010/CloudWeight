@@ -21,6 +21,7 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import xm.cloudweight.CheckInActivity;
+import xm.cloudweight.IRequestDataService;
 import xm.cloudweight.MainActivity;
 import xm.cloudweight.R;
 import xm.cloudweight.SimilarActivity;
@@ -33,6 +34,7 @@ import xm.cloudweight.utils.bussiness.ScaleUtil;
 import xm.cloudweight.utils.connect.NetBroadcastReceiver;
 import xm.cloudweight.utils.connect.NetUtil;
 import xm.cloudweight.utils.dao.DBManager;
+import xm.cloudweight.utils.dao.DBRequestManager;
 
 /**
  * @author wyh
@@ -259,6 +261,14 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
 
     public DBManager getDbManager() {
         return App.getDbManager(getApplicationContext());
+    }
+
+    public DBRequestManager getDbRequestDataManager() {
+        return App.getDbRequestDataManager(getApplicationContext());
+    }
+
+    public IRequestDataService getIRequestDataService() {
+        return App.getIRequestDataService();
     }
 
     @Override

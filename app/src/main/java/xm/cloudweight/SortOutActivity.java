@@ -3,6 +3,7 @@ package xm.cloudweight;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
@@ -39,12 +40,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import xm.cloudweight.app.App;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.camera.instrument.Instrument;
@@ -52,8 +53,6 @@ import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CommImpl;
-import xm.cloudweight.impl.SortOutImpl;
-import xm.cloudweight.presenter.SortOutPresenter;
 import xm.cloudweight.service.RequestDataService;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
@@ -65,9 +64,9 @@ import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.ListComparator;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
-import xm.cloudweight.utils.bussiness.SplitParamUtil;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
+import xm.cloudweight.utils.dao.bean.DbRequestData;
 import xm.cloudweight.utils.onNoDoubleClickListener;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
@@ -87,8 +86,6 @@ import xm.cloudweight.widget.impl.onScanFinishListener;
  */
 public class SortOutActivity extends BaseActivity implements
         CommImpl.OnQueryStockListener
-        , SortOutImpl.OnGetSortOutListListener
-        , SortOutImpl.OnCancelSortOutListener
         , AdapterView.OnItemSelectedListener
         , HistorySortOutPopWindow.OnDeleteListener,
         onInputFinishListener, VideoFragment.OnInstrumentListener,
@@ -158,8 +155,6 @@ public class SortOutActivity extends BaseActivity implements
     private DbImageUpload mDbImageUpload;
     private boolean mStable;
     private VideoFragment mVideoFragment;
-//    private Subscription mSubScriptionWeight;
-//    private Subscription mSubScriptionCount;
 
     @Override
     protected int getLayoutId() {
@@ -455,31 +450,33 @@ public class SortOutActivity extends BaseActivity implements
             requestListWeight(time);
             requestListCount(time);
 
-//            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
-//            // 请求重量列表后在请求数量， 优化UnknownHostException异常（待测试）
-//            mSubScriptionWeight = SortOutPresenter.getSourOutList(this, TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-////            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
         }
     }
 
     private void requestListWeight(String time) {
         try {
-            String params = SplitParamUtil.concat(TYPE_WEIGHT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-            App.getIRequestDataService().onGetDataListener(
-                    RequestDataService.TYPE_REQUEST_DATA_SORT_OUT,
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("TYPE", TYPE_WEIGHT);
+            params.put("PAGE", PAGE);
+            params.put("PAGE_SIZE", PAGE_SIZE);
+            params.put("DEFAULT_PAGE_SIZE", DEFAULT_PAGE_SIZE);
+            params.put("DATE", time);
+            getIRequestDataService().onGetDataListener(
+                    RequestDataService.TYPE_SORT_OUT_WEIGHT,
                     params,
                     new OnRequestDataListener.Stub() {
                         @Override
-                        public void onReceive(int type, String data) throws RemoteException {
-                            Message message = new Message();
-                            message.what = TYPE_WEIGHT;
-                            message.obj = data;
-                            mRequestData.sendMessage(message);
+                        public void onReceive(long type) throws RemoteException {
+                            List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+                            if (dbRequestData == null || dbRequestData.size() == 0) return;
+                            String data = dbRequestData.get(0).getData();
+                            Message msg = createMessage(type, data);
+                            mRequestData.sendMessage(msg);
                         }
 
                         @Override
-                        public void onError(int type, String message) throws RemoteException {
-                            onGetListFailed(message);
+                        public void onError(long type, String message) throws RemoteException {
+                            mRequestData.sendMessage(createMessage(type, message));
                         }
 
                     }
@@ -491,22 +488,28 @@ public class SortOutActivity extends BaseActivity implements
 
     private void requestListCount(String time) {
         try {
-            String params = SplitParamUtil.concat(TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-            App.getIRequestDataService().onGetDataListener(
-                    RequestDataService.TYPE_REQUEST_DATA_SORT_OUT,
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("TYPE", TYPE_COUNT);
+            params.put("PAGE", PAGE);
+            params.put("PAGE_SIZE", PAGE_SIZE);
+            params.put("DEFAULT_PAGE_SIZE", DEFAULT_PAGE_SIZE);
+            params.put("DATE", time);
+            getIRequestDataService().onGetDataListener(
+                    RequestDataService.TYPE_SORT_OUT_COUNT,
                     params,
                     new OnRequestDataListener.Stub() {
                         @Override
-                        public void onReceive(int type, String data) throws RemoteException {
-                            Message message = new Message();
-                            message.what = TYPE_COUNT;
-                            message.obj = data;
-                            mRequestData.sendMessage(message);
+                        public void onReceive(long type) throws RemoteException {
+                            List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+                            if (dbRequestData == null || dbRequestData.size() == 0) return;
+                            String data = dbRequestData.get(0).getData();
+                            Message msg = createMessage(type, data);
+                            mRequestData.sendMessage(msg);
                         }
 
                         @Override
-                        public void onError(int type, String message) throws RemoteException {
-                            onGetListFailed(message);
+                        public void onError(long type, String message) throws RemoteException {
+                            mRequestData.sendMessage(createMessage(type, message));
                         }
 
                     }
@@ -519,12 +522,7 @@ public class SortOutActivity extends BaseActivity implements
     private void onGetListSuccess() {
         if (mListAllCount != null && mListAllWeight != null) {
             //设置客户列表
-            List<MerchantCustomer> list = mSpCustomers.getList();
-            if (list == null) {
-                getListCustomer();
-            }
-            //listAll中扣除未上传的分拣数
-            removeUnSortOut();
+            getListCustomer();
             //筛选条件
             filterList();
             dismissLoadingDialog();
@@ -552,32 +550,52 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     private Handler mRequestData = new Handler(new Handler.Callback() {
+
         @Override
         public boolean handleMessage(Message msg) {
-            String data = (String) msg.obj;
-            switch (msg.what) {
-                case TYPE_WEIGHT:
-                    if (!TextUtils.isEmpty(data)) {
-                        List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
-                        }.getType());
-                        mListAllWeight = new ArrayList<>();
-                        mListAllWeight.clear();
-                        mListAllWeight.addAll(list);
-                        mListAll.addAll(mListAllWeight);
-                        onGetListSuccess();
-                    }
-                    break;
-                case TYPE_COUNT:
-                    if (!TextUtils.isEmpty(data)) {
-                        List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
-                        }.getType());
-                        mListAllCount = new ArrayList<>();
-                        mListAllCount.clear();
-                        mListAllCount.addAll(list);
-                        mListAll.addAll(mListAllCount);
-                        onGetListSuccess();
-                    }
-                    break;
+            Bundle bundle = msg.getData();
+            long type = bundle.getLong("Type");
+            if (type == RequestDataService.TYPE_SORT_OUT_WEIGHT) {
+                String data = (String) msg.obj;
+                if (!TextUtils.isEmpty(data)) {
+                    List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
+                    }.getType());
+                    //删除后台未上传的数据
+                    removeUnSortOut(list);
+                    mListAllWeight = new ArrayList<>();
+                    mListAllWeight.clear();
+                    mListAllWeight.addAll(list);
+                    mListAll.addAll(mListAllWeight);
+                    onGetListSuccess();
+                }
+            } else if (type == RequestDataService.TYPE_SORT_OUT_WEIGHT_FAILED) {
+                String data = (String) msg.obj;
+                onGetListFailed(data);
+            } else if (type == RequestDataService.TYPE_SORT_OUT_COUNT) {
+                String data = (String) msg.obj;
+                if (!TextUtils.isEmpty(data)) {
+                    List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
+                    }.getType());
+                    //删除后台未上传的数据
+                    removeUnSortOut(list);
+                    mListAllCount = new ArrayList<>();
+                    mListAllCount.clear();
+                    mListAllCount.addAll(list);
+                    mListAll.addAll(mListAllCount);
+                    onGetListSuccess();
+                }
+            } else if (type == RequestDataService.TYPE_SORT_OUT_COUNT_FAILED) {
+                String data = (String) msg.obj;
+                onGetListFailed(data);
+            } else if (type == RequestDataService.TYPE_SORT_OUT_CANCEL) {
+                onCancelSuccess(mDbImageUpload);
+            } else if (type == RequestDataService.TYPE_SORT_OUT_CANCEL_FAILED) {
+                dismissLoadingDialog();
+                mDbImageUpload = null;
+                String data = (String) msg.obj;
+                if (!TextUtils.isEmpty(data)) {
+                    ToastUtil.showShortToast(getContext(), data);
+                }
             }
             return false;
         }
@@ -654,26 +672,8 @@ public class SortOutActivity extends BaseActivity implements
                 mPreSortOutData.setLabelCode(null);
             }
 
-            //更新数据
-            //****已经分拣过的数据，且累计分拣数量>90%采购数量的，状态改成“已分拣”，界面不再显示****
-            //采购数(数量.重量)
-//            BigDecimal goodsQty = mPreSortOutData.getGoodsQty();
-//            //出库数
-//            BigDecimal stockOutQty = mPreSortOutData.getStockOutQty();
-//            //已出出库数
-//            BigDecimal hasStockOutQty = mPreSortOutData.getHasStockOutQty();
             //总出库数   hasStockOutQty总是有值，不用判空
             BigDecimal unitCoefficient = mPreSortOutData.getUnitCoefficient();
-//            BigDecimal outAmount = hasStockOutQty.add(stockOutQty);
-//            BigDecimal qtyOfNinety = goodsQty.multiply(new BigDecimal(0.9));
-
-//            if (isWeight) {
-//                if (outAmount.compareTo(qtyOfNinety) > 0) {
-//                    mPreSortOutData.setLastWeight(mPreSortOutData.getCoverToKgQty());
-//                } else {
-//                    mPreSortOutData.setLastWeight(stockOutQty.multiply(unitCoefficient));
-//                }
-//            }
 
             mPreSortOutData.setImages(Arrays.asList(GetImageFile.getName(imagePath)));
 
@@ -836,15 +836,46 @@ public class SortOutActivity extends BaseActivity implements
                 stockOutRecordUuids.add(stockOutUuid);
                 data.setStockOutRecordUuids(stockOutRecordUuids);
             }
-            SortOutPresenter.cancelSortOut(getActivity(), data);
+            cancelOnLine(data);
         } else {
             onCancelSuccess(dbImageUpload);
         }
     }
 
-    @Override
-    public void onCancelSortOutSuccess(CustomSortOutData data) {
-        onCancelSuccess(mDbImageUpload);
+    private void cancelOnLine(CustomSortOutData data) {
+        long type = RequestDataService.TYPE_SORT_OUT_CANCEL;
+        HashMap<String, CustomSortOutData> param = new HashMap<>();
+        param.put("CustomSortOutData", data);
+        try {
+            getIRequestDataService().onGetDataListener(type, param, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    Message msg = createMessage(type, null);
+                    mRequestData.sendMessage(msg);
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    Message msg = createMessage(type, message);
+                    mRequestData.sendMessage(msg);
+                }
+
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private Message createMessage(long type, Object o) {
+        Message msg = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putLong("Type", type);
+        msg.setData(bundle);
+        if (o != null) {
+            msg.obj = o;
+        }
+        return msg;
     }
 
     private void onCancelSuccess(DbImageUpload dbImageUpload) {
@@ -858,14 +889,10 @@ public class SortOutActivity extends BaseActivity implements
         mDbImageUpload = null;
     }
 
-    @Override
-    public void onCancelSortOutFailed(String message) {
-        dismissLoadingDialog();
-        mDbImageUpload = null;
-        ToastUtil.showShortToast(getContext(), message);
-    }
-
     private void refreshCancelSortOut(DbImageUpload dbImageUpload) {
+        if (mListAllWeight == null || mListAllCount == null) {
+            return;
+        }
         //判断分拣的时间 是否跟 现在选择的时间一样
         String date = mBtnDate.getText().toString().trim();
         if (!dbImageUpload.getDate().equals(date)) {
@@ -936,68 +963,26 @@ public class SortOutActivity extends BaseActivity implements
         data.setLeatherQty(null);
     }
 
-    @Override
-    public void getSortOutListSuccess(int type, List<CustomSortOutData> data) {
-//        if (type == TYPE_WEIGHT) {
-//            loadWeightSuccess = true;
-//            mListAllWeight.clear();
-//            mListAllWeight.addAll(data);
-//            mListAll.addAll(mListAllWeight);
-//        } else if (type == TYPE_COUNT) {
-//            loadCountSuccess = true;
-//            mListAllCount.clear();
-//            mListAllCount.addAll(data);
-//            mListAll.addAll(mListAllCount);
-//        }
-//        //  2018/01/04  ----------------------------------------------
-//        //待重量加载完后，在加载数量，优化出现UnknownHostException异常(待测试)
-//        if (loadWeightSuccess && !loadCountSuccess) {
-//            String time = mBtnDate.getText().toString().trim();
-//            mSubScriptionCount = SortOutPresenter.getSourOutList(this, TYPE_COUNT, PAGE, PAGE_SIZE, DEFAULT_PAGE_SIZE, time);
-//        }
-//        //--------------------------------------------------------------
-//        onSuccessList();
-    }
-
     /**
      * 扣除数据库中未上传的数据
      */
-    private void removeUnSortOut() {
+    private void removeUnSortOut(List<CustomSortOutData> list) {
+        if (list == null || list.size() == 0) {
+            return;
+        }
         //获取数据库中未上传的数据   扣除数据库中未上传的数据
         List<DbImageUpload> dbListSortOutStoreOut = getDbManager().getDbListSortOutStoreOut();
-        Map<String, BigDecimal> dbMap = new HashMap<>();
-        //扣除数据库中未上传的数据
+        Map<String, DbImageUpload> listUnUpload = new HashMap<>();
         for (DbImageUpload dbImageUpload : dbListSortOutStoreOut) {
-            CustomSortOutData dbData = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
-            String sourceBillLineUuid = dbData.getSourceBillLineUuid();
-            BigDecimal stockOutAll = dbData.getStockOutQty();
-            if (dbMap.containsKey(sourceBillLineUuid)) {
-                stockOutAll = dbMap.get(sourceBillLineUuid).add(stockOutAll);
-            }
-            dbMap.put(sourceBillLineUuid, stockOutAll);
+            CustomSortOutData dbCso = GsonUtil.getGson().fromJson(dbImageUpload.getLine(), CustomSortOutData.class);
+            listUnUpload.put(dbCso.getSourceBillLineUuid(), dbImageUpload);
         }
-        for (CustomSortOutData sortOutData : mListAll) {
-            //----------------------------------扣除数据库中未上传的数据---------------------------------------------
-            String sourceBillLineUuid = sortOutData.getSourceBillLineUuid();
-            if (dbMap.containsKey(sourceBillLineUuid)) {
-                //数据库中即将上传的数量
-                BigDecimal dbStockOutQty = dbMap.get(sourceBillLineUuid);
-                BigDecimal unitCoefficient = sortOutData.getUnitCoefficient();
-                BigDecimal hasStockOutQty = sortOutData.getHasStockOutQty();
-                if (unitCoefficient != null && unitCoefficient.doubleValue() != 0) {
-                    BigDecimal coverToKgQty = sortOutData.getCoverToKgQty();
-                    if (coverToKgQty != null) {
-                        //服务器获取的数据-数据库未上传的数据=列表显示的数据
-                        sortOutData.setCoverToKgQty(coverToKgQty.subtract(dbStockOutQty.multiply(unitCoefficient)));
-                    }
-                }
-                if (hasStockOutQty != null && hasStockOutQty.doubleValue() != 0) {
-                    //已经有已出的数据   则在基础上在加上数据库中待上传的数据
-                    sortOutData.setHasStockOutQty(hasStockOutQty.add(dbStockOutQty));
-                } else {
-                    //无已出的数据   则设置数据库中待上传的数据为已出数据
-                    sortOutData.setHasStockOutQty(dbStockOutQty);
-                }
+        Iterator<CustomSortOutData> iteratorWeight = list.iterator();
+        while (iteratorWeight.hasNext()) {
+            CustomSortOutData data = iteratorWeight.next();
+            boolean containsKey = listUnUpload.containsKey(data.getSourceBillLineUuid());
+            if (containsKey) {
+                iteratorWeight.remove();
             }
         }
     }
@@ -1038,26 +1023,9 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     @Override
-    public void getSortOutListFailed(int type, String message) {
-//        dismissLoadingDialog();
-//        loadWeightSuccess = false;
-//        loadCountSuccess = false;
-//        mBtnRequest.setEnabled(true);
-//        //中断请求
-//        SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
-//        ToastUtil.showShortToast(getContext(), message);
-    }
-
-    @Override
     protected void onLoadingDismiss() {
         super.onLoadingDismiss();
-//        if ((mSubScriptionWeight != null && !mSubScriptionWeight.isUnsubscribed())
-//                || (mSubScriptionCount != null && !mSubScriptionCount.isUnsubscribed())) {
-
         mBtnRequest.setEnabled(true);
-//            SubScriptionUtil.unsubscribe(mSubScriptionWeight, mSubScriptionCount);
-//            ToastUtil.showShortToast(getContext(), "取消获取数据");
-//        }
     }
 
     @Override

@@ -44,7 +44,6 @@ import xm.cloudweight.utils.dao.bean.DbImageUpload;
  */
 public class BgOperateService extends Service implements RefreshMerchantHelper.onRefreshMerchantListener {
 
-
     private DBManager mDBManager;
     private ApiManager mApiManager;
     private Merchant mMerchant;
@@ -92,7 +91,6 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     public void get(Merchant merchant) {
         mMerchant = merchant;
     }
-
 
     private void createTimer() {
         CountDownTimer timer = new CountDownTimer(Long.MAX_VALUE, 5000) {
@@ -520,6 +518,5 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     public class BgOperateServiceImpl extends xm.cloudweight.IBgOperateService.Stub {
 
     }
-
 
 }

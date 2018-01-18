@@ -201,9 +201,9 @@ public class BeanUtil {
     /**
      * 撤销分拣
      */
-    public static PBaseInfo cancelSortOut(Context ctx, CustomSortOutData data) {
+    public static PBaseInfo cancelSortOut(Merchant merchant, CustomSortOutData data) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         body.put("sortOutData", GsonUtil.getGson().toJson(data));
         pBaseInfo.setBody(body);

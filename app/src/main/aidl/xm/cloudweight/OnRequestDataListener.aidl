@@ -9,8 +9,9 @@ interface OnRequestDataListener {
      * and return values in AIDL.
      */
 
-   void onReceive(int type, String data );
+   void onReceive(long type);
 
-   void onError(int type,String message);
+   void onError(long type,String message);
+
 
 }
