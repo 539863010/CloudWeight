@@ -570,14 +570,28 @@ public class CheckInActivity extends BaseActivity implements
         }
         StockInRecord stockInRecord = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), StockInRecord.class);
         String cancelUuid = stockInRecord.getSourceBillLineUuid();
+        BigDecimal quantity = stockInRecord.getQuantity();
         for (PurchaseData data : mListAll) {
             PurchaseBillLine purchaseBillLine = data.getPurchaseBillLine();
             if (cancelUuid.equals(purchaseBillLine.getUuid())) {
-                BigDecimal quantity = stockInRecord.getQuantity();
                 BigDecimal hasStockInQty = purchaseBillLine.getHasStockInQty();
                 purchaseBillLine.setHasStockInQty(hasStockInQty.subtract(quantity));
                 break;
             }
+        }
+        //修改累计
+        if (mMapAccumulate.containsKey(cancelUuid)) {
+            BigDecimal coefficient = stockInRecord.getCoefficient();
+            BigDecimal numBeforeModify = new BigDecimal(mMapAccumulate.get(cancelUuid));
+            BigDecimal numAfterModify;
+            if (coefficient != null && coefficient.doubleValue() != 0) {
+                numAfterModify = numBeforeModify.subtract(quantity.multiply(coefficient));
+            } else {
+                numAfterModify = numBeforeModify.subtract(quantity);
+            }
+            String value = BigDecimalUtil.toScaleStr(numAfterModify);
+            mMapAccumulate.put(cancelUuid, value);
+            mEtWeightAccumulate.setText(value);
         }
     }
 
@@ -864,6 +878,7 @@ public class CheckInActivity extends BaseActivity implements
             UCN warehouse = mPurchaseData.getWarehouse();
             sir.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
             sir.setGoods(mPurchaseBillLine.getGoods());
+            sir.setCoefficient(mPurchaseBillLine.getWeightCoefficient());
             //保存图片
             sir.setImages(Arrays.asList(GetImageFile.getName(imagePath)));
             //规格
