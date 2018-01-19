@@ -23,6 +23,7 @@ import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.net.RetrofitUtil;
 import xm.cloudweight.utils.bussiness.BeanUtil;
+import xm.cloudweight.utils.bussiness.BuglyUtil;
 import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 import xm.cloudweight.utils.dao.DBRequestManager;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
@@ -102,6 +103,7 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
                             } else {
                                 listener.onError(TYPE_SORT_OUT_COUNT_FAILED, "获取分拣-数量列表失败");
                             }
+                            BuglyUtil.uploadCrash(e);
                         } catch (RemoteException e1) {
                             e1.printStackTrace();
                         }

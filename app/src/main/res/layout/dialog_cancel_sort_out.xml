@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_centerInParent="true"
+        android:layout_width="@dimen/_400dp"
+        android:layout_height="@dimen/_300dp">
+
+        <TextView
+            android:id="@+id/tv_cancel_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_50dp"
+            android:layout_marginLeft="@dimen/_20dp"
+            android:layout_marginRight="@dimen/_20dp"
+            android:gravity="center"
+            tools:text="TextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextViewTextView"/>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/shape_anniu_grey"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="@dimen/_50dp"
+            android:layout_marginLeft="@dimen/_60dp"
+            android:textColor="@color/white"
+            android:text="取消"/>
+
+        <Button
+            android:id="@+id/btn_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/anniu_b"
+            android:layout_marginBottom="@dimen/_50dp"
+            android:layout_marginRight="@dimen/_60dp"
+            android:textColor="@color/white"
+            android:text="确定"/>
+    </RelativeLayout>
+</RelativeLayout>

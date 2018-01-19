@@ -39,10 +39,12 @@ public class Common {
          * 出库
          */
         int TYPE_STORE_OUT = 4;
+        String STR_TYPE_STORE_OUT = "出库";
         /**
          * 调拨
          */
         int TYPE_ALLOCATE = 5;
+        String STR_TYPE_ALLOCATE = "调拨";
         /**
          * 盘点
          */

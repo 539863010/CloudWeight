@@ -51,6 +51,8 @@
     <dimen name="_3dp">3dp</dimen>
     <dimen name="_28sp">28sp</dimen>
     <dimen name="_135dp">135dp</dimen>
+    <dimen name="_400dp">400dp</dimen>
+    <dimen name="_300dp">300dp</dimen>
     <dimen name="spinner_min_width">120dp</dimen>
     <dimen name="history_item_width">80dp</dimen>
     <dimen name="history_item_size">12sp</dimen>

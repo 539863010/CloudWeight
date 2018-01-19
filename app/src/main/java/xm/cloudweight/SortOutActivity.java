@@ -74,6 +74,7 @@ import xm.cloudweight.widget.HistorySortOutPopWindow;
 import xm.cloudweight.widget.ScalableTextView;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
+import xm.cloudweight.widget.impl.OnDeleteListener;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
@@ -85,7 +86,7 @@ import xm.cloudweight.widget.impl.onScanFinishListener;
 public class SortOutActivity extends BaseActivity implements
         CommImpl.OnQueryStockListener
         , AdapterView.OnItemSelectedListener
-        , HistorySortOutPopWindow.OnDeleteListener,
+        , OnDeleteListener,
         onInputFinishListener, VideoFragment.OnInstrumentListener,
         AbsListView.OnScrollListener,
         PopupWindow.OnDismissListener {

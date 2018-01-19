@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -28,6 +27,7 @@ import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
+import xm.cloudweight.widget.impl.OnDeleteListener;
 
 /**
  * @author wyh
@@ -38,13 +38,12 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
 
     private View mAnchor;
     private Context mContext;
-    private ListView mLvHistory;
     private List<DbImageUpload> mList = new ArrayList<>();
     private List<DbImageUpload> mListSearch = new ArrayList<>();
     private HistoryAdapter mHistoryAdapter;
     private OnDeleteListener mOnDeleteListener;
-    private ImageView mIvHistorySearch;
     private EditText mEtHistoryGoodsName;
+    private CancelDialog mCancelDialog;
 
     public HistoryCheckInPopWindow(Context context, View anchor) {
         super(context);
@@ -80,12 +79,11 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
         view.findViewById(R.id.ci_revocation).setVisibility(View.INVISIBLE);
 
         mEtHistoryGoodsName = view.findViewById(R.id.et_history_goods_name);
-        mIvHistorySearch = view.findViewById(R.id.iv_history_search);
-        mIvHistorySearch.setOnClickListener(this);
+        view.findViewById(R.id.iv_history_search).setOnClickListener(this);
 
-        mLvHistory = view.findViewById(R.id.lv_check_in_history);
+        ListView lvHistory = view.findViewById(R.id.lv_check_in_history);
         mHistoryAdapter = new HistoryAdapter(mContext, mListSearch);
-        mLvHistory.setAdapter(mHistoryAdapter);
+        lvHistory.setAdapter(mHistoryAdapter);
     }
 
     @Override
@@ -140,15 +138,16 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
             final StockInRecord data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), StockInRecord.class);
             //设置类型
             final int type = dbSortOutData.getType();
+            String typeString = "";
             if (type == Common.DbType.TYPE_ChECK_IN_STORE_IN) {
-                holder.setText(R.id.ci_type, Common.DbType.STR_TYPE_ChECK_IN_STORE_IN);
+                typeString = Common.DbType.STR_TYPE_ChECK_IN_STORE_IN;
             } else if (type == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
-                holder.setText(R.id.ci_type, Common.DbType.STR_TYPE_ChECK_IN_CROSS_OUT);
+                typeString = Common.DbType.STR_TYPE_ChECK_IN_CROSS_OUT;
             } else if (type == Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE) {
-                holder.setText(R.id.ci_type, Common.DbType.STR_TYPE_ChECK_IN_CROSS_ALLCOCATE);
-            } else {
-                ToastUtil.showShortToast(mContext, "类型有误");
+                typeString = Common.DbType.STR_TYPE_ChECK_IN_CROSS_ALLCOCATE;
             }
+            holder.setText(R.id.ci_type, typeString);
+            final String typeStringIn = typeString;
             //设置操作时间
             holder.setText(R.id.ci_operation_time, dbSortOutData.getOperatime());
             //设置商品名
@@ -165,9 +164,10 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
             holder.setOnClickListener(R.id.ci_revocation, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnDeleteListener != null) {
-                        mOnDeleteListener.delete(dbSortOutData);
+                    if (mCancelDialog == null) {
+                        mCancelDialog = new CancelDialog(mContext, mOnDeleteListener);
                     }
+                    mCancelDialog.showCancelDialog(dbSortOutData, typeStringIn);
                 }
             });
             holder.setOnClickListener(R.id.ci_print_label, new View.OnClickListener() {
@@ -207,12 +207,6 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
 
     public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
         mOnDeleteListener = onDeleteListener;
-    }
-
-    public interface OnDeleteListener {
-
-        void delete(DbImageUpload data);
-
     }
 
 }

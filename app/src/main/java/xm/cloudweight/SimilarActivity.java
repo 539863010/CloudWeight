@@ -62,6 +62,7 @@ import xm.cloudweight.widget.DataSpinner;
 import xm.cloudweight.widget.HistorySimilarPopWindow;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
+import xm.cloudweight.widget.impl.OnDeleteListener;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
@@ -76,7 +77,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         , CommImpl.OnQueryStockListener
         , SimilarImpl.OnCancelSimilarListener
         , CommImpl.OnScanByTraceCodeListener
-        , AdapterView.OnItemSelectedListener, VideoFragment.OnInstrumentListener, HistorySimilarPopWindow.OnDeleteListener {
+        , AdapterView.OnItemSelectedListener, VideoFragment.OnInstrumentListener, OnDeleteListener {
 
     public static final String KEY_TYPE = "type";
     @BindView(R.id.ll_type)

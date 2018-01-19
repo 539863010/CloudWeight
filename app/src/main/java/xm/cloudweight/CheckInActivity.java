@@ -67,6 +67,7 @@ import xm.cloudweight.widget.DataSpinner;
 import xm.cloudweight.widget.HistoryCheckInPopWindow;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
+import xm.cloudweight.widget.impl.OnDeleteListener;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
@@ -81,7 +82,7 @@ public class CheckInActivity extends BaseActivity implements
         CheckInImpl.OnQueryPurchaseDataListener,
         CheckInImpl.OnCancelStockInListener,
         CheckInImpl.OnGetDropdownOperatorListener,
-        Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, HistoryCheckInPopWindow.OnDeleteListener {
+        Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, OnDeleteListener {
 
     private static final String DEFAULT_SPINNER_WAREHOURE = "采购入库仓库";
     private static final String DEFAULT_SPINNER_OPERATOR = "制单员";

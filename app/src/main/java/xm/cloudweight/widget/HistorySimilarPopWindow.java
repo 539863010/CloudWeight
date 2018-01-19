@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -28,6 +27,7 @@ import xm.cloudweight.comm.Common;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
+import xm.cloudweight.widget.impl.OnDeleteListener;
 
 /**
  * @author wyh
@@ -39,13 +39,12 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
     private final int mType;
     private View mAnchor;
     private Context mContext;
-    private ListView mLvHistory;
     private List<DbImageUpload> mList = new ArrayList<>();
     private List<DbImageUpload> mListSearch = new ArrayList<>();
     private HistoryAdapter mHistoryAdapter;
     private OnDeleteListener mOnDeleteListener;
-    private ImageView mIvHistorySearch;
     private EditText mEtHistoryGoodsName;
+    private CancelDialog mCancelDialog;
 
     public HistorySimilarPopWindow(Context context, int type, View anchor) {
         super(context);
@@ -92,12 +91,11 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
         }
 
         mEtHistoryGoodsName = view.findViewById(R.id.et_history_goods_name);
-        mIvHistorySearch = view.findViewById(R.id.iv_history_search);
-        mIvHistorySearch.setOnClickListener(this);
+        view.findViewById(R.id.iv_history_search).setOnClickListener(this);
 
-        mLvHistory = view.findViewById(R.id.lv_similar_history);
+        ListView lvHistory = view.findViewById(R.id.lv_similar_history);
         mHistoryAdapter = new HistoryAdapter(mContext, mListSearch);
-        mLvHistory.setAdapter(mHistoryAdapter);
+        lvHistory.setAdapter(mHistoryAdapter);
     }
 
     @Override
@@ -157,7 +155,9 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
 
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
-            int type = dbSortOutData.getType();
+            final int type = dbSortOutData.getType();
+            final String typeString = type == Common.DbType.TYPE_STORE_OUT ? Common.DbType.STR_TYPE_STORE_OUT :
+                    type == Common.DbType.TYPE_ALLOCATE ? Common.DbType.STR_TYPE_ALLOCATE : "";
             String goodsName = "";
             String goodsUnit = "";
             BigDecimal num = new BigDecimal(0);
@@ -213,9 +213,10 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
             holder.setOnClickListener(R.id.similar_revocation, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnDeleteListener != null) {
-                        mOnDeleteListener.delete(dbSortOutData);
+                    if (mCancelDialog == null) {
+                        mCancelDialog = new CancelDialog(mContext, mOnDeleteListener);
                     }
+                    mCancelDialog.showCancelDialog(dbSortOutData, typeString);
                 }
             });
         }
@@ -223,12 +224,6 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
 
     public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
         mOnDeleteListener = onDeleteListener;
-    }
-
-    public interface OnDeleteListener {
-
-        void delete(DbImageUpload data);
-
     }
 
 }
