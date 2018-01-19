@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="xm.cloudweight.SortOutActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,23 +37,23 @@
                 android:id="@+id/et_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_5dp"
                 android:layout_weight="1"
                 android:hint="库存标签"
                 android:inputType="text"
-                android:layout_marginRight="@dimen/_5dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey"
                 android:textSize="@dimen/_14sp"/>
 
             <ImageView
-                android:src="@drawable/delete"
-                android:layout_alignParentRight="true"
+                android:id="@+id/iv_delete"
                 android:layout_width="@dimen/_20dp"
                 android:layout_height="@dimen/_20dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/_10dp"
-                android:visibility="gone"
-                android:id="@+id/iv_delete"/>
+                android:src="@drawable/delete"
+                android:visibility="gone"/>
 
             <xm.cloudweight.widget.SearchAndFocusEditText
                 android:id="@+id/et_goods_name_or_id"
@@ -82,14 +81,17 @@
                 android:textColorHint="@color/grey"
                 android:textSize="@dimen/_14sp"/>
 
-            <xm.cloudweight.widget.DataSpinner
-                android:id="@+id/sp_customers"
-                android:layout_width="80dp"
-                android:layout_height="@dimen/_35dp"
+            <xm.cloudweight.widget.SearchAndFocusEditText
+                android:id="@+id/et_customers"
+                android:layout_width="@dimen/_100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/_5dp"
-                android:background="@drawable/shape_spinner_bg_b">
-
-            </xm.cloudweight.widget.DataSpinner>
+                android:hint="客户"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="@dimen/_14sp"/>
 
             <xm.cloudweight.widget.DataSpinner
                 android:id="@+id/sp_customers_level"
@@ -146,16 +148,16 @@
                 android:background="@color/color_20925f"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-             >
+                >
 
                 <Button
                     android:id="@+id/btn_clear_zero"
                     android:layout_width="@dimen/btn_clear_width"
                     android:layout_height="@dimen/btn_clear_height"
-                    android:background="@drawable/shape_clear_weight"
                     android:layout_marginLeft="@dimen/_20dp"
                     android:layout_marginRight="@dimen/_10dp"
                     android:layout_toLeftOf="@+id/btn_request"
+                    android:background="@drawable/shape_clear_weight"
                     android:text="归零"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sp"/>
@@ -164,8 +166,8 @@
                     android:id="@+id/btn_request"
                     android:layout_width="@dimen/_80dp"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/sp_ware_house"
                     android:layout_marginRight="@dimen/_10dp"
+                    android:layout_toLeftOf="@+id/sp_ware_house"
                     android:background="@drawable/selector_anniu_d_grey"
                     android:minHeight="@dimen/_40dp"
                     android:text="获取数据"
@@ -213,8 +215,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
                 android:layout_marginLeft="@dimen/_10dp"
+                android:orientation="horizontal"
                 android:paddingBottom="@dimen/_5dp"
                 android:paddingLeft="@dimen/_10dp"
                 android:paddingRight="@dimen/_10dp"
@@ -258,9 +260,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:layout_toRightOf="@+id/ll_show"
                 android:layout_marginLeft="@dimen/_10dp"
+                android:layout_toRightOf="@+id/ll_show"
+                android:orientation="horizontal"
                 android:paddingBottom="@dimen/_5dp"
                 android:paddingLeft="@dimen/_10dp"
                 android:paddingRight="@dimen/_10dp"
@@ -282,18 +284,18 @@
                     android:inputType="number|numberDecimal"
                     android:paddingRight="@dimen/_5dp"
                     android:singleLine="true"
+                    android:text="0"
                     android:textColor="@color/color_c5f25b"
                     android:textSize="@dimen/_25sp"
-                    android:text="0"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:text="kg"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_16sp"
-                    android:text="kg"/>
+                    android:textSize="@dimen/_16sp"/>
 
             </LinearLayout>
 
@@ -302,9 +304,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:layout_toRightOf="@+id/ll_leather"
                 android:layout_marginLeft="@dimen/_10dp"
+                android:layout_toRightOf="@+id/ll_leather"
+                android:orientation="horizontal"
                 android:paddingBottom="@dimen/_5dp"
                 android:paddingLeft="@dimen/_10dp"
                 android:paddingRight="@dimen/_10dp"
@@ -326,25 +328,25 @@
                     android:inputType="number|numberDecimal"
                     android:paddingRight="@dimen/_5dp"
                     android:singleLine="true"
+                    android:text="0"
                     android:textColor="@color/color_c5f25b"
                     android:textSize="@dimen/_25sp"
-                    android:text="0"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:text="kg"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_16sp"
-                    android:text="kg"/>
+                    android:textSize="@dimen/_16sp"/>
 
                 <EditText
-                    android:visibility="invisible"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:inputType="numberDecimal"
+                    android:visibility="invisible"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -353,9 +355,9 @@
 
     <FrameLayout
         android:id="@+id/container"
-        android:layout_centerInParent="true"
         android:layout_width="350dp"
-        android:layout_height="300dp">
+        android:layout_height="300dp"
+        android:layout_centerInParent="true">
 
     </FrameLayout>
 

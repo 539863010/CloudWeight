@@ -25,9 +25,7 @@ import com.google.gson.reflect.TypeToken;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
-import com.xmzynt.storm.service.user.customer.Customer;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
-import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 import com.xmzynt.storm.service.wms.stock.Stock;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 import com.xmzynt.storm.util.GsonUtil;
@@ -103,8 +101,6 @@ public class SortOutActivity extends BaseActivity implements
     Button mBtnSortOutHistory;
     @BindView(R.id.sp_ware_house)
     DataSpinner<Warehouse> mSpWareHouse;
-    @BindView(R.id.sp_customers)
-    DataSpinner<MerchantCustomer> mSpCustomers;
     @BindView(R.id.sp_customers_level)
     DataSpinner<CustomerLevel> mSpCustomersLevel;
     @BindView(R.id.gv_sort_out)
@@ -127,6 +123,8 @@ public class SortOutActivity extends BaseActivity implements
     ScanEditText mEtTag;
     @BindView(R.id.et_goods_name_or_id)
     SearchAndFocusEditText mEtGoodsNameOrId;
+    @BindView(R.id.et_customers)
+    SearchAndFocusEditText mEtCustomers;
     @BindView(R.id.et_custom_group)
     SearchAndFocusEditText mEtCustomGroup;
     @BindView(R.id.btn_date)
@@ -180,14 +178,13 @@ public class SortOutActivity extends BaseActivity implements
             }
         });
         mGvSortOut.setOnScrollListener(this);
-        mSpCustomers.setTitleColor(R.color.color_135c31);
         mSpWareHouse.setTitleColor(R.color.color_135c31);
         mSpCustomersLevel.setTitleColor(R.color.color_135c31);
-        mSpCustomers.setCustomItemSelectedListener(this);
         mSpCustomersLevel.setCustomItemSelectedListener(this);
         mSpWareHouse.setCustomItemSelectedListener(this);
         mEtCustomGroup.setOnInputFinishListener(this);
         mEtGoodsNameOrId.setOnInputFinishListener(this);
+        mEtCustomers.setOnInputFinishListener(this);
         mBtnSortOut.setOnClickListener(new onNoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
@@ -521,8 +518,6 @@ public class SortOutActivity extends BaseActivity implements
 
     private void onGetListSuccess() {
         if (mListAllCount != null && mListAllWeight != null) {
-            //设置客户列表
-            getListCustomer();
             //筛选条件
             filterList();
             dismissLoadingDialog();
@@ -987,41 +982,6 @@ public class SortOutActivity extends BaseActivity implements
         }
     }
 
-    /**
-     * 过滤出客户列表
-     */
-    private void getListCustomer() {
-        List<MerchantCustomer> list = new ArrayList<>();
-        MerchantCustomer e = new MerchantCustomer();
-        Customer customerAll = new Customer();
-        customerAll.setName("全部");
-        e.setCustomer(customerAll);
-        list.add(0, e);
-        for (CustomSortOutData sortOutData : mListAll) {
-            //根据重量数据+数量数据  过滤出客户列表
-            IdName customer = sortOutData.getCustomer();
-            boolean hasAdd = false;
-            for (MerchantCustomer merchantCustomer : list) {
-                Customer merchantCustomerCustomer = merchantCustomer.getCustomer();
-                //去重
-                if (merchantCustomerCustomer.getName().equals(customer.getName())
-                        &&
-                        merchantCustomerCustomer.getUuid().equals(customer.getId())) {
-                    hasAdd = true;
-                }
-            }
-            if (!hasAdd) {
-                MerchantCustomer merchantCustomerNew = new MerchantCustomer();
-                Customer customerNew = new Customer();
-                customerNew.setName(customer.getName());
-                customerNew.setUuid(customer.getId());
-                merchantCustomerNew.setCustomer(customerNew);
-                list.add(merchantCustomerNew);
-            }
-        }
-        mSpCustomers.setList(list);
-    }
-
     @Override
     protected void onLoadingDismiss() {
         super.onLoadingDismiss();
@@ -1031,7 +991,6 @@ public class SortOutActivity extends BaseActivity implements
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()) {
-            case R.id.sp_customers:
             case R.id.sp_customers_level:
                 filterList();
                 break;
@@ -1062,9 +1021,9 @@ public class SortOutActivity extends BaseActivity implements
             return;
         }
         CustomerLevel customerLevel = mSpCustomersLevel.getSelectedItem();
-        MerchantCustomer customer = mSpCustomers.getSelectedItem();
         String goodsNameOrId = mEtGoodsNameOrId.getText().toString().trim();
         String customGroup = mEtCustomGroup.getText().toString().trim();
+        String customer = mEtCustomers.getText().toString().trim();
         String tag = mEtTag.getText().toString().trim();
         //逐级删除不符合的数据
         ArrayList<CustomSortOutData> filter;

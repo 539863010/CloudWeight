@@ -4,9 +4,7 @@ import android.text.TextUtils;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
-import com.xmzynt.storm.service.user.customer.Customer;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
-import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,7 @@ public class FilterUtil {
 
     public static ArrayList<CustomSortOutData> filter(List<CustomSortOutData> mListAll
             , CustomerLevel customerLevel
-            , MerchantCustomer merchantCustomer
+            , String customer
             , String customGroup
             , String goodsNameOrId
             , String tag
@@ -44,11 +42,11 @@ public class FilterUtil {
         }
 
         ArrayList<CustomSortOutData> listMerchantCustomer = new ArrayList<>();
-        if (merchantCustomer != null && !merchantCustomer.getCustomer().getName().equals("全部")) {
+        if (!TextUtils.isEmpty(customer)) {
             for (CustomSortOutData data : listCustomerLevel) {
-                Customer customer = merchantCustomer.getCustomer();
                 IdName idName = data.getCustomer();
-                if (customer != null && idName != null && customer.getName().equals(idName.getName())) {
+                //模糊 -  用包含
+                if (idName != null && idName.getName().contains(customer)) {
                     listMerchantCustomer.add(data);
                 }
             }

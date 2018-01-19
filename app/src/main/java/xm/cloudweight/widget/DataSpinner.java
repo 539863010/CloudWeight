@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.goods.GoodsCategory;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
-import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 import com.xmzynt.storm.service.wms.stockout.StockOutType;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 
@@ -103,9 +102,6 @@ public class DataSpinner<T> extends android.support.v7.widget.AppCompatSpinner {
             } else if (t instanceof Warehouse) {
                 //仓库列表
                 mListTitle.add(((Warehouse) t).getName());
-            } else if (t instanceof MerchantCustomer) {
-                //客户列表
-                mListTitle.add(((MerchantCustomer) t).getCustomer().getName());
             } else if (t instanceof CustomerLevel) {
                 //客户等级
                 mListTitle.add(((CustomerLevel) t).getName());
