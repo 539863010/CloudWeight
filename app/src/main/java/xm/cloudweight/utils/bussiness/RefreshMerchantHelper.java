@@ -16,9 +16,8 @@ import com.xmzynt.storm.util.GsonUtil;
  */
 public class RefreshMerchantHelper {
 
-    public static final String ACTION_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
-    public static final String KEY_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
-    public RefreshMerchant mRefreshMerchant;
+    private static final String ACTION_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
+    private static final String KEY_REFRESH_MERCHANT = "ACTION_REFRESH_MERCHANT";
     private RefreshMerchant mReceiver;
 
     public void regist(Context context, onRefreshMerchantListener mRefreshMerchant) {

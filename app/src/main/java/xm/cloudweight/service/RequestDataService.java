@@ -57,6 +57,14 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
         mMerchant = merchant;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mRefreshMerchantHelper != null) {
+            mRefreshMerchantHelper.unregist(this);
+        }
+    }
+
     /**
      * 获取分拣列表（数量，重量）
      */

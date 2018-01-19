@@ -890,7 +890,7 @@ public class SortOutActivity extends BaseActivity implements
     }
 
     private void refreshCancelSortOut(DbImageUpload dbImageUpload) {
-        if (mListAllWeight == null || mListAllCount == null) {
+        if (dbImageUpload == null || mListAllWeight == null || mListAllCount == null) {
             return;
         }
         //判断分拣的时间 是否跟 现在选择的时间一样
@@ -1203,29 +1203,22 @@ public class SortOutActivity extends BaseActivity implements
             } else {
                 holder.setBackgroundRes(R.id.item_ll, R.color.color_e7f0d5);
             }
-            String unit = data.getGoodsUnit().getName();
             if (mIntType == TYPE_WEIGHT) {
                 BigDecimal coverToKgQty = data.getCoverToKgQty();
                 if (coverToKgQty != null) {
                     holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(coverToKgQty));
                     holder.setText(R.id.item_goods_weight_unit, "kg");
                 }
-//                holder.setText(R.id.item_goods_weight_all, "总重量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
-//                holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
             } else if (mIntType == TYPE_COUNT) {
                 holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getHasStockOutQty())));
-                holder.setText(R.id.item_goods_weight_unit, unit);
-//                holder.setText(R.id.item_goods_weight_all, "总数量" + BigDecimalUtil.toScaleStr(data.getGoodsQty()) + unit);
-//                holder.setVisible(R.id.item_goods_weight_all, View.VISIBLE);
+                IdName goodsUnit = data.getGoodsUnit();
+                if (goodsUnit != null) {
+                    String unit = goodsUnit.getName();
+                    holder.setText(R.id.item_goods_weight_unit, unit);
+                } else {
+                    holder.setText(R.id.item_goods_weight_unit, "");
+                }
             }
-//            BigDecimal hasStockOutQty = data.getHasStockOutQty();
-//            if (hasStockOutQty.doubleValue() != 0) {
-//                holder.setText(R.id.item_goods_weight_out, "已出" + BigDecimalUtil.toScaleStr(hasStockOutQty) + unit);
-//                holder.setVisible(R.id.item_goods_weight_out, View.VISIBLE);
-//            } else {
-//                holder.setText(R.id.item_goods_weight_out, "");
-//                holder.setVisible(R.id.item_goods_weight_out, View.INVISIBLE);
-//            }
             //设置备注
             holder.setText(R.id.item_goods_remark, data.getRemark());
             ScalableTextView tvName = holder.getView(R.id.item_goods_name);

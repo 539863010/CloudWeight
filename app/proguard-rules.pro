@@ -20,7 +20,8 @@
 
 #保留崩溃日志错误信息行号
 -renamesourcefileattribute SourceFile
--keepattributes SourceFile,LineNumberTable
+#-keepattributes SourceFile,LineNumberTable    Bugly上不显示行数
+-keepattributes LineNumberTable
 
 #aidl文件不能去混淆.
 -keep class * implements android.os.Parcelable {
