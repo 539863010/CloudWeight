@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/item_upload"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_40dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_10dp"
         android:ellipsize="end"
@@ -20,7 +20,7 @@
     <ImageView
         android:id="@+id/item_upload_state"
         android:src="@drawable/upload"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_40dp"
         android:layout_marginLeft="@dimen/_10dp"
         android:layout_height="wrap_content"/>
 

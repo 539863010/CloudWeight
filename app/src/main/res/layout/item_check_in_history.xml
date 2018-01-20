@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/item_upload"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_40dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_10dp"
         android:ellipsize="end"
@@ -20,13 +20,13 @@
     <ImageView
         android:id="@+id/item_upload_state"
         android:src="@drawable/upload"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_40dp"
         android:layout_marginLeft="@dimen/_10dp"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/ci_type"
-        android:layout_width="@dimen/history_item_width"
+        android:layout_width="@dimen/_60dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_10dp"
         android:layout_marginRight="@dimen/_10dp"
@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/ci_unit"
-        android:layout_width="@dimen/_50dp"
+        android:layout_width="@dimen/_40dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/_10dp"
         android:ellipsize="end"
