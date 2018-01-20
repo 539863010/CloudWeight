@@ -72,6 +72,7 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
         titleCustomer.setTextColor(color);
         view.findViewById(R.id.item_printer_label).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.item_revocation).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.item_upload_state).setVisibility(View.GONE);
 
         //父布局设置不自动弹出
         //   android:focusable="true"
@@ -134,6 +135,14 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
             final CustomSortOutData data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), CustomSortOutData.class);
+            //设置状态
+            holder.setVisible(R.id.item_upload, View.GONE);
+            boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
+            if (isRequestSuccess) {
+                holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+            } else {
+                holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+            }
             final String goodsName = data.getGoods().getName();
             holder.setText(R.id.item_goods_name, goodsName);
             String goodsUnit = data.getGoodsUnit().getName();

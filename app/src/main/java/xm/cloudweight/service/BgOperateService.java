@@ -82,6 +82,11 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_REDELIVER_INTENT;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mRefreshMerchantHelper.unregist(this);
@@ -469,6 +474,7 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
                     @Override
                     protected void onResult(String result) {
                         dbImageUpload.setImageUrl(result);
+                        dbImageUpload.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(dbImageUpload);
                         //删除图片
                         deleteImage(imagePath);

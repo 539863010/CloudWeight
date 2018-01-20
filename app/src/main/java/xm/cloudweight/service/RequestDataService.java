@@ -59,6 +59,11 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_REDELIVER_INTENT;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mRefreshMerchantHelper != null) {

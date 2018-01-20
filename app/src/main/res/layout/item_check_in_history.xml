@@ -7,6 +7,24 @@
               android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/item_upload"
+        android:layout_width="@dimen/_50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="上传"
+        android:textSize="@dimen/history_item_size"/>
+
+    <ImageView
+        android:id="@+id/item_upload_state"
+        android:src="@drawable/upload"
+        android:layout_width="@dimen/_50dp"
+        android:layout_marginLeft="@dimen/_10dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
         android:id="@+id/ci_type"
         android:layout_width="@dimen/history_item_width"
         android:layout_height="wrap_content"

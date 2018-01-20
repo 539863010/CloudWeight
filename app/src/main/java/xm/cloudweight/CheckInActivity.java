@@ -545,6 +545,7 @@ public class CheckInActivity extends BaseActivity implements
     }
 
     private void requestCancel(int type, String uuid) {
+        showLoadingDialog(false);
         if (!TextUtils.isEmpty(uuid)) {
             CheckInPresenter.cancelStockIn(getActivity(), uuid, type);
         } else {

@@ -62,6 +62,10 @@ public class App extends Application {
 
         mRequestDataService = new Intent(this, RequestDataService.class);
         bindService(mRequestDataService, mServiceConnection, Service.BIND_AUTO_CREATE);
+
+        getApiManager(this);
+        getDbManager(this);
+        getDbRequestDataManager(this);
     }
 
     @Override
@@ -90,7 +94,7 @@ public class App extends Application {
     }
 
     public static DBRequestManager getDbRequestDataManager(Context ctx) {
-        if (mDbManager == null) {
+        if (mDbRequestManager == null) {
             mDbRequestManager = new DBRequestManager(ctx.getApplicationContext());
         }
         return mDbRequestManager;

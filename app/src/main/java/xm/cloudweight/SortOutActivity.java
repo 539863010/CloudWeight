@@ -465,10 +465,7 @@ public class SortOutActivity extends BaseActivity implements
                     new OnRequestDataListener.Stub() {
                         @Override
                         public void onReceive(long type) throws RemoteException {
-                            List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
-                            if (dbRequestData == null || dbRequestData.size() == 0) return;
-                            String data = dbRequestData.get(0).getData();
-                            Message msg = createMessage(type, data);
+                            Message msg = createMessage(type, null);
                             mRequestData.sendMessage(msg);
                         }
 
@@ -498,10 +495,7 @@ public class SortOutActivity extends BaseActivity implements
                     new OnRequestDataListener.Stub() {
                         @Override
                         public void onReceive(long type) throws RemoteException {
-                            List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
-                            if (dbRequestData == null || dbRequestData.size() == 0) return;
-                            String data = dbRequestData.get(0).getData();
-                            Message msg = createMessage(type, data);
+                            Message msg = createMessage(type, null);
                             mRequestData.sendMessage(msg);
                         }
 
@@ -552,7 +546,8 @@ public class SortOutActivity extends BaseActivity implements
             Bundle bundle = msg.getData();
             long type = bundle.getLong("Type");
             if (type == RequestDataService.TYPE_SORT_OUT_WEIGHT) {
-                String data = (String) msg.obj;
+                List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+                String data = dbRequestData.get(0).getData();
                 if (!TextUtils.isEmpty(data)) {
                     List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
                     }.getType());
@@ -568,7 +563,8 @@ public class SortOutActivity extends BaseActivity implements
                 String data = (String) msg.obj;
                 onGetListFailed(data);
             } else if (type == RequestDataService.TYPE_SORT_OUT_COUNT) {
-                String data = (String) msg.obj;
+                List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+                String data = dbRequestData.get(0).getData();
                 if (!TextUtils.isEmpty(data)) {
                     List<CustomSortOutData> list = GsonUtil.getGson().fromJson(data, new TypeToken<List<CustomSortOutData>>() {
                     }.getType());

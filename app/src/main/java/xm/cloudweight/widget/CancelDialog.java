@@ -24,7 +24,7 @@ public class CancelDialog extends Dialog implements View.OnClickListener {
         super(context, R.style.dialog);
         mContext = context;
         mOnDeleteListener = listener;
-        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_cancel_sort_out, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_cancelt, null);
         setContentView(view);
         mTvCancelMsg = view.findViewById(R.id.tv_cancel_msg);
         view.findViewById(R.id.btn_cancel).setOnClickListener(this);

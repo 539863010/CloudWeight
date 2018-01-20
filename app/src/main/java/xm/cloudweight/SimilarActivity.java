@@ -343,6 +343,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     }
 
     private void requestCancel(int type, String uuid) {
+        showLoadingDialog(false);
         if (!TextUtils.isEmpty(uuid)) {
             SimilarPresenter.cancelSimilar(getActivity(), uuid, type);
         } else {

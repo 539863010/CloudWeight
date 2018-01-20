@@ -77,6 +77,7 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
         titleTime.setTextColor(color);
         view.findViewById(R.id.ci_print_label).setVisibility(View.INVISIBLE);
         view.findViewById(R.id.ci_revocation).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.item_upload_state).setVisibility(View.GONE);
 
         mEtHistoryGoodsName = view.findViewById(R.id.et_history_goods_name);
         view.findViewById(R.id.iv_history_search).setOnClickListener(this);
@@ -136,6 +137,14 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
             final StockInRecord data = GsonUtil.getGson().fromJson(dbSortOutData.getLine(), StockInRecord.class);
+            //设置状态
+            holder.setVisible(R.id.item_upload, View.GONE);
+            boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
+            if (isRequestSuccess) {
+                holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+            } else {
+                holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+            }
             //设置类型
             final int type = dbSortOutData.getType();
             String typeString = "";

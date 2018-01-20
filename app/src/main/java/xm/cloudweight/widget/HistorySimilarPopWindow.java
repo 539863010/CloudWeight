@@ -76,6 +76,7 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
         TextView operation = view.findViewById(R.id.similar_operatime);
         operation.setTextColor(color);
         view.findViewById(R.id.similar_revocation).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.item_upload_state).setVisibility(View.GONE);
 
         if (mType == Common.SIMILAR_STOCKOUT) {
             TextView type = view.findViewById(R.id.similar_type);
@@ -155,6 +156,14 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
 
         @Override
         public void doSomething(CommonHolder4Lv holder, final DbImageUpload dbSortOutData, int position) {
+            //设置状态
+            holder.setVisible(R.id.item_upload, View.GONE);
+            boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
+            if (isRequestSuccess) {
+                holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+            } else {
+                holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+            }
             final int type = dbSortOutData.getType();
             final String typeString = type == Common.DbType.TYPE_STORE_OUT ? Common.DbType.STR_TYPE_STORE_OUT :
                     type == Common.DbType.TYPE_ALLOCATE ? Common.DbType.STR_TYPE_ALLOCATE : "";
