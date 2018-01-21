@@ -11,6 +11,7 @@ import android.os.IBinder;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import xm.cloudweight.BuildConfig;
+import xm.cloudweight.IBgOperateService;
 import xm.cloudweight.IRequestDataService;
 import xm.cloudweight.api.ApiManager;
 import xm.cloudweight.camera.service.CameraService;
@@ -31,13 +32,25 @@ public class App extends Application {
     private static DBManager mDbManager;
     private static DBRequestManager mDbRequestManager;
     private Intent mCameraService;
-    private Intent mImageUploadService;
+    private Intent mBgOperateService;
     private Intent mRequestDataService;
     private static IRequestDataService mIRequestDataService;
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
+    private static IBgOperateService mIBgOperateService;
+    private ServiceConnection mScRequestDataService = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mIRequestDataService = IRequestDataService.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+    private ServiceConnection mScBgOperateService = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mIBgOperateService = IBgOperateService.Stub.asInterface(service);
         }
 
         @Override
@@ -57,11 +70,11 @@ public class App extends Application {
         mCameraService = new Intent(this, CameraService.class);
         startService(mCameraService);
 
-        mImageUploadService = new Intent(this, BgOperateService.class);
-        startService(mImageUploadService);
+        mBgOperateService = new Intent(this, BgOperateService.class);
+        bindService(mBgOperateService, mScBgOperateService, Service.BIND_AUTO_CREATE);
 
         mRequestDataService = new Intent(this, RequestDataService.class);
-        bindService(mRequestDataService, mServiceConnection, Service.BIND_AUTO_CREATE);
+        bindService(mRequestDataService, mScRequestDataService, Service.BIND_AUTO_CREATE);
 
         getApiManager(this);
         getDbManager(this);
@@ -72,10 +85,12 @@ public class App extends Application {
     public void onTerminate() {
         super.onTerminate();
         stopService(mCameraService);
-        stopService(mImageUploadService);
+        unbindService(mScBgOperateService);
         stopService(mRequestDataService);
-        unbindService(mServiceConnection);
-        mServiceConnection = null;
+        unbindService(mScRequestDataService);
+        mScBgOperateService = null;
+        mIBgOperateService = null;
+        mScRequestDataService = null;
         mIRequestDataService = null;
     }
 

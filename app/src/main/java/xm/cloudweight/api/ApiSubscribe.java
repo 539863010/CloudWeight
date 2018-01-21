@@ -35,7 +35,12 @@ public abstract class ApiSubscribe<T> extends Subscriber<ResponseEntity<T>> {
             String data = t.getData();
             if (!TextUtils.isEmpty(data)) {
                 //返回数组
-                Type type = TTypeUtil.getTListWithObject(this);
+                Type type = null;
+                try {
+                    type = TTypeUtil.getTListWithObject(this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if (type != null) {
                     if (!data.startsWith("{") && !data.startsWith("[")) {
                         //返回String

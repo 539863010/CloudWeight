@@ -17,8 +17,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-import com.xmzynt.storm.service.user.merchant.Merchant;
-import com.xmzynt.storm.util.GsonUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,8 +30,6 @@ import xm.cloudweight.api.ApiManager;
 import xm.cloudweight.app.App;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.utils.LogUtils;
-import xm.cloudweight.utils.bussiness.LocalSpUtil;
-import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 import xm.cloudweight.utils.bussiness.ScaleUtil;
 import xm.cloudweight.utils.connect.NetBroadcastReceiver;
 import xm.cloudweight.utils.connect.NetUtil;
@@ -58,8 +54,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            // 发送广播更新远程服务里面Merchant
-            refreshAidlMerchant();
             //隐藏标题栏跟状态栏
             setTitleAndAppBar();
             //获取数据
@@ -75,11 +69,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
             mNetWorkEvent = this;
             inspectNet();
         }
-    }
-
-    private void refreshAidlMerchant() {
-        Merchant merchant = LocalSpUtil.getMerchant(this);
-        RefreshMerchantHelper.send(this, GsonUtil.getGson().toJson(merchant));
     }
 
     @Override

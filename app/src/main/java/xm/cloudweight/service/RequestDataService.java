@@ -6,11 +6,12 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.xmzynt.storm.service.user.merchant.Merchant;
+import com.xmzynt.storm.util.GsonUtil;
 
+import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
-import rx.Observer;
 import rx.schedulers.Schedulers;
 import xm.cloudweight.IRequestDataService;
 import xm.cloudweight.OnRequestDataListener;
@@ -23,7 +24,6 @@ import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.bean.PBaseInfo;
 import xm.cloudweight.net.RetrofitUtil;
 import xm.cloudweight.utils.bussiness.BeanUtil;
-import xm.cloudweight.utils.bussiness.BuglyUtil;
 import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 import xm.cloudweight.utils.dao.DBRequestManager;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
@@ -85,7 +85,7 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
         int defaultPageSize = (int) params.get("DEFAULT_PAGE_SIZE");
         String deliveryTime = (String) params.get("DATE");
         PBaseInfo pBaseInfo = BeanUtil.getSourOutListService(mMerchant, page, pageSize, defaultPageSize, deliveryTime);
-        Observable<ResponseEntity> observable;
+        Observable<ResponseEntity<List<CustomSortOutData>>> observable;
         if (type == SortOutActivity.TYPE_WEIGHT) {
             //重量
             observable = mApiManager.getsForWeigh(pBaseInfo);
@@ -94,44 +94,39 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
             observable = mApiManager.getsForNotWeigh(pBaseInfo);
         }
         observable.subscribeOn(Schedulers.io())
-                .subscribe(new Observer<ResponseEntity>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
+                .subscribe(new ApiSubscribe<List<CustomSortOutData>>() {
 
                     @Override
-                    public void onError(Throwable e) {
+                    protected void onResult(List<CustomSortOutData> result) {
                         try {
-                            if (type == SortOutActivity.TYPE_WEIGHT) {
-                                listener.onError(TYPE_SORT_OUT_WEIGHT_FAILED, "获取分拣-重量列表失败");
-                            } else {
-                                listener.onError(TYPE_SORT_OUT_COUNT_FAILED, "获取分拣-数量列表失败");
-                            }
-                            BuglyUtil.uploadCrash(e);
-                        } catch (RemoteException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onNext(ResponseEntity re) {
-                        try {
-                            String result = re.getData();
+                            String resultString = GsonUtil.getGson().toJson(result);
                             DbRequestData data = new DbRequestData();
                             if (type == SortOutActivity.TYPE_WEIGHT) {
                                 data.setId(TYPE_SORT_OUT_WEIGHT);
-                                data.setData(result);
+                                data.setData(resultString);
                                 mDBRequestManager.insertOrReplace(data);
                                 listener.onReceive(TYPE_SORT_OUT_WEIGHT);
                             } else {
                                 data.setId(TYPE_SORT_OUT_COUNT);
-                                data.setData(result);
+                                data.setData(resultString);
                                 mDBRequestManager.insertOrReplace(data);
                                 listener.onReceive(TYPE_SORT_OUT_COUNT);
                             }
                         } catch (RemoteException e) {
                             e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            if (type == SortOutActivity.TYPE_WEIGHT) {
+                                listener.onError(TYPE_SORT_OUT_WEIGHT_FAILED, failString);
+                            } else {
+                                listener.onError(TYPE_SORT_OUT_COUNT_FAILED, failString);
+                            }
+                        } catch (RemoteException e1) {
+                            e1.printStackTrace();
                         }
                     }
                 });

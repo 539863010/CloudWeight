@@ -122,7 +122,7 @@ public interface ApiManager {
      * @return Observable<ResponseEntity<List<SortOutData>>>
      */
     @POST("/merchant/scaleApi/getsForWeigh.do")
-    Observable<ResponseEntity> getsForWeigh(@Body PBaseInfo p);
+    Observable<ResponseEntity<List<CustomSortOutData>>> getsForWeigh(@Body PBaseInfo p);
 
     /**
      * 查询分拣数据（数量）
@@ -131,7 +131,7 @@ public interface ApiManager {
      * @return Observable<ResponseEntity<List<SortOutData>>>
      */
     @POST("/merchant/scaleApi/getsForNotWeigh.do")
-    Observable<ResponseEntity> getsForNotWeigh(@Body PBaseInfo p);
+    Observable<ResponseEntity<List<CustomSortOutData>>> getsForNotWeigh(@Body PBaseInfo p);
 
     /**
      * 分拣

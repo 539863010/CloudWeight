@@ -2,7 +2,6 @@ package xm.cloudweight.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.text.TextUtils;
 
@@ -17,9 +16,12 @@ import com.xmzynt.storm.util.IMGType;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import rx.Observable;
+import rx.Subscriber;
 import xm.cloudweight.api.ApiManager;
 import xm.cloudweight.api.ApiSubscribe;
 import xm.cloudweight.api.ResponseEntity;
@@ -31,6 +33,7 @@ import xm.cloudweight.comm.ServerConstant;
 import xm.cloudweight.net.RetrofitUtil;
 import xm.cloudweight.utils.LogUtils;
 import xm.cloudweight.utils.bussiness.BeanUtil;
+import xm.cloudweight.utils.bussiness.BuglyUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 import xm.cloudweight.utils.bussiness.UploadPhotoUtil;
@@ -98,61 +101,70 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     }
 
     private void createTimer() {
-        CountDownTimer timer = new CountDownTimer(Long.MAX_VALUE, 5000) {
-            @Override
-            public void onTick(long l) {
-                if (mMerchant != null) {
-                    //根据本地path获取url
-                    if (!isCurrentUploadImage) {
-                        getUnUploadImageList();
+        Observable.interval(5, TimeUnit.SECONDS)
+                .subscribe(new Subscriber<Long>() {
+                    @Override
+                    public void onCompleted() {
                     }
-                    //请求验收-入库
-                    if (!isCurrentCheckInStoreIn) {
-                        getUnCheckInStoreInList();
-                    }
-                    //请求验收-越库
-                    if (!isCurrentCheckInCrossOut) {
-                        getUnCheckInCrossOutList();
-                    }
-                    //请求验收-越库调拨
-                    if (!isCurrentCheckInCrossAllocate) {
-                        getUnCheckInCrossAllocateList();
-                    }
-                    //请求分拣
-                    if (!isCurrentSortOutStoreOut) {
-                        getUnSortOutStoreOutList();
-                    }
-                    //请求出库
-                    if (!isCurrentStoreOut) {
-                        getUnSortOutList();
-                    }
-                    //请求调拨
-                    if (!isCurrentAllocate) {
-                        getUnAllocateList();
-                    }
-                    //请求盘点
-                    if (!isCurrentCheck) {
-                        getUnCheckList();
-                    }
-                    LogUtils.e("----",
-                            "正在获取url = " + isCurrentUploadImage
-                                    + "\n 正在入库 = " + isCurrentCheckInStoreIn
-                                    + "\n 正在越库 = " + isCurrentCheckInCrossOut
-                                    + "\n 正在越库调拨 = " + isCurrentCheckInCrossAllocate
-                                    + "\n 正在分拣 = " + isCurrentSortOutStoreOut
-                                    + "\n 正在出库 = " + isCurrentStoreOut
-                                    + "\n 正在调拨 = " + isCurrentAllocate
-                                    + "\n 正在盘点 = " + isCurrentCheck
-                    );
-                }
-            }
 
-            @Override
-            public void onFinish() {
+                    @Override
+                    public void onError(Throwable e) {
+                        BuglyUtil.uploadCrash(e);
+                    }
 
+                    @Override
+                    public void onNext(Long aLong) {
+                        upLoad();
+                    }
+                });
+
+    }
+
+    private void upLoad() {
+        if (mMerchant != null) {
+            //根据本地path获取url
+            if (!isCurrentUploadImage) {
+                getUnUploadImageList();
             }
-        };
-        timer.start();
+            //请求验收-入库
+            if (!isCurrentCheckInStoreIn) {
+                getUnCheckInStoreInList();
+            }
+            //请求验收-越库
+            if (!isCurrentCheckInCrossOut) {
+                getUnCheckInCrossOutList();
+            }
+            //请求验收-越库调拨
+            if (!isCurrentCheckInCrossAllocate) {
+                getUnCheckInCrossAllocateList();
+            }
+            //请求分拣
+            if (!isCurrentSortOutStoreOut) {
+                getUnSortOutStoreOutList();
+            }
+            //请求出库
+            if (!isCurrentStoreOut) {
+                getUnSortOutList();
+            }
+            //请求调拨
+            if (!isCurrentAllocate) {
+                getUnAllocateList();
+            }
+            //请求盘点
+            if (!isCurrentCheck) {
+                getUnCheckList();
+            }
+            LogUtils.e("----",
+                    "正在获取url = " + isCurrentUploadImage
+                            + "\n 正在入库 = " + isCurrentCheckInStoreIn
+                            + "\n 正在越库 = " + isCurrentCheckInCrossOut
+                            + "\n 正在越库调拨 = " + isCurrentCheckInCrossAllocate
+                            + "\n 正在分拣 = " + isCurrentSortOutStoreOut
+                            + "\n 正在出库 = " + isCurrentStoreOut
+                            + "\n 正在调拨 = " + isCurrentAllocate
+                            + "\n 正在盘点 = " + isCurrentCheck
+            );
+        }
     }
 
     /**
