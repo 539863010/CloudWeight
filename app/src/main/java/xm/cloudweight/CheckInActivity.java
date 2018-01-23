@@ -47,8 +47,6 @@ import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
-import xm.cloudweight.impl.CheckInImpl;
-import xm.cloudweight.presenter.CheckInPresenter;
 import xm.cloudweight.service.RequestDataService;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
@@ -61,7 +59,6 @@ import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
 import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
-import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
@@ -85,7 +82,6 @@ import static xm.cloudweight.service.RequestDataService.TYPE_CHECK_IN_GET_DROPDO
  * @create 2017/10/30
  */
 public class CheckInActivity extends BaseActivity implements
-        CheckInImpl.OnCancelStockInListener,
         Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, OnDeleteListener {
 
     private static final String DEFAULT_SPINNER_WAREHOURE = "采购入库仓库";
@@ -146,7 +142,6 @@ public class CheckInActivity extends BaseActivity implements
     private static final int TYPE_CROSS = 2;
     private static final int TYPE_CROSS_ALLOCATE = 3;
     private int mIntTypeUpload;
-    private DBManager mDBManager;
     private ImageView mIvSub;
     private ImageView mIvAdd;
     private VideoFragment mVideoFragment;
@@ -157,7 +152,6 @@ public class CheckInActivity extends BaseActivity implements
     private List<DbImageUpload> mListHistory = new ArrayList<>();
     private DbImageUpload mDbImageUpload;
     private boolean hasCancelCheckIn;
-    private onScanFinishListener mOnScanFinishListener;
     private InputFragment mInputFragment;
 
     @Override
@@ -398,13 +392,12 @@ public class CheckInActivity extends BaseActivity implements
     }
 
     private void getDropdownOperator() {
-        long type = TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR;
         Map<String, Integer> params = new HashMap<>();
         params.put(Common.PAGE_STRING, Common.PAGE);
         params.put(Common.PAGE_SIZE_STRING, Common.PAGE_SIZE);
         params.put(Common.DEFAULT_PAGE_SIZE_STRING, Common.DEFAULT_PAGE_SIZE);
         try {
-            getIRequestDataService().onGetDataListener(type, params, new OnRequestDataListener.Stub() {
+            getIRequestDataService().onGetDataListener(TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR, params, new OnRequestDataListener.Stub() {
                 @Override
                 public void onReceive(long type) throws RemoteException {
                     Message message = MessageUtil.create(type, null);
@@ -450,10 +443,20 @@ public class CheckInActivity extends BaseActivity implements
                 queryPurchaseDataSuccess(type);
             } else if (type == RequestDataService.TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED) {
                 queryPurchaseDataFailed(msg);
+            } else if (type == RequestDataService.TYPE_CHECK_IN_CANCEL) {
+                onCancelSuccess();
+            } else if (type == RequestDataService.TYPE_CHECK_IN_CANCEL_FAILED) {
+                cancelStockInFailed(msg);
             }
             return false;
         }
     });
+
+    public void cancelStockInFailed(Message message) {
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+        ToastUtil.showShortToast(getContext(), MessageUtil.getObj(message));
+    }
 
     private void getDropDownOperatorSuccess(long type) {
         List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
@@ -685,9 +688,30 @@ public class CheckInActivity extends BaseActivity implements
     private void requestCancel(int type, String uuid) {
         showLoadingDialog(false);
         if (!TextUtils.isEmpty(uuid)) {
-            CheckInPresenter.cancelStockIn(getActivity(), uuid, type);
+            cancelStockIn(uuid, type);
         } else {
             onCancelSuccess();
+        }
+    }
+
+    private void cancelStockIn(String uuid, int type) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("type", type);
+            params.put("uuid", uuid);
+            getIRequestDataService().onGetDataListener(RequestDataService.TYPE_CHECK_IN_CANCEL, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, null));
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, message));
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
@@ -747,18 +771,6 @@ public class CheckInActivity extends BaseActivity implements
         mListHistory.addAll(daoList);
         mHistoryCheckInPopWindow.show();
         mHistoryCheckInPopWindow.notify(mListHistory);
-    }
-
-    @Override
-    public void onCancelStockInSuccess(String result) {
-        onCancelSuccess();
-    }
-
-    @Override
-    public void onCancelStockInFailed(String message) {
-        dismissLoadingDialog();
-        mDbImageUpload = null;
-        ToastUtil.showShortToast(getContext(), message);
     }
 
     private boolean check() {
@@ -1171,7 +1183,6 @@ public class CheckInActivity extends BaseActivity implements
             mAdapterPurchase.notifyDataSetChanged();
         }
     }
-
 
     /**
      * 入库，越库接口请求成功后刷新数据

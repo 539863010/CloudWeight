@@ -6,9 +6,12 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.xmzynt.storm.basic.idname.IdName;
+import com.xmzynt.storm.service.goods.GoodsCategory;
 import com.xmzynt.storm.service.purchase.PurchaseData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
+import com.xmzynt.storm.service.wms.stock.Stock;
 import com.xmzynt.storm.util.GsonUtil;
+import com.xmzynt.storm.util.query.PageData;
 
 import java.util.List;
 import java.util.Map;
@@ -70,6 +73,287 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
         if (mRefreshMerchantHelper != null) {
             mRefreshMerchantHelper.unregist(this);
         }
+    }
+
+    private final IRequestDataService.Stub mBinder = new IRequestDataService.Stub() {
+
+        @Override
+        public void onGetDataListener(long type, Map params, OnRequestDataListener listener) throws RemoteException {
+            // type 请求数据类型   listener 返回监听
+            if (type == -1) {
+                return;
+            }
+            if (mMerchant == null) {
+                if (listener != null) {
+                    long failedType = getFailedType(type);
+                    listener.onError(failedType, "RequestDataService中未获取用户信息");
+                }
+                return;
+            }
+            if (type == TYPE_SORT_OUT_COUNT || type == TYPE_SORT_OUT_WEIGHT) {
+                getListSortOut(type, params, listener);
+            } else if (type == TYPE_SORT_OUT_CANCEL) {
+                sortOutCancel(params, listener);
+            } else if (type == TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR) {
+                getDropdownOperator(params, listener);
+            } else if (type == TYPE_CHECK_IN_QUERY_PURCHASE_DATA) {
+                queryPurchaseData(params, listener);
+            } else if (type == TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY) {
+                getDropdownLeafCategory(listener);
+            } else if (type == TYPE_SIMILAR_QUERY_STOCK) {
+                queryStock(params, listener);
+            } else if (type == TYPE_CHECK_IN_CANCEL) {
+                cancelStockIn(params, listener);
+            } else if (type == TYPE_SIMILAR_CANCEL) {
+                cancelSimilar(params, listener);
+            } else if (type == TYPE_SCAN_BY_TRACE_CODE) {
+                scanByTraceCode(params, listener);
+            }
+        }
+
+    };
+
+    /**
+     * 扫描库存标签
+     */
+    private void scanByTraceCode(Map params, final OnRequestDataListener listener) {
+        String traceCode = (String) params.get("traceCode");
+        String warehouseUU = (String) params.get("warehouseUU");
+        PBaseInfo pBaseInfo = BeanUtil.scanByTraceCode(mMerchant, traceCode, warehouseUU);
+        mApiManager.scanByTraceCode(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<List<Stock>>>().get())
+                .subscribe(new ApiSubscribe<List<Stock>>() {
+                    @Override
+                    protected void onResult(List<Stock> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_SCAN_BY_TRACE_CODE, listStr);
+                            listener.onReceive(TYPE_SCAN_BY_TRACE_CODE);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_SCAN_BY_TRACE_CODE_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+    }
+
+    /**
+     * 出库，调拨，盘点-撤销
+     */
+    private void cancelSimilar(Map params, final OnRequestDataListener listener) {
+        int type = (int) params.get("type");
+        String uuid = (String) params.get("uuid");
+        PBaseInfo pBaseInfo = BeanUtil.cancelSimilar(mMerchant, uuid);
+        Observable<ResponseEntity<String>> observable = null;
+        if (type == Common.DbType.TYPE_STORE_OUT) {
+            //出库
+            observable = mApiManager.cancelStockOut(pBaseInfo);
+        } else if (type == Common.DbType.TYPE_ALLOCATE) {
+            //调拨
+            observable = mApiManager.cancelAllocate(pBaseInfo);
+        }
+        if (observable == null) {
+            return;
+        }
+        observable.compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_SIMILAR_CANCEL, listStr);
+                            listener.onReceive(TYPE_SIMILAR_CANCEL);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_SIMILAR_CANCEL_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                });
+    }
+
+    /**
+     * 出库，调拨，盘点 - 查找库存记录
+     */
+    private void queryStock(Map params, final OnRequestDataListener listener) {
+        int page = (int) params.get(Common.PAGE_STRING);
+        int pageSize = (int) params.get(Common.PAGE_SIZE_STRING);
+        int defaultPageSize = (int) params.get(Common.DEFAULT_PAGE_SIZE_STRING);
+        String basketCode = (String) params.get("basketCode");
+        PBaseInfo pBaseInfo = BeanUtil.queryStock(mMerchant, page, pageSize, defaultPageSize, basketCode);
+        mApiManager.queryStock(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<PageData<Stock>>>().get())
+                .subscribe(new ApiSubscribe<PageData<Stock>>() {
+                    @Override
+                    protected void onResult(PageData<Stock> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_SIMILAR_QUERY_STOCK, listStr);
+                            listener.onReceive(TYPE_SIMILAR_QUERY_STOCK);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_SIMILAR_QUERY_STOCK_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 出库，调拨，盘点 - 查找类别
+     */
+    private void getDropdownLeafCategory(final OnRequestDataListener listener) {
+        PBaseInfo pBaseInfo = BeanUtil.getDropdownLeafCategory(mMerchant);
+        mApiManager.getDropdownLeafCategory(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<List<GoodsCategory>>>().get())
+                .subscribe(new ApiSubscribe<List<GoodsCategory>>() {
+                    @Override
+                    protected void onResult(List<GoodsCategory> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY, listStr);
+                            listener.onReceive(TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 验收-撤销
+     */
+    private void cancelStockIn(Map params, final OnRequestDataListener listener) {
+        int type_cancel = (int) params.get("type");
+        String uuid = (String) params.get("uuid");
+        String stockInType;
+        if (type_cancel == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
+            stockInType = "crossDock";
+        } else {
+            stockInType = "purchaseIn";
+        }
+        PBaseInfo pBaseInfo = BeanUtil.cancelStockIn(mMerchant, uuid, stockInType);
+        mApiManager.cancelStockIn(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        //三种验收撤销成功后的操作都一样
+                        try {
+                            listener.onReceive(TYPE_CHECK_IN_CANCEL);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_CHECK_IN_CANCEL_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                });
+    }
+
+    /**
+     * 验收-列表
+     */
+    private void queryPurchaseData(Map params, final OnRequestDataListener listener) {
+        int page = (int) params.get(Common.PAGE_STRING);
+        int pageSize = (int) params.get(Common.PAGE_SIZE_STRING);
+        int defaultPageSize = (int) params.get(Common.DEFAULT_PAGE_SIZE_STRING);
+        String date = (String) params.get("DATE");
+        PBaseInfo pBaseInfo = BeanUtil.queryPurchaseData(mMerchant, page, pageSize, defaultPageSize, date);
+        mApiManager.queryPurchaseData(pBaseInfo).compose(new TransformerHelper<ResponseEntity<List<PurchaseData>>>().get())
+                .subscribe(new ApiSubscribe<List<PurchaseData>>() {
+                    @Override
+                    protected void onResult(List<PurchaseData> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_CHECK_IN_QUERY_PURCHASE_DATA, listStr);
+                            listener.onReceive(TYPE_CHECK_IN_QUERY_PURCHASE_DATA);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 验收-获取下拉操作人
+     */
+    private void getDropdownOperator(Map params, final OnRequestDataListener listener) {
+        int page = (int) params.get(Common.PAGE_STRING);
+        int pageSize = (int) params.get(Common.PAGE_SIZE_STRING);
+        int defaultPageSize = (int) params.get(Common.DEFAULT_PAGE_SIZE_STRING);
+        PBaseInfo pBaseInfo = BeanUtil.getDropdownOperator(mMerchant, page, pageSize, defaultPageSize);
+        mApiManager.getDropdownOperator(pBaseInfo).compose(new TransformerHelper<ResponseEntity<List<IdName>>>().get())
+                .subscribe(new ApiSubscribe<List<IdName>>() {
+                    @Override
+                    protected void onResult(List<IdName> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR, listStr);
+                            listener.onReceive(TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     /**
@@ -159,112 +443,6 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
                 });
     }
 
-    private final IRequestDataService.Stub mBinder = new IRequestDataService.Stub() {
-
-        @Override
-        public void onGetDataListener(long type, Map params, OnRequestDataListener listener) throws RemoteException {
-            // type 请求数据类型   listener 返回监听
-            if (type == -1) {
-                return;
-            }
-            if (mMerchant == null) {
-                if (listener != null) {
-                    long failedType = getFailedType(type);
-                    listener.onError(failedType, "RequestDataService中未获取用户信息");
-                }
-                return;
-            }
-            if (type == TYPE_SORT_OUT_COUNT || type == TYPE_SORT_OUT_WEIGHT) {
-                getListSortOut(type, params, listener);
-            } else if (type == TYPE_SORT_OUT_CANCEL) {
-                sortOutCancel(params, listener);
-            } else if (type == TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR) {
-                getDropdownOperator(params, listener);
-            } else if (type == TYPE_CHECK_IN_QUERY_PURCHASE_DATA) {
-                queryPurchaseData(params, listener);
-            }
-        }
-
-    };
-
-
-    // TODO: 2018/1/22 注意添加新type
-    private long getFailedType(long type) {
-        long failedType = -1L;
-        if (type == TYPE_SORT_OUT_COUNT) {
-            failedType = TYPE_SORT_OUT_COUNT;
-        } else if (type == TYPE_SORT_OUT_WEIGHT) {
-            failedType = TYPE_SORT_OUT_WEIGHT_FAILED;
-        } else if (type == TYPE_SORT_OUT_CANCEL) {
-            failedType = TYPE_SORT_OUT_CANCEL_FAILED;
-        } else if (type == TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR) {
-            failedType = TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR_FAILED;
-        } else if (type == TYPE_CHECK_IN_QUERY_PURCHASE_DATA) {
-            failedType = TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED;
-        }
-        return failedType;
-    }
-
-
-    private void queryPurchaseData(Map params, final OnRequestDataListener listener) {
-        int page = (int) params.get(Common.PAGE_STRING);
-        int pageSize = (int) params.get(Common.PAGE_SIZE_STRING);
-        int defaultPageSize = (int) params.get(Common.DEFAULT_PAGE_SIZE_STRING);
-        String date = (String) params.get("DATE");
-        PBaseInfo pBaseInfo = BeanUtil.queryPurchaseData(mMerchant, page, pageSize, defaultPageSize, date);
-        mApiManager.queryPurchaseData(pBaseInfo).compose(new TransformerHelper<ResponseEntity<List<PurchaseData>>>().get())
-                .subscribe(new ApiSubscribe<List<PurchaseData>>() {
-                    @Override
-                    protected void onResult(List<PurchaseData> result) {
-                        try {
-                            String listStr = GsonUtil.getGson().toJson(result);
-                            saveDbRequestData(TYPE_CHECK_IN_QUERY_PURCHASE_DATA, listStr);
-                            listener.onReceive(TYPE_CHECK_IN_QUERY_PURCHASE_DATA);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    protected void onResultFail(int errorType, String failString) {
-                        try {
-                            listener.onError(TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED, failString);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
-
-    private void getDropdownOperator(Map params, final OnRequestDataListener listener) {
-        int page = (int) params.get(Common.PAGE_STRING);
-        int pageSize = (int) params.get(Common.PAGE_SIZE_STRING);
-        int defaultPageSize = (int) params.get(Common.DEFAULT_PAGE_SIZE_STRING);
-        PBaseInfo pBaseInfo = BeanUtil.getDropdownOperator(mMerchant, page, pageSize, defaultPageSize);
-        mApiManager.getDropdownOperator(pBaseInfo).compose(new TransformerHelper<ResponseEntity<List<IdName>>>().get())
-                .subscribe(new ApiSubscribe<List<IdName>>() {
-                    @Override
-                    protected void onResult(List<IdName> result) {
-                        try {
-                            String listStr = GsonUtil.getGson().toJson(result);
-                            saveDbRequestData(TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR, listStr);
-                            listener.onReceive(TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    protected void onResultFail(int errorType, String failString) {
-                        try {
-                            listener.onError(TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR_FAILED, failString);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
-
     private void saveDbRequestData(long type, String data) {
         DbRequestData requestData = new DbRequestData();
         requestData.setId(type);
@@ -295,5 +473,49 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
     //验收-批量查询采购信息
     public static final long TYPE_CHECK_IN_QUERY_PURCHASE_DATA = 9L;
     public static final long TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED = 10L;
+    //验收-撤销入库
+    public static final long TYPE_CHECK_IN_CANCEL = 11L;
+    public static final long TYPE_CHECK_IN_CANCEL_FAILED = 12L;
+    //出库，调拨，盘点-查找类别
+    public static final long TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY = 13L;
+    public static final long TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY_FAILED = 14L;
+    //出库，调拨，盘点-查找库存记录
+    public static final long TYPE_SIMILAR_QUERY_STOCK = 15L;
+    public static final long TYPE_SIMILAR_QUERY_STOCK_FAILED = 16L;
+    //出库，调拨，盘点-撤销
+    public static final long TYPE_SIMILAR_CANCEL = 17L;
+    public static final long TYPE_SIMILAR_CANCEL_FAILED = 18L;
+    //扫描库存标签
+    public static final long TYPE_SCAN_BY_TRACE_CODE = 19L;
+    public static final long TYPE_SCAN_BY_TRACE_CODE_FAILED = 20L;
+
+    /**
+     * 注意添加新type
+     */
+    private long getFailedType(long type) {
+        long failedType = -1L;
+        if (type == TYPE_SORT_OUT_COUNT) {
+            failedType = TYPE_SORT_OUT_COUNT_FAILED;
+        } else if (type == TYPE_SORT_OUT_WEIGHT) {
+            failedType = TYPE_SORT_OUT_WEIGHT_FAILED;
+        } else if (type == TYPE_SORT_OUT_CANCEL) {
+            failedType = TYPE_SORT_OUT_CANCEL_FAILED;
+        } else if (type == TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR) {
+            failedType = TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR_FAILED;
+        } else if (type == TYPE_CHECK_IN_QUERY_PURCHASE_DATA) {
+            failedType = TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED;
+        } else if (type == TYPE_CHECK_IN_CANCEL) {
+            failedType = TYPE_CHECK_IN_CANCEL_FAILED;
+        } else if (type == TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY) {
+            failedType = TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY_FAILED;
+        } else if (type == TYPE_SIMILAR_QUERY_STOCK) {
+            failedType = TYPE_SIMILAR_QUERY_STOCK_FAILED;
+        } else if (type == TYPE_SIMILAR_CANCEL) {
+            failedType = TYPE_SIMILAR_CANCEL_FAILED;
+        } else if (type == TYPE_SCAN_BY_TRACE_CODE) {
+            failedType = TYPE_SCAN_BY_TRACE_CODE_FAILED;
+        }
+        return failedType;
+    }
 
 }

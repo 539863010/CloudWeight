@@ -213,9 +213,9 @@ public class BeanUtil {
     /**
      * 撤销入库
      */
-    public static PBaseInfo cancelStockIn(Context ctx, String uuid, String stockInType) {
+    public static PBaseInfo cancelStockIn(Merchant merchant, String uuid, String stockInType) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         body.put("uuid", uuid);
         body.put("stockInType", stockInType);
@@ -224,9 +224,9 @@ public class BeanUtil {
     }
 
     //撤销 出库，调拨
-    public static PBaseInfo cancelSimilar(Context ctx, String uuid) {
+    public static PBaseInfo cancelSimilar(Merchant merchant, String uuid) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         body.put("uuid", uuid);
         pBaseInfo.setBody(body);
@@ -236,9 +236,9 @@ public class BeanUtil {
     /**
      * 获取类别列表
      */
-    public static PBaseInfo getDropdownLeafCategory(Context ctx) {
+    public static PBaseInfo getDropdownLeafCategory(Merchant merchant) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         return pBaseInfo;
     }
 
@@ -289,9 +289,9 @@ public class BeanUtil {
     /**
      * 查询库存列表
      */
-    public static PBaseInfo queryStock(Context ctx, int page, int pageSize, int defaultPageSize, String basketCode) {
+    public static PBaseInfo queryStock(Merchant merchant, int page, int pageSize, int defaultPageSize, String basketCode) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         QueryFilter queryFilter = new QueryFilter();
         queryFilter.setPage(page);
@@ -308,9 +308,9 @@ public class BeanUtil {
     /**
      * 扫描库存标签
      */
-    public static PBaseInfo scanByTraceCode(Context ctx, String traceCode, String warehouseUU) {
+    public static PBaseInfo scanByTraceCode(Merchant merchant, String traceCode, String warehouseUU) {
         PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
+        setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         if (!TextUtils.isEmpty(traceCode)) {
             body.put("traceCode", traceCode);

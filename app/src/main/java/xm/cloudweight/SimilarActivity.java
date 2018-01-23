@@ -3,6 +3,7 @@ package xm.cloudweight;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
 import com.xmzynt.storm.service.goods.GoodsCategory;
@@ -33,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,18 +47,17 @@ import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
-import xm.cloudweight.impl.CommImpl;
-import xm.cloudweight.impl.SimilarImpl;
-import xm.cloudweight.presenter.CommPresenter;
-import xm.cloudweight.presenter.SimilarPresenter;
+import xm.cloudweight.service.RequestDataService;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.ToastUtil;
+import xm.cloudweight.utils.bussiness.BuglyUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
-import xm.cloudweight.utils.dao.DBManager;
+import xm.cloudweight.utils.bussiness.MessageUtil;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
+import xm.cloudweight.utils.dao.bean.DbRequestData;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
@@ -73,11 +76,8 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  * @Description: 出库，调拨，盘点
  * @create 2017/10/25
  */
-public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDropdownLeafCategoryListener
-        , CommImpl.OnQueryStockListener
-        , SimilarImpl.OnCancelSimilarListener
-        , CommImpl.OnScanByTraceCodeListener
-        , AdapterView.OnItemSelectedListener, VideoFragment.OnInstrumentListener, OnDeleteListener {
+public class SimilarActivity extends BaseActivity implements
+        AdapterView.OnItemSelectedListener, VideoFragment.OnInstrumentListener, OnDeleteListener {
 
     public static final String KEY_TYPE = "type";
     @BindView(R.id.ll_type)
@@ -118,7 +118,6 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     private EditText mEtAccumulate;
     private View mLlAccumulate;
     private Button mBtnAccumulate;
-    private DBManager mDBManager;
     private Button mBtnStockOut;
     private Button mBtnAllocate;
     private Button mBtnInventory;
@@ -147,31 +146,29 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         TextView tvTitleStockNum = llStockNum.findViewById(R.id.tv_title);
         mTvTitleStockNumUnit = llStockNum.findViewById(R.id.tv_unit);
         tvTitleStockNum.setText("库存数");
-        mEtStockNum = (SearchAndFocusEditText) llStockNum.findViewById(R.id.ed_content);
+        mEtStockNum = llStockNum.findViewById(R.id.ed_content);
         mEtStockNum.setEnabled(false);
         mEtStockNum.setBackground(null);
-//        mEtStockNum.setTextColor(getResources().getColor(R.color.black));
         mEtStockNum.setTextSize(getResources().getDimension(R.dimen._16sp));
         View llCurrentWeight = findViewById(R.id.ll_current_weight);
         TextView tvTitleCurrentWeight = llCurrentWeight.findViewById(R.id.tv_title);
-        mEtCurrentWeight = (SearchAndFocusEditText) llCurrentWeight.findViewById(R.id.ed_content);
+        mEtCurrentWeight = llCurrentWeight.findViewById(R.id.ed_content);
         mEtCurrentWeight.setEnabled(false);
         mEtCurrentWeight.setBackground(null);
-//        mEtCurrentWeight.setTextColor(getResources().getColor(R.color.red));
         mEtCurrentWeight.setTextSize(getResources().getDimension(R.dimen._16sp));
         tvTitleCurrentWeight.setText("当前重量");
         View llLeather = findViewById(R.id.ll_buckles_leather);
         TextView tvBucklesLeather = llLeather.findViewById(R.id.tv_title);
-        mEtLeather = (SearchAndFocusEditText) llLeather.findViewById(R.id.ed_content);
+        mEtLeather = llLeather.findViewById(R.id.ed_content);
         tvBucklesLeather.setText("扣皮");
         View llDeduct = findViewById(R.id.ll_deduct_weight);
         TextView tvTitleDeductWeight = llDeduct.findViewById(R.id.tv_title);
-        mEtDeduct = (SearchAndFocusEditText) llDeduct.findViewById(R.id.ed_content);
+        mEtDeduct = llDeduct.findViewById(R.id.ed_content);
         tvTitleDeductWeight.setText("扣重");
         View llCount = findViewById(R.id.ll_count);
         TextView tvCount = llCount.findViewById(R.id.tv_title);
         mTvUnitCount = llCount.findViewById(R.id.tv_unit);
-        mEtCount = (EditText) llCount.findViewById(R.id.ed_content);
+        mEtCount = llCount.findViewById(R.id.ed_content);
 
         switch (mIntType) {
             case Common.SIMILAR_STOCKOUT:
@@ -215,7 +212,7 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                     Warehouse warehouse = mSpWareHouse.getSelectedItem();
                     if (warehouse != null && !TextUtils.isEmpty(warehouse.getUuid())) {
                         showLoadingDialog(false);
-                        CommPresenter.scanByTraceCode(getActivity(), key, warehouse.getUuid());
+                        scanByTraceCode(key, warehouse.getUuid());
                     }
                 }
             }
@@ -262,8 +259,72 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
         } else {
             ToastUtil.showShortToast(this, "未获取到仓库列表信息");
         }
-        SimilarPresenter.getDropdownLeafCategory(this);
-        CommPresenter.queryStock(this, 0, 0, 0, "");
+        getDropdownLeafCategory();
+        queryStock();
+    }
+
+    private void queryStock() {
+        try {
+            long type = RequestDataService.TYPE_SIMILAR_QUERY_STOCK;
+            Map<String, Object> params = new HashMap<>();
+            params.put(Common.PAGE_STRING, Common.PAGE);
+            params.put(Common.PAGE_SIZE_STRING, Common.PAGE_SIZE);
+            params.put(Common.DEFAULT_PAGE_SIZE_STRING, Common.DEFAULT_PAGE_SIZE);
+            params.put("basketCode", "");
+            getIRequestDataService().onGetDataListener(type, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, null));
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, message));
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getDropdownLeafCategory() {
+        try {
+            long type = RequestDataService.TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY;
+            getIRequestDataService().onGetDataListener(type, null, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, null));
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, message));
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void scanByTraceCode(String key, String uuid) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("key", key);
+            params.put("uuid", uuid);
+            getIRequestDataService().onGetDataListener(RequestDataService.TYPE_SCAN_BY_TRACE_CODE, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, null));
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, message));
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -345,9 +406,30 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
     private void requestCancel(int type, String uuid) {
         showLoadingDialog(false);
         if (!TextUtils.isEmpty(uuid)) {
-            SimilarPresenter.cancelSimilar(getActivity(), uuid, type);
+            cancelSimilar(uuid, type);
         } else {
             onCancelSuccess();
+        }
+    }
+
+    private void cancelSimilar(String uuid, int type) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("type", type);
+            params.put("uuid", uuid);
+            getIRequestDataService().onGetDataListener(RequestDataService.TYPE_SIMILAR_CANCEL, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, null));
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, message));
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
@@ -386,18 +468,6 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
                 break;
             }
         }
-    }
-
-    @Override
-    public void onCancelSimilarSuccess(String result) {
-        onCancelSuccess();
-    }
-
-    @Override
-    public void onCancelSimilarFailed(String message) {
-        dismissLoadingDialog();
-        mDbImageUpload = null;
-        ToastUtil.showShortToast(getContext(), message);
     }
 
     /**
@@ -614,76 +684,6 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             ToastUtil.showShortToast(getContext(), "请选择商品");
         }
         return false;
-    }
-
-    @Override
-    public void onGetDropdownLeafCategorySuccess(List<GoodsCategory> result) {
-        GoodsCategory category = new GoodsCategory();
-        category.setName("全部");
-        result.add(0, category);
-        mSpGoodsCategory.setList(result);
-        loadCategory = true;
-        filterList();
-    }
-
-    @Override
-    public void onGetDropdownLeafCategoryFailed(int errorType, String failString) {
-        ToastUtil.showShortToast(getContext(), failString);
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onQueryStockSuccess(PageData<Stock> result) {
-        if (result == null) {
-            dismissLoadingDialog();
-            return;
-        }
-        List<Stock> values = result.getValues();
-        if (values == null || values.size() == 0) {
-            clearContent(null);
-            dismissLoadingDialog();
-            return;
-        }
-        if (values.size() == 1) {
-            //通过扫描获取的直接设置
-            mEtTag.setText("");
-            clearContent(values.get(0));
-            setInfo();
-            dismissLoadingDialog();
-        } else {
-            mListAll.clear();
-            mListAll.addAll(values);
-            loadList = true;
-            filterList();
-        }
-    }
-
-    @Override
-    public void onQueryStockFailed(int errorType, String failString) {
-        ToastUtil.showShortToast(getContext(), failString);
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onScanByTraceCodeSuccess(List<Stock> result) {
-        dismissLoadingDialog();
-        if (result == null || result.size() == 0) {
-            ToastUtil.showShortToast(getContext(), "该库存标签没有商品");
-            mEtTag.setText("");
-            return;
-        }
-        //若有传仓库uuid则返回的list为1调或空，无不传，则返回多条或空
-        if (result.size() == 1) {
-            clearContent(result.get(0));
-            setInfo();
-        }
-    }
-
-    @Override
-    public void onScanByTraceCodeFailed(int errorType, String failString) {
-        mEtTag.setText("");
-        ToastUtil.showShortToast(getContext(), failString);
-        dismissLoadingDialog();
     }
 
     /**
@@ -966,4 +966,102 @@ public class SimilarActivity extends BaseActivity implements SimilarImpl.OnGetDr
             return null;
         }
     }
+
+    private Handler mRequestData = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            long type = MessageUtil.getType(msg);
+            if (type == RequestDataService.TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY) {
+                getDropDownLeafCategorySuccess(type);
+            } else if (type == RequestDataService.TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY_FAILED) {
+                String failString = MessageUtil.getObj(msg);
+                ToastUtil.showShortToast(getContext(), failString);
+                dismissLoadingDialog();
+            } else if (type == RequestDataService.TYPE_SIMILAR_QUERY_STOCK) {
+                queryStockSuccess(type);
+            } else if (type == RequestDataService.TYPE_SIMILAR_QUERY_STOCK_FAILED) {
+                ToastUtil.showShortToast(getContext(), MessageUtil.getObj(msg));
+                dismissLoadingDialog();
+            } else if (type == RequestDataService.TYPE_SIMILAR_CANCEL) {
+                onCancelSuccess();
+            } else if (type == RequestDataService.TYPE_SIMILAR_CANCEL_FAILED) {
+                dismissLoadingDialog();
+                mDbImageUpload = null;
+                ToastUtil.showShortToast(getContext(), MessageUtil.getObj(msg));
+            } else if (type == RequestDataService.TYPE_SCAN_BY_TRACE_CODE) {
+                scanByTraceCodeSuccess(type);
+            } else if (type == RequestDataService.TYPE_SCAN_BY_TRACE_CODE_FAILED) {
+                mEtTag.setText("");
+                ToastUtil.showShortToast(getContext(), MessageUtil.getObj(msg));
+                dismissLoadingDialog();
+            }
+            return false;
+        }
+    });
+
+    public void scanByTraceCodeSuccess(long type) {
+        List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+        String json = dbRequestData.get(0).getData();
+        List<Stock> result = GsonUtil.getGson().fromJson(json, new TypeToken<List<Stock>>() {
+        }.getType());
+        dismissLoadingDialog();
+        if (result == null || result.size() == 0) {
+            ToastUtil.showShortToast(getContext(), "该库存标签没有商品");
+            mEtTag.setText("");
+            return;
+        }
+        //若有传仓库uuid则返回的list为1调或空，无不传，则返回多条或空
+        if (result.size() == 1) {
+            clearContent(result.get(0));
+            setInfo();
+        }
+    }
+
+    private void getDropDownLeafCategorySuccess(long type) {
+        List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+        String json = dbRequestData.get(0).getData();
+        List<GoodsCategory> result = GsonUtil.getGson().fromJson(json, new TypeToken<List<GoodsCategory>>() {
+        }.getType());
+        GoodsCategory category = new GoodsCategory();
+        category.setName("全部");
+        result.add(0, category);
+        mSpGoodsCategory.setList(result);
+        loadCategory = true;
+        filterList();
+    }
+
+    public void queryStockSuccess(long type) {
+        try {
+            List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+            String json = dbRequestData.get(0).getData();
+            PageData<Stock> result = GsonUtil.getGson().fromJson(json, new TypeToken<PageData<Stock>>() {
+            }.getType());
+            if (result == null) {
+                dismissLoadingDialog();
+                return;
+            }
+            List<Stock> values = result.getValues();
+            if (values == null || values.size() == 0) {
+                clearContent(null);
+                dismissLoadingDialog();
+                return;
+            }
+            if (values.size() == 1) {
+                //通过扫描获取的直接设置
+                mEtTag.setText("");
+                clearContent(values.get(0));
+                setInfo();
+                dismissLoadingDialog();
+            } else {
+                mListAll.clear();
+                mListAll.addAll(values);
+                loadList = true;
+                filterList();
+            }
+        } catch (Exception e) {
+            BuglyUtil.uploadCrash(e);
+        }
+    }
+
 }
