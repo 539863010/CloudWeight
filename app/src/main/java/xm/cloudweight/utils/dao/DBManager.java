@@ -2,9 +2,7 @@ package xm.cloudweight.utils.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import xm.cloudweight.comm.Common;
@@ -52,11 +50,11 @@ public class DBManager {
     /**
      * 插入上传图片DbImageUpload
      */
-    public void insertDbImageUpload(DbImageUpload photo) {
+    public void insertDbImageUpload(DbImageUpload dbImageUpload) {
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         DbImageUploadDao dao = daoSession.getDbImageUploadDao();
-        dao.insert(photo);
+        dao.insert(dbImageUpload);
     }
 
     /**
@@ -103,37 +101,11 @@ public class DBManager {
                 .list();
     }
 
-    /**
-     * 获取数据库中  未成功 保存图片 的列表
-     * //url不为空且（StockInUuid 或 StockOutUuid）不为空，请求保存图片接口
-     */
-    public List<DbImageUpload> getDbListUnSaveImage() {
-        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
-        DaoSession daoSession = daoMaster.newSession();
-        List<DbImageUpload> list = daoSession.getDbImageUploadDao()
-                .queryBuilder()
-                .where(DbImageUploadDao.Properties.ImageUrl.isNotNull())
-                .whereOr(DbImageUploadDao.Properties.StockInUuid.isNotNull(),
-                        DbImageUploadDao.Properties.StockOutUuid.isNotNull())
-                .list();
-        List<DbImageUpload> newList = new ArrayList<>();
-        for (DbImageUpload dbImageUpload : list) {
-            //已分拣成功的没有删除本地（用于本历史显示）， 以下代码为过滤掉上传分拣接口成功的数据
-            boolean noSortOut = !(dbImageUpload.getType() == Common.DbType.TYPE_SORT_OUT_STORE_OUT && dbImageUpload.getIsUploadStockOutImage());
-            //未保存的
-            boolean isSaveIn = !TextUtils.isEmpty(dbImageUpload.getStockInUuid()) && !dbImageUpload.getIsUploadStockInImage();
-            boolean isSaveOut = !TextUtils.isEmpty(dbImageUpload.getStockOutUuid()) && !dbImageUpload.getIsUploadStockOutImage();
-            if (noSortOut && (isSaveIn || isSaveOut)) {
-                newList.add(dbImageUpload);
-            }
-        }
-        return newList;
-    }
 
     /**
      * 获取数据库中  分拣历史
      */
-    public List<DbImageUpload> getDbListSortOutStoreOutHistory(String date) {
+    public List<DbImageUpload> getDbListSortOutStoreOutAll(String date) {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         return daoSession.getDbImageUploadDao()
