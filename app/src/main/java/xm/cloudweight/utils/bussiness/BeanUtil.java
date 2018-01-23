@@ -78,9 +78,9 @@ public class BeanUtil {
     /**
      * 获取经办人
      */
-    public static PBaseInfo getDropdownOperator(Context ctx, int page, int pageSize, int defaultPageSize) {
+    public static PBaseInfo getDropdownOperator(Merchant merchant, int page, int pageSize, int defaultPageSize) {
         PBaseInfo p = new PBaseInfo();
-        setBaseInfo(ctx, p);
+        setMerchantInfo(p, merchant);
         Map<String, Object> body = p.getBody();
         QueryFilter queryFilter = new QueryFilter();
         queryFilter.setPage(page);
@@ -96,9 +96,9 @@ public class BeanUtil {
     /**
      * 分页查询采购订单
      */
-    public static PBaseInfo queryPurchaseData(Context ctx, int page, int pageSize, int defaultPageSize, String deliveryTime) {
+    public static PBaseInfo queryPurchaseData(Merchant merchant, int page, int pageSize, int defaultPageSize, String deliveryTime) {
         PBaseInfo p = new PBaseInfo();
-        setBaseInfo(ctx, p);
+        setMerchantInfo(p, merchant);
         Map<String, Object> body = p.getBody();
         QueryFilter queryFilter = new QueryFilter();
         queryFilter.setPage(page);

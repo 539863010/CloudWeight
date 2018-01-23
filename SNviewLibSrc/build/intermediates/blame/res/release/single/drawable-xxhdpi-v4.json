@@ -4,6 +4,14 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\left_up.png"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\left_down.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\left_down.png"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\up.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\up.png"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\right.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\right.png"
     },
@@ -20,6 +28,10 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\right_down.png"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\left_up.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\left_up.png"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\right_up.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\right_up.png"
     },
@@ -28,11 +40,35 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\right.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\right.png"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\right_down.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\right_down.png"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\left_down.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\left_down.png"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\ic_launcher.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\ic_launcher.png"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\up.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\up.png"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\down.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\down.png"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\right_up.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\right_up.png"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable-xxhdpi-v4\\left.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xxhdpi\\left.png"
     }
 ]

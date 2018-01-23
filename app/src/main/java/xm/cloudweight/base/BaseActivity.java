@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.xmzynt.storm.service.user.merchant.Merchant;
+import com.xmzynt.storm.util.GsonUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -30,6 +32,8 @@ import xm.cloudweight.api.ApiManager;
 import xm.cloudweight.app.App;
 import xm.cloudweight.camera.instrument.Instrument;
 import xm.cloudweight.utils.LogUtils;
+import xm.cloudweight.utils.bussiness.LocalSpUtil;
+import xm.cloudweight.utils.bussiness.RefreshMerchantHelper;
 import xm.cloudweight.utils.bussiness.ScaleUtil;
 import xm.cloudweight.utils.connect.NetBroadcastReceiver;
 import xm.cloudweight.utils.connect.NetUtil;
@@ -69,6 +73,13 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
             mNetWorkEvent = this;
             inspectNet();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Merchant merchant = LocalSpUtil.getMerchant(this);
+        RefreshMerchantHelper.send(this, GsonUtil.getGson().toJson(merchant));
     }
 
     @Override

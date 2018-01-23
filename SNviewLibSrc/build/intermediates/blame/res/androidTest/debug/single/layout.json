@@ -212,12 +212,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\update_notice_dialog.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\alarm_accounts_add_activity.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\alarm_accounts_add_activity.xml"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\system_setting_cloudaccount_setting_activity_another.xml",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\system_setting_cloudaccount_setting_activity_another.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\alarm_accounts_add_activity.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\alarm_accounts_add_activity.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\alarm_user_notifyadapter_item.xml",
@@ -320,24 +320,24 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\images_listview_thumbnail_item_layout.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\system_setting_cloudaccount_set_activity.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\system_setting_cloudaccount_set_activity.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\playback_live_view_item.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\playback_live_view_item.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\system_setting_cloudaccount_set_activity.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\system_setting_cloudaccount_set_activity.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\surfaceview_multi_layout.xml",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\surfaceview_multi_layout.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\alarm_accounts_edit_activity.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\alarm_accounts_edit_activity.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\alarm_contents_layout.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\alarm_contents_layout.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\alarm_accounts_edit_activity.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\bundles\\debug\\res\\layout\\alarm_accounts_edit_activity.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\arrow_add_focallength.xml",

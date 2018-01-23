@@ -10,5 +10,17 @@
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\menu\\demo.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\menu\\demo.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\menu\\main.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\menu\\main.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\menu\\device_choose_menu.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\menu\\device_choose_menu.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\menu\\demo.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\menu\\demo.xml"
     }
 ]

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
 import com.xmzynt.storm.service.purchase.PurchaseBillLine;
@@ -47,6 +49,7 @@ import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.impl.CheckInImpl;
 import xm.cloudweight.presenter.CheckInPresenter;
+import xm.cloudweight.service.RequestDataService;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.KeyBoardUtils;
@@ -55,11 +58,13 @@ import xm.cloudweight.utils.bussiness.CrossAllocateUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
+import xm.cloudweight.utils.bussiness.MessageUtil;
 import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.DBManager;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
+import xm.cloudweight.utils.dao.bean.DbRequestData;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
@@ -72,6 +77,7 @@ import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
 import static java.math.BigDecimal.ROUND_HALF_EVEN;
+import static xm.cloudweight.service.RequestDataService.TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR;
 
 /**
  * @author wyh
@@ -79,9 +85,7 @@ import static java.math.BigDecimal.ROUND_HALF_EVEN;
  * @create 2017/10/30
  */
 public class CheckInActivity extends BaseActivity implements
-        CheckInImpl.OnQueryPurchaseDataListener,
         CheckInImpl.OnCancelStockInListener,
-        CheckInImpl.OnGetDropdownOperatorListener,
         Spinner.OnItemSelectedListener, VideoFragment.OnInstrumentListener, OnDeleteListener {
 
     private static final String DEFAULT_SPINNER_WAREHOURE = "采购入库仓库";
@@ -388,7 +392,34 @@ public class CheckInActivity extends BaseActivity implements
 
         showLoadingDialog(true);
         getWareHouseList();
-        CheckInPresenter.getDropdownOperator(this, 0, 0, 0);
+
+        getDropdownOperator();
+
+    }
+
+    private void getDropdownOperator() {
+        long type = TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR;
+        Map<String, Integer> params = new HashMap<>();
+        params.put(Common.PAGE_STRING, Common.PAGE);
+        params.put(Common.PAGE_SIZE_STRING, Common.PAGE_SIZE);
+        params.put(Common.DEFAULT_PAGE_SIZE_STRING, Common.DEFAULT_PAGE_SIZE);
+        try {
+            getIRequestDataService().onGetDataListener(type, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    Message message = MessageUtil.create(type, null);
+                    mRequestData.sendMessage(message);
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    Message msg = MessageUtil.create(type, message);
+                    mRequestData.sendMessage(msg);
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getWareHouseList() {
@@ -404,6 +435,113 @@ public class CheckInActivity extends BaseActivity implements
         } else {
             mSpWareHouse.setList(listWareHouse);
         }
+    }
+
+    private Handler mRequestData = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            long type = MessageUtil.getType(msg);
+            if (type == RequestDataService.TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR) {
+                getDropDownOperatorSuccess(type);
+            } else if (type == RequestDataService.TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR_FAILED) {
+                getDropDownOperatorFailed(msg);
+            } else if (type == RequestDataService.TYPE_CHECK_IN_QUERY_PURCHASE_DATA) {
+                queryPurchaseDataSuccess(type);
+            } else if (type == RequestDataService.TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED) {
+                queryPurchaseDataFailed(msg);
+            }
+            return false;
+        }
+    });
+
+    private void getDropDownOperatorSuccess(long type) {
+        List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+        String data = dbRequestData.get(0).getData();
+        List<IdName> result = GsonUtil.getGson().fromJson(data, new TypeToken<List<IdName>>() {
+        }.getType());
+        List<IdName> listOperator = new ArrayList<>();
+        listOperator.add(new IdName("", DEFAULT_SPINNER_OPERATOR));
+        if (result != null && result.size() > 0) {
+            listOperator.addAll(result);
+        }
+        mSpOperator.setList(listOperator);
+        queryPurchaseData();
+    }
+
+    private void getDropDownOperatorFailed(Message msg) {
+        String failedMsg = MessageUtil.getObj(msg);
+        mSpOperator.setList(new ArrayList<IdName>());
+        ToastUtil.showShortToast(getContext(), failedMsg);
+        dismissLoadingDialog();
+    }
+
+    private void queryPurchaseDataSuccess(long type) {
+        List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+        List<PurchaseData> data = GsonUtil.getGson().fromJson(dbRequestData.get(0).getData(), new TypeToken<List<PurchaseData>>() {
+        }.getType());
+        if (data != null && data.size() > 0) {
+            List<String> mListSuppliers = new ArrayList<>();
+            mListSuppliers.add(DEFAULT_SPINNER_SUPPLIER);
+            int size = data.size();
+            for (int i = 0; i < size; i++) {
+                IdName supplier = data.get(i).getSupplier();
+                if (supplier == null) continue;
+                String supplierName = supplier.getName();
+                if (!mListSuppliers.contains(supplierName)) {
+                    mListSuppliers.add(supplierName);
+                }
+            }
+            mSpSupplier.setList(mListSuppliers);
+            mListAll.clear();
+            mListAll.addAll(data);
+            filterList();
+        } else {
+            mListAll.clear();
+            mListShow.clear();
+            mAdapterPurchase.notifyDataSetChanged();
+            mPurchaseData = null;
+            mPurchaseBillLine = null;
+        }
+        dismissLoadingDialog();
+    }
+
+    private void queryPurchaseDataFailed(Message msg) {
+        String message = MessageUtil.getObj(msg);
+        //清空list跟供应商下拉数据
+        mSpSupplier.setList(new ArrayList<String>());
+        mListShow.clear();
+        mAdapterPurchase.notifyDataSetChanged();
+        ToastUtil.showShortToast(getContext(), message);
+        dismissLoadingDialog();
+    }
+
+    private void queryPurchaseData() {
+        String currentData = mBtnDate.getText().toString().trim();
+        long type = RequestDataService.TYPE_CHECK_IN_QUERY_PURCHASE_DATA;
+        Map<String, Object> params = new HashMap<>();
+        params.put(Common.PAGE_STRING, Common.PAGE);
+        params.put(Common.PAGE_SIZE_STRING, Common.PAGE_SIZE);
+        params.put(Common.DEFAULT_PAGE_SIZE_STRING, Common.DEFAULT_PAGE_SIZE);
+        params.put("DATE", currentData);
+        try {
+            getIRequestDataService().onGetDataListener(type, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    Message message = MessageUtil.create(type, null);
+                    mRequestData.sendMessage(message);
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    Message failedMsg = MessageUtil.create(type, message);
+                    mRequestData.sendMessage(failedMsg);
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -698,7 +836,8 @@ public class CheckInActivity extends BaseActivity implements
             showLoadingDialog(false);
 
             clearGoodsList();
-            CheckInPresenter.queryPurchaseData(getActivity(), 0, 0, 0, date);
+
+            queryPurchaseData();
         }
     };
 
@@ -1033,63 +1172,6 @@ public class CheckInActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    public void onQueryPurchaseDataSuccess(List<PurchaseData> data) {
-        if (data != null && data.size() > 0) {
-            List<String> mListSuppliers = new ArrayList<>();
-            mListSuppliers.add(DEFAULT_SPINNER_SUPPLIER);
-            int size = data.size();
-            for (int i = 0; i < size; i++) {
-                IdName supplier = data.get(i).getSupplier();
-                String supplierName = supplier.getName();
-                if (!mListSuppliers.contains(supplierName)) {
-                    mListSuppliers.add(supplierName);
-                }
-            }
-            mSpSupplier.setList(mListSuppliers);
-            mListAll.clear();
-            mListAll.addAll(data);
-            filterList();
-        } else {
-            mListAll.clear();
-            mListShow.clear();
-            mAdapterPurchase.notifyDataSetChanged();
-            mPurchaseData = null;
-            mPurchaseBillLine = null;
-        }
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onQueryPurchaseDataFailed(String message) {
-        //清空list跟供应商下拉数据
-        mSpSupplier.setList(new ArrayList<String>());
-        mListShow.clear();
-        mAdapterPurchase.notifyDataSetChanged();
-        ToastUtil.showShortToast(getContext(), message);
-        dismissLoadingDialog();
-    }
-
-    @Override
-    public void onGetDropdownOperatorSuccess(List<IdName> result) {
-        List<IdName> listOperator = new ArrayList<>();
-        listOperator.add(new IdName("", DEFAULT_SPINNER_OPERATOR));
-        if (result != null && result.size() > 0) {
-            listOperator.addAll(result);
-        }
-        mSpOperator.setList(listOperator);
-
-        //请求列表数据
-        String currentData = mBtnDate.getText().toString().trim();
-        CheckInPresenter.queryPurchaseData(this, 0, 0, 0, currentData);
-    }
-
-    @Override
-    public void onGetDropdownOperatorFailed(String message) {
-        mSpOperator.setList(new ArrayList<IdName>());
-        ToastUtil.showShortToast(getContext(), message);
-        dismissLoadingDialog();
-    }
 
     /**
      * 入库，越库接口请求成功后刷新数据

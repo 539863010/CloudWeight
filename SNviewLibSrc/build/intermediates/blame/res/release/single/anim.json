@@ -1,13 +1,5 @@
 [
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_right_0.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_right_0.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_left.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_left.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\popup_exit.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\popup_exit.xml"
     },
@@ -20,8 +12,8 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\video_sliding_left.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_down_in.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_down_in.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_right_in.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_right_in.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_right_in.xml",
@@ -32,8 +24,68 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\out_to_left.xml"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\popup_exit.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\popup_exit.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\left_out.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\left_out.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\video_switch.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\video_switch.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_right.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_right.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_right.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_right.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_right_out.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_right_out.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\right_out.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\right_out.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\video_switch.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\video_switch.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_right_0.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_right_0.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_left.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_left.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\left_in.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\left_in.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_down_in.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_down_in.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_left_out.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_left_out.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\popup_enter.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\popup_enter.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_right_0.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_right_0.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\right_in.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\right_in.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\right_out.xml",
@@ -42,6 +94,22 @@
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_left_out.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_left_out.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\video_sliding_left.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\video_sliding_left.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\shot_picture.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\shot_picture.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_down_in.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_down_in.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_left_in.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_left_in.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\out_to_right.xml",
@@ -56,12 +124,16 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\left_out.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_right.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_right.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\out_to_left.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\out_to_left.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_right_out.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_right_out.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\out_to_right.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\out_to_right.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\shot_picture.xml",
@@ -76,7 +148,15 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_left_in.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\video_switch.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\video_switch.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\in_from_left.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\in_from_left.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\popup_enter.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\popup_enter.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\anim\\push_down_out.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\anim\\push_down_out.xml"
     }
 ]

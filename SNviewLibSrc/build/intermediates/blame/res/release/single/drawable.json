@@ -1,7 +1,11 @@
 [
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_fluency_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_fluency_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_liveview_quality_custom_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_custom_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pager_bar_next_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pager_bar_next_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\time_edittext_shape_selected.xml",
@@ -12,20 +16,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_clear_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\time_edittext_shape.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\time_edittext_shape.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\imagepreview_deletebtn_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\imagepreview_deletebtn_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_record_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_record_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_savebtn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_savebtn_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toggle_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toggle_btn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pager_bar_previous_bitmap.xml",
@@ -36,32 +32,56 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_ptz_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_preset_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_preset_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_left_down_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_left_down_list.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_voicetalk_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_voicetalk_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\update_cancel_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\update_cancel_btn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_right_arrow_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_right_arrow_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarmuser_container_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarmuser_container_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\liveview_view_refresh_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\liveview_view_refresh_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\md__list_selector_background_transition_holo_dark.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\md__list_selector_background_transition_holo_dark.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_right_arrow_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_right_arrow_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_sound_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_sound_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_savebtn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_savebtn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_back_btn_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_back_btn_selector.xml"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_bottom_copy.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_bottom_copy.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_bar_back_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_bar_back_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_list_item_arrow_btn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_list_item_arrow_btn_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_capture_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_capture_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_pause_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_pause_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarm_right_back.xml",
@@ -72,36 +92,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_pause_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\list_item_divider.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\list_item_divider.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_round_button.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_round_button.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_focus_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_focus_selector.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_check_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_check_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_enlarge_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_enlarge_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_up_list.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_up_list.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_del_btn_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_del_btn_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\liveview_view_refresh_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\liveview_view_refresh_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round.xml",
@@ -112,24 +108,28 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_quality_button_bg_selector.xml"
     },
     {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_text_color_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_text_color_selector.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_focus_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_focus_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_text_color_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_text_color_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_pageindicator_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_pageindicator_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_auto_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_auto_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_sound_off_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_sound_off_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_seekbar_style.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_seekbar_style.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_bottom_copy.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_bottom_copy.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_focal_length_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_focal_length_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_shape_copy.xml",
@@ -144,6 +144,10 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarmuser_container_pressed.xml"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_delete_all_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_delete_all_selector.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_selector.xml"
     },
@@ -156,44 +160,52 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_scan_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_copy.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_copy.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_sound_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_sound_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_high_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_high_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_alarm_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_alarm_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_pause_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_pause_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_device_channel_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_device_channel_btn_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_save_btn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_save_btn_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_capture_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_capture_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_fluency_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_fluency_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_channel_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_channel_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_down_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_down_list.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_edit_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_edit_btn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toggle_btn_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toggle_btn_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\corner_shape_layout.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\corner_shape_layout.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_playback_cut_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_playback_cut_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_microphone_stop_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_microphone_stop_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pager_bar_previous_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pager_bar_previous_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_manager_imagepreview_back_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_manager_imagepreview_back_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_liveview_quality_fluent_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_fluent_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_left_list.xml",
@@ -204,56 +216,80 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_custom_selector.xml"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_selector.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\menu_drawer_item_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\menu_drawer_item_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\playback_timesetting_type_all_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\playback_timesetting_type_all_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_pop_frame_decrease_btn_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_pop_frame_decrease_btn_selector.xml"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\wheel_bg.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\wheel_bg.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_add_btn_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_add_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigationbar_menu_button_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigationbar_menu_button_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_list_item_divider.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_list_item_divider.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_microphone_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_microphone_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_focal_length_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_focal_length_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_quality_button_bg_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_quality_button_bg_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_video_record_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_video_record_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_seekbar_thumb.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_seekbar_thumb.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_aperture_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_aperture_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_scan_edit_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_scan_edit_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_status_btn.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_status_btn.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_seekbar_thumb.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_seekbar_thumb.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarmuser_container_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarmuser_container_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_alarm_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_alarm_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\corner_shape_layout.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\corner_shape_layout.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_list_item_divider.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_list_item_divider.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pager_bar_previous_bitmap.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pager_bar_previous_bitmap.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_record_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_record_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_capture_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_capture_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_auto_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_auto_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_list_item_arrow_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_list_item_arrow_btn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_alarm_selector.xml",
@@ -264,56 +300,44 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_left_down_list.xml"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_ptz_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_ptz_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\time_edittext_shape_selected.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\time_edittext_shape_selected.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_top_copy.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_top_copy.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_slide_delete_contact_listitem.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_slide_delete_contact_listitem.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_high_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_high_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_down_arrow_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_down_arrow_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\update_cancel_btn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\update_cancel_btn_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_left_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_left_list.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\md__list_selector_holo_dark.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\md__list_selector_holo_dark.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_device_channel_btn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_device_channel_btn_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_custom_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_custom_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_fluency_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_fluency_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_standard_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_standard_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_standard_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_standard_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_standard_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_standard_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_aperture_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_aperture_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_left_up_list.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_left_up_list.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigationbar_menu_button_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigationbar_menu_button_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_search_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_search_btn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_pageindicator_selector.xml",
@@ -328,52 +352,44 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_shape.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_pushset_info_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_pushset_info_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_pause_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_pause_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_voicetalk_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_voicetalk_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_text_color_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_text_color_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_stop_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_stop_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_seekbar_style.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_seekbar_style.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_delete_all_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_delete_all_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_sound_off_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_sound_off_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_play_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_play_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_bar_back_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_bar_back_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarm_right_back.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarm_right_back.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pushset_save_btn_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pushset_save_btn_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_scan_edit_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_scan_edit_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_preview_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_preview_selector.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarmuser_container_nomal.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarmuser_container_nomal.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pager_bar_previous_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pager_bar_previous_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\list_item_divider.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\list_item_divider.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\seekbar_style.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\seekbar_style.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_video_cut_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_video_cut_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_aperture_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_aperture_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pushset_clear_btn_selector.xml",
@@ -384,48 +400,44 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_menu_btn_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_custom_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_custom_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_sound_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_sound_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_del_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_del_btn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pager_bar_next_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pager_bar_next_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\wheel_bg.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\wheel_bg.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_microphone_stop_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_microphone_stop_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_check_long_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_check_long_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_bottom.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_bottom.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_edit_btn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_edit_btn_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_high_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_high_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_check_long_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_check_long_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarmuser_container_nomal.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarmuser_container_nomal.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_liveview_quality_clear_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_clear_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_liveview_quality_balance_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_balance_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_right_up_list.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_right_up_list.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_quality_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_quality_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarm_list_item_divider.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarm_list_item_divider.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_top.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_top.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_pop_frame_increase_btn_selector.xml",
@@ -436,8 +448,16 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_presetbtn_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_channel_btn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_channel_btn_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_preset_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_preset_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_back_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_back_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_top.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_top.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_down_list.xml",
@@ -448,12 +468,16 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_capture_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_aperture_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_aperture_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_right_down_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_right_down_list.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_focal_length_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_focal_length_selector.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\md__list_selector_holo_dark.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\md__list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_aperture_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_aperture_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_listview_shape.xml",
@@ -468,28 +492,500 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_take_picture_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_search_btn_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_search_btn_selector.xml"
-    },
-    {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_bottom.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_bottom.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_take_picture_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_take_picture_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_playback_cut_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_playback_cut_selector.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_sound_selector.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_sound_selector.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_pause_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_pause_selector.xml"
     },
     {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_listview_shape.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_listview_shape.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pushset_save_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pushset_save_btn_selector.xml"
+    },
+    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_preset_point_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_preset_point_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_left_up_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_left_up_list.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_fluency_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_fluency_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_fluency_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_fluency_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\time_edittext_shape.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\time_edittext_shape.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_record_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_record_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_savebtn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_savebtn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_high_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_high_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_shape_copy.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_shape_copy.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_microphone_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_microphone_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_status_btn.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_status_btn.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_preset_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_preset_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarmuser_container_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarmuser_container_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\md__list_selector_background_transition_holo_dark.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\md__list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_liveview_quality_fluent_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_fluent_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_add_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_add_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_list_item_arrow_btn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_list_item_arrow_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_focus_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_focus_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_round_button.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_round_button.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\list_item_divider.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\list_item_divider.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_enlarge_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_enlarge_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_up_list.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_up_list.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\liveview_view_refresh_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\liveview_view_refresh_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_video_cut_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_video_cut_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\time_edittext_shape.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\time_edittext_shape.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\menu_drawer_item_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\menu_drawer_item_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_seekbar_style.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_seekbar_style.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_bottom_copy.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_bottom_copy.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_sound_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_sound_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_preset_point_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_preset_point_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_copy.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_copy.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_high_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_high_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\md__list_selector_background_transition_holo_dark.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\md__list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_standard_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_standard_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_pause_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_pause_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_save_btn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_save_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\corner_shape_layout.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\corner_shape_layout.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_down_arrow_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_down_arrow_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_play_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_play_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_microphone_stop_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_microphone_stop_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_liveview_quality_fluent_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_fluent_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_pop_frame_increase_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_pop_frame_increase_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_preview_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_preview_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\imagepreview_deletebtn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\imagepreview_deletebtn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_scan_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_scan_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_focal_length_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_focal_length_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_video_record_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_video_record_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_aperture_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_aperture_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_custom_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_custom_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_seekbar_thumb.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_seekbar_thumb.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_alarm_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_alarm_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_custom_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_custom_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_right_up_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_right_up_list.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_pause_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_pause_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_list_item_divider.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_list_item_divider.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_auto_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_auto_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarm_list_item_divider.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarm_list_item_divider.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_copy.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_copy.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_slide_delete_contact_listitem.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_slide_delete_contact_listitem.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_high_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_high_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\update_cancel_btn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\update_cancel_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_round_button.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_round_button.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_enlarge_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_enlarge_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_device_channel_btn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_device_channel_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_sound_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_sound_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_custom_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_custom_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_fluency_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_fluency_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_standard_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_standard_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigationbar_menu_button_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigationbar_menu_button_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_left_up_list.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_left_up_list.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_menu_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_menu_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_pushset_info_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_pushset_info_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_voicetalk_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_voicetalk_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_focus_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_focus_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_stop_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_stop_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_delete_all_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_delete_all_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_shape.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_shape.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_play_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_play_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_scan_edit_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_scan_edit_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_preview_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\channel_listview_preview_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\seekbar_style.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\seekbar_style.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pager_bar_previous_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pager_bar_previous_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\seekbar_style.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\seekbar_style.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_video_cut_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_video_cut_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_liveview_quality_balance_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_liveview_quality_balance_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_up_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_up_list.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_presetbtn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_presetbtn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_pop_frame_decrease_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_pop_frame_decrease_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_video_record_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_video_record_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_quality_menu_custom_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_quality_menu_custom_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_sound_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_sound_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\pushset_clear_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\pushset_clear_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\wheel_bg.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\wheel_bg.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_save_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_save_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_check_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_check_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\search_edittext_shape.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\search_edittext_shape.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_quality_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_quality_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\button_check_long_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\button_check_long_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_right_list.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_right_list.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_edit_btn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_edit_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_right_up_list.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_right_up_list.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarm_list_item_divider.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarm_list_item_divider.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_top.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_top.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_slide_delete_contact_listitem.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_slide_delete_contact_listitem.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_channel_btn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_channel_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_ptz_focal_length_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_focal_length_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_pushset_info_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_pushset_info_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_manager_imagepreview_back_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_manager_imagepreview_back_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toolbar_stop_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\toolbar_stop_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_top_copy.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_top_copy.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\wheel_val.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\wheel_val.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_focal_length_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_focal_length_selector.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_search_btn_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_search_btn_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_controlbar_menu_focus_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\ptz_controlbar_menu_focus_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_alarm_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_alarm_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\alarmuser_container_pressed.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\alarmuser_container_pressed.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\system_setting_cornerlistview_round_bottom.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\system_setting_cornerlistview_round_bottom.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\landscape_sound_selector.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_sound_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\playback_timesetting_type_all_selector.xml",

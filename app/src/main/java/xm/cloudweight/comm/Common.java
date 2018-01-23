@@ -15,6 +15,13 @@ public class Common {
     public static final String USER_IDENTITY = "merchant";
     public static final String MACHINE_NUM = "001";
 
+    public static final int DEFAULT_PAGE_SIZE = 0;
+    public static final String DEFAULT_PAGE_SIZE_STRING = "DEFAULT_PAGE_SIZE";
+    public static final int PAGE_SIZE = 0;
+    public static final String PAGE_SIZE_STRING = "PAGE_SIZE";
+    public static final int PAGE = 0;
+    public static final String PAGE_STRING = "PAGE";
+
     public interface DbType {
         /**
          * 验收-入库

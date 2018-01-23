@@ -3,7 +3,6 @@ package xm.cloudweight;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
@@ -61,6 +60,7 @@ import xm.cloudweight.utils.bussiness.FilterUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.ListComparator;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
+import xm.cloudweight.utils.bussiness.MessageUtil;
 import xm.cloudweight.utils.bussiness.PrinterSortOut;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
@@ -93,9 +93,6 @@ public class SortOutActivity extends BaseActivity implements
 
     public static final int TYPE_WEIGHT = 0;
     public static final int TYPE_COUNT = 1;
-    public static final int DEFAULT_PAGE_SIZE = 0;
-    public static final int PAGE_SIZE = 0;
-    public static final int PAGE = 0;
     public static final int UPLOAD_PAGE_SIZE = 50;
 
     @BindView(R.id.btn_sort_out_history)
@@ -454,10 +451,9 @@ public class SortOutActivity extends BaseActivity implements
     private void requestListWeight(String time) {
         try {
             HashMap<String, Object> params = new HashMap<>();
-            params.put("TYPE", TYPE_WEIGHT);
-            params.put("PAGE", PAGE);
-            params.put("PAGE_SIZE", PAGE_SIZE);
-            params.put("DEFAULT_PAGE_SIZE", DEFAULT_PAGE_SIZE);
+            params.put(Common.PAGE_STRING, Common.PAGE);
+            params.put(Common.PAGE_SIZE_STRING, Common.PAGE_SIZE);
+            params.put(Common.DEFAULT_PAGE_SIZE_STRING, Common.DEFAULT_PAGE_SIZE);
             params.put("DATE", time);
             getIRequestDataService().onGetDataListener(
                     RequestDataService.TYPE_SORT_OUT_WEIGHT,
@@ -465,13 +461,13 @@ public class SortOutActivity extends BaseActivity implements
                     new OnRequestDataListener.Stub() {
                         @Override
                         public void onReceive(long type) throws RemoteException {
-                            Message msg = createMessage(type, null);
+                            Message msg = MessageUtil.create(type, null);
                             mRequestData.sendMessage(msg);
                         }
 
                         @Override
                         public void onError(long type, String message) throws RemoteException {
-                            mRequestData.sendMessage(createMessage(type, message));
+                            mRequestData.sendMessage(MessageUtil.create(type, message));
                         }
 
                     }
@@ -484,10 +480,9 @@ public class SortOutActivity extends BaseActivity implements
     private void requestListCount(String time) {
         try {
             HashMap<String, Object> params = new HashMap<>();
-            params.put("TYPE", TYPE_COUNT);
-            params.put("PAGE", PAGE);
-            params.put("PAGE_SIZE", PAGE_SIZE);
-            params.put("DEFAULT_PAGE_SIZE", DEFAULT_PAGE_SIZE);
+            params.put(Common.PAGE_STRING, Common.PAGE);
+            params.put(Common.PAGE_SIZE_STRING, Common.PAGE_SIZE);
+            params.put(Common.DEFAULT_PAGE_SIZE_STRING, Common.DEFAULT_PAGE_SIZE);
             params.put("DATE", time);
             getIRequestDataService().onGetDataListener(
                     RequestDataService.TYPE_SORT_OUT_COUNT,
@@ -495,13 +490,13 @@ public class SortOutActivity extends BaseActivity implements
                     new OnRequestDataListener.Stub() {
                         @Override
                         public void onReceive(long type) throws RemoteException {
-                            Message msg = createMessage(type, null);
+                            Message msg = MessageUtil.create(type, null);
                             mRequestData.sendMessage(msg);
                         }
 
                         @Override
                         public void onError(long type, String message) throws RemoteException {
-                            mRequestData.sendMessage(createMessage(type, message));
+                            mRequestData.sendMessage(MessageUtil.create(type, message));
                         }
 
                     }
@@ -543,8 +538,7 @@ public class SortOutActivity extends BaseActivity implements
 
         @Override
         public boolean handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            long type = bundle.getLong("Type");
+            long type = MessageUtil.getType(msg);
             if (type == RequestDataService.TYPE_SORT_OUT_WEIGHT) {
                 List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
                 String data = dbRequestData.get(0).getData();
@@ -842,13 +836,13 @@ public class SortOutActivity extends BaseActivity implements
             getIRequestDataService().onGetDataListener(type, param, new OnRequestDataListener.Stub() {
                 @Override
                 public void onReceive(long type) throws RemoteException {
-                    Message msg = createMessage(type, null);
+                    Message msg = MessageUtil.create(type, null);
                     mRequestData.sendMessage(msg);
                 }
 
                 @Override
                 public void onError(long type, String message) throws RemoteException {
-                    Message msg = createMessage(type, message);
+                    Message msg = MessageUtil.create(type, message);
                     mRequestData.sendMessage(msg);
                 }
 
@@ -859,16 +853,6 @@ public class SortOutActivity extends BaseActivity implements
 
     }
 
-    private Message createMessage(long type, Object o) {
-        Message msg = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putLong("Type", type);
-        msg.setData(bundle);
-        if (o != null) {
-            msg.obj = o;
-        }
-        return msg;
-    }
 
     private void onCancelSuccess(DbImageUpload dbImageUpload) {
         //先刷新后删除数据库
