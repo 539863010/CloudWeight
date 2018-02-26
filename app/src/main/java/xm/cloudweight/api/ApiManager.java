@@ -8,6 +8,7 @@ import com.xmzynt.storm.service.user.customer.CustomerLevel;
 import com.xmzynt.storm.service.user.customer.MerchantCustomer;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.user.supplier.Supplier;
+import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
 import com.xmzynt.storm.service.wms.stock.Stock;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 import com.xmzynt.storm.util.query.PageData;
@@ -287,5 +288,16 @@ public interface ApiManager {
      */
     @POST("/merchant/pda/purchase/getDropdownOperator.do")
     Observable<ResponseEntity<List<IdName>>> getDropdownOperator(@Body PBaseInfo p);
+
+    /**
+     * 查询待验收数据（调拨验收）
+     *
+     * @param p 查询待验收数据请求体
+     * @return Observable<ResponseEntity>
+     */
+    @POST("/merchant/scaleApi/queryNotAcceptData.do")
+    Observable<ResponseEntity<List<AllocateRecord>>> queryNotAcceptData(@Body PBaseInfo p);
+
+
 
 }

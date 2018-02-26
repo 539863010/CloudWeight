@@ -124,6 +124,30 @@ public class BeanUtil {
     }
 
     /**
+     * 获取仓库列表
+     */
+    public static PBaseInfo getWareHouseCheck(Merchant merchant) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("type", "check");
+        return pBaseInfo;
+    }
+
+    /**
+     * 获取仓库列表
+     */
+    public static PBaseInfo queryNotAcceptData(Merchant merchant, String date, String status, String inWarehouseUuid) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("date", date);
+        body.put("status", status);
+        body.put("inWarehouseUuid", inWarehouseUuid);
+        return pBaseInfo;
+    }
+
+    /**
      * 查询客户列表
      */
     public static PBaseInfo getMerchantCustomer(Context ctx, int page, int pageSize, int defaultPageSize) {

@@ -166,13 +166,13 @@ public class CheckInActivity extends BaseActivity implements
         mEtWeightCurrent = (EditText) getEditText(R.id.ll_weight_current, "当前重量");
         mEtWeightCurrent.setEnabled(false);
         mEtWeightCurrent.setBackground(null);
-//        mEtWeightCurrent.setTextColor(getResources().getColor(R.color.red));
+        //        mEtWeightCurrent.setTextColor(getResources().getColor(R.color.red));
         mEtWeightCurrent.setTextSize(getResources().getDimension(R.dimen._16sp));
         mEtWeightAccumulate = (SearchAndFocusEditText) getEditText(R.id.ll_weight_accumulate, "累计重量");
         mTvWeightAccumulateUnit = ((TextView) findViewById(R.id.ll_weight_accumulate).findViewById(R.id.tv_unit));
         mEtWeightAccumulate.setEnabled(false);
         mEtWeightAccumulate.setBackground(null);
-//        mEtWeightAccumulate.setTextColor(getResources().getColor(R.color.blue));
+        //        mEtWeightAccumulate.setTextColor(getResources().getColor(R.color.blue));
         mEtWeightCurrent.setTextSize(getResources().getDimension(R.dimen._16sp));
         mEtBucklesLeather = (SearchAndFocusEditText) getEditText(R.id.ll_buckles_leather, "扣皮");
         mEtDeductWeight = (SearchAndFocusEditText) getEditText(R.id.ll_deduct_weight, "扣重");
@@ -829,16 +829,16 @@ public class CheckInActivity extends BaseActivity implements
      */
     private void keySearch() {
         showLoadingDialog(false);
-//        mSpWareHouse.setCustomItemSelectedListener(null);
-//        mSpSupplier.setCustomItemSelectedListener(null);
-//        mSpOperator.setCustomItemSelectedListener(null);
-//        mSpWareHouse.setSelection(0);
-//        mSpSupplier.setSelection(0);
-//        mSpOperator.setSelection(0);
+        //        mSpWareHouse.setCustomItemSelectedListener(null);
+        //        mSpSupplier.setCustomItemSelectedListener(null);
+        //        mSpOperator.setCustomItemSelectedListener(null);
+        //        mSpWareHouse.setSelection(0);
+        //        mSpSupplier.setSelection(0);
+        //        mSpOperator.setSelection(0);
         filterList();
-//        mSpWareHouse.setCustomItemSelectedListener(this);
-//        mSpSupplier.setCustomItemSelectedListener(this);
-//        mSpOperator.setCustomItemSelectedListener(this);
+        //        mSpWareHouse.setCustomItemSelectedListener(this);
+        //        mSpSupplier.setCustomItemSelectedListener(this);
+        //        mSpOperator.setCustomItemSelectedListener(this);
         dismissLoadingDialog();
     }
 
@@ -937,6 +937,9 @@ public class CheckInActivity extends BaseActivity implements
      * 清空商品列表
      */
     private void clearGoodsList() {
+        if (mListAll.size() > 0) {
+            mListAll.clear();
+        }
         if (mListShow.size() > 0) {
             mListShow.clear();
         }

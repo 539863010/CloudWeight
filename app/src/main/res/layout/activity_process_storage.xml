@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/activity_process_storage"
     tools:context="xm.cloudweight.ProcessStorageActivity">
 
 
@@ -35,7 +36,7 @@
                     android:orientation="horizontal">
 
                     <xm.cloudweight.widget.ScanEditText
-                        android:id="@+id/et_purchase_label"
+                        android:id="@+id/et_finish_produce_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -189,7 +190,7 @@
                     android:paddingTop="@dimen/_10dp">
 
                     <include
-                        android:id="@+id/ll_weight_accumulate"
+                        android:id="@+id/ll_produce_accumulate"
                         layout="@layout/layout_item" />
 
                     <include

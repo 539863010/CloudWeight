@@ -9,7 +9,9 @@ import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.goods.GoodsCategory;
 import com.xmzynt.storm.service.purchase.PurchaseData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
+import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
 import com.xmzynt.storm.service.wms.stock.Stock;
+import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 import com.xmzynt.storm.util.GsonUtil;
 import com.xmzynt.storm.util.query.PageData;
 
@@ -108,10 +110,75 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
                 cancelSimilar(params, listener);
             } else if (type == TYPE_SCAN_BY_TRACE_CODE) {
                 scanByTraceCode(params, listener);
+            } else if (type == TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK) {
+                getWareHouseCheck(listener);
+            } else if (type == TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA) {
+                queryNotAcceptData(params, listener);
             }
         }
 
     };
+
+    /**
+     * 调拨验收-未验收商品列表
+     */
+    private void queryNotAcceptData(Map params, final OnRequestDataListener listener) {
+        String date = (String) params.get("date");
+        String status = (String) params.get("status");
+        String inWarehouseUuid = (String) params.get("inWarehouseUuid");
+        PBaseInfo pBaseInfo = BeanUtil.queryNotAcceptData(mMerchant, date, status, inWarehouseUuid);
+        mApiManager.queryNotAcceptData(pBaseInfo).compose(new TransformerHelper<ResponseEntity<List<AllocateRecord>>>().get())
+                .subscribe(new ApiSubscribe<List<AllocateRecord>>() {
+                    @Override
+                    protected void onResult(List<AllocateRecord> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA, listStr);
+                            listener.onReceive(TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 调拨验收-仓库验收列表
+     */
+    private void getWareHouseCheck(final OnRequestDataListener listener) {
+        PBaseInfo wareHouseCheck = BeanUtil.getWareHouseCheck(mMerchant);
+        mApiManager.getDropDownWareHouse(wareHouseCheck).compose(new TransformerHelper<ResponseEntity<List<Warehouse>>>().get())
+                .subscribe(new ApiSubscribe<List<Warehouse>>() {
+                    @Override
+                    protected void onResult(List<Warehouse> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK, listStr);
+                            listener.onReceive(TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
 
     /**
      * 扫描库存标签
@@ -488,6 +555,12 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
     //扫描库存标签
     public static final long TYPE_SCAN_BY_TRACE_CODE = 19L;
     public static final long TYPE_SCAN_BY_TRACE_CODE_FAILED = 20L;
+    //调拨验收-仓库验收列表
+    public static final long TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK = 21L;
+    public static final long TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK_FAILED = 22L;
+    //调拨验收-商品列表
+    public static final long TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA = 23L;
+    public static final long TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED = 24L;
 
     /**
      * 注意添加新type
@@ -514,6 +587,10 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
             failedType = TYPE_SIMILAR_CANCEL_FAILED;
         } else if (type == TYPE_SCAN_BY_TRACE_CODE) {
             failedType = TYPE_SCAN_BY_TRACE_CODE_FAILED;
+        } else if (type == TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK) {
+            failedType = TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK_FAILED;
+        } else if (type == TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA) {
+            failedType = TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED;
         }
         return failedType;
     }
