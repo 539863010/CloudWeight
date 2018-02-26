@@ -31,7 +31,8 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btn_accepting, R.id.btn_sorting, R.id.btn_stockout, R.id.btn_allocating, R.id.btn_checking, R.id.btn_logout})
+    @OnClick({R.id.btn_accepting, R.id.btn_sorting, R.id.btn_stockout, R.id.btn_allocating, R.id.btn_checking, R.id.btn_logout
+            , R.id.btn_allocation_acceptance, R.id.btn_processing_storage})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_accepting:
@@ -49,6 +50,14 @@ public class MainActivity extends BaseActivity {
             case R.id.btn_allocating:
                 //调拨
                 goSimilarActivity(Common.SIMILAR_ALLOCATE);
+                break;
+            case R.id.btn_allocation_acceptance:
+                //调拨验收
+                startActivity(AllocateAcceptActivity.class);
+                break;
+            case R.id.btn_processing_storage:
+                //加工入库
+                startActivity(ProcessStorageActivity.class);
                 break;
             case R.id.btn_checking:
                 //盘点

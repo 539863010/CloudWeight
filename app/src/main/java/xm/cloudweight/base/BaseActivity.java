@@ -22,9 +22,11 @@ import com.xmzynt.storm.util.GsonUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import xm.cloudweight.AllocateAcceptActivity;
 import xm.cloudweight.CheckInActivity;
 import xm.cloudweight.IRequestDataService;
 import xm.cloudweight.MainActivity;
+import xm.cloudweight.ProcessStorageActivity;
 import xm.cloudweight.R;
 import xm.cloudweight.SimilarActivity;
 import xm.cloudweight.SortOutActivity;
@@ -97,7 +99,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         if (this instanceof MainActivity
                 || this instanceof CheckInActivity
                 || this instanceof SortOutActivity
-                || this instanceof SimilarActivity) {
+                || this instanceof SimilarActivity
+                || this instanceof AllocateAcceptActivity
+                || this instanceof ProcessStorageActivity) {
             LinearLayout llBaseTitle = (LinearLayout) findViewById(R.id.ll_base_title);
             llBaseTitle.setVisibility(View.VISIBLE);
             TextView tvBaseTitle = (TextView) findViewById(R.id.tv_base_title);
