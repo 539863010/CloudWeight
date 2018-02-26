@@ -52,6 +52,7 @@ import xm.cloudweight.widget.SearchAndFocusEditText;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
+import static java.math.BigDecimal.ROUND_HALF_EVEN;
 import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA;
 import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED;
 import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK;
@@ -507,11 +508,10 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     private onInputFinishListener mOnInputFinishListenerSetStoreInNum = new onInputFinishListener() {
         @Override
         public void onFinish(String key) {
-            // TODO: 2018/2/26
-            //            if (mPurchaseData == null) {
-            //                return;
-            //            }
-            //            setStoreInNum();
+            if (mAllocateRecord == null) {
+                return;
+            }
+            setStoreInNum();
         }
     };
 
@@ -528,27 +528,26 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         String strDeduct = mEtDeductWeight.getText().toString().trim();
         BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeduct) ? strDeduct : "0");
         BigDecimal amount;
-        // TODO: 2018/2/26
-        //        if (accumulate.doubleValue() == 0) {
-        //            //当前没累计的话，设置当前重量为累计重量
-        //            amount = currentWeight;
-        //        } else {
-        //            //当前有累计的话，取累计值
-        //            amount = accumulate;
-        //        }
-        //        BigDecimal weightCoefficient = mPurchaseBillLine.getWeightCoefficient();
-        //        BigDecimal finallyCount;
-        //        if (weightCoefficient != null) {
-        //            finallyCount = amount.subtract(leather).subtract(deduct).divide(weightCoefficient, ROUND_HALF_EVEN);
-        //        } else {
-        //            finallyCount = amount;
-        //        }
-        //        if (finallyCount.doubleValue() < 0) {
-        //            mEtNumWarehousing.setText("0.00");
-        //        } else {
-        //            String num = BigDecimalUtil.toScaleStr(finallyCount);
-        //            mEtNumWarehousing.setText(num);
-        //        }
+        if (accumulate.doubleValue() == 0) {
+            //当前没累计的话，设置当前重量为累计重量
+            amount = currentWeight;
+        } else {
+            //当前有累计的话，取累计值
+            amount = accumulate;
+        }
+        BigDecimal weightCoefficient = mAllocateRecord.getWeightCoefficient();
+        BigDecimal finallyCount;
+        if (weightCoefficient != null) {
+            finallyCount = amount.subtract(leather).subtract(deduct).divide(weightCoefficient, ROUND_HALF_EVEN);
+        } else {
+            finallyCount = amount;
+        }
+        if (finallyCount.doubleValue() < 0) {
+            mEtNumWarehousing.setText("0.00");
+        } else {
+            String num = BigDecimalUtil.toScaleStr(finallyCount);
+            mEtNumWarehousing.setText(num);
+        }
     }
 
     private onScanFinishListener mLabelOnScanFinishListener = new onScanFinishListener() {
@@ -574,21 +573,20 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     private void scanLabel(String key) {
         showLoadingDialog(false);
         KeyBoardUtils.closeKeybord(mEtInventoryLabel, getContext());
-        //        if (mListAll.size() == 0) {
-        //            ToastUtil.showShortToast(getContext(), "暂无数据");
-        //            return;
-        //        }
-        //        for (PurchaseData data : mListAll) {
-        //            String purchaseBatch = data.getPurchaseBillLine().getPurchaseBatch();
-        //            if (key.equals(purchaseBatch)) {
-        //                mPurchaseData = data;
-        //                mPurchaseBillLine = mPurchaseData.getPurchaseBillLine();
-        //                setPurchaseBillLineInfo();
-        //                mEtPurChaseLabel.setText("");
-        //                dismissLoadingDialog();
-        //                break;
-        //            }
-        //        }
+        if (mListAll.size() == 0) {
+            ToastUtil.showShortToast(getContext(), "暂无数据");
+            return;
+        }
+        for (AllocateRecord data : mListAll) {
+            String traceCode = data.getTraceCode();
+            if (key.equals(traceCode)) {
+                mAllocateRecord = data;
+                setAllocateRecordInfo();
+                mEtInventoryLabel.setText("");
+                dismissLoadingDialog();
+                break;
+            }
+        }
         dismissLoadingDialog();
     }
 

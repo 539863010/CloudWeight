@@ -391,4 +391,22 @@ public class BeanUtil {
         return pBaseInfo;
     }
 
+    /**
+     * 查询加工数据
+     */
+    public static PBaseInfo queryProcessData(Merchant merchant, String createdTime, int page, int pageSize, int defaultPageSize) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        QueryFilter queryFilter = new QueryFilter();
+        queryFilter.setPage(page);
+        queryFilter.setPageSize(pageSize);
+        queryFilter.setDefaultPageSize(defaultPageSize);
+        Map<String, Object> params = queryFilter.getParams();
+        params.put("createdTime", createdTime);
+        queryFilter.setParams(params);
+        body.put("queryFilter", queryFilter);
+        pBaseInfo.setBody(body);
+        return pBaseInfo;
+    }
 }

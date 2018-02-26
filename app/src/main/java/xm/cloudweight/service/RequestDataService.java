@@ -7,6 +7,7 @@ import android.os.RemoteException;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.goods.GoodsCategory;
+import com.xmzynt.storm.service.process.ForecastProcessPlan;
 import com.xmzynt.storm.service.purchase.PurchaseData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
@@ -114,10 +115,42 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
                 getWareHouseCheck(listener);
             } else if (type == TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA) {
                 queryNotAcceptData(params, listener);
+            } else if (type == TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA) {
+                queryProcessData(params, listener);
             }
         }
 
     };
+
+    /**
+     * 查询加工数据
+     */
+    private void queryProcessData(Map params, final OnRequestDataListener listener) {
+        String createdTime = (String) params.get("createdTime");
+        PBaseInfo baseInfo = BeanUtil.queryProcessData(mMerchant, createdTime, 0, 0, 0);
+        mApiManager.queryProcessData(baseInfo).compose(new TransformerHelper<ResponseEntity<List<ForecastProcessPlan>>>().get())
+                .subscribe(new ApiSubscribe<List<ForecastProcessPlan>>() {
+                    @Override
+                    protected void onResult(List<ForecastProcessPlan> result) {
+                        try {
+                            String listStr = GsonUtil.getGson().toJson(result);
+                            saveDbRequestData(TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA, listStr);
+                            listener.onReceive(TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
 
     /**
      * 调拨验收-未验收商品列表
@@ -561,6 +594,9 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
     //调拨验收-商品列表
     public static final long TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA = 23L;
     public static final long TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED = 24L;
+    //调拨验收-查询加工列表
+    public static final long TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA = 25L;
+    public static final long TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA_FAILED = 26L;
 
     /**
      * 注意添加新type
@@ -591,6 +627,8 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
             failedType = TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK_FAILED;
         } else if (type == TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA) {
             failedType = TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED;
+        } else if (type == TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA) {
+            failedType = TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA_FAILED;
         }
         return failedType;
     }

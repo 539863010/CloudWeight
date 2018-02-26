@@ -2,6 +2,7 @@ package xm.cloudweight.api;
 
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.service.goods.GoodsCategory;
+import com.xmzynt.storm.service.process.ForecastProcessPlan;
 import com.xmzynt.storm.service.purchase.PurchaseBill;
 import com.xmzynt.storm.service.purchase.PurchaseData;
 import com.xmzynt.storm.service.user.customer.CustomerLevel;
@@ -297,6 +298,15 @@ public interface ApiManager {
      */
     @POST("/merchant/scaleApi/queryNotAcceptData.do")
     Observable<ResponseEntity<List<AllocateRecord>>> queryNotAcceptData(@Body PBaseInfo p);
+
+    /**
+     * 查询加工列表
+     *
+     * @param p 查询加工列表请求体
+     * @return Observable<ResponseEntity>
+     */
+    @POST("/merchant/scaleApi/queryProcessData.do")
+    Observable<ResponseEntity<List<ForecastProcessPlan>>> queryProcessData(@Body PBaseInfo p);
 
 
 
