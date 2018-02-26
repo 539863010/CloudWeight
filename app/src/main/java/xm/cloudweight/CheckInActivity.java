@@ -489,7 +489,9 @@ public class CheckInActivity extends BaseActivity implements
             int size = data.size();
             for (int i = 0; i < size; i++) {
                 IdName supplier = data.get(i).getSupplier();
-                if (supplier == null) continue;
+                if (supplier == null) {
+                    continue;
+                }
                 String supplierName = supplier.getName();
                 if (!mListSuppliers.contains(supplierName)) {
                     mListSuppliers.add(supplierName);
@@ -584,7 +586,9 @@ public class CheckInActivity extends BaseActivity implements
                 DatePickerDialogUtil.show(getContext(), dateStr, mOnDateSetListener);
                 break;
             case R.id.btn_stock_in:
-                if (check()) return;
+                if (check()) {
+                    return;
+                }
                 mIntTypeUpload = TYPE_STORE_IN;
                 setBtnEnable(mBtnCrossAllocate, false, mBtnStockCross, false, mBtnStockIn, false);
                 showLoadingDialog(false);
@@ -595,7 +599,9 @@ public class CheckInActivity extends BaseActivity implements
                 }
                 break;
             case R.id.btn_stock_cross:
-                if (check()) return;
+                if (check()) {
+                    return;
+                }
                 if (mPurchaseData != null && mPurchaseData.getPurchaseBillLine() != null) {
                     PurchaseBillLine purchaseBillLine = mPurchaseData.getPurchaseBillLine();
                     if (!TextUtils.isEmpty(purchaseBillLine.getSourcePlanUuid())
@@ -614,7 +620,9 @@ public class CheckInActivity extends BaseActivity implements
                 }
                 break;
             case R.id.btn_cross_allocate:
-                if (check()) return;
+                if (check()) {
+                    return;
+                }
                 if (mPurchaseData == null || mPurchaseBillLine == null) {
                     ToastUtil.showShortToast(getContext(), "请先选择商品");
                     return;
