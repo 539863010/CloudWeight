@@ -552,7 +552,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
             //                        code);
             //            }
             //保存已入库数
-            mForecastProcessPlan.setCompleteQty(record.getOutputQty());
+            mForecastProcessPlan.setCompleteQty(mForecastProcessPlan.getCompleteQty().add(record.getOutputQty()));
             clearContent();
             mProcessAdapter.notifyDataSetChanged();
             mForecastProcessPlan = null;

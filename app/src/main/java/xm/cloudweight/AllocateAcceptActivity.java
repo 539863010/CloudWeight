@@ -20,12 +20,14 @@ import com.google.gson.reflect.TypeToken;
 import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
 import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
+import com.xmzynt.storm.service.wms.stockin.StockInRecord;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 import com.xmzynt.storm.util.GsonUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.camera.instrument.Instrument;
+import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.utils.BigDecimalUtil;
@@ -42,6 +45,7 @@ import xm.cloudweight.utils.KeyBoardUtils;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
+import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
@@ -91,7 +95,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     SearchAndFocusEditText mEtKeySearch;
     private List<AllocateRecord> mListShow = new ArrayList<>();
     private List<AllocateRecord> mListAll = new ArrayList<>();
-    //        private Map<String, String> mMapAccumulate = new HashMap<>();
+    private Map<String, String> mMapAccumulate = new HashMap<>();
     private EditText mEtWeightCurrent;
     private SearchAndFocusEditText mEtWeightAccumulate;
     private SearchAndFocusEditText mEtBucklesLeather;
@@ -476,41 +480,90 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     });
 
     private void shotResult(String imagePath) {
-        //                StockInRecord record = prepareConfig(imagePath);
-        //                String date = mBtnDate.getText().toString().trim();
-        //                if (mIntTypeUpload == TYPE_STORE_IN) {
-        //                    //入库
-        //                    DbImageUpload db = new DbImageUpload();
-        //                    db.setDate(date);
-        //                    db.setOperatime(DateUtils.getTime2(new Date()));
-        //                    db.setImagePath(imagePath);
-        //                    db.setLine(GsonUtil.getGson().toJson(record));
-        //                    db.setType(Common.DbType.TYPE_ChECK_IN_STORE_IN);
-        //                    getDbManager().insertDbImageUpload(db);
-        //                    ToastUtil.showShortToast(getContext(), "入库成功");
-        //                } else if (mIntTypeUpload == TYPE_CROSS) {
-        //                    //越库
-        //                    DbImageUpload db = new DbImageUpload();
-        //                    db.setDate(date);
-        //                    db.setOperatime(DateUtils.getTime2(new Date()));
-        //                    db.setImagePath(imagePath);
-        //                    db.setLine(GsonUtil.getGson().toJson(record));
-        //                    db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_OUT);
-        //                    getDbManager().insertDbImageUpload(db);
-        //                    ToastUtil.showShortToast(getContext(), "越库成功");
-        //                } else if (mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
-        //                    DbImageUpload db = new DbImageUpload();
-        //                    db.setDate(date);
-        //                    db.setOperatime(DateUtils.getTime2(new Date()));
-        //                    db.setImagePath(imagePath);
-        //                    db.setLine(GsonUtil.getGson().toJson(record));
-        //                    db.setType(Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE);
-        //                    getDbManager().insertDbImageUpload(db);
-        //                    ToastUtil.showShortToast(getContext(), "越库调拨成功");
-        //                }
-        //                refreshSuccessData(record);
-        //        mBtnAllocateAcceptSubmit.setEnabled(true);
-        //                dismissLoadingDialog();
+        StockInRecord record = new StockInRecord();
+        //扣重数
+        record.setDeductQty(getEtBigDecimal(mEtDeductWeight));
+        //扣皮数
+        record.setLeatherQty(getEtBigDecimal(mEtBucklesLeather));
+        //验收数（入库数）
+        record.setQuantity(getEtBigDecimal(mEtNumWarehousing));
+        //调拨记录uuid
+        record.setAllocateRecordUuid(null);
+
+        String date = mBtnDate.getText().toString().trim();
+        DbImageUpload db = new DbImageUpload();
+        db.setDate(date);
+        db.setOperatime(DateUtils.getTime2(new Date()));
+        db.setImagePath(imagePath);
+        db.setLine(GsonUtil.getGson().toJson(record));
+        db.setType(Common.DbType.TYPE_ALLOCATE_ACCEPT);
+        getDbManager().insertDbImageUpload(db);
+        ToastUtil.showShortToast(getContext(), "越库调拨成功");
+
+        refreshSuccessData(record);
+        mBtnAllocateAcceptSubmit.setEnabled(true);
+        dismissLoadingDialog();
+    }
+
+    /**
+     * 调拨验收请求成功后刷新数据
+     */
+    private void refreshSuccessData(StockInRecord record) {
+        // 保存累计重量
+        if (mAllocateRecord != null) {
+            BigDecimal accumulate = getEtBigDecimal(mEtWeightAccumulate);
+            //转化为kg
+            BigDecimal weightCoefficient = mAllocateRecord.getWeightCoefficient();
+            BigDecimal numWarehousing = getEtBigDecimal(mEtNumWarehousing);
+            // 打印标签
+            //            if (mIntTypeUpload == TYPE_STORE_IN || mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
+            //                String goodsName = mPurchaseBillLine.getGoods().getName();
+            //                String purchaseBatch = mPurchaseBillLine.getPurchaseBatch();
+            //                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
+            //                PrinterInventory.printer(getContext(), count, goodsName, purchaseBatch);
+            //            } else if (mIntTypeUpload == TYPE_CROSS) {
+            //                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
+            //                String goodsName = mPurchaseBillLine.getGoods().getName();
+            //                String crossNum;
+            //                if (weightCoefficient != null && weightCoefficient.doubleValue() != 0) {
+            //                    crossNum = BigDecimalUtil.toScaleStr(numWarehousing.multiply(weightCoefficient)).concat("kg");
+            //                } else {
+            //                    crossNum = BigDecimalUtil.toScaleStr(numWarehousing).concat(mPurchaseBillLine.getGoodsUnit().getName());
+            //                }
+            //                String code = record.getPlatformTraceCode();
+            //                String customer = mAllocateRecord.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
+            //                String department = mAllocateRecord.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
+            //                PrinterSortOut.printer(
+            //                        getContext(),
+            //                        count,
+            //                        PrinterSortOut.SORT_OUT_QRCODE.concat(code),
+            //                        customer,
+            //                        department,
+            //                        goodsName,
+            //                        crossNum,
+            //                        code);
+            //            }
+            //设置累计
+            if (weightCoefficient != null) {
+                mMapAccumulate.put(mAllocateRecord.getUuid(), BigDecimalUtil.toScaleStr(accumulate.add(numWarehousing.multiply(weightCoefficient))));
+            } else {
+                mMapAccumulate.put(mAllocateRecord.getUuid(), BigDecimalUtil.toScaleStr(accumulate.add(numWarehousing)));
+            }
+            //保存已验收数
+            mAllocateRecord.setAcceptQty(mAllocateRecord.getAcceptQty().add(record.getQuantity()));
+            clearContent();
+            mNotAcceptAdapter.notifyDataSetChanged();
+            mAllocateRecord = null;
+            //光标移动到采购标签
+            mEtInventoryLabel.requestFocus();
+        }
+    }
+
+    private void clearContent() {
+        //清除关键字
+        mEtKeySearch.setText("");
+        //清除文本
+        clearText();
     }
 
     private boolean check() {
@@ -645,12 +698,12 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
 
     private void setAllocateRecordInfo() {
         clearText();
-        //todo 设置累计重量
-        //        if (mMapAccumulate.containsKey(mAllocateRecord.getUuid())) {
-        //            mEtWeightAccumulate.setText(mMapAccumulate.get(mAllocateRecord.getUuid()));
-        //        } else {
-        //            mEtWeightAccumulate.setText("");
-        //        }
+        //设置累计重量
+        if (mMapAccumulate.containsKey(mAllocateRecord.getUuid())) {
+            mEtWeightAccumulate.setText(mMapAccumulate.get(mAllocateRecord.getUuid()));
+        } else {
+            mEtWeightAccumulate.setText("");
+        }
         BigDecimal weightCoefficient = mAllocateRecord.getWeightCoefficient();
         if (weightCoefficient != null) {
             mTvWeightAccumulateUnit.setText("kg");

@@ -370,4 +370,15 @@ public class BeanUtil {
         pBaseInfo.setBody(body);
         return pBaseInfo;
     }
+
+    /**
+     * 调拨验收
+     */
+    public static PBaseInfo accept(Merchant merchant, StockInRecord stockInRecord) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("stockInRecord", GsonUtil.getGson().toJson(stockInRecord));
+        return pBaseInfo;
+    }
 }

@@ -218,7 +218,30 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     }
 
     private void doUnAllocateAcceptList(final DbImageUpload data) {
-        // TODO: 2018/2/27  
+        final StockInRecord stockInRecord = GsonUtil.getGson().fromJson(data.getLine(), StockInRecord.class);
+        PBaseInfo pBaseInfo = BeanUtil.accept(mMerchant, stockInRecord);
+        mApiManager.accept(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        stockInRecord.setAllocateRecordUuid(result);
+                        data.setLine(GsonUtil.getGson().toJson(stockInRecord));
+                        data.setStockInUuid(result);
+                        data.setIsRequestSuccess(true);
+                        mDBManager.updateDbImageUpload(data);
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        getUnProcessStoreInList();
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        isCurrentAllocateAccept = false;
+                        LogUtils.e("----------调拨验收失败-------------", failString);
+                        doResultFaild(errorType, failString, data);
+                    }
+
+                });
     }
 
     /**
@@ -236,13 +259,15 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     }
 
     private void doUnProcessStoreInList(final DbImageUpload data) {
-        StockInData stockInData = GsonUtil.getGson().fromJson(data.getLine(), StockInData.class);
+        final StockInData stockInData = GsonUtil.getGson().fromJson(data.getLine(), StockInData.class);
         PBaseInfo pBaseInfo = BeanUtil.stockInForProcess(mMerchant, stockInData);
         mApiManager.stockInForProcess(pBaseInfo)
                 .compose(new TransformerHelper<ResponseEntity<String>>().get())
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
+                        stockInData.setRecordUuid(result);
+                        data.setLine(GsonUtil.getGson().toJson(stockInData));
                         data.setStockInUuid(result);
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);
