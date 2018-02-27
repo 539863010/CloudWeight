@@ -23,6 +23,7 @@ import java.util.List;
 import xm.cloudweight.R;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
+import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.impl.OnDeleteListener;
 
@@ -166,32 +167,8 @@ public class HistoryAllocateAcceptPopWindow extends PopupWindow implements View.
 
                 @Override
                 public void onClick(View v) {
-                    //todo 打印标签
-                    //                    String count = BigDecimalUtil.toScaleStr(quantity);
-                    //                    // 顾客-部门   部门可能为null
-                    //                    String customer = data.getCustomerName();
-                    //                    String department = "";
-                    //                    if (customer.contains("-")) {
-                    //                        String[] s = customer.split("-");
-                    //                        customer = s[0];
-                    //                        department = s[1];
-                    //                    }
-                    //                    if (type == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
-                    //                        String platformTraceCode = data.getPlatformTraceCode();
-                    //                        PrinterSortOut.printer(
-                    //                                mContext,
-                    //                                1,
-                    //                                PrinterSortOut.SORT_OUT_QRCODE.concat(platformTraceCode),
-                    //                                customer,
-                    //                                department,
-                    //                                goodsName,
-                    //                                count,
-                    //                                platformTraceCode);
-                    //                    } else if (type == Common.DbType.TYPE_ChECK_IN_STORE_IN ||
-                    //                            type == Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE) {
-                    //                        String purchaseBatch = data.getTraceCode();
-                    //                        PrinterInventory.printer(mContext, 1, goodsName, purchaseBatch);
-                    //                    }
+                    String traceCode = data.getTraceCode();
+                    PrinterInventory.printer(mContext, 1, goodsName, traceCode);
                 }
             });
         }

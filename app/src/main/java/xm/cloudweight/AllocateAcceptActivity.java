@@ -47,6 +47,7 @@ import xm.cloudweight.utils.KeyBoardUtils;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
+import xm.cloudweight.utils.bussiness.PrinterInventory;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
@@ -619,6 +620,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         record.setGoods(mAllocateRecord.getGoods());
         record.setGoodsUnit(mAllocateRecord.getGoodsUnit());
         record.setCoefficient(mAllocateRecord.getWeightCoefficient());
+        record.setTraceCode(mAllocateRecord.getTraceCode());
         //扣重数
         record.setDeductQty(getEtBigDecimal(mEtDeductWeight));
         //扣皮数
@@ -649,39 +651,16 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     private void refreshSuccessData(StockInRecord record) {
         // 保存累计重量
         if (mAllocateRecord != null) {
-            BigDecimal accumulate = getEtBigDecimal(mEtWeightAccumulate);
+            //打印标签
+            int printCount = Integer.parseInt(mEtPrintLabelCount.getText().toString());
+            String name = mAllocateRecord.getGoods().getName();
+            String code = mAllocateRecord.getTraceCode();
+            PrinterInventory.printer(getContext(), printCount, name, code);
             //转化为kg
             BigDecimal weightCoefficient = mAllocateRecord.getWeightCoefficient();
             BigDecimal numWarehousing = getEtBigDecimal(mEtNumWarehousing);
-            // 打印标签
-            //            if (mIntTypeUpload == TYPE_STORE_IN || mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
-            //                String goodsName = mPurchaseBillLine.getGoods().getName();
-            //                String purchaseBatch = mPurchaseBillLine.getPurchaseBatch();
-            //                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
-            //                PrinterInventory.printer(getContext(), count, goodsName, purchaseBatch);
-            //            } else if (mIntTypeUpload == TYPE_CROSS) {
-            //                int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
-            //                String goodsName = mPurchaseBillLine.getGoods().getName();
-            //                String crossNum;
-            //                if (weightCoefficient != null && weightCoefficient.doubleValue() != 0) {
-            //                    crossNum = BigDecimalUtil.toScaleStr(numWarehousing.multiply(weightCoefficient)).concat("kg");
-            //                } else {
-            //                    crossNum = BigDecimalUtil.toScaleStr(numWarehousing).concat(mPurchaseBillLine.getGoodsUnit().getName());
-            //                }
-            //                String code = record.getPlatformTraceCode();
-            //                String customer = mAllocateRecord.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
-            //                String department = mAllocateRecord.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
-            //                PrinterSortOut.printer(
-            //                        getContext(),
-            //                        count,
-            //                        PrinterSortOut.SORT_OUT_QRCODE.concat(code),
-            //                        customer,
-            //                        department,
-            //                        goodsName,
-            //                        crossNum,
-            //                        code);
-            //            }
             //设置累计
+            BigDecimal accumulate = getEtBigDecimal(mEtWeightAccumulate);
             if (weightCoefficient != null) {
                 mMapAccumulate.put(mAllocateRecord.getUuid(), BigDecimalUtil.toScaleStr(accumulate.add(numWarehousing.multiply(weightCoefficient))));
             } else {
@@ -1028,4 +1007,11 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         String str = et.getText().toString().trim();
         return new BigDecimal(!TextUtils.isEmpty(str) ? str : "0");
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DbRefreshUtil.refreshUnRegist(this);
+    }
+
 }

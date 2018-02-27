@@ -468,7 +468,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                 break;
             case R.id.btn_process_submit:
                 String production = mEtDeduceProduction.getText().toString();
-                BigDecimal bgProduction = new BigDecimal(!TextUtils.isEmpty(production) ? production : "");
+                BigDecimal bgProduction = new BigDecimal(!TextUtils.isEmpty(production) ? production : "0");
                 if (bgProduction.doubleValue() <= 0) {
                     ToastUtil.showShortToast(getContext(), "产量要大于0");
                     return;
@@ -478,6 +478,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                     ToastUtil.showShortToast(getContext(), "请选择入库仓库");
                     return;
                 }
+                showLoadingDialog(false);
                 mBtnSubmit.setEnabled(false);
                 if (mVideoFragment.isLight()) {
                     mVideoFragment.screenshot(mHandlerShotPic);
@@ -657,23 +658,6 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     private void refreshSuccessData(StockInData record) {
         // 保存累计重量
         if (mForecastProcessPlan != null) {
-            //转化为kg
-            BigDecimal weightCoefficient = mForecastProcessPlan.getWeightCoefficient();
-            BigDecimal numWarehousing = getEtBigDecimal(mEtDeduceProduction);
-            //todo 打印标签
-            //            if (mIntTypeUpload == TYPE_STORE_IN || mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
-            //                PrinterInventory.printer(getContext(), count, goodsName, purchaseBatch);
-            //            } else if (mIntTypeUpload == TYPE_CROSS) {
-            //         PrinterSortOut.printer(
-            //                        getContext(),
-            //                        count,
-            //                        PrinterSortOut.SORT_OUT_QRCODE.concat(code),
-            //                        customer,
-            //                        department,
-            //                        goodsName,
-            //                        crossNum,
-            //                        code);
-            //            }
             //保存已入库数
             mForecastProcessPlan.setCompleteQty(mForecastProcessPlan.getCompleteQty().add(record.getOutputQty()));
             clearContent();
@@ -862,6 +846,12 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                     .setText(R.id.tv_goods_cumulative, "累计产量:" + BigDecimalUtil.toScaleStr(completeQty) + unit)
                     .setText(R.id.tv_goods_customer, !TextUtils.isEmpty(customerName) ? customerName : "");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DbRefreshUtil.refreshUnRegist(this);
     }
 
 }
