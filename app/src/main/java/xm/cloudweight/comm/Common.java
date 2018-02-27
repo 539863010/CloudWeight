@@ -34,11 +34,6 @@ public class Common {
         int TYPE_ChECK_IN_CROSS_OUT = 2;
         String STR_TYPE_ChECK_IN_CROSS_OUT = "越库";
         /**
-         * 验收-越库调拨
-         */
-        int TYPE_ChECK_IN_CROSS_ALLCOCATE = 7;
-        String STR_TYPE_ChECK_IN_CROSS_ALLCOCATE = "越库调拨";
-        /**
          * 分拣-分拣
          */
         int TYPE_SORT_OUT_STORE_OUT = 3;
@@ -56,6 +51,20 @@ public class Common {
          * 盘点
          */
         int TYPE_CHECK = 6;
+
+        /**
+         * 验收-越库调拨
+         */
+        int TYPE_ChECK_IN_CROSS_ALLCOCATE = 7;
+
+        String STR_TYPE_ChECK_IN_CROSS_ALLCOCATE = "越库调拨";
+
+        /**
+         * 加工入库
+         */
+        int TYPE_PROCESS_STORE_IN = 8;
+
+        String STR_TYPE_PROCESS_STORE_IN = "加工入库";
     }
 
     /**

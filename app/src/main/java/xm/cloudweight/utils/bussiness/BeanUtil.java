@@ -3,6 +3,7 @@ package xm.cloudweight.utils.bussiness;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.xmzynt.storm.service.process.StockInData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
 import com.xmzynt.storm.service.wms.inventory.InventoryRecord;
@@ -137,29 +138,19 @@ public class BeanUtil {
     /**
      * 获取仓库列表
      */
-    public static PBaseInfo queryNotAcceptData(Merchant merchant, String date, String status, String inWarehouseUuid) {
+    public static PBaseInfo queryNotAcceptData(Merchant merchant, int page, int pageSize, int defaultPageSize, String date, String status, String inWarehouseUuid) {
         PBaseInfo pBaseInfo = new PBaseInfo();
         setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
-        body.put("date", date);
-        body.put("status", status);
-        body.put("inWarehouseUuid", inWarehouseUuid);
-        return pBaseInfo;
-    }
-
-    /**
-     * 查询客户列表
-     */
-    public static PBaseInfo getMerchantCustomer(Context ctx, int page, int pageSize, int defaultPageSize) {
-        PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
-        Map<String, Object> body = pBaseInfo.getBody();
         QueryFilter queryFilter = new QueryFilter();
+        Map<String, Object> params = queryFilter.getParams();
         queryFilter.setPage(page);
         queryFilter.setPageSize(pageSize);
         queryFilter.setDefaultPageSize(defaultPageSize);
+        params.put("date", date);
+        params.put("status", status);
+        params.put("inWarehouseUuid", inWarehouseUuid);
         body.put("queryFilter", queryFilter);
-        pBaseInfo.setBody(body);
         return pBaseInfo;
     }
 
@@ -169,25 +160,6 @@ public class BeanUtil {
     public static PBaseInfo getDropDownLevels(Merchant merchant) {
         PBaseInfo pBaseInfo = new PBaseInfo();
         setMerchantInfo(pBaseInfo, merchant);
-        return pBaseInfo;
-    }
-
-    /**
-     * 查询分拣数据
-     */
-    public static PBaseInfo getSourOutList(Context ctx, int page, int pageSize, int defaultPageSize, String deliveryTime) {
-        PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
-        Map<String, Object> body = pBaseInfo.getBody();
-        QueryFilter queryFilter = new QueryFilter();
-        queryFilter.setOrders(null);
-        queryFilter.setPage(page);
-        queryFilter.setPageSize(pageSize);
-        queryFilter.setDefaultPageSize(defaultPageSize);
-        Map<String, Object> params = queryFilter.getParams();
-        params.put("deliveryTime", deliveryTime);
-        body.put("queryFilter", queryFilter);
-        pBaseInfo.setBody(body);
         return pBaseInfo;
     }
 
@@ -247,7 +219,9 @@ public class BeanUtil {
         return pBaseInfo;
     }
 
-    //撤销 出库，调拨
+    /**
+     * 撤销 出库，调拨
+     */
     public static PBaseInfo cancelSimilar(Merchant merchant, String uuid) {
         PBaseInfo pBaseInfo = new PBaseInfo();
         setMerchantInfo(pBaseInfo, merchant);
@@ -278,6 +252,17 @@ public class BeanUtil {
     }
 
     /**
+     * 加工入库
+     */
+    public static PBaseInfo stockInForProcess(Merchant merchant, StockInData stockInData) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("stockInData", GsonUtil.getGson().toJson(stockInData));
+        return pBaseInfo;
+    }
+
+    /**
      * 越库调拨
      */
     public static PBaseInfo crossAllocate(Merchant merchant, StockInRecord stockInRecord) {
@@ -296,17 +281,6 @@ public class BeanUtil {
         setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         body.put("stockInRecord", GsonUtil.getGson().toJson(stockInRecord));
-        return pBaseInfo;
-    }
-
-    /**
-     * 扫描获取订单信息
-     */
-    public static PBaseInfo scanToPurchaseData(Context ctx, String uuid) {
-        PBaseInfo pBaseInfo = new PBaseInfo();
-        setBaseInfo(ctx, pBaseInfo);
-        Map<String, Object> body = pBaseInfo.getBody();
-        body.put("uuid", uuid);
         return pBaseInfo;
     }
 
@@ -375,19 +349,6 @@ public class BeanUtil {
         setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
         body.put("inventoryRecord", GsonUtil.getGson().toJson(ir));
-        return pBaseInfo;
-    }
-
-    /**
-     * 保存图片
-     */
-    public static PBaseInfo saveImage(Merchant merchant, String uuid, String imageUrl, String type) {
-        PBaseInfo pBaseInfo = new PBaseInfo();
-        setMerchantInfo(pBaseInfo, merchant);
-        Map<String, Object> body = pBaseInfo.getBody();
-        body.put("uuid", uuid);
-        body.put("image", imageUrl);
-        body.put("type", type);
         return pBaseInfo;
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.text.TextUtils;
 
+import com.xmzynt.storm.service.process.StockInData;
 import com.xmzynt.storm.service.user.merchant.Merchant;
 import com.xmzynt.storm.service.wms.allocate.AllocateRecord;
 import com.xmzynt.storm.service.wms.inventory.InventoryRecord;
@@ -66,6 +67,9 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     private boolean isCurrentAllocate;
     //当前是否在盘点
     private boolean isCurrentCheck;
+    //当前是否在加工入库
+    private boolean isCurrentProcessStoreIn;
+
     private RefreshMerchantHelper mRefreshMerchantHelper;
 
     public BgOperateService() {
@@ -154,6 +158,10 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
             if (!isCurrentCheck) {
                 getUnCheckList();
             }
+            //请求加工入库
+            if (!isCurrentProcessStoreIn) {
+                getUnProcessStoreInList();
+            }
             LogUtils.e("----",
                     "正在获取url = " + isCurrentUploadImage
                             + "\n 正在入库 = " + isCurrentCheckInStoreIn
@@ -163,8 +171,48 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
                             + "\n 正在出库 = " + isCurrentStoreOut
                             + "\n 正在调拨 = " + isCurrentAllocate
                             + "\n 正在盘点 = " + isCurrentCheck
+                            + "\n 正在加工入库 = " + isCurrentProcessStoreIn
             );
         }
+    }
+
+    /**
+     * 加工入库
+     */
+    private void getUnProcessStoreInList() {
+        List<DbImageUpload> list = mDBManager.getDbListProcessStoreIn();
+        if (list != null && list.size() > 0) {
+            isCurrentProcessStoreIn = true;
+            DbImageUpload data = list.get(0);
+            doUnProcessStoreInList(data);
+        } else {
+            isCurrentProcessStoreIn = false;
+        }
+    }
+
+    private void doUnProcessStoreInList(final DbImageUpload data) {
+        StockInData stockInData = GsonUtil.getGson().fromJson(data.getLine(), StockInData.class);
+        PBaseInfo pBaseInfo = BeanUtil.stockInForProcess(mMerchant, stockInData);
+        mApiManager.stockInForProcess(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        data.setStockInUuid(result);
+                        data.setIsRequestSuccess(true);
+                        mDBManager.updateDbImageUpload(data);
+                        sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        getUnProcessStoreInList();
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        isCurrentProcessStoreIn = false;
+                        LogUtils.e("----------加工入库失败-------------", failString);
+                        doResultFaild(errorType, failString, data);
+                    }
+
+                });
     }
 
     /**
@@ -389,7 +437,7 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
                         //盘点成功删除数据库
                         mDBManager.updateDbImageUpload(data);
                         //有历史时添加通知
-//                       sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
+                        //                       sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
                         getUnCheckList();
                     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,12 +19,14 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.xmzynt.storm.basic.ucn.UCN;
 import com.xmzynt.storm.service.process.ForecastProcessPlan;
+import com.xmzynt.storm.service.process.StockInData;
 import com.xmzynt.storm.service.wms.warehouse.Warehouse;
 import com.xmzynt.storm.util.GsonUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +34,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import xm.cloudweight.base.BaseActivity;
 import xm.cloudweight.camera.instrument.Instrument;
+import xm.cloudweight.comm.Common;
 import xm.cloudweight.fragment.InputFragment;
 import xm.cloudweight.fragment.VideoFragment;
 import xm.cloudweight.utils.BigDecimalUtil;
@@ -40,7 +44,9 @@ import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
+import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
+import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
@@ -65,6 +71,8 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     private InputFragment mInputFragment;
     @BindView(R.id.btn_date)
     Button mBtnDate;
+    @BindView(R.id.btn_allocate_accept_submit)
+    Button mBtnSubmit;
     @BindView(R.id.et_finish_produce_label)
     ScanEditText mEtFinishProduceLabel;
     @BindView(R.id.iv_delete)
@@ -133,6 +141,26 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
         mEtFinishProduceLabel.setOnScanFinishListener(mLabelOnScanFinishListener);
         mEtBucklesLeather.setOnInputFinishListener(mOnInputFinishListener);
         mEtDeductBad.setOnInputFinishListener(mOnInputFinishListener);
+        mEtWeightCurrent.addTextChangedListener(new BaseTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                String strCurrentWeight = s.toString().trim();
+                if (TextUtils.isEmpty(strCurrentWeight)) {
+                    return;
+                }
+                BigDecimal currentWeight = new BigDecimal(strCurrentWeight);
+                String strLeather = mEtBucklesLeather.getText().toString().trim();
+                BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
+                String strDeductBad = mEtDeductBad.getText().toString().trim();
+                BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeductBad) ? strDeductBad : "0");
+                BigDecimal weightCoefficient = new BigDecimal(1);
+                if (isWeight()) {
+                    weightCoefficient = mForecastProcessPlan.getWeightCoefficient();
+                }
+                BigDecimal finallyNum = currentWeight.subtract(leather).subtract(deduct).divide(weightCoefficient, RoundingMode.HALF_EVEN);
+                mEtDeduceProduction.setText(BigDecimalUtil.toScaleStr(finallyNum));
+            }
+        });
         mSpCustomer.setCustomItemSelectedListener(this);
         mSpWareHouseIn.setCustomItemSelectedListener(this);
         mSpWareHouseIn.setTitleColor(R.color.color_135c31);
@@ -408,7 +436,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
 
     }
 
-    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.et_key_search})
+    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.et_key_search, R.id.btn_allocate_accept_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -422,9 +450,122 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
             case R.id.et_key_search:
                 keySearch();
                 break;
+            case R.id.btn_allocate_accept_submit:
+                String production = mEtDeduceProduction.getText().toString();
+                BigDecimal bgProduction = new BigDecimal(!TextUtils.isEmpty(production) ? production : "");
+                if (bgProduction.doubleValue() <= 0) {
+                    ToastUtil.showShortToast(getContext(), "产量要大于0");
+                    return;
+                }
+                Warehouse warehouse = mSpWareHouseIn.getSelectedItem();
+                if (warehouse == null || TextUtils.isEmpty(warehouse.getUuid())) {
+                    ToastUtil.showShortToast(getContext(), "请选择入库仓库");
+                    return;
+                }
+                mBtnSubmit.setEnabled(false);
+                if (mVideoFragment.isLight()) {
+                    mVideoFragment.screenshot(mHandlerShotPic);
+                } else {
+                    shotResult(null);
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 拍照Handler
+     */
+    private Handler mHandlerShotPic = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+
+                    break;
+                case 2:
+                    String path = msg.getData().getString("path", "");
+                    shotResult(path);
+                    break;
+                case 3:
+                    shotResult(null);
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    });
+
+    private void shotResult(String imagePath) {
+        StockInData stockInData = new StockInData();
+        stockInData.setPlanUuid(mForecastProcessPlan.getUuid());
+        Warehouse warehouse = mSpWareHouseIn.getSelectedItem();
+        stockInData.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
+        stockInData.setPrice(getEtBigDecimal(mEtStorageInPrice));
+        //产量
+        stockInData.setOutputQty(getEtBigDecimal(mEtDeduceProduction));
+        //不良
+        stockInData.setRejectQty(getEtBigDecimal(mEtDeductBad));
+        //扣皮
+        stockInData.setLetterQty(getEtBigDecimal(mEtBucklesLeather));
+        //请求成功时返回的uuid
+        stockInData.setRecordUuid(null);
+        String date = mBtnDate.getText().toString().trim();
+        //保存到本地
+        DbImageUpload db = new DbImageUpload();
+        db.setDate(date);
+        db.setOperatime(DateUtils.getTime2(new Date()));
+        db.setImagePath(imagePath);
+        db.setLine(GsonUtil.getGson().toJson(stockInData));
+        db.setType(Common.DbType.TYPE_PROCESS_STORE_IN);
+        getDbManager().insertDbImageUpload(db);
+        ToastUtil.showShortToast(getContext(), "加工入库成功");
+        //刷新数据
+        refreshSuccessData(stockInData);
+        mBtnSubmit.setEnabled(true);
+        dismissLoadingDialog();
+    }
+
+    /**
+     * 入库，越库接口请求成功后刷新数据
+     */
+    private void refreshSuccessData(StockInData record) {
+        // 保存累计重量
+        if (mForecastProcessPlan != null) {
+            //转化为kg
+            BigDecimal weightCoefficient = mForecastProcessPlan.getWeightCoefficient();
+            BigDecimal numWarehousing = getEtBigDecimal(mEtDeduceProduction);
+            //todo 打印标签
+            //            if (mIntTypeUpload == TYPE_STORE_IN || mIntTypeUpload == TYPE_CROSS_ALLOCATE) {
+            //                PrinterInventory.printer(getContext(), count, goodsName, purchaseBatch);
+            //            } else if (mIntTypeUpload == TYPE_CROSS) {
+            //         PrinterSortOut.printer(
+            //                        getContext(),
+            //                        count,
+            //                        PrinterSortOut.SORT_OUT_QRCODE.concat(code),
+            //                        customer,
+            //                        department,
+            //                        goodsName,
+            //                        crossNum,
+            //                        code);
+            //            }
+            //保存已入库数
+            mForecastProcessPlan.setCompleteQty(record.getOutputQty());
+            clearContent();
+            mProcessAdapter.notifyDataSetChanged();
+            mForecastProcessPlan = null;
+            //光标移动到采购标签
+            mEtFinishProduceLabel.requestFocus();
+        }
+    }
+
+    private void clearContent() {
+        //清除关键字
+        mEtKeySearch.setText("");
+        //清除文本
+        clearText();
     }
 
     private onInputFinishListener mOnInputFinishListener = new onInputFinishListener() {

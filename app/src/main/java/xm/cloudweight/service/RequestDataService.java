@@ -156,10 +156,13 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
      * 调拨验收-未验收商品列表
      */
     private void queryNotAcceptData(Map params, final OnRequestDataListener listener) {
+        int page = (int) params.get("page");
+        int pageSize = (int) params.get("pageSize");
+        int defaultPageSize = (int) params.get("defaultPageSize");
         String date = (String) params.get("date");
         String status = (String) params.get("status");
         String inWarehouseUuid = (String) params.get("inWarehouseUuid");
-        PBaseInfo pBaseInfo = BeanUtil.queryNotAcceptData(mMerchant, date, status, inWarehouseUuid);
+        PBaseInfo pBaseInfo = BeanUtil.queryNotAcceptData(mMerchant, page, pageSize, defaultPageSize, date, status, inWarehouseUuid);
         mApiManager.queryNotAcceptData(pBaseInfo).compose(new TransformerHelper<ResponseEntity<List<AllocateRecord>>>().get())
                 .subscribe(new ApiSubscribe<List<AllocateRecord>>() {
                     @Override

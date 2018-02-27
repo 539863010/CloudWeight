@@ -308,6 +308,15 @@ public interface ApiManager {
     @POST("/merchant/scaleApi/queryProcessData.do")
     Observable<ResponseEntity<List<ForecastProcessPlan>>> queryProcessData(@Body PBaseInfo p);
 
+    /**
+     * 加工入库
+     *
+     * @param p 加工入库请求体
+     * @return Observable<ResponseEntity>
+     */
+    @POST("/merchant/scaleApi/stockInForProcess.do")
+    Observable<ResponseEntity<String>> stockInForProcess(@Body PBaseInfo p);
+
 
 
 }

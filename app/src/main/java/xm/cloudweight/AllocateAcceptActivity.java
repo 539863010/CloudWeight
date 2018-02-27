@@ -188,6 +188,26 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         mEtWeightAccumulate.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
         mEtBucklesLeather.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
         mEtDeductWeight.setOnInputFinishListener(mOnInputFinishListenerSetStoreInNum);
+        mEtWeightCurrent.addTextChangedListener(new BaseTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                String strCurrentWeight = s.toString().trim();
+                if (TextUtils.isEmpty(strCurrentWeight)) {
+                    return;
+                }
+                BigDecimal currentWeight = new BigDecimal(strCurrentWeight);
+                String strLeather = mEtBucklesLeather.getText().toString().trim();
+                BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
+                String strDeduct = mEtDeductWeight.getText().toString().trim();
+                BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeduct) ? strDeduct : "0");
+                BigDecimal weightCoefficient = new BigDecimal(1);
+                if (isWeight()) {
+                    weightCoefficient = mAllocateRecord.getWeightCoefficient();
+                }
+                BigDecimal finallyNum = currentWeight.subtract(leather).subtract(deduct).divide(weightCoefficient, RoundingMode.HALF_EVEN);
+                mEtNumWarehousing.setText(BigDecimalUtil.toScaleStr(finallyNum));
+            }
+        });
 
         //初始化视频
         mVideoFragment = VideoFragment.getInstance();
@@ -291,7 +311,10 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
      */
     private void queryNotAcceptData(String date, String warehouseUuid) {
         try {
-            Map<String, String> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
+            params.put("page", 0);
+            params.put("pageSize", 0);
+            params.put("defaultPageSize", 0);
             params.put("date", date);
             params.put("status", "unAccept");
             params.put("inWarehouseUuid", warehouseUuid);
