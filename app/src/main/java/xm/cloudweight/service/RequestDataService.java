@@ -117,10 +117,72 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
                 queryNotAcceptData(params, listener);
             } else if (type == TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA) {
                 queryProcessData(params, listener);
+            } else if (type == TYPE_ALLOCATE_ACCEPT_CANCEL) {
+                cancelAccept(params, listener);
+            } else if (type == TYPE_PROCESS_STORAGE_CANCEL) {
+                cancelStockInForProcess(params, listener);
             }
         }
 
     };
+
+    /**
+     * 撤销加工入库
+     */
+    private void cancelStockInForProcess(Map params, final OnRequestDataListener listener) {
+        String uuid = (String) params.get("uuid");
+        PBaseInfo pBaseInfo = BeanUtil.cancelStockInForProcess(mMerchant, uuid);
+        mApiManager.cancelStockInForProcess(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        try {
+                            listener.onReceive(TYPE_PROCESS_STORAGE_CANCEL);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_PROCESS_STORAGE_CANCEL_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 撤销调拨验收
+     */
+    private void cancelAccept(Map params, final OnRequestDataListener listener) {
+        String uuid = (String) params.get("uuid");
+        PBaseInfo pBaseInfo = BeanUtil.cancelAccept(mMerchant, uuid);
+        mApiManager.cancelAccept(pBaseInfo)
+                .compose(new TransformerHelper<ResponseEntity<String>>().get())
+                .subscribe(new ApiSubscribe<String>() {
+                    @Override
+                    protected void onResult(String result) {
+                        try {
+                            listener.onReceive(TYPE_ALLOCATE_ACCEPT_CANCEL);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onResultFail(int errorType, String failString) {
+                        try {
+                            listener.onError(TYPE_ALLOCATE_ACCEPT_CANCEL_FAILED, failString);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
 
     /**
      * 查询加工数据
@@ -561,45 +623,81 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
     /**
      * 保存到数据库的接口类型,用type来保存主键id, 确保数据库中只有一条该type数据
      */
-    //获取分拣数据-重量
+    /**
+     * 获取分拣数据-重量
+     */
     public static final long TYPE_SORT_OUT_WEIGHT = 1L;
     public static final long TYPE_SORT_OUT_WEIGHT_FAILED = 2L;
-    //获取分拣数据-数量
+    /**
+     * 获取分拣数据-数量
+     */
     public static final long TYPE_SORT_OUT_COUNT = 3L;
     public static final long TYPE_SORT_OUT_COUNT_FAILED = 4L;
-    //获取分拣数据-取消
+    /**
+     * 获取分拣数据-取消
+     */
     public static final long TYPE_SORT_OUT_CANCEL = 5L;
     public static final long TYPE_SORT_OUT_CANCEL_FAILED = 6L;
-    //验收-获取下拉操作者
+    /**
+     * 验收-获取下拉操作者
+     */
     public static final long TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR = 7L;
     public static final long TYPE_CHECK_IN_GET_DROPDOWN_OPERATOR_FAILED = 8L;
-    //验收-批量查询采购信息
+    /**
+     * 验收-批量查询采购信息
+     */
     public static final long TYPE_CHECK_IN_QUERY_PURCHASE_DATA = 9L;
     public static final long TYPE_CHECK_IN_QUERY_PURCHASE_DATA_FAILED = 10L;
-    //验收-撤销入库
+    /**
+     * 验收-撤销入库
+     */
     public static final long TYPE_CHECK_IN_CANCEL = 11L;
     public static final long TYPE_CHECK_IN_CANCEL_FAILED = 12L;
-    //出库，调拨，盘点-查找类别
+    /**
+     * 出库，调拨，盘点-查找类别
+     */
     public static final long TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY = 13L;
     public static final long TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY_FAILED = 14L;
-    //出库，调拨，盘点-查找库存记录
+    /**
+     * 出库，调拨，盘点-查找库存记录
+     */
     public static final long TYPE_SIMILAR_QUERY_STOCK = 15L;
     public static final long TYPE_SIMILAR_QUERY_STOCK_FAILED = 16L;
-    //出库，调拨，盘点-撤销
+    /**
+     * 出库，调拨，盘点-撤销
+     */
     public static final long TYPE_SIMILAR_CANCEL = 17L;
     public static final long TYPE_SIMILAR_CANCEL_FAILED = 18L;
-    //扫描库存标签
+    /**
+     * 扫描库存标签
+     */
     public static final long TYPE_SCAN_BY_TRACE_CODE = 19L;
     public static final long TYPE_SCAN_BY_TRACE_CODE_FAILED = 20L;
-    //调拨验收-仓库验收列表
+    /**
+     * 调拨验收-仓库验收列表
+     */
     public static final long TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK = 21L;
     public static final long TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK_FAILED = 22L;
-    //调拨验收-商品列表
+    /**
+     * 调拨验收-商品列表
+     */
     public static final long TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA = 23L;
     public static final long TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED = 24L;
-    //调拨验收-查询加工列表
+    /**
+     * 调拨验收-查询加工列表
+     */
     public static final long TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA = 25L;
     public static final long TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA_FAILED = 26L;
+    /**
+     * 调拨验收-撤销调拨验收
+     */
+    public static final long TYPE_ALLOCATE_ACCEPT_CANCEL = 27L;
+    public static final long TYPE_ALLOCATE_ACCEPT_CANCEL_FAILED = 28L;
+    /**
+     * 加工入库-撤销
+     */
+    public static final long TYPE_PROCESS_STORAGE_CANCEL = 29L;
+    public static final long TYPE_PROCESS_STORAGE_CANCEL_FAILED = 30L;
 
     /**
      * 注意添加新type
@@ -632,6 +730,10 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
             failedType = TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED;
         } else if (type == TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA) {
             failedType = TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA_FAILED;
+        } else if (type == TYPE_ALLOCATE_ACCEPT_CANCEL) {
+            failedType = TYPE_ALLOCATE_ACCEPT_CANCEL_FAILED;
+        } else if (type == TYPE_PROCESS_STORAGE_CANCEL) {
+            failedType = TYPE_PROCESS_STORAGE_CANCEL_FAILED;
         }
         return failedType;
     }

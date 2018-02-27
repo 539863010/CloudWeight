@@ -58,7 +58,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_check_in_history"
+                    android:id="@+id/btn_process_storage_history"
                     style="@style/btn_border_less"
                     android:layout_width="@dimen/_80dp"
                     android:layout_height="@dimen/btn_height_small"
@@ -315,7 +315,7 @@
                     android:textSize="@dimen/_12sp" />
 
                 <ImageView
-                    android:id="@+id/iv_sort_out_search"
+                    android:id="@+id/iv_process_storage_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_5dp"

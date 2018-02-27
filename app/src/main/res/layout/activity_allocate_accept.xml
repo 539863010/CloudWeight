@@ -57,7 +57,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_check_in_history"
+                    android:id="@+id/btn_allocate_accept_history"
                     style="@style/btn_border_less"
                     android:layout_width="@dimen/_80dp"
                     android:layout_height="@dimen/btn_height_small"

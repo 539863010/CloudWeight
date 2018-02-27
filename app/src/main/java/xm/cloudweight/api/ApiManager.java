@@ -326,6 +326,24 @@ public interface ApiManager {
     @POST("/merchant/scaleApi/accept.do")
     Observable<ResponseEntity<String>> accept(@Body PBaseInfo p);
 
+    /**
+     * 撤销调拨验收
+     *
+     * @param p 撤销调拨验收请求体
+     * @return Observable<ResponseEntity>
+     */
+    @POST("/merchant/scaleApi/cancelAccept.do")
+    Observable<ResponseEntity<String>> cancelAccept(@Body PBaseInfo p);
+
+    /**
+     * 撤销加工入库
+     *
+     * @param p 撤销加工入库请求体
+     * @return Observable<ResponseEntity>
+     */
+    @POST("/merchant/scaleApi/cancelStockInForProcess.do")
+    Observable<ResponseEntity<String>> cancelStockInForProcess(@Body PBaseInfo p);
+
 
 
 }

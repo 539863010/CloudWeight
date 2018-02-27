@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +28,7 @@ import com.xmzynt.storm.util.GsonUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,18 +47,23 @@ import xm.cloudweight.utils.KeyBoardUtils;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
+import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
+import xm.cloudweight.widget.HistoryAllocateAcceptPopWindow;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
+import xm.cloudweight.widget.impl.OnDeleteListener;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
 import static java.math.BigDecimal.ROUND_HALF_EVEN;
+import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_CANCEL;
+import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_CANCEL_FAILED;
 import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA;
 import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED;
 import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_WARE_HOUSE_CHECK;
@@ -67,7 +74,7 @@ import static xm.cloudweight.service.RequestDataService.TYPE_ALLOCATE_ACCEPT_WAR
  * @create : 2018/2/26
  * @des :  调拨验收
  */
-public class AllocateAcceptActivity extends BaseActivity implements VideoFragment.OnInstrumentListener, AdapterView.OnItemSelectedListener {
+public class AllocateAcceptActivity extends BaseActivity implements VideoFragment.OnInstrumentListener, AdapterView.OnItemSelectedListener, OnDeleteListener {
 
     private VideoFragment mVideoFragment;
     private InputFragment mInputFragment;
@@ -96,6 +103,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     private List<AllocateRecord> mListShow = new ArrayList<>();
     private List<AllocateRecord> mListAll = new ArrayList<>();
     private Map<String, String> mMapAccumulate = new HashMap<>();
+    private List<DbImageUpload> mListHistory = new ArrayList<>();
     private EditText mEtWeightCurrent;
     private SearchAndFocusEditText mEtWeightAccumulate;
     private SearchAndFocusEditText mEtBucklesLeather;
@@ -107,6 +115,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     private ImageView mIvAdd;
     private NotAcceptAdapter mNotAcceptAdapter;
     private AllocateRecord mAllocateRecord;
+    private HistoryAllocateAcceptPopWindow mAllocateAcceptPopWindow;
+    private DbImageUpload mDbImageUpload;
+    private boolean hasCancelAccept;
 
     @Override
     public String getBaseTitle() {
@@ -226,14 +237,14 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
                 .show(mVideoFragment)
                 .commitAllowingStateLoss();
 
-        //        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
-        //            @Override
-        //            public void onRefresh() {
-        //                if (mHistoryCheckInPopWindow != null && mHistoryCheckInPopWindow.isShowing()) {
-        //                    refreshHistoryList();
-        //                }
-        //            }
-        //        });
+        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mAllocateAcceptPopWindow != null && mAllocateAcceptPopWindow.isShowing()) {
+                    refreshHistoryList();
+                }
+            }
+        });
 
     }
 
@@ -260,6 +271,10 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
                 queryNotAcceptDataSuccess(type);
             } else if (type == TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA_FAILED) {
                 queryNotAcceptDataFailed(msg);
+            } else if (type == TYPE_ALLOCATE_ACCEPT_CANCEL) {
+                onCancelSuccess();
+            } else if (type == TYPE_ALLOCATE_ACCEPT_CANCEL_FAILED) {
+                onCancelFailed(msg);
             }
             return false;
         }
@@ -409,8 +424,8 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         mNotAcceptAdapter.notifyDataSetChanged();
     }
 
-    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.iv_print_label_sub,
-            R.id.iv_print_label_add, R.id.btn_allocate_accept_submit})
+    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.iv_print_label_sub, R.id.iv_allocate_accept_search,
+            R.id.iv_print_label_add, R.id.btn_allocate_accept_submit, R.id.btn_allocate_accept_history})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -450,9 +465,129 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
                     shotResult(null);
                 }
                 break;
+            case R.id.btn_allocate_accept_history:
+                showHistory();
+                break;
             default:
                 break;
         }
+    }
+
+    private void showHistory() {
+        if (mAllocateAcceptPopWindow == null) {
+            mAllocateAcceptPopWindow = new HistoryAllocateAcceptPopWindow(getContext(), mSpWareHouseIn);
+            mAllocateAcceptPopWindow.setOnDeleteListener(this);
+            mAllocateAcceptPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    if (hasCancelAccept) {
+                        mNotAcceptAdapter.notifyDataSetChanged();
+                    }
+                    hasCancelAccept = false;
+                }
+            });
+        }
+        refreshHistoryList();
+    }
+
+    @Override
+    public void delete(DbImageUpload data) {
+        mDbImageUpload = data;
+        requestCancel(data.getStockInUuid());
+    }
+
+    private void requestCancel(String uuid) {
+        showLoadingDialog(false);
+        if (!TextUtils.isEmpty(uuid)) {
+            cancelAccept(uuid);
+        } else {
+            onCancelSuccess();
+        }
+    }
+
+    private void cancelAccept(String uuid) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("uuid", uuid);
+            getIRequestDataService().onGetDataListener(TYPE_ALLOCATE_ACCEPT_CANCEL, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, null));
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, message));
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onCancelSuccess() {
+        //先刷新后删除数据库
+        refreshCancelAccept();
+        getDbManager().deleteDbImageUpload(mDbImageUpload);
+        refreshHistoryList();
+        ToastUtil.showShortToast(getContext(), "撤销成功");
+        hasCancelAccept = true;
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+    }
+
+    public void onCancelFailed(Message message) {
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+        ToastUtil.showShortToast(getContext(), MessageUtil.getObj(message));
+    }
+
+    private void refreshCancelAccept() {
+        String date = mDbImageUpload.getDate();
+        String currentSelectedDate = mBtnDate.getText().toString().trim();
+        if (!date.equals(currentSelectedDate)) {
+            return;
+        }
+        StockInRecord stockInRecord = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), StockInRecord.class);
+        String cancelUuid = stockInRecord.getAllocateRecordUuid();
+        BigDecimal quantity = stockInRecord.getQuantity();
+        for (AllocateRecord data : mListAll) {
+            String uuid = data.getUuid();
+            if (cancelUuid.equals(uuid)) {
+                //已验收
+                BigDecimal acceptQty = data.getAcceptQty();
+                data.setAcceptQty(acceptQty.subtract(quantity));
+                break;
+            }
+        }
+        //修改累计
+        if (mMapAccumulate.containsKey(cancelUuid)) {
+            BigDecimal coefficient = stockInRecord.getCoefficient();
+            BigDecimal numBeforeModify = new BigDecimal(mMapAccumulate.get(cancelUuid));
+            BigDecimal numAfterModify;
+            if (coefficient != null && coefficient.doubleValue() != 0) {
+                numAfterModify = numBeforeModify.subtract(quantity.multiply(coefficient));
+            } else {
+                numAfterModify = numBeforeModify.subtract(quantity);
+            }
+            String value = BigDecimalUtil.toScaleStr(numAfterModify);
+            mMapAccumulate.put(cancelUuid, value);
+            mEtWeightAccumulate.setText(value);
+        }
+    }
+
+    /**
+     * 刷新历史列表
+     */
+    private void refreshHistoryList() {
+        //获取数据库当天的数据
+        String date = mBtnDate.getText().toString().trim();
+        List<DbImageUpload> daoList = getDbManager().getDbListAllocateAcceptHistory(date);
+        Collections.reverse(daoList);
+        mListHistory.clear();
+        mListHistory.addAll(daoList);
+        mAllocateAcceptPopWindow.show();
+        mAllocateAcceptPopWindow.notify(mListHistory);
     }
 
     /**
@@ -481,6 +616,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
 
     private void shotResult(String imagePath) {
         StockInRecord record = new StockInRecord();
+        record.setGoods(mAllocateRecord.getGoods());
+        record.setGoodsUnit(mAllocateRecord.getGoodsUnit());
+        record.setCoefficient(mAllocateRecord.getWeightCoefficient());
         //扣重数
         record.setDeductQty(getEtBigDecimal(mEtDeductWeight));
         //扣皮数
@@ -488,7 +626,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         //验收数（入库数）
         record.setQuantity(getEtBigDecimal(mEtNumWarehousing));
         //调拨记录uuid
-        record.setAllocateRecordUuid(null);
+        record.setAllocateRecordUuid(mAllocateRecord.getUuid());
 
         String date = mBtnDate.getText().toString().trim();
         DbImageUpload db = new DbImageUpload();
@@ -672,9 +810,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     private DatePickerDialog.OnDateSetListener mOnDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            String monthStr = ((month + 1) < 10) ? "0" + (month + 1) : (month + 1) + "";
-            String dayStr = (dayOfMonth < 10) ? "0" + dayOfMonth : dayOfMonth + "";
-            String date = year + "-" + monthStr + "-" + dayStr;
+            String date = year + "-" + (month + 1) + "-" + dayOfMonth;
             mBtnDate.setText(date);
             Warehouse selectedItem = mSpWareHouseIn.getSelectedItem();
             if (selectedItem != null) {

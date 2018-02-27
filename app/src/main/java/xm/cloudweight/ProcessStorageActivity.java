@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -26,9 +27,11 @@ import com.xmzynt.storm.util.GsonUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,18 +47,23 @@ import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
+import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
 import xm.cloudweight.widget.BaseTextWatcher;
 import xm.cloudweight.widget.CommonAdapter4Lv;
 import xm.cloudweight.widget.CommonHolder4Lv;
 import xm.cloudweight.widget.DataSpinner;
+import xm.cloudweight.widget.HistoryProcessStoragePopWindow;
 import xm.cloudweight.widget.ScanEditText;
 import xm.cloudweight.widget.SearchAndFocusEditText;
+import xm.cloudweight.widget.impl.OnDeleteListener;
 import xm.cloudweight.widget.impl.onInputFinishListener;
 import xm.cloudweight.widget.impl.onScanFinishListener;
 
 import static java.math.BigDecimal.ROUND_HALF_EVEN;
+import static xm.cloudweight.service.RequestDataService.TYPE_PROCESS_STORAGE_CANCEL;
+import static xm.cloudweight.service.RequestDataService.TYPE_PROCESS_STORAGE_CANCEL_FAILED;
 import static xm.cloudweight.service.RequestDataService.TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA;
 import static xm.cloudweight.service.RequestDataService.TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA_FAILED;
 
@@ -64,7 +72,7 @@ import static xm.cloudweight.service.RequestDataService.TYPE_PROCESS_STORAGE_QUE
  * @create : 2018/2/26
  * @des :  加工入库
  */
-public class ProcessStorageActivity extends BaseActivity implements VideoFragment.OnInstrumentListener, AdapterView.OnItemSelectedListener {
+public class ProcessStorageActivity extends BaseActivity implements VideoFragment.OnInstrumentListener, AdapterView.OnItemSelectedListener, OnDeleteListener {
 
     private static final String DEFAULT_SPINNER_CUSTOMER = "客户";
     private VideoFragment mVideoFragment;
@@ -102,6 +110,10 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     private ProcessAdapter mProcessAdapter;
     private TextView mTvDeductBadUnit;
     private TextView mTvDeductProductionUnit;
+    private HistoryProcessStoragePopWindow mProcessStoragePopWindow;
+    private DbImageUpload mDbImageUpload;
+    private boolean hasCancelProcess;
+    private List<DbImageUpload> mListHistory = new ArrayList<>();
 
     @Override
     public String getBaseTitle() {
@@ -178,14 +190,14 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                 .show(mVideoFragment)
                 .commitAllowingStateLoss();
 
-        //        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
-        //            @Override
-        //            public void onRefresh() {
-        //                if (mHistoryCheckInPopWindow != null && mHistoryCheckInPopWindow.isShowing()) {
-        //                    refreshHistoryList();
-        //                }
-        //            }
-        //        });
+        DbRefreshUtil.refreshRegist(this, new DbRefreshUtil.onDbRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mProcessStoragePopWindow != null && mProcessStoragePopWindow.isShowing()) {
+                    refreshHistoryList();
+                }
+            }
+        });
     }
 
     @Override
@@ -217,6 +229,10 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                 queryProcessDataSuccess(type);
             } else if (type == TYPE_PROCESS_STORAGE_QUERY_PROCESS_DATA_FAILED) {
                 queryProcessDataFailed(msg);
+            } else if (type == TYPE_PROCESS_STORAGE_CANCEL) {
+                onCancelSuccess();
+            } else if (type == TYPE_PROCESS_STORAGE_CANCEL_FAILED) {
+                onCancelFailed(msg);
             }
             return false;
         }
@@ -436,7 +452,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
 
     }
 
-    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.et_key_search, R.id.btn_process_submit})
+    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.iv_process_storage_search, R.id.btn_process_submit, R.id.btn_process_storage_history})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -447,7 +463,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
             case R.id.btn_clear_zero:
                 clearToZero();
                 break;
-            case R.id.et_key_search:
+            case R.id.iv_process_storage_search:
                 keySearch();
                 break;
             case R.id.btn_process_submit:
@@ -469,9 +485,112 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                     shotResult(null);
                 }
                 break;
+            case R.id.btn_process_storage_history:
+                showHistory();
+                break;
             default:
                 break;
         }
+    }
+
+    private void showHistory() {
+        if (mProcessStoragePopWindow == null) {
+            mProcessStoragePopWindow = new HistoryProcessStoragePopWindow(getContext(), mSpCustomer);
+            mProcessStoragePopWindow.setOnDeleteListener(this);
+            mProcessStoragePopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    if (hasCancelProcess) {
+                        mProcessAdapter.notifyDataSetChanged();
+                    }
+                    hasCancelProcess = false;
+                }
+            });
+        }
+        refreshHistoryList();
+    }
+
+    @Override
+    public void delete(DbImageUpload data) {
+        mDbImageUpload = data;
+        requestCancel(data.getStockInUuid());
+    }
+
+    private void requestCancel(String uuid) {
+        showLoadingDialog(false);
+        if (!TextUtils.isEmpty(uuid)) {
+            cancelProcess(uuid);
+        } else {
+            onCancelSuccess();
+        }
+    }
+
+    private void cancelProcess(String uuid) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("uuid", uuid);
+            getIRequestDataService().onGetDataListener(TYPE_PROCESS_STORAGE_CANCEL, params, new OnRequestDataListener.Stub() {
+                @Override
+                public void onReceive(long type) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, null));
+                }
+
+                @Override
+                public void onError(long type, String message) throws RemoteException {
+                    mRequestData.sendMessage(MessageUtil.create(type, message));
+                }
+            });
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onCancelSuccess() {
+        //先刷新后删除数据库
+        refreshCancelProcess();
+        getDbManager().deleteDbImageUpload(mDbImageUpload);
+        refreshHistoryList();
+        ToastUtil.showShortToast(getContext(), "撤销成功");
+        hasCancelProcess = true;
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+    }
+
+    public void onCancelFailed(Message message) {
+        dismissLoadingDialog();
+        mDbImageUpload = null;
+        ToastUtil.showShortToast(getContext(), MessageUtil.getObj(message));
+    }
+
+    private void refreshCancelProcess() {
+        String date = mDbImageUpload.getDate();
+        String currentSelectedDate = mBtnDate.getText().toString().trim();
+        if (!date.equals(currentSelectedDate)) {
+            return;
+        }
+        StockInData stockInData = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), StockInData.class);
+        String cancelUuid = stockInData.getPlanUuid();
+        BigDecimal quantity = stockInData.getOutputQty();
+        for (ForecastProcessPlan data : mListAll) {
+            if (cancelUuid.equals(data.getUuid())) {
+                data.setCompleteQty(data.getCompleteQty().subtract(quantity));
+                break;
+            }
+        }
+    }
+
+    /**
+     * 刷新历史列表
+     */
+    private void refreshHistoryList() {
+        //获取数据库当天的数据
+        String date = mBtnDate.getText().toString().trim();
+        List<DbImageUpload> daoList = getDbManager().getDbListProcessStorageHistory(date);
+        Collections.reverse(daoList);
+        mListHistory.clear();
+        mListHistory.addAll(daoList);
+        mProcessStoragePopWindow.show();
+        mProcessStoragePopWindow.notify(mListHistory);
     }
 
     /**
@@ -501,6 +620,10 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     private void shotResult(String imagePath) {
         StockInData stockInData = new StockInData();
         stockInData.setPlanUuid(mForecastProcessPlan.getUuid());
+        stockInData.setGoods(mForecastProcessPlan.getGoods());
+        stockInData.setGoodsUnit(mForecastProcessPlan.getGoodsUnit());
+        stockInData.setPackageSpec(mForecastProcessPlan.getPackageSpec());
+        stockInData.setCustomerName(mForecastProcessPlan.getCustomerName());
         Warehouse warehouse = mSpWareHouseIn.getSelectedItem();
         stockInData.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
         stockInData.setPrice(getEtBigDecimal(mEtStorageInPrice));
@@ -642,9 +765,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     private DatePickerDialog.OnDateSetListener mOnDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            String monthStr = ((month + 1) < 10) ? "0" + (month + 1) : (month + 1) + "";
-            String dayStr = (dayOfMonth < 10) ? "0" + dayOfMonth : dayOfMonth + "";
-            String date = year + "-" + monthStr + "-" + dayStr;
+            String date = year + "-" + ((month + 1)) + "-" + dayOfMonth;
             mBtnDate.setText(date);
             //请求数据
             showLoadingDialog(false);

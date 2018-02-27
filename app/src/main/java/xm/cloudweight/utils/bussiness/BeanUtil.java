@@ -381,4 +381,27 @@ public class BeanUtil {
         body.put("stockInRecord", GsonUtil.getGson().toJson(stockInRecord));
         return pBaseInfo;
     }
+
+    /**
+     * 撤销调拨验收
+     */
+    public static PBaseInfo cancelAccept(Merchant merchant, String uuid) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("uuid", uuid);
+        return pBaseInfo;
+    }
+
+    /**
+     * 撤销调拨验收
+     */
+    public static PBaseInfo cancelStockInForProcess(Merchant merchant, String uuid) {
+        PBaseInfo pBaseInfo = new PBaseInfo();
+        setMerchantInfo(pBaseInfo, merchant);
+        Map<String, Object> body = pBaseInfo.getBody();
+        body.put("uuid", uuid);
+        return pBaseInfo;
+    }
+
 }

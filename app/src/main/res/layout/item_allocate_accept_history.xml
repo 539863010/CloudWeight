@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pop_title"
+    android:layout_width="600dp"
+    android:layout_height="@dimen/_34dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_upload"
+        android:layout_width="@dimen/_40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="上传"
+        android:textSize="@dimen/history_item_size" />
+
+    <ImageView
+        android:id="@+id/item_upload_state"
+        android:src="@drawable/upload"
+        android:layout_width="@dimen/_40dp"
+        android:layout_marginLeft="@dimen/_10dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/ci_goods"
+        android:layout_width="@dimen/_100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="商品"
+        android:textSize="@dimen/history_item_size" />
+
+    <TextView
+        android:id="@+id/ci_num"
+        android:layout_width="@dimen/_50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="入库数量"
+        android:textSize="@dimen/history_item_size" />
+
+    <TextView
+        android:id="@+id/ci_unit"
+        android:layout_width="@dimen/_40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_10dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="单位"
+        android:textSize="@dimen/history_item_size" />
+
+    <TextView
+        android:id="@+id/ci_operation_time"
+        android:layout_width="@dimen/_120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_10dp"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="操作时间"
+        android:textSize="@dimen/history_item_size" />
+
+    <Button
+        android:id="@+id/ci_print_label"
+        android:layout_width="@dimen/_0dp"
+        android:layout_height="@dimen/_25dp"
+        android:layout_marginRight="@dimen/_10dp"
+        android:layout_weight="1"
+        android:background="@drawable/anniu_c"
+        android:ellipsize="middle"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="打印标签"
+        android:textColor="@color/white"
+        android:textSize="9sp" />
+
+    <Button
+        android:id="@+id/ci_revocation"
+        android:layout_width="@dimen/_42dp"
+        android:layout_height="@dimen/_25dp"
+        android:layout_marginRight="@dimen/_10dp"
+        android:background="@drawable/shape_anniu_grey"
+        android:gravity="center"
+        android:text="撤销"
+        android:textColor="@color/white"
+        android:textSize="9sp" />
+
+</LinearLayout>

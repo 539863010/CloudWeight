@@ -848,9 +848,7 @@ public class CheckInActivity extends BaseActivity implements
     private DatePickerDialog.OnDateSetListener mOnDateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-            String monthStr = ((month + 1) < 10) ? "0" + (month + 1) : (month + 1) + "";
-            String dayStr = (dayOfMonth < 10) ? "0" + dayOfMonth : dayOfMonth + "";
-            String date = year + "-" + monthStr + "-" + dayStr;
+            String date = year + "-" + ((month + 1)) + "-" + dayOfMonth;
             mBtnDate.setText(date);
             //请求数据
             showLoadingDialog(false);

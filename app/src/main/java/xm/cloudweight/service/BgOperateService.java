@@ -225,13 +225,11 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        stockInRecord.setAllocateRecordUuid(result);
-                        data.setLine(GsonUtil.getGson().toJson(stockInRecord));
                         data.setStockInUuid(result);
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);
                         sendBroadcast(new Intent(BrocastFilter.FILTER_REFRESH_HISTORY));
-                        getUnProcessStoreInList();
+                        getUnAllocateAcceptList();
                     }
 
                     @Override
@@ -266,8 +264,6 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
                 .subscribe(new ApiSubscribe<String>() {
                     @Override
                     protected void onResult(String result) {
-                        stockInData.setRecordUuid(result);
-                        data.setLine(GsonUtil.getGson().toJson(stockInData));
                         data.setStockInUuid(result);
                         data.setIsRequestSuccess(true);
                         mDBManager.updateDbImageUpload(data);

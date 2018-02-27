@@ -27,6 +27,7 @@ public class DBManager {
         mContext = context;
         mDevOpenHelper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
     }
+
     /**
      * 获取可读数据库
      */
@@ -101,7 +102,6 @@ public class DBManager {
                 .list();
     }
 
-
     /**
      * 获取数据库中  分拣历史
      */
@@ -167,7 +167,39 @@ public class DBManager {
     }
 
     /**
-     *  验收  入库
+     * 获取数据库中  调拨验收历史
+     */
+    public List<DbImageUpload> getDbListAllocateAcceptHistory(String date) {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession.getDbImageUploadDao()
+                .queryBuilder()
+                .where(
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ALLOCATE_ACCEPT),
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.ErrorString.isNull(),
+                        DbImageUploadDao.Properties.Date.eq(date))
+                .list();
+    }
+
+    /**
+     * 获取数据库中  加工入库历史
+     */
+    public List<DbImageUpload> getDbListProcessStorageHistory(String date) {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession.getDbImageUploadDao()
+                .queryBuilder()
+                .where(
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_PROCESS_STORE_IN),
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.ErrorString.isNull(),
+                        DbImageUploadDao.Properties.Date.eq(date))
+                .list();
+    }
+
+    /**
+     * 验收  入库
      */
     public List<DbImageUpload> getDbListCheckInStoreIn() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -202,7 +234,7 @@ public class DBManager {
     }
 
     /**
-     *  验收  越库调拨
+     * 验收  越库调拨
      */
     public List<DbImageUpload> getDbListCheckInCrossAllocate() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -238,7 +270,7 @@ public class DBManager {
     }
 
     /**
-     *  出库
+     * 出库
      */
     public List<DbImageUpload> getDbListStoreOut() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -256,7 +288,7 @@ public class DBManager {
     }
 
     /**
-     *  调拨
+     * 调拨
      */
     public List<DbImageUpload> getDbListAllocate() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -308,7 +340,7 @@ public class DBManager {
     }
 
     /**
-     *  调拨验收
+     * 调拨验收
      */
     public List<DbImageUpload> getDbListAllocateAccept() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
