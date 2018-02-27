@@ -291,7 +291,7 @@ public class DBManager {
     }
 
     /**
-     *  加工入库
+     * 加工入库
      */
     public List<DbImageUpload> getDbListProcessStoreIn() {
         DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
@@ -300,6 +300,23 @@ public class DBManager {
                 .queryBuilder()
                 .where(
                         DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_PROCESS_STORE_IN),
+                        DbImageUploadDao.Properties.ErrorString.isNull(),
+                        DbImageUploadDao.Properties.Line.isNotNull(),
+                        DbImageUploadDao.Properties.IsRequestSuccess.eq(false)
+                )
+                .list();
+    }
+
+    /**
+     *  调拨验收
+     */
+    public List<DbImageUpload> getDbListAllocateAccept() {
+        DaoMaster daoMaster = new DaoMaster(getReadableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        return daoSession.getDbImageUploadDao()
+                .queryBuilder()
+                .where(
+                        DbImageUploadDao.Properties.Type.eq(Common.DbType.TYPE_ALLOCATE_ACCEPT),
                         DbImageUploadDao.Properties.ErrorString.isNull(),
                         DbImageUploadDao.Properties.Line.isNotNull(),
                         DbImageUploadDao.Properties.IsRequestSuccess.eq(false)

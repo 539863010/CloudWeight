@@ -4,12 +4,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\realplay_activity.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\alarmuseradapter_item.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\alarmuseradapter_item.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\arrow_sub_focallength.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\arrow_sub_focallength.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\alarmuseradapter_item.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\alarmuseradapter_item.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\surfaceview_multi_layout.xml",
@@ -36,12 +36,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\alarm_content_activity.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\playback_activity.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\playback_activity.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\cloudaccount_listview_item_layout.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\cloudaccount_listview_item_layout.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\playback_activity.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\playback_activity.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\download_notification_layout.xml",
@@ -52,12 +52,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\alarm_notifyadapter_items.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\device_slide_delete_item.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\device_slide_delete_item.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\navigation_bar.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\navigation_bar.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\device_slide_delete_item.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\device_slide_delete_item.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\device_listview_item_layout_other.xml",
@@ -104,16 +104,16 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\help_activity.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\images_listview_thumbnail_item_layout.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\images_listview_thumbnail_item_layout.xml"
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\cloudaccount_info_activity.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\cloudaccount_info_activity.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\start_activity.xml",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\start_activity.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\cloudaccount_info_activity.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\cloudaccount_info_activity.xml"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\images_listview_thumbnail_item_layout.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\images_listview_thumbnail_item_layout.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\images_listview_thumbnail_layout.xml",
@@ -200,12 +200,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\alarmuseradapter_item.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\device_manage_add_baseactivity.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\device_manage_add_baseactivity.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\system_setting_cloudaccount_setting_activity.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\system_setting_cloudaccount_setting_activity.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\device_manage_add_baseactivity.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\device_manage_add_baseactivity.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\type_popupwindow.xml",
@@ -220,12 +220,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\device_manager_editable_acitivity.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\playback_live_view_item.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\playback_live_view_item.xml"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\imagepreview_videoplay.xml",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\imagepreview_videoplay.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\playback_live_view_item.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\playback_live_view_item.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\system_setting_cloudaccount_set_activity.xml",
@@ -252,12 +252,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\navigation_bar.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\menu_scrollview.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\menu_scrollview.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\playback_cloudaccount_preview_item.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\playback_cloudaccount_preview_item.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\menu_scrollview.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\menu_scrollview.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\menu_row_item.xml",
@@ -284,12 +284,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\image_manager_imagepreview_frag_activity.xml"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\acy_play.xml",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\acy_play.xml"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\image_manager_localplay_activity.xml",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\image_manager_localplay_activity.xml"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\acy_play.xml",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\acy_play.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\alarm_push_manager_activity.xml",
@@ -372,12 +372,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\images_listview_date_info_layout.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\device_manage_add_baseactivity.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\device_manage_add_baseactivity.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\alarm_push_manager_activity.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\alarm_push_manager_activity.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\device_manage_add_baseactivity.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\layout\\device_manage_add_baseactivity.xml"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\layout\\alarm_listview_item_layout.xml",

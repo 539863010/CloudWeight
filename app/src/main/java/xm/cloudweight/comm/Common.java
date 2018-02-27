@@ -23,30 +23,40 @@ public class Common {
     public static final String PAGE_STRING = "PAGE";
 
     public interface DbType {
+
         /**
          * 验收-入库
          */
         int TYPE_ChECK_IN_STORE_IN = 1;
+
         String STR_TYPE_ChECK_IN_STORE_IN = "入库";
+
         /**
          * 验收-越库
          */
         int TYPE_ChECK_IN_CROSS_OUT = 2;
+
         String STR_TYPE_ChECK_IN_CROSS_OUT = "越库";
+
         /**
          * 分拣-分拣
          */
         int TYPE_SORT_OUT_STORE_OUT = 3;
+
         /**
          * 出库
          */
         int TYPE_STORE_OUT = 4;
+
         String STR_TYPE_STORE_OUT = "出库";
+
         /**
          * 调拨
          */
         int TYPE_ALLOCATE = 5;
+
         String STR_TYPE_ALLOCATE = "调拨";
+
         /**
          * 盘点
          */
@@ -65,6 +75,13 @@ public class Common {
         int TYPE_PROCESS_STORE_IN = 8;
 
         String STR_TYPE_PROCESS_STORE_IN = "加工入库";
+
+        /**
+         * 调拨验收
+         */
+        int TYPE_ALLOCATE_ACCEPT = 9;
+
+        String STR_TYPE_ALLOCATE_ACCEPT = "调拨验收";
     }
 
     /**

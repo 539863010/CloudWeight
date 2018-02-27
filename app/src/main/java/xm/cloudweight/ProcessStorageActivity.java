@@ -71,7 +71,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     private InputFragment mInputFragment;
     @BindView(R.id.btn_date)
     Button mBtnDate;
-    @BindView(R.id.btn_allocate_accept_submit)
+    @BindView(R.id.btn_process_submit)
     Button mBtnSubmit;
     @BindView(R.id.et_finish_produce_label)
     ScanEditText mEtFinishProduceLabel;
@@ -436,7 +436,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
 
     }
 
-    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.et_key_search, R.id.btn_allocate_accept_submit})
+    @OnClick({R.id.btn_date, R.id.btn_clear_zero, R.id.et_key_search, R.id.btn_process_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -450,7 +450,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
             case R.id.et_key_search:
                 keySearch();
                 break;
-            case R.id.btn_allocate_accept_submit:
+            case R.id.btn_process_submit:
                 String production = mEtDeduceProduction.getText().toString();
                 BigDecimal bgProduction = new BigDecimal(!TextUtils.isEmpty(production) ? production : "");
                 if (bgProduction.doubleValue() <= 0) {

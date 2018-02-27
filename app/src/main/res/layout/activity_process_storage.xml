@@ -261,7 +261,7 @@
                         android:layout_weight="1" />
 
                     <Button
-                        android:id="@+id/btn_allocate_accept_submit"
+                        android:id="@+id/btn_process_submit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_5dp"

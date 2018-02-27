@@ -317,6 +317,15 @@ public interface ApiManager {
     @POST("/merchant/scaleApi/stockInForProcess.do")
     Observable<ResponseEntity<String>> stockInForProcess(@Body PBaseInfo p);
 
+    /**
+     * 调拨验收
+     *
+     * @param p 调拨验收请求体
+     * @return Observable<ResponseEntity>
+     */
+    @POST("/merchant/scaleApi/accept.do")
+    Observable<ResponseEntity<String>> accept(@Body PBaseInfo p);
+
 
 
 }

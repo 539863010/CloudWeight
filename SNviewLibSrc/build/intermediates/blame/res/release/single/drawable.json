@@ -184,12 +184,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_channel_btn_selector.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_edit_btn_selector.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_edit_btn_selector.xml"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\arrow_down_list.xml",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\arrow_down_list.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\navigation_bar_edit_btn_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\navigation_bar_edit_btn_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\toggle_btn_selector.xml",
@@ -220,12 +220,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_ptz_selector.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\playback_timesetting_type_all_selector.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\playback_timesetting_type_all_selector.xml"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\menu_drawer_item_selector.xml",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\menu_drawer_item_selector.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\playback_timesetting_type_all_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\playback_timesetting_type_all_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\ptz_pop_frame_decrease_btn_selector.xml",
@@ -256,12 +256,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\landscape_quality_button_bg_selector.xml"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_scan_edit_selector.xml",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_scan_edit_selector.xml"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\image_seekbar_thumb.xml",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\image_seekbar_thumb.xml"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\device_scan_edit_selector.xml",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable\\device_scan_edit_selector.xml"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\release\\drawable\\channel_listview_status_btn.xml",

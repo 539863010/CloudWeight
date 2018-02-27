@@ -51,24 +51,46 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
     private DBManager mDBManager;
     private ApiManager mApiManager;
     private Merchant mMerchant;
-    //当前是否在上传图片
+    /**
+     * 当前是否在上传图片
+     */
     private boolean isCurrentUploadImage;
-    //当前是否在分拣
+    /**
+     * 当前是否在分拣
+     */
     private boolean isCurrentSortOutStoreOut;
-    //当前是否在验收-入库
+    /**
+     * 当前是否在验收-入库
+     */
     private boolean isCurrentCheckInStoreIn;
-    //当前是否在验收-越库
+    /**
+     * 当前是否在验收-越库
+     */
     private boolean isCurrentCheckInCrossOut;
-    //当前是否在验收-越库调拨
+    /**
+     * 当前是否在验收-越库调拨
+     */
     private boolean isCurrentCheckInCrossAllocate;
-    //当前是否在出库
+    /**
+     * 当前是否在出库
+     */
     private boolean isCurrentStoreOut;
-    //当前是否在调拨
+    /**
+     * 当前是否在调拨
+     */
     private boolean isCurrentAllocate;
-    //当前是否在盘点
+    /**
+     * 当前是否在盘点
+     */
     private boolean isCurrentCheck;
-    //当前是否在加工入库
+    /**
+     * 当前是否在加工入库
+     */
     private boolean isCurrentProcessStoreIn;
+    /**
+     * 当前是否调拨验收
+     */
+    private boolean isCurrentAllocateAccept;
 
     private RefreshMerchantHelper mRefreshMerchantHelper;
 
@@ -162,6 +184,10 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
             if (!isCurrentProcessStoreIn) {
                 getUnProcessStoreInList();
             }
+            //请求调拨验收
+            if (!isCurrentAllocateAccept) {
+                getUnAllocateAcceptList();
+            }
             LogUtils.e("----",
                     "正在获取url = " + isCurrentUploadImage
                             + "\n 正在入库 = " + isCurrentCheckInStoreIn
@@ -172,8 +198,27 @@ public class BgOperateService extends Service implements RefreshMerchantHelper.o
                             + "\n 正在调拨 = " + isCurrentAllocate
                             + "\n 正在盘点 = " + isCurrentCheck
                             + "\n 正在加工入库 = " + isCurrentProcessStoreIn
+                            + "\n 正在调拨验收 = " + isCurrentAllocateAccept
             );
         }
+    }
+
+    /**
+     * 调拨验收
+     */
+    private void getUnAllocateAcceptList() {
+        List<DbImageUpload> list = mDBManager.getDbListAllocateAccept();
+        if (list != null && list.size() > 0) {
+            isCurrentAllocateAccept = true;
+            DbImageUpload data = list.get(0);
+            doUnAllocateAcceptList(data);
+        } else {
+            isCurrentAllocateAccept = false;
+        }
+    }
+
+    private void doUnAllocateAcceptList(final DbImageUpload data) {
+        // TODO: 2018/2/27  
     }
 
     /**
