@@ -57,8 +57,9 @@ import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
-import xm.cloudweight.utils.bussiness.PrinterInventory;
-import xm.cloudweight.utils.bussiness.PrinterSortOut;
+import xm.cloudweight.utils.bussiness.printer.PrinterBean;
+import xm.cloudweight.utils.bussiness.printer.PrinterInventory;
+import xm.cloudweight.utils.bussiness.printer.PrinterSortOut;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
@@ -743,17 +744,22 @@ public class CheckInActivity extends BaseActivity implements
         StockInRecord stockInRecord = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), StockInRecord.class);
         String cancelUuid = stockInRecord.getSourceBillLineUuid();
         BigDecimal quantity = stockInRecord.getQuantity();
+        PurchaseBillLine billLine = null;
         for (PurchaseData data : mListAll) {
             PurchaseBillLine purchaseBillLine = data.getPurchaseBillLine();
             if (cancelUuid.equals(purchaseBillLine.getUuid())) {
+                billLine = purchaseBillLine;
                 BigDecimal hasStockInQty = purchaseBillLine.getHasStockInQty();
                 purchaseBillLine.setHasStockInQty(hasStockInQty.subtract(quantity));
                 break;
             }
         }
+        if (billLine == null) {
+            return;
+        }
         //修改累计
         if (mMapAccumulate.containsKey(cancelUuid)) {
-            BigDecimal coefficient = stockInRecord.getCoefficient();
+            BigDecimal coefficient = billLine.getWeightCoefficient();
             BigDecimal numBeforeModify = new BigDecimal(mMapAccumulate.get(cancelUuid));
             BigDecimal numAfterModify;
             if (coefficient != null && coefficient.doubleValue() != 0) {
@@ -1040,7 +1046,6 @@ public class CheckInActivity extends BaseActivity implements
             UCN warehouse = mPurchaseData.getWarehouse();
             sir.setWarehouse(new UCN(warehouse.getUuid(), warehouse.getCode(), warehouse.getName()));
             sir.setGoods(mPurchaseBillLine.getGoods());
-            sir.setCoefficient(mPurchaseBillLine.getWeightCoefficient());
             //保存图片
             sir.setImages(Arrays.asList(GetImageFile.getName(imagePath)));
             //规格
@@ -1068,8 +1073,6 @@ public class CheckInActivity extends BaseActivity implements
                 sir.setShouldStockInQty(storeIn);
                 sir.setQuantity(storeIn);
             }
-            //标准单位
-            sir.setSdUnit(mPurchaseBillLine.getGoodsUnit());
             //类型   	越库的入库类型改为crossDock，入库和越库调拨仍为purchaseIn
             if (mIntTypeUpload == TYPE_CROSS) {
                 sir.setStockInType(StockInType.crossDock);
@@ -1208,7 +1211,8 @@ public class CheckInActivity extends BaseActivity implements
                 String goodsName = mPurchaseBillLine.getGoods().getName();
                 String purchaseBatch = mPurchaseBillLine.getPurchaseBatch();
                 int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
-                PrinterInventory.printer(getContext(), count, goodsName, purchaseBatch);
+                PrinterBean printerBean = PrinterBean.get(count, purchaseBatch, null, null, goodsName, null, null, null);
+                PrinterInventory.printer(getContext(), printerBean);
             } else if (mIntTypeUpload == TYPE_CROSS) {
                 int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
                 String goodsName = mPurchaseBillLine.getGoods().getName();
@@ -1221,15 +1225,12 @@ public class CheckInActivity extends BaseActivity implements
                 String code = record.getPlatformTraceCode();
                 String customer = mPurchaseBillLine.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
                 String department = mPurchaseBillLine.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
+                String storageMode = mPurchaseData.getStorageMode();
+                String period = mPurchaseData.getPeriod();
+                PrinterBean printerBean = PrinterBean.get(count, code, customer, department, goodsName, crossNum, storageMode, period);
                 PrinterSortOut.printer(
                         getContext(),
-                        count,
-                        PrinterSortOut.SORT_OUT_QRCODE.concat(code),
-                        customer,
-                        department,
-                        goodsName,
-                        crossNum,
-                        code);
+                        printerBean);
             }
             //设置累计
             if (weightCoefficient != null) {

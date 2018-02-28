@@ -47,7 +47,8 @@ import xm.cloudweight.utils.KeyBoardUtils;
 import xm.cloudweight.utils.ToastUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
-import xm.cloudweight.utils.bussiness.PrinterInventory;
+import xm.cloudweight.utils.bussiness.printer.PrinterBean;
+import xm.cloudweight.utils.bussiness.printer.PrinterInventory;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
@@ -550,20 +551,25 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
             return;
         }
         StockInRecord stockInRecord = GsonUtil.getGson().fromJson(mDbImageUpload.getLine(), StockInRecord.class);
-        String cancelUuid = stockInRecord.getAllocateRecordUuid();
+        String cancelUuid = stockInRecord.getSourceBillLineUuid();
         BigDecimal quantity = stockInRecord.getQuantity();
+        AllocateRecord allocateRecord = null;
         for (AllocateRecord data : mListAll) {
             String uuid = data.getUuid();
             if (cancelUuid.equals(uuid)) {
                 //已验收
+                allocateRecord = data;
                 BigDecimal acceptQty = data.getAcceptQty();
                 data.setAcceptQty(acceptQty.subtract(quantity));
                 break;
             }
         }
+        if (allocateRecord == null) {
+            return;
+        }
         //修改累计
         if (mMapAccumulate.containsKey(cancelUuid)) {
-            BigDecimal coefficient = stockInRecord.getCoefficient();
+            BigDecimal coefficient = allocateRecord.getWeightCoefficient();
             BigDecimal numBeforeModify = new BigDecimal(mMapAccumulate.get(cancelUuid));
             BigDecimal numAfterModify;
             if (coefficient != null && coefficient.doubleValue() != 0) {
@@ -619,7 +625,6 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         StockInRecord record = new StockInRecord();
         record.setGoods(mAllocateRecord.getGoods());
         record.setGoodsUnit(mAllocateRecord.getGoodsUnit());
-        record.setCoefficient(mAllocateRecord.getWeightCoefficient());
         record.setTraceCode(mAllocateRecord.getTraceCode());
         //扣重数
         record.setDeductQty(getEtBigDecimal(mEtDeductWeight));
@@ -628,7 +633,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         //验收数（入库数）
         record.setQuantity(getEtBigDecimal(mEtNumWarehousing));
         //调拨记录uuid
-        record.setAllocateRecordUuid(mAllocateRecord.getUuid());
+        record.setSourceBillLineUuid(mAllocateRecord.getUuid());
 
         String date = mBtnDate.getText().toString().trim();
         DbImageUpload db = new DbImageUpload();
@@ -655,7 +660,8 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
             int printCount = Integer.parseInt(mEtPrintLabelCount.getText().toString());
             String name = mAllocateRecord.getGoods().getName();
             String code = mAllocateRecord.getTraceCode();
-            PrinterInventory.printer(getContext(), printCount, name, code);
+            PrinterBean printerBean = PrinterBean.get(printCount, code, null, null, name, null, null, null);
+            PrinterInventory.printer(getContext(), printerBean);
             //转化为kg
             BigDecimal weightCoefficient = mAllocateRecord.getWeightCoefficient();
             BigDecimal numWarehousing = getEtBigDecimal(mEtNumWarehousing);

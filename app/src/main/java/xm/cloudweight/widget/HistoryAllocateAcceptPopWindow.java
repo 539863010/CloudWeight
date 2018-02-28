@@ -23,7 +23,8 @@ import java.util.List;
 import xm.cloudweight.R;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
-import xm.cloudweight.utils.bussiness.PrinterInventory;
+import xm.cloudweight.utils.bussiness.printer.PrinterBean;
+import xm.cloudweight.utils.bussiness.printer.PrinterInventory;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.impl.OnDeleteListener;
 
@@ -168,7 +169,8 @@ public class HistoryAllocateAcceptPopWindow extends PopupWindow implements View.
                 @Override
                 public void onClick(View v) {
                     String traceCode = data.getTraceCode();
-                    PrinterInventory.printer(mContext, 1, goodsName, traceCode);
+                    PrinterBean printerBean = PrinterBean.get(1, traceCode, null, null, goodsName, null, null, null);
+                    PrinterInventory.printer(mContext, printerBean);
                 }
             });
         }

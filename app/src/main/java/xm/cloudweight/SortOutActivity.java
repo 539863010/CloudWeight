@@ -62,7 +62,8 @@ import xm.cloudweight.utils.bussiness.GetImageFile;
 import xm.cloudweight.utils.bussiness.ListComparator;
 import xm.cloudweight.utils.bussiness.LocalSpUtil;
 import xm.cloudweight.utils.bussiness.MessageUtil;
-import xm.cloudweight.utils.bussiness.PrinterSortOut;
+import xm.cloudweight.utils.bussiness.printer.PrinterBean;
+import xm.cloudweight.utils.bussiness.printer.PrinterSortOut;
 import xm.cloudweight.utils.dao.DbRefreshUtil;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.utils.dao.bean.DbRequestData;
@@ -748,15 +749,12 @@ public class SortOutActivity extends BaseActivity implements
         String code = mPreSortOutData.getPlatformTraceCode();
         String customer = mPreSortOutData.getCustomer() != null ? mPreSortOutData.getCustomer().getName() : "";
         String department = mPreSortOutData.getCustomerDepartment() != null ? mPreSortOutData.getCustomerDepartment().getName() : "";
+        String storageMode = mPreSortOutData.getStorageMode();
+        String period = mPreSortOutData.getPeriod();
+        PrinterBean printerBean = PrinterBean.get(1, code, customer, department, goodsName, sortOutNum, storageMode, period);
         PrinterSortOut.printer(
                 getContext(),
-                1,
-                PrinterSortOut.SORT_OUT_QRCODE.concat(code),
-                customer,
-                department,
-                goodsName,
-                sortOutNum,
-                code);
+                printerBean);
     }
 
     /**

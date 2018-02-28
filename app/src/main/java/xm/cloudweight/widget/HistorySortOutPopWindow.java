@@ -22,7 +22,8 @@ import xm.cloudweight.R;
 import xm.cloudweight.bean.CustomSortOutData;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
-import xm.cloudweight.utils.bussiness.PrinterSortOut;
+import xm.cloudweight.utils.bussiness.printer.PrinterBean;
+import xm.cloudweight.utils.bussiness.printer.PrinterSortOut;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.impl.OnDeleteListener;
 
@@ -176,15 +177,12 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
                     String traceCode = data.getPlatformTraceCode();
                     String customer = data.getCustomer() != null ? data.getCustomer().getName() : "";
                     String department = data.getCustomerDepartment() != null ? data.getCustomerDepartment().getName() : "";
+                    String storageMode = data.getStorageMode();
+                    String period = data.getPeriod();
+                    PrinterBean printerBean = PrinterBean.get(1, traceCode, customer, department, goodsName, sortOutNum, storageMode, period);
                     PrinterSortOut.printer(
                             mContext,
-                            1,
-                            PrinterSortOut.SORT_OUT_QRCODE.concat(traceCode),
-                            customer,
-                            department,
-                            goodsName,
-                            sortOutNum,
-                            traceCode);
+                            printerBean);
                 }
             });
         }

@@ -55,7 +55,6 @@ public class BeanSimilar {
         sor.setRemark(mStock.getRemark());
         sor.setTraceCode(mStock.getTraceCode());
         sor.setMaterials(mStock.getMaterials());
-        sor.setPlatformBatchCode(mStock.getPlatformBatchCode());
         sor.setOutDate(new Date());
         sor.setStockUuid(mStock.getUuid());
         sor.setLeatherQty(leather);
@@ -73,8 +72,6 @@ public class BeanSimilar {
 //        sor.setImages(images);
         //  设备号（eg. 001 /002/...） + 年月日时间到毫秒
         sor.setPlatformTraceCode(Common.getPlatformTraceCode());
-        // 2017/11/7  “ 加个sdStockOutQty  随便数值 就不会报错  现在更新不了   你可以先加上测试下”
-        sor.setSdStockOutQty(new BigDecimal(11));
         return sor;
     }
 
