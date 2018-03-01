@@ -59,6 +59,8 @@ public class PrinterSortOut {
         String department = bean.getDepartment();
         String goodsName = bean.getGoodsName();
         String sortOutNum = bean.getNum();
+        String storageMode = !TextUtils.isEmpty(bean.getStorageMode()) ? bean.getStorageMode() : "无";
+        String period = !TextUtils.isEmpty(bean.getPeriod()) ? bean.getPeriod() : "无";
 
         // QRCode
         if (!TextUtils.isEmpty(code)) {
@@ -120,7 +122,7 @@ public class PrinterSortOut {
                     91);
         }
 
-        design.drawTextLocalFont("保存条件:",
+        design.drawTextLocalFont("保存条件:".concat(storageMode),
                 Typeface.SERIF,
                 LabelConst.CLS_RT_NORMAL,
                 60,
@@ -130,7 +132,7 @@ public class PrinterSortOut {
                 95,
                 75);
 
-        design.drawTextLocalFont("保质期:",
+        design.drawTextLocalFont("保质期:".concat(period),
                 Typeface.SERIF,
                 LabelConst.CLS_RT_NORMAL,
                 60,

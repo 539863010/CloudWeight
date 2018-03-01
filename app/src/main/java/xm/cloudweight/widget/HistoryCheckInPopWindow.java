@@ -24,8 +24,9 @@ import xm.cloudweight.R;
 import xm.cloudweight.comm.Common;
 import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.ToastUtil;
-import xm.cloudweight.utils.bussiness.PrinterInventory;
-import xm.cloudweight.utils.bussiness.PrinterSortOut;
+import xm.cloudweight.utils.bussiness.printer.PrinterBean;
+import xm.cloudweight.utils.bussiness.printer.PrinterInventory;
+import xm.cloudweight.utils.bussiness.printer.PrinterSortOut;
 import xm.cloudweight.utils.dao.bean.DbImageUpload;
 import xm.cloudweight.widget.impl.OnDeleteListener;
 
@@ -195,19 +196,17 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
                     }
                     if (type == Common.DbType.TYPE_ChECK_IN_CROSS_OUT) {
                         String platformTraceCode = data.getPlatformTraceCode();
+                        String storageMode = data.getStorageMode();
+                        String period = data.getPeriod();
+                        PrinterBean printerBean = PrinterBean.get(1, platformTraceCode, customer, department, goodsName, count, storageMode, period);
                         PrinterSortOut.printer(
                                 mContext,
-                                1,
-                                PrinterSortOut.SORT_OUT_QRCODE.concat(platformTraceCode),
-                                customer,
-                                department,
-                                goodsName,
-                                count,
-                                platformTraceCode);
+                                printerBean);
                     } else if (type == Common.DbType.TYPE_ChECK_IN_STORE_IN ||
                             type == Common.DbType.TYPE_ChECK_IN_CROSS_ALLCOCATE) {
-                        String purchaseBatch = data.getTraceCode();
-                        PrinterInventory.printer(mContext, 1, goodsName, purchaseBatch);
+                        String traceCode = data.getTraceCode();
+                        PrinterBean printerBean = PrinterBean.get(1, traceCode, null, null, goodsName, null, null, null);
+                        PrinterInventory.printer(mContext, printerBean);
                     }
                 }
             });
