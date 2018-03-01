@@ -48,13 +48,13 @@
         <Button
             android:id="@+id/btn_allocation_acceptance"
             style="@style/main_btns"
-            android:drawableTop="@drawable/tubiao_s_diaobo"
+            android:drawableTop="@drawable/tubiao_s_diaoboyanshou"
             android:text="调拨验收" />
 
         <Button
             android:id="@+id/btn_processing_storage"
             style="@style/main_btns"
-            android:drawableTop="@drawable/tubiao_s_diaobo"
+            android:drawableTop="@drawable/tubiao_s_jiagongruku"
             android:text="加工入库" />
 
         <Button
