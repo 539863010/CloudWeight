@@ -446,7 +446,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
             break;
             case R.id.iv_print_label_sub: {
                 int count = Integer.parseInt(mEtPrintLabelCount.getText().toString().trim());
-                if (count > 1) {
+                if (count > 0) {
                     count--;
                     mEtPrintLabelCount.setText(String.valueOf(count));
                 }
@@ -658,10 +658,12 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         if (mAllocateRecord != null) {
             //打印标签
             int printCount = Integer.parseInt(mEtPrintLabelCount.getText().toString());
-            String name = mAllocateRecord.getGoods().getName();
-            String code = mAllocateRecord.getTraceCode();
-            PrinterBean printerBean = PrinterBean.get(printCount, code, null, null, name, null, null, null);
-            PrinterInventory.printer(getContext(), printerBean);
+            if (printCount > 0) {
+                String name = mAllocateRecord.getGoods().getName();
+                String code = mAllocateRecord.getTraceCode();
+                PrinterBean printerBean = PrinterBean.get(printCount, code, null, null, name, null, null, null);
+                PrinterInventory.printer(getContext(), printerBean);
+            }
             //转化为kg
             BigDecimal weightCoefficient = mAllocateRecord.getWeightCoefficient();
             BigDecimal numWarehousing = getEtBigDecimal(mEtNumWarehousing);
@@ -690,8 +692,8 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     }
 
     private boolean check() {
-        if (Integer.parseInt(mEtPrintLabelCount.getText().toString().trim()) < 1) {
-            ToastUtil.showShortToast(getContext(), "标签数不能小于1");
+        if (Integer.parseInt(mEtPrintLabelCount.getText().toString().trim()) < 0) {
+            ToastUtil.showShortToast(getContext(), "标签数不能小于0");
             return true;
         }
         if (TextUtils.isEmpty(mEtNumWarehousing.getText().toString().trim())) {
