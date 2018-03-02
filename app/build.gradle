@@ -7,7 +7,7 @@ android {
         release {
             keyAlias 'sanyou'
             keyPassword '123456'
-            storeFile file('E:/sanyou/签名及加固/sanyou.jks')
+            storeFile file('sanyou.jks')
             storePassword '123456'
         }
     }
@@ -18,7 +18,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
-        versionName "1.1"
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
