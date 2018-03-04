@@ -59,8 +59,8 @@ public class PrinterSortOut {
         String department = bean.getDepartment();
         String goodsName = bean.getGoodsName();
         String sortOutNum = bean.getNum();
-        String storageMode = !TextUtils.isEmpty(bean.getStorageMode()) ? bean.getStorageMode() : "无";
-        String period = !TextUtils.isEmpty(bean.getPeriod()) ? bean.getPeriod() : "无";
+        String storageMode = bean.getStorageMode();
+        String period = bean.getPeriod();
 
         // QRCode
         if (!TextUtils.isEmpty(code)) {
@@ -121,26 +121,29 @@ public class PrinterSortOut {
                     95,
                     91);
         }
+        if (!(TextUtils.isEmpty(storageMode) && TextUtils.isEmpty(period))) {
+            storageMode = !TextUtils.isEmpty(bean.getStorageMode()) ? bean.getStorageMode() : "无";
+            period = !TextUtils.isEmpty(bean.getPeriod()) ? bean.getPeriod() : "无";
+            design.drawTextLocalFont("保存条件:".concat(storageMode),
+                    Typeface.SERIF,
+                    LabelConst.CLS_RT_NORMAL,
+                    60,
+                    60,
+                    10,
+                    (LabelConst.CLS_FNT_DEFAULT),
+                    95,
+                    75);
 
-        design.drawTextLocalFont("保存条件:".concat(storageMode),
-                Typeface.SERIF,
-                LabelConst.CLS_RT_NORMAL,
-                60,
-                60,
-                10,
-                (LabelConst.CLS_FNT_DEFAULT),
-                95,
-                75);
-
-        design.drawTextLocalFont("保质期:".concat(period),
-                Typeface.SERIF,
-                LabelConst.CLS_RT_NORMAL,
-                60,
-                60,
-                10,
-                (LabelConst.CLS_FNT_DEFAULT),
-                95,
-                65);
+            design.drawTextLocalFont("保质期:".concat(period),
+                    Typeface.SERIF,
+                    LabelConst.CLS_RT_NORMAL,
+                    60,
+                    60,
+                    10,
+                    (LabelConst.CLS_FNT_DEFAULT),
+                    95,
+                    65);
+        }
 
         SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
         String date = "包装日期:".concat(dateformat.format(new Date()));

@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
+import com.xmzynt.storm.basic.idname.IdName;
 import com.xmzynt.storm.basic.ucn.UCN;
 import com.xmzynt.storm.service.process.ForecastProcessPlan;
 import com.xmzynt.storm.service.process.StockInData;
@@ -161,16 +162,14 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                     return;
                 }
                 BigDecimal currentWeight = new BigDecimal(strCurrentWeight);
-                String strLeather = mEtBucklesLeather.getText().toString().trim();
-                BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
-                String strDeductBad = mEtDeductBad.getText().toString().trim();
-                BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeductBad) ? strDeductBad : "0");
+                BigDecimal leather = getEtBigDecimal(mEtBucklesLeather);
                 BigDecimal weightCoefficient = new BigDecimal(1);
                 if (isWeight()) {
                     weightCoefficient = mForecastProcessPlan.getWeightCoefficient();
                 }
-                BigDecimal finallyNum = currentWeight.subtract(leather).subtract(deduct).divide(weightCoefficient, RoundingMode.HALF_EVEN);
-                mEtDeduceProduction.setText(BigDecimalUtil.toScaleStr(finallyNum));
+                BigDecimal finallyNum = currentWeight.subtract(leather).divide(weightCoefficient, RoundingMode.HALF_EVEN);
+                BigDecimal deduct = getEtBigDecimal(mEtDeductBad);
+                mEtDeduceProduction.setText(BigDecimalUtil.toScaleStr(finallyNum.subtract(deduct)));
             }
         });
         mSpCustomer.setCustomItemSelectedListener(this);
@@ -359,14 +358,19 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
         clearText();
         BigDecimal weightCoefficient = mForecastProcessPlan.getWeightCoefficient();
         if (weightCoefficient != null) {
-            mTvDeductProductionUnit.setText("kg");
-            mTvDeductBadUnit.setText("kg");
             mEtBucklesLeather.setEnabled(true);
         } else {
-            String name = mForecastProcessPlan.getGoodsUnit().getName();
+            mEtBucklesLeather.setEnabled(false);
+        }
+        //单位
+        IdName goodsUnit = mForecastProcessPlan.getGoodsUnit();
+        if (goodsUnit != null) {
+            String name = goodsUnit.getName();
             mTvDeductProductionUnit.setText(name);
             mTvDeductBadUnit.setText(name);
-            mEtBucklesLeather.setEnabled(false);
+        } else {
+            mTvDeductProductionUnit.setText("");
+            mTvDeductBadUnit.setText("");
         }
         //商品名
         UCN goods = mForecastProcessPlan.getGoods();
@@ -467,9 +471,8 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                 keySearch();
                 break;
             case R.id.btn_process_submit:
-                String production = mEtDeduceProduction.getText().toString();
-                BigDecimal bgProduction = new BigDecimal(!TextUtils.isEmpty(production) ? production : "0");
-                if (bgProduction.doubleValue() <= 0) {
+                BigDecimal production = getEtBigDecimal(mEtDeduceProduction);
+                if (production.doubleValue() <= 0) {
                     ToastUtil.showShortToast(getContext(), "产量要大于0");
                     return;
                 }
@@ -681,23 +684,21 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
             if (mForecastProcessPlan == null) {
                 return;
             }
-            String strCurrentWeight = mEtWeightCurrent.getText().toString().trim();
-            BigDecimal currentWeight = new BigDecimal(!TextUtils.isEmpty(strCurrentWeight) ? strCurrentWeight : "0");
-            String strLeather = mEtBucklesLeather.getText().toString().trim();
-            BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
-            String strDeductBad = mEtDeductBad.getText().toString().trim();
-            BigDecimal deductBad = new BigDecimal(!TextUtils.isEmpty(strDeductBad) ? strDeductBad : "0");
             BigDecimal weightCoefficient = mForecastProcessPlan.getWeightCoefficient();
+            BigDecimal currentWeight = getEtBigDecimal(mEtWeightCurrent);
+            BigDecimal leather = getEtBigDecimal(mEtBucklesLeather);
             BigDecimal finallyCount;
             if (weightCoefficient != null) {
-                finallyCount = currentWeight.subtract(leather).subtract(deductBad).divide(weightCoefficient, ROUND_HALF_EVEN);
+                finallyCount = currentWeight.subtract(leather).divide(weightCoefficient, ROUND_HALF_EVEN);
             } else {
                 finallyCount = currentWeight;
             }
             if (finallyCount.doubleValue() < 0) {
                 mEtDeduceProduction.setText("0.00");
             } else {
-                String num = BigDecimalUtil.toScaleStr(finallyCount);
+                BigDecimal deductBad = getEtBigDecimal(mEtDeductBad);
+                BigDecimal subtract = finallyCount.subtract(deductBad);
+                String num = BigDecimalUtil.toScaleStr(subtract);
                 mEtDeduceProduction.setText(num);
             }
         }
@@ -777,8 +778,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                     //设置产量
                     BigDecimal currentWeight = getEtBigDecimal(mEtWeightCurrent);
                     BigDecimal leather = getEtBigDecimal(mEtBucklesLeather);
-                    BigDecimal bad = getEtBigDecimal(mEtDeductBad);
-                    BigDecimal stockInNum = currentWeight.subtract(leather).subtract(bad);
+                    BigDecimal stockInNum = currentWeight.subtract(leather);
                     //转化单位
                     BigDecimal defaultWeightCoefficient = new BigDecimal(1);
                     if (mForecastProcessPlan.getWeightCoefficient().doubleValue() != 0) {
@@ -788,7 +788,8 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
                     if (finallyCount.doubleValue() < 0) {
                         mEtDeduceProduction.setText("0.00");
                     } else {
-                        mEtDeduceProduction.setText(BigDecimalUtil.toScaleStr(finallyCount));
+                        BigDecimal bad = getEtBigDecimal(mEtDeductBad);
+                        mEtDeduceProduction.setText(BigDecimalUtil.toScaleStr(finallyCount.subtract(bad)));
                     }
                 }
                 mPreWeight = data.weight;

@@ -481,6 +481,9 @@ public class CheckInActivity extends BaseActivity implements
     }
 
     private void queryPurchaseDataSuccess(long type) {
+        if (isFinishing()) {
+            return;
+        }
         List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
         List<PurchaseData> data = GsonUtil.getGson().fromJson(dbRequestData.get(0).getData(), new TypeToken<List<PurchaseData>>() {
         }.getType());
