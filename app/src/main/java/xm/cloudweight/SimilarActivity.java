@@ -306,11 +306,11 @@ public class SimilarActivity extends BaseActivity implements
         }
     }
 
-    private void scanByTraceCode(String key, String uuid) {
+    private void scanByTraceCode(String traceCode, String warehouseUuid) {
         try {
             Map<String, Object> params = new HashMap<>();
-            params.put("key", key);
-            params.put("uuid", uuid);
+            params.put("traceCode", traceCode);
+            params.put("warehouseUuid", warehouseUuid);
             getIRequestDataService().onGetDataListener(RequestDataService.TYPE_SCAN_BY_TRACE_CODE, params, new OnRequestDataListener.Stub() {
                 @Override
                 public void onReceive(long type) throws RemoteException {

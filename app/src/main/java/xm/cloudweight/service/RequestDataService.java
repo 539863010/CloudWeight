@@ -283,7 +283,7 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
      */
     private void scanByTraceCode(Map params, final OnRequestDataListener listener) {
         String traceCode = (String) params.get("traceCode");
-        String warehouseUU = (String) params.get("warehouseUU");
+        String warehouseUU = (String) params.get("warehouseUuid");
         PBaseInfo pBaseInfo = BeanUtil.scanByTraceCode(mMerchant, traceCode, warehouseUU);
         mApiManager.scanByTraceCode(pBaseInfo)
                 .compose(new TransformerHelper<ResponseEntity<List<Stock>>>().get())
