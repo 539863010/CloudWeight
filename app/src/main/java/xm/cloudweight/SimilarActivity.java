@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -98,8 +97,6 @@ public class SimilarActivity extends BaseActivity implements
     TextView mTvGoods;
     @BindView(R.id.btn_similar_history)
     Button mBtnHistory;
-    @BindView(R.id.iv_delete)
-    ImageView mIvDelete;
     private int mIntType;
     private List<Stock> mListShow = new ArrayList<>();
     private List<Stock> mListAll = new ArrayList<>();
@@ -333,7 +330,7 @@ public class SimilarActivity extends BaseActivity implements
         DbRefreshUtil.refreshUnRegist(this);
     }
 
-    @OnClick({R.id.iv_similar_search, R.id.btn_clear_zero, R.id.btn_similar_history, R.id.iv_delete})
+    @OnClick({R.id.iv_similar_search, R.id.btn_clear_zero, R.id.btn_similar_history})
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.iv_similar_search:
@@ -345,12 +342,6 @@ public class SimilarActivity extends BaseActivity implements
                 break;
             case R.id.btn_similar_history:
                 showHistory();
-                break;
-            case R.id.iv_delete:
-                String tag = mEtTag.getText().toString().trim();
-                if (!TextUtils.isEmpty(tag)) {
-                    mEtTag.setText("");
-                }
                 break;
             default:
                 break;
@@ -991,24 +982,25 @@ public class SimilarActivity extends BaseActivity implements
                 ToastUtil.showShortToast(getContext(), MessageUtil.getObj(msg));
             } else if (type == RequestDataService.TYPE_SCAN_BY_TRACE_CODE) {
                 scanByTraceCodeSuccess(type);
-            } else if (type == RequestDataService.TYPE_SCAN_BY_TRACE_CODE_FAILED) {
                 mEtTag.setText("");
+            } else if (type == RequestDataService.TYPE_SCAN_BY_TRACE_CODE_FAILED) {
                 ToastUtil.showShortToast(getContext(), MessageUtil.getObj(msg));
                 dismissLoadingDialog();
+                mEtTag.setText("");
             }
             return false;
         }
     });
 
     public void scanByTraceCodeSuccess(long type) {
+        dismissLoadingDialog();
+        mEtTag.setText("");
         List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
         String json = dbRequestData.get(0).getData();
         List<Stock> result = GsonUtil.getGson().fromJson(json, new TypeToken<List<Stock>>() {
         }.getType());
-        dismissLoadingDialog();
         if (result == null || result.size() == 0) {
-            ToastUtil.showShortToast(getContext(), "该库存标签没有商品");
-            mEtTag.setText("");
+            ToastUtil.showShortToast(getContext(), "暂无数据");
             return;
         }
         //若有传仓库uuid则返回的list为1调或空，无不传，则返回多条或空

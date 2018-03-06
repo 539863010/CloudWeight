@@ -107,8 +107,6 @@ public class CheckInActivity extends BaseActivity implements
     SearchAndFocusEditText mEtKeySearch;
     @BindView(R.id.et_purchase_label)
     ScanEditText mEtPurChaseLabel;
-    @BindView(R.id.iv_delete)
-    ImageView mIvDelete;
     @BindView(R.id.btn_date)
     Button mBtnDate;
     @BindView(R.id.btn_stock_in)
@@ -278,37 +276,33 @@ public class CheckInActivity extends BaseActivity implements
             if (!TextUtils.isEmpty(key)) {
                 scanLabel(key);
             }
-            setIvDeleteVis(key);
         }
 
-        private void setIvDeleteVis(String key) {
-            if (!TextUtils.isEmpty(key)) {
-                if (mIvDelete.getVisibility() != View.VISIBLE) {
-                    mIvDelete.setVisibility(View.VISIBLE);
-                }
-            } else {
-                mIvDelete.setVisibility(View.GONE);
-            }
-        }
     };
 
     private void scanLabel(String purchaseBatchScan) {
         showLoadingDialog(false);
+        mEtPurChaseLabel.setText("");
         KeyBoardUtils.closeKeybord(mEtPurChaseLabel, getContext());
         if (mListAll.size() == 0) {
             ToastUtil.showShortToast(getContext(), "暂无数据");
+            dismissLoadingDialog();
             return;
         }
+        boolean hasGoods = false;
         for (PurchaseData data : mListAll) {
             String purchaseBatch = data.getPurchaseBillLine().getPurchaseBatch();
             if (purchaseBatchScan.equals(purchaseBatch)) {
+                hasGoods = true;
                 mPurchaseData = data;
                 mPurchaseBillLine = mPurchaseData.getPurchaseBillLine();
                 setPurchaseBillLineInfo();
-                mEtPurChaseLabel.setText("");
                 dismissLoadingDialog();
                 break;
             }
+        }
+        if (!hasGoods) {
+            ToastUtil.showShortToast(getContext(), "暂无数据");
         }
         dismissLoadingDialog();
     }
@@ -580,8 +574,7 @@ public class CheckInActivity extends BaseActivity implements
 
     @OnClick({R.id.btn_stock_in, R.id.btn_stock_cross, R.id.btn_date, R.id.btn_clear_zero,
             R.id.iv_sort_out_search, R.id.btn_cross_allocate, R.id.iv_print_label_sub,
-            R.id.iv_print_label_add, R.id.btn_check_in_history
-            , R.id.iv_delete})
+            R.id.iv_print_label_add, R.id.btn_check_in_history})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_date:
@@ -655,14 +648,6 @@ public class CheckInActivity extends BaseActivity implements
                 break;
             case R.id.btn_check_in_history:
                 showHistory();
-                break;
-            case R.id.iv_delete:
-                String label = mEtPurChaseLabel.getText().toString().trim();
-                if (!TextUtils.isEmpty(label)) {
-                    mEtPurChaseLabel.setOnScanFinishListener(null);
-                    mEtPurChaseLabel.setText("");
-                    mEtPurChaseLabel.setOnScanFinishListener(mLabelOnScanFinishListener);
-                }
                 break;
             default:
                 break;

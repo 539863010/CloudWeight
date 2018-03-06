@@ -45,15 +45,6 @@
                 android:textColorHint="@color/grey"
                 android:textSize="@dimen/_12sp"/>
 
-            <ImageView
-                android:src="@drawable/delete"
-                android:layout_alignParentRight="true"
-                android:layout_width="@dimen/_20dp"
-                android:layout_height="@dimen/_20dp"
-                android:layout_marginRight="@dimen/_10dp"
-                android:visibility="gone"
-                android:id="@+id/iv_delete"/>
-
             <Button
                 android:id="@+id/btn_similar_history"
                 style="@style/btn_border_less"

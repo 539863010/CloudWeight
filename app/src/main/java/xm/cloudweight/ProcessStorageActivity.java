@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -84,8 +83,6 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     Button mBtnSubmit;
     @BindView(R.id.et_finish_produce_label)
     ScanEditText mEtFinishProduceLabel;
-    @BindView(R.id.iv_delete)
-    ImageView mIvDelete;
     @BindView(R.id.et_key_search)
     EditText mEtKeySearch;
     @BindView(R.id.sp_customer)
@@ -707,39 +704,46 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
     private onScanFinishListener mLabelOnScanFinishListener = new onScanFinishListener() {
         @Override
         public void onScanFinish(String key) {
-            if (!TextUtils.isEmpty(key)) {
-                scanLabel(key);
+            try {
+                if (!TextUtils.isEmpty(key)) {
+                    scanLabel(key);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            setIvDeleteVis(key);
         }
 
-        private void setIvDeleteVis(String key) {
-            if (!TextUtils.isEmpty(key)) {
-                if (mIvDelete.getVisibility() != View.VISIBLE) {
-                    mIvDelete.setVisibility(View.VISIBLE);
-                }
-            } else {
-                mIvDelete.setVisibility(View.GONE);
-            }
-        }
     };
 
-    private void scanLabel(String purchaseBatchScan) {
+    private void scanLabel(String key) {
         showLoadingDialog(false);
+        mEtFinishProduceLabel.setText("");
         KeyBoardUtils.closeKeybord(mEtFinishProduceLabel, getContext());
         if (mListAll.size() == 0) {
             ToastUtil.showShortToast(getContext(), "暂无数据");
+            dismissLoadingDialog();
             return;
         }
-        for (ForecastProcessPlan data : mListAll) {
-            String traceCode = data.getTraceCode();
-            if (purchaseBatchScan.equals(traceCode)) {
-                mForecastProcessPlan = data;
-                setForecastProcessPlan();
-                mEtFinishProduceLabel.setText("");
-                dismissLoadingDialog();
-                break;
+        if (key.contains("/")) {
+            boolean hasGoods = false;
+            //截取最后一串溯源码
+            String[] split = key.split("/");
+            String code = split[split.length - 1];
+            for (ForecastProcessPlan data : mListAll) {
+                String traceCode = data.getTraceCode();
+                if (code != null && code.equals(traceCode)) {
+                    hasGoods = true;
+                    mForecastProcessPlan = data;
+                    setForecastProcessPlan();
+                    dismissLoadingDialog();
+                    break;
+                }
             }
+            if (!hasGoods) {
+                ToastUtil.showShortToast(getContext(), "暂无数据");
+            }
+        } else {
+            ToastUtil.showShortToast(getContext(), "标签有误");
         }
         dismissLoadingDialog();
     }

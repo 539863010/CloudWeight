@@ -86,8 +86,6 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     DataSpinner<Warehouse> mSpWareHouseIn;
     @BindView(R.id.et_inventory_label)
     ScanEditText mEtInventoryLabel;
-    @BindView(R.id.iv_delete)
-    ImageView mIvDelete;
     @BindView(R.id.et_print_label_count)
     EditText mEtPrintLabelCount;
     @BindView(R.id.btn_allocate_accept_submit)
@@ -757,36 +755,31 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
             if (!TextUtils.isEmpty(key)) {
                 scanLabel(key);
             }
-            setIvDeleteVis(key);
-        }
-
-        private void setIvDeleteVis(String key) {
-            if (!TextUtils.isEmpty(key)) {
-                if (mIvDelete.getVisibility() != View.VISIBLE) {
-                    mIvDelete.setVisibility(View.VISIBLE);
-                }
-            } else {
-                mIvDelete.setVisibility(View.GONE);
-            }
         }
     };
 
     private void scanLabel(String key) {
         showLoadingDialog(false);
+        mEtInventoryLabel.setText("");
         KeyBoardUtils.closeKeybord(mEtInventoryLabel, getContext());
         if (mListAll.size() == 0) {
             ToastUtil.showShortToast(getContext(), "暂无数据");
+            dismissLoadingDialog();
             return;
         }
+        boolean hasGoods = false;
         for (AllocateRecord data : mListAll) {
             String traceCode = data.getTraceCode();
             if (key.equals(traceCode)) {
+                hasGoods = true;
                 mAllocateRecord = data;
                 setAllocateRecordInfo();
-                mEtInventoryLabel.setText("");
                 dismissLoadingDialog();
                 break;
             }
+        }
+        if (!hasGoods) {
+            ToastUtil.showShortToast(getContext(), "暂无数据");
         }
         dismissLoadingDialog();
     }
