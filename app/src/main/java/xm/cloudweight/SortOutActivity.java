@@ -307,6 +307,14 @@ public class SortOutActivity extends BaseActivity implements
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
         if (listWareHouse != null) {
             mSpWareHouse.setList(listWareHouse);
+            int size = listWareHouse.size();
+            for (int i = 0; i < size; i++) {
+                Warehouse warehouse = listWareHouse.get(i);
+                //默认配送仓
+                if (warehouse.getCode().equals("003") && warehouse.getName().equals("配送仓")) {
+                    mSpWareHouse.setSelection(i);
+                }
+            }
         } else {
             ToastUtil.showShortToast(this, "未获取到仓库列表信息");
         }
