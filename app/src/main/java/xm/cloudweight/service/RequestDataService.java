@@ -362,7 +362,8 @@ public class RequestDataService extends Service implements RefreshMerchantHelper
         int pageSize = (int) params.get(Common.PAGE_SIZE_STRING);
         int defaultPageSize = (int) params.get(Common.DEFAULT_PAGE_SIZE_STRING);
         String basketCode = (String) params.get("basketCode");
-        PBaseInfo pBaseInfo = BeanUtil.queryStock(mMerchant, page, pageSize, defaultPageSize, basketCode);
+        String warehouseUuid = (String) params.get("warehouseUuid");
+        PBaseInfo pBaseInfo = BeanUtil.queryStock(mMerchant, page, pageSize, defaultPageSize, basketCode, warehouseUuid);
         mApiManager.queryStock(pBaseInfo)
                 .compose(new TransformerHelper<ResponseEntity<PageData<Stock>>>().get())
                 .subscribe(new ApiSubscribe<PageData<Stock>>() {

@@ -72,8 +72,9 @@ public class LoginActivity extends BaseActivity implements LoginImpl.OnLoginStat
 
 //        15012345678  12345
 //        13806008655  12345
-//        mEtName.setText("18559695718");
-        mEtName.setText("13666049527");
+        //正式
+        mEtName.setText("18559695718");
+        //        mEtName.setText("13666049527");
         mEtPwd.setText("12345");
     }
 

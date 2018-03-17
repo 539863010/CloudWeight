@@ -268,6 +268,13 @@ public class SimilarActivity extends BaseActivity implements
             params.put(Common.PAGE_SIZE_STRING, Common.PAGE_SIZE);
             params.put(Common.DEFAULT_PAGE_SIZE_STRING, Common.DEFAULT_PAGE_SIZE);
             params.put("basketCode", "");
+            Warehouse warehouse = mSpWareHouse.getSelectedItem();
+            if (warehouse != null) {
+                params.put("warehouseUuid", warehouse.getUuid());
+            } else {
+                ToastUtil.showShortToast(getContext(), "请先设置配送仓信息");
+                return;
+            }
             getIRequestDataService().onGetDataListener(type, params, new OnRequestDataListener.Stub() {
                 @Override
                 public void onReceive(long type) throws RemoteException {

@@ -287,7 +287,7 @@ public class BeanUtil {
     /**
      * 查询库存列表
      */
-    public static PBaseInfo queryStock(Merchant merchant, int page, int pageSize, int defaultPageSize, String basketCode) {
+    public static PBaseInfo queryStock(Merchant merchant, int page, int pageSize, int defaultPageSize, String basketCode, String warehouseUuid) {
         PBaseInfo pBaseInfo = new PBaseInfo();
         setMerchantInfo(pBaseInfo, merchant);
         Map<String, Object> body = pBaseInfo.getBody();
@@ -299,6 +299,7 @@ public class BeanUtil {
         Map<String, Object> params = queryFilter.getParams();
         params.put("moreThanZero", true);
         params.put("basketCode", basketCode);
+        params.put("warehouseUuid", warehouseUuid);
         body.put("queryFilter", queryFilter);
         return pBaseInfo;
     }
