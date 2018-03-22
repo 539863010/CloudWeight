@@ -782,10 +782,10 @@ public class SimilarActivity extends BaseActivity implements
 
         switch (mIntType) {
             case Common.SIMILAR_STOCKOUT:
-                mSpTypeStockOut.setSelection(0);
+                //                mSpTypeStockOut.setSelection(0);
                 break;
             case Common.SIMILAR_ALLOCATE:
-                mSpWareHouseIn.setSelection(0);
+                //                mSpWareHouseIn.setSelection(0);
                 break;
             case Common.SIMILAR_CHECK:
                 break;

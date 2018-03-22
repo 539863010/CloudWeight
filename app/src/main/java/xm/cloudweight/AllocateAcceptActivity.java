@@ -310,9 +310,8 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }.getType());
         if (result != null && result.size() > 0) {
             mSpWareHouseIn.setList(result);
-            String date = mBtnDate.getText().toString();
             String warehouseUuid = result.get(0).getUuid();
-            queryNotAcceptData(date, warehouseUuid);
+            queryNotAcceptData(warehouseUuid);
         } else {
             dismissLoadingDialog();
             ToastUtil.showShortToast(getContext(), "无仓库验收列表数据");
@@ -328,13 +327,13 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
     /**
      * 获取未验收商品列表
      */
-    private void queryNotAcceptData(String date, String warehouseUuid) {
+    private void queryNotAcceptData(String warehouseUuid) {
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("page", 0);
             params.put("pageSize", 0);
             params.put("defaultPageSize", 0);
-            params.put("date", date);
+            params.put("date", mBtnDate.getText().toString());
             params.put("status", "unAccept");
             params.put("inWarehouseUuid", warehouseUuid);
             getIRequestDataService().onGetDataListener(TYPE_ALLOCATE_ACCEPT_QUERY_NOT_ACCEPT_DATA, params, new OnRequestDataListener.Stub() {
@@ -797,7 +796,7 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
                 //请求数据
                 clearGoodsList();
                 showLoadingDialog(false);
-                queryNotAcceptData(date, selectedItem.getUuid());
+                queryNotAcceptData(selectedItem.getUuid());
             } else {
                 ToastUtil.showShortToast(getContext(), "无仓库数据");
             }
@@ -886,13 +885,12 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (view.getId()) {
+        switch (parent.getId()) {
             case R.id.sp_ware_house_in:
                 showLoadingDialog(false);
                 clearGoodsList();
-                String date = mBtnDate.getText().toString();
                 Warehouse selectedItem = mSpWareHouseIn.getSelectedItem();
-                queryNotAcceptData(date, selectedItem.getUuid());
+                queryNotAcceptData(selectedItem.getUuid());
                 break;
             default:
                 break;

@@ -70,12 +70,12 @@ public class LoginActivity extends BaseActivity implements LoginImpl.OnLoginStat
             mEtName.requestFocus();
         }
 
-//        15012345678  12345
-//        13806008655  12345
+        //        15012345678  12345
+        //        13806008655  12345
         //正式
-        mEtName.setText("18559695718");
+        //        mEtName.setText("18559695718");
         //        mEtName.setText("13666049527");
-        mEtPwd.setText("12345");
+        //        mEtPwd.setText("12345");
     }
 
     @OnClick(R.id.btn_login)
