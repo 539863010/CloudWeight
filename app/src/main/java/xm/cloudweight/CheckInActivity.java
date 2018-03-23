@@ -1121,11 +1121,11 @@ public class CheckInActivity extends BaseActivity implements
         if (mListAll.size() > 0) {
             List<PurchaseData> listWarehouse = new ArrayList<>();
             Warehouse warehouse = mSpWareHouse.getSelectedItem();
-            if (warehouse != null && !TextUtils.isEmpty(warehouse.getName()) && !warehouse.getName().equals(DEFAULT_SPINNER_WAREHOURE)) {
-                String warehouseName = warehouse.getName();
+            if (warehouse != null && !TextUtils.isEmpty(warehouse.getUuid())) {
+                String warehouseUuid = warehouse.getUuid();
                 for (PurchaseData data : mListAll) {
                     UCN ucnWarehouse = data.getWarehouse();
-                    if (ucnWarehouse != null && ucnWarehouse.getName().equals(warehouseName)) {
+                    if (ucnWarehouse != null && ucnWarehouse.getUuid().equals(warehouseUuid)) {
                         listWarehouse.add(data);
                     }
                 }

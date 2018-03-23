@@ -809,11 +809,11 @@ public class SimilarActivity extends BaseActivity implements
         }
         Warehouse warehouse = mSpWareHouse.getSelectedItem();
         ArrayList<Stock> listWarehouseName = new ArrayList<>();
-        if (warehouse != null && !TextUtils.isEmpty(warehouse.getName())) {
-            String warehouseName = warehouse.getName();
+        if (warehouse != null && !TextUtils.isEmpty(warehouse.getUuid())) {
+            String warehouseUuid = warehouse.getUuid();
             for (Stock stock : mListAll) {
                 UCN stockWarehouse = stock.getWarehouse();
-                if (stockWarehouse != null && stockWarehouse.getName().equals(warehouseName)) {
+                if (stockWarehouse != null && stockWarehouse.getUuid().equals(warehouseUuid)) {
                     listWarehouseName.add(stock);
                 }
             }

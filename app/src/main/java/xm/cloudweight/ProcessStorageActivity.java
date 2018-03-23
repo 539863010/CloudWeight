@@ -437,7 +437,7 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (view.getId()) {
+        switch (parent.getId()) {
             case R.id.sp_customer:
                 showLoadingDialog(false);
                 filterList();
