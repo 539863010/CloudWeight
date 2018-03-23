@@ -857,6 +857,12 @@ public class SimilarActivity extends BaseActivity implements
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getId()) {
             case R.id.sp_ware_house:
+                showLoadingDialog(false);
+                //清除列表信息
+                mListShow.clear();
+                mGoodsAdapter.notifyDataSetChanged();
+                queryStock();
+                break;
             case R.id.sp_goods_category:
                 showLoadingDialog(false);
                 //清除列表信息
