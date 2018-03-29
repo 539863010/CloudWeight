@@ -76,12 +76,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\navigation_bar_search_btn.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\navigation_bar_edit_btn_sel.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\navigation_bar_edit_btn_sel.png"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\toolbar_quality_custom_sel.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_quality_custom_sel.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\navigation_bar_edit_btn_sel.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\navigation_bar_edit_btn_sel.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\devide_line.png",
@@ -100,12 +100,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_ptz.png"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\toolbar_sound_sel.png",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_sound_sel.png"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\navigation_bar_back_btn_sel.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\navigation_bar_back_btn_sel.png"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\toolbar_sound_sel.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_sound_sel.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ptz_controlbar_menu_aperture.png",
@@ -120,12 +120,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_recording_stay.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_soundoff.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_soundoff.png"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\landscape_fullscreen_cut.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\landscape_fullscreen_cut.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_soundoff.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_soundoff.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\channel_listview_account.png",
@@ -160,20 +160,20 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\left_3.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\down_1.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\down_1.png"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\image_bar_bg.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\image_bar_bg.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\image_play_btn.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\image_play_btn.png"
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\down_1.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\down_1.png"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\toolbar_quality_high_sel.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_quality_high_sel.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\image_play_btn.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\image_play_btn.png"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_quality_sel.png",
@@ -184,12 +184,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_quality_fluent_sel.png"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\device_listview_item_securityprotection_off.png",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\device_listview_item_securityprotection_off.png"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\toolbar_microphone_stop.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_microphone_stop.png"
+    },
+    {
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\device_listview_item_securityprotection_off.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\device_listview_item_securityprotection_off.png"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ptz_controlbar_menu_focus_sel.png",
@@ -204,12 +204,12 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\search_icon.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_ptz_disable.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_ptz_disable.png"
-    },
-    {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\left_down_2.png",
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\left_down_2.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_ptz_disable.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_ptz_disable.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_alarm.png",
@@ -264,36 +264,36 @@
         "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_quality_custom_sel.png"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\right_down_1.png",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\right_down_1.png"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\left_down_2.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\left_down_2.png"
     },
     {
-        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\md__list_pressed_holo_dark.9.png",
-        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\md__list_pressed_holo_dark.9.png"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\right_down_1.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\right_down_1.png"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\btn_round_bg_long_sel.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\btn_round_bg_long_sel.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\liveview_view_refresh.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\liveview_view_refresh.png"
+        "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\md__list_pressed_holo_dark.9.png",
+        "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\md__list_pressed_holo_dark.9.png"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_ptz_aperture.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_ptz_aperture.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_quality_sel.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_quality_sel.png"
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\liveview_view_refresh.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\liveview_view_refresh.png"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\landscape_fullscreen_cut_sel.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\landscape_fullscreen_cut_sel.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_quality_sel.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_quality_sel.png"
     },
     {
         "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_delete.png",
@@ -336,12 +336,12 @@
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\search_btn_background.png"
     },
     {
-        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\toolbar_stop.png",
-        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_stop.png"
-    },
-    {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\fullscreen_quality_stay.png",
         "source": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\fullscreen_quality_stay.png"
+    },
+    {
+        "merged": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\toolbar_stop.png",
+        "source": "D:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\src\\main\\res\\drawable-xhdpi\\toolbar_stop.png"
     },
     {
         "merged": "E:\\CloudWeight\\CloudWeight\\SNviewLibSrc\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\playback_fullscreen_toolbar_center.9.png",

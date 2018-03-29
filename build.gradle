@@ -13,6 +13,8 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.8.1'
+        //bugly符号表插件
+        classpath 'com.tencent.bugly:symtabfileuploader:latest.release'
     }
 }
 

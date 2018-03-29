@@ -1,6 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'bugly'
+
+bugly {
+    appId = "dfead879d1"
+    appKey = "31a1b079-8da6-4a8a-8598-9dc8394906fa"
+}
 
 android {
     signingConfigs {
