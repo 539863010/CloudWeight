@@ -453,6 +453,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
                 keySearch();
                 break;
             case R.id.btn_allocate_accept_submit:
+                if (mAllocateRecord == null) {
+                    return;
+                }
                 if (check()) {
                     return;
                 }

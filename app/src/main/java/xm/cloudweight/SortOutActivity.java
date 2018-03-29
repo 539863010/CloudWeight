@@ -1154,35 +1154,40 @@ public class SortOutActivity extends BaseActivity implements
 
         @Override
         public void doSomething(CommonHolder4Lv holder, CustomSortOutData data, int position) {
-            if (mIntSelect == position) {
-                holder.setBackgroundRes(R.id.item_ll, R.color.color_ffe080);
-            } else {
-                holder.setBackgroundRes(R.id.item_ll, R.color.color_e7f0d5);
-            }
-            if (mIntType == TYPE_WEIGHT) {
-                BigDecimal coverToKgQty = data.getCoverToKgQty();
-                if (coverToKgQty != null) {
-                    holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(coverToKgQty));
-                    holder.setText(R.id.item_goods_weight_unit, "kg");
-                }
-            } else if (mIntType == TYPE_COUNT) {
-                holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getHasStockOutQty())));
-                IdName goodsUnit = data.getGoodsUnit();
-                if (goodsUnit != null) {
-                    String unit = goodsUnit.getName();
-                    holder.setText(R.id.item_goods_weight_unit, unit);
+            try {
+                if (mIntSelect == position) {
+                    holder.setBackgroundRes(R.id.item_ll, R.color.color_ffe080);
                 } else {
-                    holder.setText(R.id.item_goods_weight_unit, "");
+                    holder.setBackgroundRes(R.id.item_ll, R.color.color_e7f0d5);
                 }
+                if (mIntType == TYPE_WEIGHT) {
+                    BigDecimal coverToKgQty = data.getCoverToKgQty();
+                    if (coverToKgQty != null) {
+                        holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(coverToKgQty));
+                        holder.setText(R.id.item_goods_weight_unit, "kg");
+                    }
+                } else if (mIntType == TYPE_COUNT) {
+                    holder.setText(R.id.item_goods_weight, BigDecimalUtil.toScaleStr(data.getGoodsQty().subtract(data.getHasStockOutQty())));
+                    IdName goodsUnit = data.getGoodsUnit();
+                    if (goodsUnit != null) {
+                        String unit = goodsUnit.getName();
+                        holder.setText(R.id.item_goods_weight_unit, unit);
+                    } else {
+                        holder.setText(R.id.item_goods_weight_unit, "");
+                    }
+                }
+                //设置备注
+                holder.setText(R.id.item_goods_remark, data.getRemark());
+                ScalableTextView tvName = holder.getView(R.id.item_goods_name);
+                tvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, mDim10Sp);
+                tvName.setText(data.getGoods().getName());
+                ScalableTextView tvCustomer = holder.getView(R.id.item_goods_customer);
+                tvCustomer.setTextSize(TypedValue.COMPLEX_UNIT_SP, mDim10Sp);
+                holder.setText(R.id.item_goods_customer, data.getCustomer().getName());
+            } catch (Exception e) {
+                e.printStackTrace();
+                BuglyUtil.uploadCrash(e);
             }
-            //设置备注
-            holder.setText(R.id.item_goods_remark, data.getRemark());
-            ScalableTextView tvName = holder.getView(R.id.item_goods_name);
-            tvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, mDim10Sp);
-            tvName.setText(data.getGoods().getName());
-            ScalableTextView tvCustomer = holder.getView(R.id.item_goods_customer);
-            tvCustomer.setTextSize(TypedValue.COMPLEX_UNIT_SP, mDim10Sp);
-            holder.setText(R.id.item_goods_customer, data.getCustomer().getName());
         }
 
         private void setIntSelect(int intSelect) {
@@ -1198,25 +1203,30 @@ public class SortOutActivity extends BaseActivity implements
 
     @Override
     public void receive(Instrument.InsData data) {
-        String weight = data.weight;
-        if ((mIntType == TYPE_WEIGHT) && !TextUtils.isEmpty(weight)) {
-            mStable = data.stable;
-            mEtShow.setText(weight);
-            BigDecimal w = new BigDecimal(Double.parseDouble(weight));
-            String leather = mEtLeather.getText().toString().trim();
-            BigDecimal l;
-            if (!TextUtils.isEmpty(leather)) {
-                l = new BigDecimal(leather);
-            } else {
-                l = new BigDecimal(0);
+        try {
+            String weight = data.weight;
+            if ((mIntType == TYPE_WEIGHT) && !TextUtils.isEmpty(weight)) {
+                mStable = data.stable;
+                mEtShow.setText(weight);
+                BigDecimal w = new BigDecimal(Double.parseDouble(weight));
+                String leather = mEtLeather.getText().toString().trim();
+                BigDecimal l;
+                if (!TextUtils.isEmpty(leather)) {
+                    l = new BigDecimal(leather);
+                } else {
+                    l = new BigDecimal(0);
+                }
+                if (mStable && !weight.equals(mPreWeight)) {
+                    mPreWeight = weight;
+                    mEtWeight.setText(BigDecimalUtil.toScaleStr(w.subtract(l)));
+                    String strW = String.valueOf(w.subtract(l));
+                    sequenceListWeight(mListShow, strW);
+                    scrollToBottom(0);
+                }
             }
-            if (mStable && !weight.equals(mPreWeight)) {
-                mPreWeight = weight;
-                mEtWeight.setText(BigDecimalUtil.toScaleStr(w.subtract(l)));
-                String strW = String.valueOf(w.subtract(l));
-                sequenceListWeight(mListShow, strW);
-                scrollToBottom(0);
-            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            BuglyUtil.uploadCrash(e);
         }
     }
 

@@ -135,6 +135,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
     }
 
     private void showP() {
+        if (isFinishing()) {
+            return;
+        }
         if (mAlertDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog);
             View v = LayoutInflater.from(this).inflate(R.layout.loading, null);
