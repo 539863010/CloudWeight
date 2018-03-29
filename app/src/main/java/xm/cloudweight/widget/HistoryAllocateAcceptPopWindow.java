@@ -139,8 +139,10 @@ public class HistoryAllocateAcceptPopWindow extends PopupWindow implements View.
             boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
             if (isRequestSuccess) {
                 holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+                holder.setVisible(R.id.ci_revocation, View.VISIBLE);
             } else {
                 holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+                holder.setVisible(R.id.ci_revocation, View.INVISIBLE);
             }
             //设置操作时间
             holder.setText(R.id.ci_operation_time, dbSortOutData.getOperatime());

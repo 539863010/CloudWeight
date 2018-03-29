@@ -144,8 +144,10 @@ public class HistoryProcessStoragePopWindow extends PopupWindow implements View.
             boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
             if (isRequestSuccess) {
                 holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+                holder.setVisible(R.id.ci_revocation, View.VISIBLE);
             } else {
                 holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+                holder.setVisible(R.id.ci_revocation, View.INVISIBLE);
             }
             //设置商品名
             UCN goods = data.getGoods();

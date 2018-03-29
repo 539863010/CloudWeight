@@ -141,8 +141,10 @@ public class HistorySortOutPopWindow extends PopupWindow implements View.OnClick
             boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
             if (isRequestSuccess) {
                 holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+                holder.setVisible(R.id.item_revocation, View.VISIBLE);
             } else {
                 holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+                holder.setVisible(R.id.item_revocation, View.INVISIBLE);
             }
             final String goodsName = data.getGoods().getName();
             holder.setText(R.id.item_goods_name, goodsName);

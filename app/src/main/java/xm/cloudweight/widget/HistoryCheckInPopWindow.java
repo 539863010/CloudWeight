@@ -143,8 +143,10 @@ public class HistoryCheckInPopWindow extends PopupWindow implements View.OnClick
             boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
             if (isRequestSuccess) {
                 holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+                holder.setVisible(R.id.ci_revocation, View.VISIBLE);
             } else {
                 holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+                holder.setVisible(R.id.ci_revocation, View.INVISIBLE);
             }
             //设置类型
             final int type = dbSortOutData.getType();

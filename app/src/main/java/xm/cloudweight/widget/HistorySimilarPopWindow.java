@@ -161,8 +161,10 @@ public class HistorySimilarPopWindow extends PopupWindow implements View.OnClick
             boolean isRequestSuccess = dbSortOutData.getIsRequestSuccess();
             if (isRequestSuccess) {
                 holder.setVisible(R.id.item_upload_state, View.VISIBLE);
+                holder.setVisible(R.id.similar_revocation, View.VISIBLE);
             } else {
                 holder.setVisible(R.id.item_upload_state, View.INVISIBLE);
+                holder.setVisible(R.id.similar_revocation, View.INVISIBLE);
             }
             final int type = dbSortOutData.getType();
             final String typeString = type == Common.DbType.TYPE_STORE_OUT ? Common.DbType.STR_TYPE_STORE_OUT :
