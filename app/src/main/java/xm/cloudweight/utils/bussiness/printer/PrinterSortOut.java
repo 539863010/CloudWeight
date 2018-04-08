@@ -104,18 +104,22 @@ public class PrinterSortOut {
         }
 
         String title = "";
-        if (!TextUtils.isEmpty(customer)) {
-            title = customer;
+        if (!TextUtils.isEmpty(department)) {
+            title = title.concat(department);
         }
-        //        if (!TextUtils.isEmpty(department)) {
-        //            title = title.concat("【").concat(department).concat("】");
-        //        }
+        if (!TextUtils.isEmpty(customer)) {
+            if (!TextUtils.isEmpty(title)) {
+                title = title.concat("-").concat(customer);
+            } else {
+                title = title.concat(customer);
+            }
+        }
         if (!TextUtils.isEmpty(title)) {
             design.drawTextLocalFont(title,
                     Typeface.SERIF,
                     LabelConst.CLS_RT_NORMAL,
-                    105,
-                    105,
+                    95,
+                    95,
                     10,
                     (LabelConst.CLS_FNT_BOLD),
                     95,
