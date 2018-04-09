@@ -1075,9 +1075,13 @@ public class CheckInActivity extends BaseActivity implements
                 }
             }
             //保存顾客，部门信息，打印标签用
-            String customer = mPurchaseBillLine.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
             String department = mPurchaseBillLine.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
-            sir.setCustomerName(customer.concat(department));
+            String customer = mPurchaseBillLine.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
+            if (!TextUtils.isEmpty(department)) {
+                sir.setCustomerName(customer.concat("-").concat(department));
+            } else {
+                sir.setCustomerName(customer);
+            }
             //设置供应商
             sir.setSupplier(mPurchaseData.getSupplier());
             //来源采购单号
