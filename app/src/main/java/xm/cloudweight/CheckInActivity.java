@@ -1077,7 +1077,9 @@ public class CheckInActivity extends BaseActivity implements
             //保存顾客，部门信息，打印标签用
             String department = mPurchaseBillLine.getCustomerDept() != null ? mPurchaseBillLine.getCustomerDept().getName() : "";
             String customer = mPurchaseBillLine.getCustomer() != null ? mPurchaseBillLine.getCustomer().getName() : "";
-            if (!TextUtils.isEmpty(department)) {
+            if (TextUtils.isEmpty(department) && TextUtils.isEmpty(customer)) {
+                sir.setCustomerName("");
+            } else if (!TextUtils.isEmpty(department)) {
                 sir.setCustomerName(customer.concat("-").concat(department));
             } else {
                 sir.setCustomerName(customer);
