@@ -104,14 +104,14 @@ public class PrinterSortOut {
         }
 
         String title = "";
-        if (!TextUtils.isEmpty(department)) {
-            title = title.concat(department);
-        }
         if (!TextUtils.isEmpty(customer)) {
+            title = title.concat(customer);
+        }
+        if (!TextUtils.isEmpty(department)) {
             if (!TextUtils.isEmpty(title)) {
-                title = title.concat("-").concat(customer);
+                title = title.concat("-").concat(department);
             } else {
-                title = title.concat(customer);
+                title = title.concat(department);
             }
         }
         if (!TextUtils.isEmpty(title)) {
