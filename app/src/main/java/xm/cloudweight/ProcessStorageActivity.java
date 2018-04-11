@@ -417,15 +417,6 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
         }
     }
 
-    private void setEditText(EditText et, String content) {
-        if (!TextUtils.isEmpty(content)) {
-            et.setText(content);
-            et.setSelection(content.length());
-        } else {
-            et.setText("");
-        }
-    }
-
     /**
      * 关键字搜索
      */
@@ -526,6 +517,9 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
         }
     }
 
+    /**
+     * 加工入库-撤销
+     */
     private void cancelProcess(String uuid) {
         try {
             Map<String, Object> params = new HashMap<>();
@@ -563,6 +557,9 @@ public class ProcessStorageActivity extends BaseActivity implements VideoFragmen
         ToastUtil.showShortToast(getContext(), MessageUtil.getObj(message));
     }
 
+    /**
+     * 刷新加工入库数据
+     */
     private void refreshCancelProcess() {
         String date = mDbImageUpload.getDate();
         String currentSelectedDate = mBtnDate.getText().toString().trim();

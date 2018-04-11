@@ -256,6 +256,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         getWareHouseCheck();
     }
 
+    /**
+     * 接口请求对应的回调
+     */
     private Handler mRequestData = new Handler(new Handler.Callback() {
 
         @Override
@@ -301,6 +304,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }
     }
 
+    /**
+     * 获取仓库验收列表成功
+     */
     private void getWareHouseCheckSuccess(long type) {
         List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
         String data = dbRequestData.get(0).getData();
@@ -316,6 +322,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }
     }
 
+    /**
+     * 获取仓库验收列表失败
+     */
     private void getWareHouseCheckFailed(Message msg) {
         String failedMsg = MessageUtil.getObj(msg);
         ToastUtil.showShortToast(getContext(), failedMsg);
@@ -352,6 +361,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }
     }
 
+    /**
+     * 获取未验收商品列表成功
+     */
     private void queryNotAcceptDataSuccess(long type) {
         List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
         String data = dbRequestData.get(0).getData();
@@ -370,12 +382,18 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         dismissLoadingDialog();
     }
 
+    /**
+     * 获取未验收商品列表失败
+     */
     private void queryNotAcceptDataFailed(Message msg) {
         String failedMsg = MessageUtil.getObj(msg);
         ToastUtil.showShortToast(getContext(), failedMsg);
         dismissLoadingDialog();
     }
 
+    /**
+     * 过滤列表
+     */
     private void filterList() {
         if (mListAll.size() > 0) {
             String key = mEtKeySearch.getText().toString().trim();
@@ -473,6 +491,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }
     }
 
+    /**
+     * 显示历史
+     */
     private void showHistory() {
         if (mAllocateAcceptPopWindow == null) {
             mAllocateAcceptPopWindow = new HistoryAllocateAcceptPopWindow(getContext(), mSpWareHouseIn);
@@ -496,6 +517,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         requestCancel(data.getStockInUuid());
     }
 
+    /**
+     * 请求删除历史
+     */
     private void requestCancel(String uuid) {
         showLoadingDialog(false);
         if (!TextUtils.isEmpty(uuid)) {
@@ -505,6 +529,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }
     }
 
+    /**
+     * 撤销调拨验收
+     */
     private void cancelAccept(String uuid) {
         try {
             Map<String, Object> params = new HashMap<>();
@@ -525,6 +552,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }
     }
 
+    /**
+     * 撤销成功
+     */
     private void onCancelSuccess() {
         //先刷新后删除数据库
         refreshCancelAccept();
@@ -536,12 +566,18 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         mDbImageUpload = null;
     }
 
+    /**
+     * 撤销失败
+     */
     public void onCancelFailed(Message message) {
         dismissLoadingDialog();
         mDbImageUpload = null;
         ToastUtil.showShortToast(getContext(), MessageUtil.getObj(message));
     }
 
+    /**
+     * 撤销成功后刷新列表数据
+     */
     private void refreshCancelAccept() {
         String date = mDbImageUpload.getDate();
         String currentSelectedDate = mBtnDate.getText().toString().trim();
@@ -619,6 +655,9 @@ public class AllocateAcceptActivity extends BaseActivity implements VideoFragmen
         }
     });
 
+    /**
+     * 显示结果，并将数据保存到后台进行请求
+     */
     private void shotResult(String imagePath) {
         StockInRecord record = new StockInRecord();
         record.setGoods(mAllocateRecord.getGoods());

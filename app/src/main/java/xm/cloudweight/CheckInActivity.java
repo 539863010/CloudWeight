@@ -386,6 +386,9 @@ public class CheckInActivity extends BaseActivity implements
 
     }
 
+    /**
+     * 获取下拉操作者
+     */
     private void getDropdownOperator() {
         Map<String, Integer> params = new HashMap<>();
         params.put(Common.PAGE_STRING, Common.PAGE);
@@ -410,6 +413,9 @@ public class CheckInActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 获取仓库列表
+     */
     private void getWareHouseList() {
         List<Warehouse> listWareHouse = LocalSpUtil.getListWareHouse(this);
         if (listWareHouse == null) {
@@ -447,12 +453,18 @@ public class CheckInActivity extends BaseActivity implements
         }
     });
 
+    /**
+     * 撤销入库失败
+     */
     public void cancelStockInFailed(Message message) {
         dismissLoadingDialog();
         mDbImageUpload = null;
         ToastUtil.showShortToast(getContext(), MessageUtil.getObj(message));
     }
 
+    /**
+     * 获取下拉操作者成功
+     */
     private void getDropDownOperatorSuccess(long type) {
         List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
         String data = dbRequestData.get(0).getData();
@@ -467,6 +479,9 @@ public class CheckInActivity extends BaseActivity implements
         queryPurchaseData();
     }
 
+    /**
+     * 获取下拉操作者失败
+     */
     private void getDropDownOperatorFailed(Message msg) {
         String failedMsg = MessageUtil.getObj(msg);
         mSpOperator.setList(new ArrayList<IdName>());
@@ -474,6 +489,9 @@ public class CheckInActivity extends BaseActivity implements
         dismissLoadingDialog();
     }
 
+    /**
+     * 批量查询采购信息获取成功
+     */
     private void queryPurchaseDataSuccess(long type) {
         if (isFinishing()) {
             return;
@@ -509,6 +527,9 @@ public class CheckInActivity extends BaseActivity implements
         dismissLoadingDialog();
     }
 
+    /**
+     * 批量查询采购信息获取失败
+     */
     private void queryPurchaseDataFailed(Message msg) {
         String message = MessageUtil.getObj(msg);
         //清空list跟供应商下拉数据
@@ -519,6 +540,9 @@ public class CheckInActivity extends BaseActivity implements
         dismissLoadingDialog();
     }
 
+    /**
+     * 批量查询采购信息
+     */
     private void queryPurchaseData() {
         String currentData = mBtnDate.getText().toString().trim();
         long type = RequestDataService.TYPE_CHECK_IN_QUERY_PURCHASE_DATA;
@@ -654,6 +678,9 @@ public class CheckInActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 显示历史弹框
+     */
     private void showHistory() {
         if (mHistoryCheckInPopWindow == null) {
             mHistoryCheckInPopWindow = new HistoryCheckInPopWindow(getContext(), mSpWareHouse);
@@ -682,6 +709,9 @@ public class CheckInActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 请求撤销
+     */
     private void requestCancel(int type, String uuid) {
         showLoadingDialog(false);
         if (!TextUtils.isEmpty(uuid)) {
@@ -691,6 +721,9 @@ public class CheckInActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 撤销入库
+     */
     private void cancelStockIn(String uuid, int type) {
         try {
             Map<String, Object> params = new HashMap<>();
@@ -712,6 +745,9 @@ public class CheckInActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 撤销入库成功
+     */
     private void onCancelSuccess() {
         //先刷新后删除数据库
         refreshCancelCheckIn();
@@ -723,6 +759,9 @@ public class CheckInActivity extends BaseActivity implements
         mDbImageUpload = null;
     }
 
+    /**
+     * 撤销后进行刷新数据
+     */
     private void refreshCancelCheckIn() {
         String date = mDbImageUpload.getDate();
         String currentSelectedDate = mBtnDate.getText().toString().trim();

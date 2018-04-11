@@ -462,6 +462,9 @@ public class SortOutActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 获取分拣数据-重量
+     */
     private void requestListWeight(String time) {
         try {
             HashMap<String, Object> params = new HashMap<>();
@@ -491,6 +494,9 @@ public class SortOutActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 获取分拣数据-数量
+     */
     private void requestListCount(String time) {
         try {
             HashMap<String, Object> params = new HashMap<>();
@@ -837,6 +843,9 @@ public class SortOutActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 获取分拣数据-取消
+     */
     private void cancelOnLine(CustomSortOutData data) {
         long type = RequestDataService.TYPE_SORT_OUT_CANCEL;
         HashMap<String, CustomSortOutData> param = new HashMap<>();

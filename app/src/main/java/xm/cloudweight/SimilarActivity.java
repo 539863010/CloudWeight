@@ -260,6 +260,9 @@ public class SimilarActivity extends BaseActivity implements
         queryStock();
     }
 
+    /**
+     * 出库，调拨，盘点-查找库存记录
+     */
     private void queryStock() {
         try {
             long type = RequestDataService.TYPE_SIMILAR_QUERY_STOCK;
@@ -291,6 +294,9 @@ public class SimilarActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 出库，调拨，盘点-查找类别
+     */
     private void getDropdownLeafCategory() {
         try {
             long type = RequestDataService.TYPE_SIMILAR_GET_DROPDOWN_LEAFCATEGORY;
@@ -310,6 +316,9 @@ public class SimilarActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 扫描库存标签
+     */
     private void scanByTraceCode(String traceCode, String warehouseUuid) {
         try {
             Map<String, Object> params = new HashMap<>();
@@ -410,6 +419,9 @@ public class SimilarActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * 出库，调拨，盘点-撤销
+     */
     private void cancelSimilar(String uuid, int type) {
         try {
             Map<String, Object> params = new HashMap<>();
@@ -1036,6 +1048,9 @@ public class SimilarActivity extends BaseActivity implements
         filterList();
     }
 
+    /**
+     * 出库，调拨，盘点-查找库存记录
+     */
     public void queryStockSuccess(long type) {
         try {
             List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
