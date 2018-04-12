@@ -72,6 +72,9 @@ public class DBManager {
      * 更新DbImageUpload
      */
     public void updateDbImageUpload(DbImageUpload data) {
+        if (data == null) {
+            return;
+        }
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         DbImageUploadDao userDao = daoSession.getDbImageUploadDao();
@@ -82,6 +85,9 @@ public class DBManager {
      * 删除一条DbImageUpload记录
      */
     public void deleteDbImageUpload(DbImageUpload data) {
+        if (data == null) {
+            return;
+        }
         DaoMaster daoMaster = new DaoMaster(getWritableDatabase());
         DaoSession daoSession = daoMaster.newSession();
         DbImageUploadDao dao = daoSession.getDbImageUploadDao();

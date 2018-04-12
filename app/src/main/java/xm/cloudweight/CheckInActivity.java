@@ -52,6 +52,7 @@ import xm.cloudweight.utils.BigDecimalUtil;
 import xm.cloudweight.utils.DateUtils;
 import xm.cloudweight.utils.KeyBoardUtils;
 import xm.cloudweight.utils.ToastUtil;
+import xm.cloudweight.utils.bussiness.BuglyUtil;
 import xm.cloudweight.utils.bussiness.CrossAllocateUtil;
 import xm.cloudweight.utils.bussiness.DatePickerDialogUtil;
 import xm.cloudweight.utils.bussiness.GetImageFile;
@@ -198,21 +199,25 @@ public class CheckInActivity extends BaseActivity implements
         mEtWeightCurrent.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                String strCurrentWeight = s.toString().trim();
-                if (TextUtils.isEmpty(strCurrentWeight)) {
-                    return;
+                try {
+                    String strCurrentWeight = s.toString().trim();
+                    if (TextUtils.isEmpty(strCurrentWeight)) {
+                        return;
+                    }
+                    BigDecimal currentWeight = new BigDecimal(strCurrentWeight);
+                    String strLeather = mEtBucklesLeather.getText().toString().trim();
+                    BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
+                    String strDeduct = mEtDeductWeight.getText().toString().trim();
+                    BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeduct) ? strDeduct : "0");
+                    BigDecimal weightCoefficient = new BigDecimal(1);
+                    if (isWeight()) {
+                        weightCoefficient = mPurchaseBillLine.getWeightCoefficient();
+                    }
+                    BigDecimal finallyNum = currentWeight.subtract(leather).subtract(deduct).divide(weightCoefficient, RoundingMode.HALF_EVEN);
+                    mEtNumWarehousing.setText(BigDecimalUtil.toScaleStr(finallyNum));
+                } catch (Exception e) {
+                    BuglyUtil.uploadCrash(e);
                 }
-                BigDecimal currentWeight = new BigDecimal(strCurrentWeight);
-                String strLeather = mEtBucklesLeather.getText().toString().trim();
-                BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
-                String strDeduct = mEtDeductWeight.getText().toString().trim();
-                BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeduct) ? strDeduct : "0");
-                BigDecimal weightCoefficient = new BigDecimal(1);
-                if (isWeight()) {
-                    weightCoefficient = mPurchaseBillLine.getWeightCoefficient();
-                }
-                BigDecimal finallyNum = currentWeight.subtract(leather).subtract(deduct).divide(weightCoefficient, RoundingMode.HALF_EVEN);
-                mEtNumWarehousing.setText(BigDecimalUtil.toScaleStr(finallyNum));
             }
         });
         mIvSub.setOnClickListener(new View.OnClickListener() {
@@ -466,27 +471,35 @@ public class CheckInActivity extends BaseActivity implements
      * 获取下拉操作者成功
      */
     private void getDropDownOperatorSuccess(long type) {
-        List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
-        String data = dbRequestData.get(0).getData();
-        List<IdName> result = GsonUtil.getGson().fromJson(data, new TypeToken<List<IdName>>() {
-        }.getType());
-        List<IdName> listOperator = new ArrayList<>();
-        listOperator.add(new IdName("", DEFAULT_SPINNER_OPERATOR));
-        if (result != null && result.size() > 0) {
-            listOperator.addAll(result);
+        try {
+            List<DbRequestData> dbRequestData = getDbRequestDataManager().getDbRequestData(type);
+            String data = dbRequestData.get(0).getData();
+            List<IdName> result = GsonUtil.getGson().fromJson(data, new TypeToken<List<IdName>>() {
+            }.getType());
+            List<IdName> listOperator = new ArrayList<>();
+            listOperator.add(new IdName("", DEFAULT_SPINNER_OPERATOR));
+            if (result != null && result.size() > 0) {
+                listOperator.addAll(result);
+            }
+            mSpOperator.setList(listOperator);
+            queryPurchaseData();
+        } catch (Exception e) {
+            BuglyUtil.uploadCrash(e);
         }
-        mSpOperator.setList(listOperator);
-        queryPurchaseData();
     }
 
     /**
      * 获取下拉操作者失败
      */
     private void getDropDownOperatorFailed(Message msg) {
-        String failedMsg = MessageUtil.getObj(msg);
-        mSpOperator.setList(new ArrayList<IdName>());
-        ToastUtil.showShortToast(getContext(), failedMsg);
-        dismissLoadingDialog();
+        try {
+            String failedMsg = MessageUtil.getObj(msg);
+            mSpOperator.setList(new ArrayList<IdName>());
+            ToastUtil.showShortToast(getContext(), failedMsg);
+            dismissLoadingDialog();
+        } catch (Exception e) {
+            BuglyUtil.uploadCrash(e);
+        }
     }
 
     /**

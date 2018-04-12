@@ -907,16 +907,20 @@ public class SimilarActivity extends BaseActivity implements
      * 改变数量，重量
      */
     private void changeCountNum() {
-        String strCurrentWeight = mEtCurrentWeight.getText().toString().trim();
-        if (TextUtils.isEmpty(strCurrentWeight)) {
-            return;
+        try {
+            String strCurrentWeight = mEtCurrentWeight.getText().toString().trim();
+            if (TextUtils.isEmpty(strCurrentWeight)) {
+                return;
+            }
+            BigDecimal currentWeight = new BigDecimal(strCurrentWeight);
+            String strLeather = mEtLeather.getText().toString().trim();
+            BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
+            String strDeduct = mEtDeduct.getText().toString().trim();
+            BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeduct) ? strDeduct : "0");
+            mEtCount.setText(BigDecimalUtil.toScaleStr(currentWeight.subtract(leather).subtract(deduct)));
+        } catch (Exception e) {
+            BuglyUtil.uploadCrash(e);
         }
-        BigDecimal currentWeight = new BigDecimal(strCurrentWeight);
-        String strLeather = mEtLeather.getText().toString().trim();
-        BigDecimal leather = new BigDecimal(!TextUtils.isEmpty(strLeather) ? strLeather : "0");
-        String strDeduct = mEtDeduct.getText().toString().trim();
-        BigDecimal deduct = new BigDecimal(!TextUtils.isEmpty(strDeduct) ? strDeduct : "0");
-        mEtCount.setText(BigDecimalUtil.toScaleStr(currentWeight.subtract(leather).subtract(deduct)));
     }
 
     /**
@@ -930,7 +934,9 @@ public class SimilarActivity extends BaseActivity implements
 
         @Override
         public void doSomething(CommonHolder4Lv holder, Stock stock, int position) {
-            holder.setText(R.id.tv_goods_name, stock.getGoods().getName());
+            String goodsName = stock.getGoods().getName();
+            String traceCode = TextUtils.isEmpty(stock.getTraceCode()) ? "" : stock.getTraceCode();
+            holder.setText(R.id.tv_goods_name, goodsName.concat("\n").concat(traceCode));
             holder.setText(R.id.tv_goods_weight, BigDecimalUtil.toScaleStr(stock.getAmount()) + stock.getGoodsUnit().getName());
         }
     }

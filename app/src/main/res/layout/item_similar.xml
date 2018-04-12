@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/_12sp"
         android:textColor="@color/white"
+        android:lineSpacingExtra="@dimen/_2dp"
         android:text="TextView"/>
 
     <TextView
